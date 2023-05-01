@@ -10,6 +10,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import com.goforer.phogal.data.model.response.Document
 import com.goforer.phogal.data.model.state.ResourceState
 import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.network.response.Status
@@ -26,9 +27,8 @@ class PhotosContentState(
     var clickedState: MutableState<Boolean>,
     val baseUiState: BaseUiState<Resource>,
     val resourceState: ResourceState<StateFlow<Resource>>,
-    var selectedIndex: MutableState<Int>
 ) {
-    lateinit var currentPhotosState: State<Resource>
+    lateinit var photos: List<Document>
 
     val status: Status = resourceState.status
 }
@@ -42,7 +42,6 @@ fun rememberPhotosContentState(
     clickedState: MutableState<Boolean> = remember { mutableStateOf(false) },
     baseUiState: BaseUiState<Resource>,
     resourceState: ResourceState<StateFlow<Resource>> = rememberResourceState(resourceStateFlow = baseUiState.resourceStateFlow),
-    selectedIndex: MutableState<Int> = remember { mutableStateOf(-1) }
 ): PhotosContentState = remember(
     lazyListState,
     searchedKeywordState,
@@ -50,8 +49,7 @@ fun rememberPhotosContentState(
     showTopButtonState,
     clickedState,
     baseUiState,
-    resourceState,
-    selectedIndex
+    resourceState
 ) {
     PhotosContentState(
         lazyListState = lazyListState,
@@ -60,7 +58,6 @@ fun rememberPhotosContentState(
         showTopButtonState = showTopButtonState,
         clickedState = clickedState,
         baseUiState = baseUiState,
-        resourceState = resourceState,
-        selectedIndex = selectedIndex
+        resourceState = resourceState
     )
 }

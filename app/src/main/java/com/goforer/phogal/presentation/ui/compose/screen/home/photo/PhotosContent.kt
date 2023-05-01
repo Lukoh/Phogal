@@ -19,8 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -61,8 +59,14 @@ fun PhotosContent(
     when(state.status) {
         Status.SUCCESS -> {
             state.resourceState.resourceStateFlow?.let {
+                val currentPhotosState = it.collectAsStateWithLifecycle()
+
                 state.enabledList.value = true
-                state.currentPhotosState = it.collectAsStateWithLifecycle()
+
+                @Suppress("UNCHECKED_CAST")
+                state.photos = snapshotFlow {
+                    (currentPhotosState.value.data as State<PagingData<Document>>).value
+                }.collectAsLazyPagingItems().itemSnapshotList.items
             }
         }
         Status.LOADING -> {
@@ -102,13 +106,9 @@ fun PhotosContent(
                 }
             )
             if (state.enabledList.value) {
-                @Suppress("UNCHECKED_CAST")
                 ListSection(
                     modifier = Modifier.weight(1f),
-                    state = rememberListSectionState(
-                        photos = snapshotFlow {
-                            (state.currentPhotosState.value.data as State<PagingData<Document>>).value
-                        }.collectAsLazyPagingItems().itemSnapshotList.items),
+                    state = rememberListSectionState(photos = state.photos),
                     onItemClicked = { item, index ->
                         onItemClicked(item, index)
                     }
@@ -171,7 +171,6 @@ fun PhotosContentPreview(modifier: Modifier = Modifier) {
                         0.dp
                     )
             ) {
-                val likedState = rememberSaveable { mutableStateOf(true) }
                 val photos = listOf(
                     Document("_SBS","news", "2017-06-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457, "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
                     Document("_JTBC","news", "2017-07-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457, "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
@@ -194,7 +193,7 @@ fun PhotosContentPreview(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .padding(4.dp, 4.dp)
                         .weight(1f),
-                    state = rememberListSectionState(photos =  photos, likedState = likedState),
+                    state = rememberListSectionState(photos =  photos),
                     onItemClicked = { _, _ -> }
                 )
             }
