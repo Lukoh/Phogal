@@ -23,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -40,7 +41,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.photos.rememberListSe
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import timber.log.Timber
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun PhotosContent(
     modifier: Modifier = Modifier,
@@ -59,7 +60,7 @@ fun PhotosContent(
 
     when(state.status) {
         Status.SUCCESS -> {
-            state.resourceStateFlow?.let {
+            state.resourceState.resourceStateFlow?.let {
                 state.enabledList.value = true
                 state.currentPhotosState = it.collectAsStateWithLifecycle()
             }
@@ -71,7 +72,7 @@ fun PhotosContent(
         Status.ERROR -> {
             // To Do : handle the error
             state.enabledList.value = false
-            state.resourceStateFlow?.let {
+            state.resourceState.resourceStateFlow?.let {
                 Timber.d("Error Code - %d & Error Message - %s", it.value.errorCode, it.value.message)
             }
         }
@@ -96,6 +97,7 @@ fun PhotosContent(
             SearchSection(
                 modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
                 onSearched = { keyword ->
+                    state.baseUiState.keyboardController?.hide()
                     onSearched(keyword)
                 }
             )
@@ -117,7 +119,7 @@ fun PhotosContent(
         AnimatedVisibility(
             enter = expandVertically(),
             exit = shrinkVertically(),
-            visible = state.showButtonState.value,
+            visible = state.showTopButtonState.value,
             modifier = Modifier.align(Alignment.BottomEnd)
         ) {
             val background by transition.animateColor(label = "FloatingAnimation") { state ->
@@ -138,9 +140,11 @@ fun PhotosContent(
             }
         }
 
-        if (state.showButtonState.value && state.clickedState.value) {
-            LaunchedEffect(state.lazyListState) {
-                state.searchedKeywordState.value = ""
+        if (state.showTopButtonState.value && state.clickedState.value) {
+            LaunchedEffect(state.lazyListState, state.showTopButtonState.value, state.clickedState.value) {
+                if (state.showTopButtonState.value && state.clickedState.value)
+                    state.lazyListState.scrollToItem (0)
+
                 state.clickedState.value = false
             }
         }

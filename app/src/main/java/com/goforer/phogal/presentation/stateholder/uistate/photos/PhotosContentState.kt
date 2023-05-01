@@ -14,18 +14,15 @@ import com.goforer.phogal.data.model.state.ResourceState
 import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
-import com.goforer.phogal.presentation.stateholder.uistate.EditableInputState
-import com.goforer.phogal.presentation.stateholder.uistate.rememberEditableInputState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberResourceState
 import kotlinx.coroutines.flow.StateFlow
 
 @Stable
 class PhotosContentState(
     val lazyListState: LazyListState,
-    val editableInputState: EditableInputState,
     var searchedKeywordState: MutableState<String>,
     var enabledList: MutableState<Boolean>,
-    val showButtonState: State<Boolean>,
+    val showTopButtonState: State<Boolean>,
     var clickedState: MutableState<Boolean>,
     val baseUiState: BaseUiState<Resource>,
     val resourceState: ResourceState<StateFlow<Resource>>,
@@ -33,27 +30,24 @@ class PhotosContentState(
 ) {
     lateinit var currentPhotosState: State<Resource>
 
-    val resourceStateFlow: StateFlow<Resource>? = resourceState.resourceStateFlow
     val status: Status = resourceState.status
 }
 
 @Composable
 fun rememberPhotosContentState(
     lazyListState: LazyListState = rememberLazyListState(),
-    editableInputState: EditableInputState = rememberEditableInputState(hint = "Search"),
     searchedKeywordState: MutableState<String> = rememberSaveable { mutableStateOf("") },
     enabledList: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    showButtonState: State<Boolean> = remember { derivedStateOf { searchedKeywordState.value.isNotEmpty() } },
+    showTopButtonState: State<Boolean> = remember { derivedStateOf { searchedKeywordState.value.isNotEmpty() } },
     clickedState: MutableState<Boolean> = remember { mutableStateOf(false) },
     baseUiState: BaseUiState<Resource>,
     resourceState: ResourceState<StateFlow<Resource>> = rememberResourceState(resourceStateFlow = baseUiState.resourceStateFlow),
     selectedIndex: MutableState<Int> = remember { mutableStateOf(-1) }
 ): PhotosContentState = remember(
     lazyListState,
-    editableInputState,
     searchedKeywordState,
     enabledList,
-    showButtonState,
+    showTopButtonState,
     clickedState,
     baseUiState,
     resourceState,
@@ -61,10 +55,9 @@ fun rememberPhotosContentState(
 ) {
     PhotosContentState(
         lazyListState = lazyListState,
-        editableInputState =  editableInputState,
         searchedKeywordState = searchedKeywordState,
         enabledList = enabledList,
-        showButtonState = showButtonState,
+        showTopButtonState = showTopButtonState,
         clickedState = clickedState,
         baseUiState = baseUiState,
         resourceState = resourceState,
