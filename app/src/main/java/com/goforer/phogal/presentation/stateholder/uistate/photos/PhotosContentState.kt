@@ -27,9 +27,8 @@ class PhotosContentState(
     var clickedState: MutableState<Boolean>,
     val baseUiState: BaseUiState<Resource>,
     val resourceState: ResourceState<StateFlow<Resource>>,
+    var photos: MutableState<List<Document>>
 ) {
-    lateinit var photos: List<Document>
-
     val status: Status = resourceState.status
 }
 
@@ -42,6 +41,7 @@ fun rememberPhotosContentState(
     clickedState: MutableState<Boolean> = remember { mutableStateOf(false) },
     baseUiState: BaseUiState<Resource>,
     resourceState: ResourceState<StateFlow<Resource>> = rememberResourceState(resourceStateFlow = baseUiState.resourceStateFlow),
+    photos: MutableState<List<Document>> = rememberSaveable { mutableStateOf(emptyList()) }
 ): PhotosContentState = remember(
     lazyListState,
     searchedKeywordState,
@@ -49,7 +49,8 @@ fun rememberPhotosContentState(
     showTopButtonState,
     clickedState,
     baseUiState,
-    resourceState
+    resourceState,
+    photos
 ) {
     PhotosContentState(
         lazyListState = lazyListState,
@@ -58,6 +59,7 @@ fun rememberPhotosContentState(
         showTopButtonState = showTopButtonState,
         clickedState = clickedState,
         baseUiState = baseUiState,
-        resourceState = resourceState
+        resourceState = resourceState,
+        photos = photos
     )
 }

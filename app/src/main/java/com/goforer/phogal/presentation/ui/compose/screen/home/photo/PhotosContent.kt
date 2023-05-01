@@ -64,7 +64,7 @@ fun PhotosContent(
                 state.enabledList.value = true
 
                 @Suppress("UNCHECKED_CAST")
-                state.photos = snapshotFlow {
+                state.photos.value = snapshotFlow {
                     (currentPhotosState.value.data as State<PagingData<Document>>).value
                 }.collectAsLazyPagingItems().itemSnapshotList.items
             }
@@ -108,7 +108,7 @@ fun PhotosContent(
             if (state.enabledList.value) {
                 ListSection(
                     modifier = Modifier.weight(1f),
-                    state = rememberListSectionState(photos = state.photos),
+                    state = rememberListSectionState(photos = state.photos.value),
                     onItemClicked = { item, index ->
                         onItemClicked(item, index)
                     }
