@@ -1,0 +1,24 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.Phogal" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:colorPrimaryDark">@android:color/transparent</item>
+
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/explode</item>
+
+        <item name="android:ambientShadowAlpha">0.05</item>
+        <item name="android:spotShadowAlpha">0.05</item>
+    </style>
+</resources>

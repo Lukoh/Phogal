@@ -1,0 +1,272 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+}
+
+android {
+    namespace 'com.goforer.phogal'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.goforer.phogal"
+        minSdk 28
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        debug {
+            lintOptions {
+                checkReleaseBuilds false
+                checkDependencies true
+            }
+
+            /*
+            FirebasePerformance {
+                // Set this flag to 'false' to disable @AddTrace annotation processing and
+                // automatic HTTP/S network request monitoring
+                // for a specific build variant at compile time.
+                instrumentationEnabled false
+            }
+
+             */
+
+            initWith debug
+            jniDebuggable true
+            minifyEnabled false
+            shrinkResources false
+//            testCoverageEnabled !project.hasProperty('android.injected.invoked.from.ide')
+            testCoverageEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            lintOptions {
+                checkReleaseBuilds false
+                checkDependencies true
+            }
+
+            //ndkVersion "22.0.6917172"
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
+
+            /*
+            FirebasePerformance {
+                // Set this flag to 'false' to disable @AddTrace annotation processing and
+                // automatic HTTP/S network request monitoring
+                // for a specific build variant at compile time.
+                instrumentationEnabled false
+            }
+
+             */
+
+            initWith release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    kotlin {
+        jvmToolchain(17)
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.5"
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+
+    configurations.implementation {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
+    }
+
+    sourceSets {
+        String sharedTestDir = 'src/commonTest/kotlin'
+        main {
+            main.java.srcDirs += 'src/main/kotlin'
+            test.java.srcDirs += 'src/test/kotlin'
+            test.java.srcDirs += sharedTestDir
+            androidTest.java.srcDirs += 'src/androidTest/kotlin'
+            androidTest.java.srcDirs += sharedTestDir
+            resources.srcDirs += ['src/commonTest/resources']
+        }
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        prod {
+            dimension "default"
+            manifestPlaceholders = [appNameGradle: "Phogal"]
+            manifestPlaceholders = [appLabel: "@string/app_name"]
+            buildConfigField "String", "apiServer", "\"https://dapi.kakao.com/\""
+            buildConfigField "String", "apiKey", "\"0ccd20e97886affaeba21b3580824d32\""
+        }
+
+        stg {
+            dimension "default"
+            applicationIdSuffix = ".stg"
+            manifestPlaceholders = [appNameGradle: "Phogal_stg"]
+            manifestPlaceholders = [appLabel: "Phogal_Stg"]
+            buildConfigField "String", "apiServer", "\"https://dapi.kakao.com/\""
+            buildConfigField "String", "apiKey", "\"0ccd20e97886affaeba21b3580824d32\""
+        }
+
+        dev {
+            dimension "default"
+            applicationIdSuffix = ".dev"
+            manifestPlaceholders = [appNameGradle: "Phogal_Dev"]
+            manifestPlaceholders = [appLabel: "Phogal_Dev"]
+            buildConfigField "String", "apiServer", "\"https://dapi.kakao.com/\""
+            buildConfigField "String", "apiKey", "\"0ccd20e97886affaeba21b3580824d32\""
+        }
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'arm64-v8a'
+            universalApk true
+        }
+    }
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
+
+    applicationVariants.all {
+        // Return compile configuration objects of a variant.
+        compileConfiguration.resolutionStrategy {
+            // Use Gradle's ResolutionStrategy API
+            // to customize how this variant resolves dependencies.
+        }
+        // Return runtime configuration objects of a variant.
+        runtimeConfiguration.resolutionStrategy {
+        }
+        // Return annotation processor configuration of a variant.
+        annotationProcessorConfiguration.resolutionStrategy {
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.paging:paging-common-ktx:3.1.1'
+    implementation 'androidx.paging:paging-runtime-ktx:3.1.1'
+    implementation 'androidx.paging:paging-compose:1.0.0-alpha18'
+    implementation 'androidx.security:security-crypto-ktx:1.1.0-alpha06'
+    def composeBom = platform('androidx.compose:compose-bom:2023.01.00')
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+    implementation composeBom
+    androidTestImplementation composeBom
+
+    // Choose one of the following:
+    // Material Design 3
+    implementation("androidx.compose.material3:material3")
+    // or Material Design 2
+    implementation("androidx.compose.material:material")
+    // Optional - Included automatically by material, only add when you need
+    // the icons but not the material library (e.g. when using Material3 or a
+    // custom design system based on Foundation)
+    implementation("androidx.compose.material:material-icons-core")
+    // Optional - Add full set of material icons
+    implementation("androidx.compose.material:material-icons-extended")
+    // Optional - Add window size utils
+    implementation("androidx.compose.material3:material3-window-size-class")
+    // or skip Material Design and build directly on top of foundational components
+    implementation("androidx.compose.foundation:foundation")
+    // or only import the main APIs for the underlying toolkit systems,
+    // such as input and measurement/layout
+    implementation("androidx.compose.ui:ui")
+
+    // Android Studio Preview support
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+
+    implementation("androidx.profileinstaller:profileinstaller:1.3.0")
+
+    // UI Tests
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Optional - Integration with activities
+    implementation("androidx.activity:activity-compose:1.7.1")
+    // Optional - Integration with ViewModels
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation 'androidx.compose.material3:material3:1.1.0-rc01'
+
+    implementation "com.google.accompanist:accompanist-placeholder-material:0.31.1-alpha"
+
+    implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-webview:$accompanist_version"
+
+    implementation "com.google.dagger:hilt-android:$dagger_hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$dagger_hilt_version"
+
+    implementation "androidx.navigation:navigation-compose:$nav_version"
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
+    implementation "androidx.hilt:hilt-navigation-compose:$navigation_compose_hilt_version"
+
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    // define a BOM and its version
+    implementation(platform('com.squareup.okhttp3:okhttp-bom:5.0.0-alpha.11'))
+
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation('com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11')
+
+    implementation 'com.squareup.okio:okio:3.2.0'
+
+    // Debugging Network & Resources
+    implementation 'com.facebook.stetho:stetho:1.6.0'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
+
+    implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
+
+    // Json Logging
+    implementation 'com.orhanobut:logger:2.2.0'
+
+    implementation "io.coil-kt:coil-compose:2.2.2"
+    implementation "io.coil-kt:coil-svg:2.2.2"
+
+    implementation "com.airbnb.android:lottie-compose:4.0.0"
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes true
+}

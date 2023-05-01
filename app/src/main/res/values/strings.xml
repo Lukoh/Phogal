@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Phogal</string>
+    <string name="bottom_navigation_photo">Photo</string>
+    <string name="bottom_navigation_community">Community</string>
+    <string name="bottom_navigation_notification">Notification</string>
+    <string name="bottom_navigation_setting">Setting</string>
+
+    <string name="placeholder_search">Search</string>
+</resources>
