@@ -19,8 +19,8 @@ import kotlinx.coroutines.flow.StateFlow
 class BaseUiState<T>(
     val resourceStateFlow: StateFlow<T>,
     val context: Context?,
-    val scope: CoroutineScope?,
-    val lifecycle: Lifecycle?,
+    val scope: CoroutineScope,
+    val lifecycle: Lifecycle,
     val keyboardController: SoftwareKeyboardController?,
 )
 

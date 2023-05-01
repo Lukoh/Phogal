@@ -75,7 +75,7 @@ fun PhotoItem(
     Surface(modifier = modifier.fillMaxWidth()) {
         BoxWithConstraints(
             modifier = modifier
-            .padding(4.dp, verticalPadding)
+            .padding(0.dp, verticalPadding)
             .clip(RoundedCornerShape(4.dp))
         ) {
             val imageUrl = document.image_url ?: document.thumbnail

@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.uistate.EditableInputState
+import com.goforer.phogal.presentation.stateholder.uistate.photos.SearchSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.photos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberEditableInputState
 import com.goforer.phogal.presentation.ui.compose.component.SearchIconButton
 import com.goforer.phogal.presentation.ui.theme.ColorSearchBarBorder
@@ -46,14 +48,11 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun SearchSection(
     modifier: Modifier = Modifier,
-    state: EditableInputState = rememberEditableInputState(""),
+    state: SearchSectionState = rememberSearchSectionState(),
     onSearched: (String) -> Unit
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isFocused by interactionSource.collectIsFocusedAsState()
-
+    val isFocused by state.interactionSource.collectIsFocusedAsState()
     val indicatorColor = if (isFocused) Color.Black else Color.Gray
-    val indicatorWidth = 0.5.dp
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -69,15 +68,16 @@ fun SearchSection(
             .fillMaxWidth()
     ) {
         TextField(
-            value = if (state.isHint)
+            value = if (state.editableInputState.isHint)
                 ""
             else
-                state.textState,
+                state.editableInputState.textState,
             onValueChange = {
-                state.textState = it
+                state.editableInputState.textState = it
             },
             leadingIcon = {
                 Icon(
+                    modifier = Modifier.padding(0.dp, 4.dp, 0.dp, 0.dp),
                     imageVector = Icons.Default.Search,
                     contentDescription = null
                 )
@@ -109,7 +109,7 @@ fun SearchSection(
                 .weight(4f)
                 .background(Color.Transparent)
                 .drawBehind {
-                    val strokeWidth = indicatorWidth.value * density
+                    val strokeWidth =  0.5.dp.value * density
                     val y = size.height - strokeWidth / 2
                     drawLine(
                         indicatorColor,
@@ -120,9 +120,9 @@ fun SearchSection(
                 }
         )
         SearchIconButton(
-            modifier = modifier.padding(4.dp, 4.dp),
+            modifier = modifier.padding(2.dp, 4.dp),
             onClick = {
-                onSearched(state.textState)
+                onSearched(state.editableInputState.textState)
             },
             icon = {
                 Icon(
@@ -155,7 +155,6 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
         val interactionSource = remember { MutableInteractionSource() }
         val isFocused by interactionSource.collectIsFocusedAsState()
         val indicatorColor = if (isFocused) Color.Black else Color.Gray
-        val indicatorWidth = 0.5.dp
         val state: EditableInputState = rememberEditableInputState("")
 
         Row(
@@ -181,6 +180,7 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
                 },
                 leadingIcon = {
                     Icon(
+                        modifier = Modifier.padding(0.dp, 4.dp, 0.dp, 0.dp),
                         imageVector = Icons.Default.Search,
                         contentDescription = null
                     )
@@ -212,7 +212,7 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
                     .weight(4f)
                     .background(Color.Transparent)
                     .drawBehind {
-                        val strokeWidth = indicatorWidth.value * density
+                        val strokeWidth =  0.5.dp.value * density
                         val y = size.height - strokeWidth / 2
                         drawLine(
                             indicatorColor,
@@ -223,7 +223,7 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
                     }
             )
             SearchIconButton(
-                modifier = modifier.padding(4.dp, 4.dp),
+                modifier = modifier.padding(2.dp, 4.dp),
                 onClick = {},
                 icon = {
                     Icon(

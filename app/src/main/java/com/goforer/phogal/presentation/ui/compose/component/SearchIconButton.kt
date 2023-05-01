@@ -55,7 +55,7 @@ internal inline fun SearchIconButton(
         onClick = onClick,
         modifier = modifier
             .wrapContentWidth()
-            .heightIn(54.dp),
+            .heightIn(48.dp),
         shape = MaterialTheme.shapes.small,
         interactionSource = interactionSource
     ) {
@@ -91,14 +91,13 @@ fun SearchIconButtonPreview(modifier: Modifier = Modifier) {
 
          */
 
-
         Button(
             onClick = {},
             modifier = modifier
                 .height(IntrinsicSize.Min)
                 .wrapContentHeight()
                 .wrapContentWidth()
-                .heightIn(54.dp),
+                .heightIn(48.dp),
             shape = MaterialTheme.shapes.small,
             interactionSource = interactionSource
         ) {

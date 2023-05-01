@@ -25,17 +25,18 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.goforer.phogal.R
 import com.goforer.phogal.data.model.response.Document
 import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.data.repository.Repository.Companion.replyCount
 import com.goforer.phogal.presentation.stateholder.uistate.photos.PhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.photos.rememberListSectionState
-import com.goforer.phogal.presentation.stateholder.uistate.rememberEditableInputState
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import timber.log.Timber
 
@@ -93,8 +94,7 @@ fun PhotosContent(
                 )
         ) {
             SearchSection(
-                modifier = Modifier.padding(8.dp),
-                state = state.editableInputState,
+                modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
                 onSearched = { keyword ->
                     onSearched(keyword)
                 }
@@ -167,7 +167,6 @@ fun PhotosContentPreview(modifier: Modifier = Modifier) {
                         0.dp
                     )
             ) {
-                val editableInputState = rememberEditableInputState(hint = "Search")
                 val likedState = rememberSaveable { mutableStateOf(true) }
                 val photos = listOf(
                     Document("_SBS","news", "2017-06-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457, "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
@@ -184,12 +183,13 @@ fun PhotosContentPreview(modifier: Modifier = Modifier) {
                 )
 
                 SearchSection(
-                    modifier = Modifier.padding(8.dp),
-                    state = editableInputState,
+                    modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
                     onSearched = {}
                 )
                 ListSection(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .padding(4.dp, 4.dp)
+                        .weight(1f),
                     state = rememberListSectionState(photos =  photos, likedState = likedState),
                     onItemClicked = { _, _ -> }
                 )
@@ -208,7 +208,7 @@ fun PhotosContentPreview(modifier: Modifier = Modifier) {
                     onClick = {
                     }
                 ) {
-                    Text("Back!")
+                    Text(stringResource(id = R.string.up_to_top))
                 }
             }
         }
