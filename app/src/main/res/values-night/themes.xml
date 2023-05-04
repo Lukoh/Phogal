@@ -21,4 +21,9 @@
         <item name="android:ambientShadowAlpha">0.05</item>
         <item name="android:spotShadowAlpha">0.05</item>
     </style>
+
+    <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
 </resources>

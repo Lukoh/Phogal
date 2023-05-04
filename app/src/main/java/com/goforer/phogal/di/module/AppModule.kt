@@ -9,6 +9,7 @@ import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.goforer.base.extension.isNull
+import com.goforer.base.utils.connect.ConnectivityManagerNetworkMonitor
 import com.goforer.phogal.BuildConfig
 import com.goforer.phogal.data.network.NetworkError
 import com.goforer.phogal.data.network.NetworkErrorHandler
@@ -47,12 +48,15 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideConnectivityManagerNetworkMonitor(context: Context) = ConnectivityManagerNetworkMonitor(context)
+
+    @Singleton
+    @Provides
     fun provideGSon(): Gson = GsonBuilder().create()
 
     @Singleton
     @Provides
     fun provideNetworkErrorHandler(context: Context) = NetworkErrorHandler(context)
-
 
     @Singleton
     @Provides

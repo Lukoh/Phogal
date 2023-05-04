@@ -31,7 +31,7 @@ import com.goforer.phogal.R
 import com.goforer.phogal.data.model.response.Document
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.presentation.stateholder.business.home.photo.PhotoViewModel
-import com.goforer.phogal.presentation.stateholder.uistate.photos.rememberPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.compose.component.CardSnackBar
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme

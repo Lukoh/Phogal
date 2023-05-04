@@ -38,8 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.uistate.EditableInputState
-import com.goforer.phogal.presentation.stateholder.uistate.photos.SearchSectionState
-import com.goforer.phogal.presentation.stateholder.uistate.photos.rememberSearchSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.photos.SearchSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberEditableInputState
 import com.goforer.phogal.presentation.ui.compose.component.SearchIconButton
 import com.goforer.phogal.presentation.ui.theme.ColorSearchBarBorder

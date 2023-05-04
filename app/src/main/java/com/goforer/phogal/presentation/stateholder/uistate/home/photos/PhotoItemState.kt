@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.stateholder.uistate.photos
+package com.goforer.phogal.presentation.stateholder.uistate.home.photos
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState

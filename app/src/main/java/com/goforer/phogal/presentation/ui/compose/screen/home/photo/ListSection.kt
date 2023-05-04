@@ -23,8 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goforer.phogal.data.model.response.Document
-import com.goforer.phogal.presentation.stateholder.uistate.photos.ListSectionState
-import com.goforer.phogal.presentation.stateholder.uistate.photos.rememberListSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
 @Composable

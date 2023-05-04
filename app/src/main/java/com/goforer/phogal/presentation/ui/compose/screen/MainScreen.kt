@@ -1,25 +1,31 @@
-package com.goforer.phogal.presentation.ui.compose
+package com.goforer.phogal.presentation.ui.compose.screen
 
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.currentBackStackEntryAsState
-import com.goforer.phogal.presentation.ui.navigation.destination.Photos
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.goforer.base.designsystem.component.Background
+import com.goforer.base.designsystem.component.GradientBackground
+import com.goforer.base.designsystem.theme.GradientColors
+import com.goforer.base.designsystem.theme.LocalGradientColors
+import com.goforer.base.utils.connect.NetworkMonitor
+import com.goforer.phogal.presentation.stateholder.uistate.MainScreenState
+import com.goforer.phogal.presentation.stateholder.uistate.rememberMainScreenState
+import com.goforer.phogal.presentation.ui.compose.screen.home.BottomNavDestination.Photo
 import com.goforer.phogal.presentation.ui.compose.screen.home.HomeScreen
-import com.goforer.phogal.presentation.ui.compose.screen.home.Screens
-import com.goforer.phogal.presentation.ui.compose.screen.landing.LandingScreen
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.goforer.phogal.presentation.ui.compose.screen.home.OfflineScreen
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun MainScreen(windowSizeClass: WindowSizeClass) {
+fun MainScreen(
+    networkMonitor: NetworkMonitor,
+    windowSizeClass: WindowSizeClass,
+    state: MainScreenState = rememberMainScreenState(
+        windowSizeClass = windowSizeClass,
+        networkMonitor = networkMonitor
+    )
+) {
+    /*
     Surface(color = MaterialTheme.colorScheme.primary) {
         var showLandingScreen by remember { mutableStateOf(true) }
 
@@ -36,6 +42,31 @@ fun MainScreen(windowSizeClass: WindowSizeClass) {
                 modifier = Modifier,
                 navController = navController
             )
+        }
+
+        val currentScreen = Screens.find { it.route == state.currentDestination?.route } ?: Photos
+
+        HomeScreen(modifier = Modifier, state = state)
+    }
+
+     */
+
+    val shouldShowGradientBackground = state.currentTopLevelDestination == Photo
+
+    Background {
+        GradientBackground(
+            gradientColors = if (shouldShowGradientBackground) {
+                LocalGradientColors.current
+            } else {
+                GradientColors()
+            },
+        ) {
+            val isOffline by state.isOffline.collectAsStateWithLifecycle()
+
+            if (isOffline)
+                OfflineScreen(modifier = Modifier)
+            else
+                HomeScreen(modifier = Modifier, state = state)
         }
     }
 }

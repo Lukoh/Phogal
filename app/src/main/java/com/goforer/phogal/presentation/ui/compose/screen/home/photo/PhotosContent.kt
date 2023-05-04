@@ -34,8 +34,8 @@ import com.goforer.phogal.R
 import com.goforer.phogal.data.model.response.Document
 import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.data.repository.Repository.Companion.replyCount
-import com.goforer.phogal.presentation.stateholder.uistate.photos.PhotosContentState
-import com.goforer.phogal.presentation.stateholder.uistate.photos.rememberListSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.photos.PhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import timber.log.Timber
 

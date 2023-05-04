@@ -6,6 +6,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -17,8 +18,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -39,8 +38,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.goforer.phogal.R
-import com.goforer.phogal.presentation.ui.navigation.destination.Community
-import com.goforer.phogal.presentation.ui.navigation.destination.Notification
+import com.goforer.phogal.presentation.stateholder.uistate.MainScreenState
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.communitiesStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.communityHomeRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.notificationHomeRoute
@@ -49,8 +47,6 @@ import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestinati
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.photosStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingHomeRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingStartRoute
-import com.goforer.phogal.presentation.ui.navigation.destination.Photos
-import com.goforer.phogal.presentation.ui.navigation.destination.Setting
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopToGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.communityGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.notificationGraph
@@ -61,41 +57,34 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
-val Screens = listOf(
-    Photos,
-    Community,
-    Notification,
-    Setting
-)
-
-
 @Stable
-sealed class BottomNavItem(val route: String, @DrawableRes val icon: Int, @StringRes val title: Int) {
-    object Photo : BottomNavItem(photosHomeRoute, R.drawable.ic_photo, R.string.bottom_navigation_photo)
-    object Community :  BottomNavItem(communityHomeRoute, R.drawable.ic_community, R.string.bottom_navigation_community)
-    object Notification :  BottomNavItem(notificationHomeRoute, R.drawable.ic_notification, R.string.bottom_navigation_notification)
-    object Setting : BottomNavItem(settingHomeRoute, R.drawable.ic_setting, R.string.bottom_navigation_setting)
+sealed class BottomNavDestination(val route: String, @DrawableRes val icon: Int, @StringRes val title: Int) {
+    object Photo : BottomNavDestination(photosHomeRoute, R.drawable.ic_photo, R.string.bottom_navigation_photo)
+    object Community :  BottomNavDestination(communityHomeRoute, R.drawable.ic_community, R.string.bottom_navigation_community)
+    object Notification :  BottomNavDestination(notificationHomeRoute, R.drawable.ic_notification, R.string.bottom_navigation_notification)
+    object Setting : BottomNavDestination(settingHomeRoute, R.drawable.ic_setting, R.string.bottom_navigation_setting)
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeScreen(
-    windowSizeClass: WindowSizeClass,
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberAnimatedNavController()
+    state: MainScreenState
 ) {
     var bottomBarVisible by remember { mutableStateOf(false) }
     val bottomBarOffset by animateDpAsState(targetValue = if (bottomBarVisible) 0.dp else 56.dp)
-    val showBottomBar = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
     Scaffold(
+        containerColor = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onBackground,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
-            if (showBottomBar) {
+            if (state.shouldShowBottomBar) {
                 val items = listOf(
-                    BottomNavItem.Photo,
-                    BottomNavItem.Community,
-                    BottomNavItem.Notification,
-                    BottomNavItem.Setting,
+                    BottomNavDestination.Photo,
+                    BottomNavDestination.Community,
+                    BottomNavDestination.Notification,
+                    BottomNavDestination.Setting,
                 )
 
                 BottomNavigation(
@@ -105,11 +94,8 @@ fun HomeScreen(
                     modifier = if (bottomBarVisible)
                         modifier.navigationBarsPadding()
                     else
-                        modifier.offset(y = bottomBarOffset)
+                        modifier.offset(y = bottomBarOffset),
                 ) {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
-
                     items.forEach { item ->
                         BottomNavigationItem(
                             icon = {
@@ -128,10 +114,10 @@ fun HomeScreen(
                             },
                             selectedContentColor = MaterialTheme.colorScheme.primary,
                             unselectedContentColor = Color.Gray,
-                            selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                            selected = state.currentDestination?.hierarchy?.any { it.route == item.route } == true,
                             alwaysShowLabel = false,
                             onClick = {
-                                navController.navigateSingleTopToGraph(item.route)
+                                state.navigateToTopLevelDestination(item)
                             }
                         )
                     }
@@ -152,26 +138,26 @@ fun HomeScreen(
                         0.dp)
             ) {
                 AnimatedNavHost(
-                    navController = navController,
+                    navController = state.navController,
                     startDestination = photosHomeRoute
                 ) {
                     photoGraph(
-                        navController = navController,
+                        navController = state.navController,
                         startDestination =  photosStartRoute,
                         route = photosHomeRoute
                     )
                     communityGraph(
-                        navController = navController,
+                        navController = state.navController,
                         startDestination = communitiesStartRoute,
                         route = communityHomeRoute
                     )
                     notificationGraph(
-                        navController = navController,
+                        navController = state.navController,
                         startDestination = notificationsStartRoute,
                         route =  notificationHomeRoute
                     )
                     settingGraph(
-                        navController = navController,
+                        navController = state.navController,
                         startDestination = settingStartRoute,
                         route = settingHomeRoute
                     )
@@ -180,7 +166,7 @@ fun HomeScreen(
         }
     )
 
-    navController.addOnDestinationChangedListener { _, destination, _ ->
+    state.navController.addOnDestinationChangedListener { _, destination, _ ->
         bottomBarVisible = when(destination.route) {
             photosStartRoute, communitiesStartRoute, notificationsStartRoute, settingStartRoute -> {
                 true
@@ -210,10 +196,10 @@ fun ProfilerHomeScreenPreview(
         Scaffold(
             bottomBar = {
                 val items = listOf(
-                    BottomNavItem.Photo,
-                    BottomNavItem.Community,
-                    BottomNavItem.Notification,
-                    BottomNavItem.Setting,
+                    BottomNavDestination.Photo,
+                    BottomNavDestination.Community,
+                    BottomNavDestination.Notification,
+                    BottomNavDestination.Setting,
                 )
 
                 BottomNavigation(
@@ -263,7 +249,7 @@ fun ProfilerHomeScreenPreview(
                     photoGraph(
                         navController = navController,
                         startDestination =  photosStartRoute,
-                        route = photosStartRoute
+                        route = photosHomeRoute
                     )
                     communityGraph(
                         navController = navController,

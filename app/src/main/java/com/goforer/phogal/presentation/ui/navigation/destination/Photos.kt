@@ -2,7 +2,7 @@ package com.goforer.phogal.presentation.ui.navigation.destination
 
 import android.os.Bundle
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.sharp.Person
+import androidx.compose.material.icons.sharp.Photo
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.goforer.phogal.presentation.ui.compose.screen.home.photo.PhotosScreen
@@ -10,7 +10,7 @@ import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestinati
 import timber.log.Timber
 
 object Photos : PhogalDestination {
-    override val icon = Icons.Sharp.Person
+    override val icon = Icons.Sharp.Photo
     override val route = photosStartRoute
     override val screen: @Composable (navController: NavHostController, bundle: Bundle?) -> Unit = { navController, _ ->
         navController.currentBackStackEntry?.let {

@@ -9,7 +9,6 @@ import coil.decode.Decoder
 import coil.request.ImageRequest
 import coil.size.Size
 
-
 @Composable
 fun loadImagePainter(
     data: Any,

@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.stateholder.uistate.photos
+package com.goforer.phogal.presentation.stateholder.uistate.home.photos
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
