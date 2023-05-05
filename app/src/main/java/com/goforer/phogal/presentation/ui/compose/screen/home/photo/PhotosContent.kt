@@ -107,7 +107,9 @@ fun PhotosContent(
             )
             if (state.enabledList.value) {
                 ListSection(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .padding(4.dp, 4.dp)
+                        .weight(1f),
                     state = rememberListSectionState(photos = state.photos.value),
                     onItemClicked = { item, index ->
                         onItemClicked(item, index)
@@ -130,7 +132,7 @@ fun PhotosContent(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .navigationBarsPadding()
-                    .padding(bottom = 4.dp, end = 8.dp),
+                    .padding(bottom = 8.dp, end = 8.dp),
                 backgroundColor = background,
                 onClick = {
                     state.clickedState.value = true
@@ -206,7 +208,7 @@ fun PhotosContentPreview(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .navigationBarsPadding()
-                        .padding(bottom = 4.dp, end = 8.dp),
+                        .padding(bottom = 8.dp, end = 8.dp),
                     backgroundColor = MaterialTheme.colorScheme.primary,
                     onClick = {
                     }

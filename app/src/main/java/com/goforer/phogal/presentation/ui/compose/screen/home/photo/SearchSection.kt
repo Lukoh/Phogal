@@ -61,7 +61,7 @@ fun SearchSection(
             .background(Color.Transparent)
             .wrapContentHeight(Alignment.Top)
             .border(
-                width = 1.dp,
+                width = 0.5.dp,
                 color = Color(0xFFAAE9E6),
                 shape = RoundedCornerShape(size = 4.dp)
             )

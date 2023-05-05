@@ -1,6 +1,6 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.photo
 
-import androidx.compose.animation.core.animateDpAsState
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,13 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.ui.compose.loadImagePainter
 import com.goforer.phogal.data.model.response.Document
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.PhotoItemState
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPhotoItemState
 import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray10
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
@@ -39,8 +38,7 @@ fun PhotoItem(
     modifier: Modifier = Modifier,
     index: Int,
     document: Document,
-    onItemClicked: (item: Document, index: Int) -> Unit,
-    state: PhotoItemState = rememberPhotoItemState()
+    onItemClicked: (item: Document, index: Int) -> Unit
 ) {
     /*
      * The following code implements the requirement of advancing automatically
@@ -69,9 +67,6 @@ fun PhotoItem(
     else
         4.dp
 
-    state.heightDpState.value = animateDpAsState(
-        targetValue = 68.dp
-    ).value
     Surface(modifier = modifier.fillMaxWidth()) {
         BoxWithConstraints(
             modifier = modifier
@@ -117,6 +112,47 @@ fun PhotoItem(
                     contentScale = ContentScale.Crop
                 )
             }
+        }
+    }
+}
+
+@Preview(name = "Light Mode")
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    name = "Dark Mode",
+    showSystemUi = true
+)
+@Composable
+fun PhotoItemPreview(modifier: Modifier = Modifier) {
+    val verticalPadding = 4.dp
+
+    Surface(modifier = modifier.fillMaxWidth()) {
+        BoxWithConstraints(
+            modifier = modifier
+                .padding(0.dp, verticalPadding)
+                .clip(RoundedCornerShape(4.dp))
+        ) {
+            val imageUrl = "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg"
+            val painter = loadImagePainter(
+                data = imageUrl,
+                size = Size.ORIGINAL
+            )
+
+            val imageModifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .border(BorderStroke(1.dp, Black))
+                .background(ColorSystemGray10)
+                .clip(RoundedCornerShape(4.dp))
+                .clickable { }
+
+            Image(
+                modifier = imageModifier,
+                painter = painter,
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
         }
     }
 }
