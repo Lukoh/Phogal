@@ -16,6 +16,7 @@ import com.goforer.phogal.data.network.NetworkErrorHandler
 import com.goforer.phogal.data.network.adapter.factory.FlowCallAdapterFactory
 import com.goforer.phogal.data.network.adapter.factory.NullOnEmptyConverterFactory
 import com.goforer.phogal.data.network.api.RestAPI
+import com.goforer.phogal.data.network.response.Resource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -53,6 +54,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideGSon(): Gson = GsonBuilder().create()
+
+    @Singleton
+    @Provides
+    fun provideResource(): Resource = Resource()
 
     @Singleton
     @Provides

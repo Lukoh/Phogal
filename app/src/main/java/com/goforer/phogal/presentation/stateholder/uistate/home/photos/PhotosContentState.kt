@@ -11,12 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.goforer.phogal.data.model.response.Document
-import com.goforer.phogal.data.model.state.ResourceState
-import com.goforer.phogal.data.network.response.Resource
-import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
-import com.goforer.phogal.presentation.stateholder.uistate.rememberResourceState
-import kotlinx.coroutines.flow.StateFlow
 
 @Stable
 class PhotosContentState(
@@ -25,12 +20,9 @@ class PhotosContentState(
     var enabledList: MutableState<Boolean>,
     val showTopButtonState: State<Boolean>,
     var clickedState: MutableState<Boolean>,
-    val baseUiState: BaseUiState<Resource>,
-    val resourceState: ResourceState<StateFlow<Resource>>,
+    val baseUiState: BaseUiState,
     var photos: MutableState<List<Document>>
-) {
-    val status: Status = resourceState.status
-}
+)
 
 @Composable
 fun rememberPhotosContentState(
@@ -39,8 +31,7 @@ fun rememberPhotosContentState(
     enabledList: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     showTopButtonState: State<Boolean> = remember { derivedStateOf { searchedKeywordState.value.isNotEmpty() } },
     clickedState: MutableState<Boolean> = remember { mutableStateOf(false) },
-    baseUiState: BaseUiState<Resource>,
-    resourceState: ResourceState<StateFlow<Resource>> = rememberResourceState(resourceStateFlow = baseUiState.resourceStateFlow),
+    baseUiState: BaseUiState,
     photos: MutableState<List<Document>> = rememberSaveable { mutableStateOf(emptyList()) }
 ): PhotosContentState = remember(
     lazyListState,
@@ -49,7 +40,6 @@ fun rememberPhotosContentState(
     showTopButtonState,
     clickedState,
     baseUiState,
-    resourceState,
     photos
 ) {
     PhotosContentState(
@@ -59,7 +49,6 @@ fun rememberPhotosContentState(
         showTopButtonState = showTopButtonState,
         clickedState = clickedState,
         baseUiState = baseUiState,
-        resourceState = resourceState,
         photos = photos
     )
 }

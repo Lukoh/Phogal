@@ -7,7 +7,6 @@ import androidx.paging.cachedIn
 import com.goforer.phogal.data.mediator.PagingDataMediator
 import com.goforer.phogal.data.model.response.Document
 import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.data.repository.paging.source.BasePagingSource
 import com.goforer.phogal.data.repository.paging.source.home.GetImagesPagingSource
@@ -21,13 +20,13 @@ class GetImagesRepository
 @Inject
 constructor(
     @ApplicationScope private val externalScope: CoroutineScope
-) : Repository<Resource>() {
+) : Repository(externalScope) {
     @Inject
     lateinit var pagingSource: GetImagesPagingSource
 
     override fun trigger(replyCount: Int, params: Params) {
-        value = object :
-            PagingDataMediator<PagingData<Document>>(externalScope) {
+        Repository.replyCount = replyCount
+        value = object : PagingDataMediator<PagingData<Document>>(externalScope) {
             override fun load() = Pager(
                 config = PagingConfig(
                     pageSize = ITEM_COUNT.times(3),

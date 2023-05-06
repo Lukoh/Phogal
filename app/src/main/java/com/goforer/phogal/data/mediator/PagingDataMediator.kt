@@ -8,9 +8,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.shareIn
+import javax.inject.Inject
 
 abstract class PagingDataMediator<Response> constructor(viewModelScope: CoroutineScope) {
-    private val resource = Resource()
+    @Inject
+    lateinit var resource: Resource
 
     internal val asSharedFlow = flow {
         emit(resource.loading(Status.LOADING))

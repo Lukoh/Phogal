@@ -12,12 +12,10 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Stable
-class BaseUiState<T>(
-    val resourceStateFlow: StateFlow<T>,
+class BaseUiState(
     val context: Context?,
     val scope: CoroutineScope,
     val lifecycle: Lifecycle,
@@ -26,16 +24,13 @@ class BaseUiState<T>(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun <T> rememberBaseUiState(
-    resourceStateFlow: StateFlow<T>,
+fun rememberBaseUiState(
     context: Context = LocalContext.current,
     scope: CoroutineScope = rememberCoroutineScope(),
     lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle,
     keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current,
-): BaseUiState<T> = remember(
-    resourceStateFlow, context, scope, lifecycle, keyboardController) {
+): BaseUiState = remember(context, scope, lifecycle, keyboardController) {
     BaseUiState(
-        resourceStateFlow = resourceStateFlow,
         context = context,
         scope = scope,
         lifecycle = lifecycle,

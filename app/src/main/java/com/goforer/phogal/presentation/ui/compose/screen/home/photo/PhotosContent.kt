@@ -17,8 +17,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -27,15 +29,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.response.Document
+import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Status
-import com.goforer.phogal.data.repository.Repository.Companion.replyCount
+import com.goforer.phogal.presentation.stateholder.business.home.photo.PhotoViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.PhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import timber.log.Timber
 
@@ -43,50 +49,12 @@ import timber.log.Timber
 @Composable
 fun PhotosContent(
     modifier: Modifier = Modifier,
-    state: PhotosContentState,
     contentPadding: PaddingValues = PaddingValues(4.dp),
-    onSearched: (keyword: String) -> Unit,
+    photoViewModel: PhotoViewModel = hiltViewModel(),
     onItemClicked: (item: Document, index: Int) -> Unit
 ) {
-    replyCount = 2
-    /*
-    LaunchedEffect(state.selectedIndex.value, state.baseUiState.lifecycle) {
-        if (state.selectedIndex.value != -1)
-            Toast.makeText(state.baseUiState.context, "Show the detailed profile!", Toast.LENGTH_SHORT).show()
-    }
-    */
-
-    when(state.status) {
-        Status.SUCCESS -> {
-            state.resourceState.resourceStateFlow?.let {
-                val currentPhotosState = it.collectAsStateWithLifecycle()
-
-                state.enabledList.value = true
-
-                @Suppress("UNCHECKED_CAST")
-                state.photos.value = snapshotFlow {
-                    (currentPhotosState.value.data as State<PagingData<Document>>).value
-                }.collectAsLazyPagingItems().itemSnapshotList.items
-            }
-        }
-        Status.LOADING -> {
-            // To Do : run the loading animation or shimmer
-            state.enabledList.value = false
-        }
-        Status.ERROR -> {
-            // To Do : handle the error
-            state.enabledList.value = false
-            state.resourceState.resourceStateFlow?.let {
-                Timber.d("Error Code - %d & Error Message - %s", it.value.errorCode, it.value.message)
-            }
-        }
-    }
-
-    /*
-    if (!photosSectionState.editableInputState.isHint)
-        onSearched(photosSectionState.editableInputState.textState, false)
-
-     */
+    val state: PhotosContentState = rememberPhotosContentState(baseUiState = rememberBaseUiState())
+    var searched by rememberSaveable { mutableStateOf(false) }
 
     BoxWithConstraints(modifier = modifier) {
         Column(
@@ -102,19 +70,40 @@ fun PhotosContent(
                 modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
                 onSearched = { keyword ->
                     state.baseUiState.keyboardController?.hide()
-                    onSearched(keyword)
+                    photoViewModel.trigger(2, Params(keyword))
+                    searched = true
                 }
             )
-            if (state.enabledList.value) {
-                ListSection(
-                    modifier = Modifier
-                        .padding(4.dp, 4.dp)
-                        .weight(1f),
-                    state = rememberListSectionState(photos = state.photos.value),
-                    onItemClicked = { item, index ->
-                        onItemClicked(item, index)
+            if (searched) {
+                val photosState = photoViewModel.photosStateFlow.collectAsStateWithLifecycle()
+
+                when(photosState.value.status) {
+                    Status.SUCCESS -> {
+                        state.enabledList.value = true
+                        ListSection(
+                            modifier = Modifier
+                                .padding(4.dp, 4.dp)
+                                .weight(1f),
+                            state = rememberListSectionState(
+                                photos = snapshotFlow {
+                                    @Suppress("UNCHECKED_CAST")
+                                    photosState.value.data as PagingData<Document>
+                                }.collectAsLazyPagingItems().itemSnapshotList.items),
+                            onItemClicked = { document, index ->
+                                onItemClicked(document, index)
+                            }
+                        )
                     }
-                )
+                    Status.LOADING -> {
+                        // To Do : run the loading animation or shimmer
+                        state.enabledList.value = false
+                    }
+                    Status.ERROR -> {
+                        // To Do : handle the error
+                        state.enabledList.value = false
+                        Timber.d("Error Code - %d & Error Message - %s", photosState.value.errorCode, photosState.value.message)
+                    }
+                }
             }
         }
 
