@@ -25,7 +25,7 @@ class Phogal : Application(), ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
-        
+
         FirebaseApp.initializeApp(this)
     }
 }
