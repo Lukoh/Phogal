@@ -51,9 +51,9 @@ fun PhotosContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     photoViewModel: PhotoViewModel = hiltViewModel(),
+    state: PhotosContentState = rememberPhotosContentState(baseUiState = rememberBaseUiState()),
     onItemClicked: (item: Document, index: Int) -> Unit
 ) {
-    val state: PhotosContentState = rememberPhotosContentState(baseUiState = rememberBaseUiState())
     var searched by rememberSaveable { mutableStateOf(false) }
 
     BoxWithConstraints(modifier = modifier) {
