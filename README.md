@@ -12,3 +12,5 @@
 
 # Phogal 
 ## Better Android Apps Using latest advanced Android Architecture Guidelines + Dependency injection with Hilt + Jetpack Compose + Navigation(Navigating with Compose)
+
+# On designing & developing
