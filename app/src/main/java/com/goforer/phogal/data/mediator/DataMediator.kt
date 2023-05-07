@@ -5,18 +5,20 @@ import com.goforer.phogal.data.network.response.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import timber.log.Timber
+import javax.inject.Inject
 
 abstract class DataMediator<T> constructor(viewModelScope: CoroutineScope, replyCount: Int = 0) {
-    private val resource by lazy {
-        Resource()
-    }
+    @Inject
+    lateinit var resource: Resource
 
     internal val asSharedFlow = flow {
-        emit(resource.loading(Status.LOADING))
-        load().collect { apiResponse ->
+        load().map { apiResponse ->
             when (apiResponse) {
                 is ApiSuccessResponse -> {
                     emit(resource.success(apiResponse.body))
@@ -32,6 +34,10 @@ abstract class DataMediator<T> constructor(viewModelScope: CoroutineScope, reply
                     onNetworkError(apiResponse.errorMessage, apiResponse.statusCode)
                 }
             }
+        }.onStart {
+            emit(resource.loading(Status.LOADING))
+        }.catch {
+            emit(resource.error(it.message, 400))
         }
     }.shareIn(
         scope = viewModelScope,

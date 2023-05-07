@@ -12,6 +12,7 @@ import com.goforer.phogal.data.repository.paging.source.BasePagingSource
 import com.goforer.phogal.data.repository.paging.source.home.GetImagesPagingSource
 import com.goforer.phogal.di.module.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,8 +27,8 @@ constructor(
 
     override fun trigger(replyCount: Int, params: Params) {
         Repository.replyCount = replyCount
-        value = object : PagingDataMediator<PagingData<Document>>(externalScope) {
-            override fun load() = Pager(
+        value = object : PagingDataMediator<PagingData<Document>>(externalScope, replyCount) {
+            override fun load(): Flow<PagingData<Document>> = Pager(
                 config = PagingConfig(
                     pageSize = ITEM_COUNT.times(3),
                     prefetchDistance = ITEM_COUNT.times(3) - 5,
