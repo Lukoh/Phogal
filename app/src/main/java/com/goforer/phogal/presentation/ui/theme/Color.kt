@@ -89,5 +89,5 @@ val ColorSearchBarBorder = Color(0xFFAAE9E6)
 
 val ColorText1 = Color(0xFF203F2F)
 val ColorText2 = Color(0xFF018786)
-val ColorText3 = Color(0x993C3C43)
+val ColorText3 = Color(0xFFF7F8FF)
 val ColorText4 = Color(0xFF9BA5B4)

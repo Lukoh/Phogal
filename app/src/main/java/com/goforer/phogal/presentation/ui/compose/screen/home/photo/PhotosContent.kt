@@ -33,7 +33,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.photos.PhotosCon
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
-import com.goforer.phogal.presentation.ui.theme.ColorText2
+import com.goforer.phogal.presentation.ui.theme.ColorText3
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import kotlinx.coroutines.flow.flowOf
 import timber.log.Timber
@@ -106,7 +106,7 @@ fun PhotosContent(
                     Text(
                         text = stringResource(id = R.string.search_photos),
                         modifier = Modifier.align(Alignment.Center),
-                        color = ColorText2,
+                        color = ColorText3,
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.Bold,
                         fontSize = 17.sp
@@ -146,7 +146,7 @@ fun PhotosContentPreview(modifier: Modifier = Modifier) {
                     Text(
                         text = stringResource(id = R.string.search_photos),
                         modifier = Modifier.align(Alignment.Center),
-                        color = ColorText2,
+                        color = ColorText3,
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.Bold,
                         fontSize = 17.sp
