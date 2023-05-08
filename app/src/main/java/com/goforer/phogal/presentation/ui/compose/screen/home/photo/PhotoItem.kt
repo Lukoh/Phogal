@@ -40,28 +40,6 @@ fun PhotoItem(
     document: Document,
     onItemClicked: (item: Document, index: Int) -> Unit
 ) {
-    /*
-     * The following code implements the requirement of advancing automatically
-     * to the DetailInfo screen when person id is changed....
-     * and the user wanted to continue with the next process.
-     */
-    /*
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-    val currentNavigateToDetailInfo by rememberUpdatedState(onNavigateToDetailInfo)
-    var clikced by remember { mutableStateOf(false) }
-
-    LaunchedEffect(clikced, lifecycle) {
-        if (clikced) {
-            snapshotFlow { person.id }
-                .flowWithLifecycle(lifecycle)
-                .collect {
-                    currentNavigateToDetailInfo(it)
-                }
-        }
-    }
-
-     */
-
     val verticalPadding = if (index == 0)
         2.dp
     else
