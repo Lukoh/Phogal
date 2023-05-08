@@ -1,7 +1,5 @@
 package com.goforer.phogal.presentation.stateholder.uistate.home.photos
 
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
@@ -15,7 +13,6 @@ import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 
 @Stable
 class PhotosContentState(
-    val lazyListState: LazyListState,
     var searchedKeywordState: MutableState<String>,
     var enabledList: MutableState<Boolean>,
     val showTopButtonState: State<Boolean>,
@@ -26,7 +23,6 @@ class PhotosContentState(
 
 @Composable
 fun rememberPhotosContentState(
-    lazyListState: LazyListState = rememberLazyListState(),
     searchedKeywordState: MutableState<String> = rememberSaveable { mutableStateOf("") },
     enabledList: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     showTopButtonState: State<Boolean> = remember { derivedStateOf { searchedKeywordState.value.isNotEmpty() } },
@@ -34,7 +30,6 @@ fun rememberPhotosContentState(
     baseUiState: BaseUiState,
     photos: MutableState<List<Document>> = rememberSaveable { mutableStateOf(emptyList()) }
 ): PhotosContentState = remember(
-    lazyListState,
     searchedKeywordState,
     enabledList,
     showTopButtonState,
@@ -43,7 +38,6 @@ fun rememberPhotosContentState(
     photos
 ) {
     PhotosContentState(
-        lazyListState = lazyListState,
         searchedKeywordState = searchedKeywordState,
         enabledList = enabledList,
         showTopButtonState = showTopButtonState,

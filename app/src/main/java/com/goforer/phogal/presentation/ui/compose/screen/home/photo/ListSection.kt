@@ -13,21 +13,30 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import com.goforer.phogal.R
 import com.goforer.phogal.data.model.response.Document
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun ListSection(
@@ -36,6 +45,8 @@ fun ListSection(
     photos: LazyPagingItems<Document>,
     onItemClicked: (item: Document, index: Int) -> Unit,
 ) {
+    var openedErrorDialog by rememberSaveable { mutableStateOf(false) }
+
     BoxWithConstraints(
         modifier = modifier
             .clip(RoundedCornerShape(4.dp))
@@ -54,27 +65,32 @@ fun ListSection(
                 )
             })
 
-            when(val state = photos.loadState.refresh) {
+            openedErrorDialog = when(photos.loadState.refresh) {
                 is LoadState.Error -> {
-                    //TODO Error Item
+                    true
                 }
+
                 is LoadState.Loading -> {
-
+                    false
                 }
-                else -> {
 
+                else -> {
+                    false
                 }
             }
 
-            when (val state = photos.loadState.append) {
+            openedErrorDialog = when(photos.loadState.append) {
                 is LoadState.Error -> {
-                    //TODO Pagination Error Item
-                    //state.error to get error message
+                    true
                 }
+
                 is LoadState.Loading -> {
-                    // Pagination Loading UI
+                    false
                 }
-                else -> {}
+
+                else -> {
+                    false
+                }
             }
         }
 
@@ -90,6 +106,9 @@ fun ListSection(
                 backgroundColor = MaterialTheme.colorScheme.primary,
                 onClick = {
                     state.clickedState.value = true
+                    state.scope.launch {
+                        state.lazyListState.scrollToItem(0)
+                    }
                 }
             ) {
                 Text("Up!")
@@ -123,6 +142,26 @@ fun ListSection(
         }
 
          */
+    }
+
+    if (openedErrorDialog) {
+        AlertDialog(
+            onDismissRequest = {
+            },
+            title = {
+                Text(text = stringResource(id = R.string.error_dialog_title))
+            },
+            text = {
+                Text(stringResource(id = R.string.error_dialog_content))
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                    }) {
+                    Text(stringResource(id = R.string.confirm))
+                }
+            },
+        )
     }
 }
 

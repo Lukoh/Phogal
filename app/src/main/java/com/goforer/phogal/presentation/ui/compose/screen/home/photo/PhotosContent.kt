@@ -1,29 +1,16 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.photo
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterExitState
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateColor
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,7 +27,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import kotlinx.coroutines.flow.flowOf
 import timber.log.Timber
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PhotosContent(
     modifier: Modifier = Modifier,
@@ -81,7 +68,7 @@ fun PhotosContent(
                             modifier = Modifier
                                 .padding(4.dp, 4.dp)
                                 .weight(1f),
-                            state = rememberListSectionState(),
+                            state = rememberListSectionState(scope = state.baseUiState.scope),
                             photos,
                             onItemClicked = { document, index ->
                                 onItemClicked(document, index)
@@ -98,39 +85,6 @@ fun PhotosContent(
                         Timber.d("Error Code - %d & Error Message - %s", photosState.value.errorCode, photosState.value.message)
                     }
                 }
-            }
-        }
-
-        AnimatedVisibility(
-            enter = expandVertically(),
-            exit = shrinkVertically(),
-            visible = state.showTopButtonState.value,
-            modifier = Modifier.align(Alignment.BottomEnd)
-        ) {
-            val background by transition.animateColor(label = "FloatingAnimation") { state ->
-                if (state == EnterExitState.Visible) MaterialTheme.colorScheme.primary else Color.Gray
-            }
-
-            FloatingActionButton(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .navigationBarsPadding()
-                    .padding(bottom = 8.dp, end = 8.dp),
-                backgroundColor = background,
-                onClick = {
-                    state.clickedState.value = true
-                }
-            ) {
-                Text("Back!")
-            }
-        }
-
-        if (state.showTopButtonState.value && state.clickedState.value) {
-            LaunchedEffect(state.lazyListState, state.showTopButtonState.value, state.clickedState.value) {
-                if (state.showTopButtonState.value && state.clickedState.value)
-                    state.lazyListState.scrollToItem (0)
-
-                state.clickedState.value = false
             }
         }
     }
