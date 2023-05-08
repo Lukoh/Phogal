@@ -71,17 +71,18 @@ fun PhotosContent(
             )
             if (searched) {
                 val photosState = photoViewModel.photosStateFlow.collectAsStateWithLifecycle()
+                @Suppress("UNCHECKED_CAST")
+                val photos = flowOf(photosState.value.data as PagingData<Document>).collectAsLazyPagingItems()
 
                 when(photosState.value.status) {
                     Status.SUCCESS -> {
                         state.enabledList.value = true
-                        @Suppress("UNCHECKED_CAST")
                         ListSection(
                             modifier = Modifier
                                 .padding(4.dp, 4.dp)
                                 .weight(1f),
                             state = rememberListSectionState(),
-                            flowOf(photosState.value.data as PagingData<Document>).collectAsLazyPagingItems(),
+                            photos,
                             onItemClicked = { document, index ->
                                 onItemClicked(document, index)
                             }
