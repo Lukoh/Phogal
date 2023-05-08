@@ -55,11 +55,11 @@ fun ListSection(
                 .animateContentSize(),
             state = state.lazyListState,
         ) {
-            itemsIndexed(photos.itemSnapshotList , key = { _, item -> item?.datetime!! }, itemContent = { index, item ->
+            itemsIndexed(photos.itemSnapshotList.items , key = { _, item -> item.datetime }, itemContent = { index, item ->
                 PhotoItem(
                     modifier = modifier,
                     index = index,
-                    document = item as Document,
+                    document = item,
                     onItemClicked = onItemClicked
                 )
             })

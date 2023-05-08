@@ -12,4 +12,6 @@
 
     <string name="error_dialog_title">Error</string>
     <string name="error_dialog_content">Failed to get the photo list.</string>
+
+    <string name="search_photos">Search your photos</string>
 </resources>
