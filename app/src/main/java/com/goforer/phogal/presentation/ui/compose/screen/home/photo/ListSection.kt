@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.goforer.phogal.data.model.response.Document
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
@@ -53,7 +54,28 @@ fun ListSection(
                 )
             })
 
+            when(val state = photos.loadState.refresh) {
+                is LoadState.Error -> {
+                    //TODO Error Item
+                }
+                is LoadState.Loading -> {
 
+                }
+                else -> {
+
+                }
+            }
+
+            when (val state = photos.loadState.append) {
+                is LoadState.Error -> {
+                    //TODO Pagination Error Item
+                    //state.error to get error message
+                }
+                is LoadState.Loading -> {
+                    // Pagination Loading UI
+                }
+                else -> {}
+            }
         }
 
         AnimatedVisibility(
