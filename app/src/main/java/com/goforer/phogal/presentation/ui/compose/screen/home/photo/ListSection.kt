@@ -36,7 +36,6 @@ import com.goforer.phogal.data.model.response.Document
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun ListSection(
@@ -106,9 +105,13 @@ fun ListSection(
                 backgroundColor = MaterialTheme.colorScheme.primary,
                 onClick = {
                     state.clickedState.value = true
+                    // Can scrolling to the first item using below code....
+                    /*
                     state.scope.launch {
                         state.lazyListState.scrollToItem(0)
                     }
+
+                     */
                 }
             ) {
                 Text("Up!")
@@ -121,32 +124,12 @@ fun ListSection(
 
             state.clickedState.value = false
         }
-
-        /*
-        if (showButton) {
-            val coroutineScope = rememberCoroutineScope()
-
-            FloatingActionButton(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .navigationBarsPadding()
-                    .padding(bottom = 4.dp, end = 8.dp),
-                backgroundColor = MaterialTheme.colorScheme.primary,
-                onClick = {
-                    coroutineScope.launch {
-                        lazyListState.scrollToItem(0)
-                    }}
-            ) {
-                Text("Up!")
-            }
-        }
-
-         */
     }
 
     if (openedErrorDialog) {
         AlertDialog(
             onDismissRequest = {
+                openedErrorDialog = false
             },
             title = {
                 Text(text = stringResource(id = R.string.error_dialog_title))
@@ -157,6 +140,7 @@ fun ListSection(
             confirmButton = {
                 Button(
                     onClick = {
+                        openedErrorDialog = false
                     }) {
                     Text(stringResource(id = R.string.confirm))
                 }

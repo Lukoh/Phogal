@@ -78,6 +78,8 @@ fun PhotosContent(
                     Status.LOADING -> {
                         // To Do : run the loading animation or shimmer
                         state.enabledList.value = false
+                        LoadingPhotos(Modifier.padding(4.dp, 4.dp).weight(1f), 3)
+
                     }
                     Status.ERROR -> {
                         // To Do : handle the error

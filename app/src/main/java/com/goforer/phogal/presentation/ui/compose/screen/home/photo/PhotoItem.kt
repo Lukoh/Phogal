@@ -82,7 +82,7 @@ fun PhotoItem(
             if (painter.state is AsyncImagePainter.State.Loading) {
                 val holderModifier = Modifier
                     .fillMaxWidth()
-                    .height(175.dp)
+                    .height(256.dp)
                     .align(Alignment.Center)
                     .border(BorderStroke(1.dp, Black))
                     .background(ColorSystemGray2)
