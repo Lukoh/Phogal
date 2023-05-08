@@ -6,13 +6,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -67,51 +67,48 @@ fun PhotoItem(
     else
         4.dp
 
-    Surface(modifier = modifier.fillMaxWidth()) {
-        BoxWithConstraints(
-            modifier = modifier
-            .padding(0.dp, verticalPadding)
-            .clip(RoundedCornerShape(4.dp))
-        ) {
-            val imageUrl = document.image_url ?: document.thumbnail
-            val painter = loadImagePainter(
-                data = imageUrl!!,
-                size = Size.ORIGINAL
+    Card(
+        modifier = modifier.padding(0.dp, verticalPadding),
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+    ) {
+        val imageUrl = document.image_url ?: document.thumbnail
+        val painter = loadImagePainter(
+            data = imageUrl!!,
+            size = Size.ORIGINAL
+        )
+
+        if (painter.state is AsyncImagePainter.State.Loading) {
+            val holderModifier = Modifier
+                .fillMaxWidth()
+                .height(256.dp)
+                .align(Alignment.CenterHorizontally)
+                .border(BorderStroke(1.dp, Black))
+                .background(ColorSystemGray2)
+                .placeholder(
+                    visible = true,
+                    highlight = PlaceholderHighlight.shimmer(),
+                )
+
+            Text(
+                modifier = holderModifier,
+                text = "",
+                textAlign = TextAlign.Center
             )
+        } else {
+            val imageModifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .border(BorderStroke(1.dp, Black))
+                .background(ColorSystemGray10)
+                .clip(RoundedCornerShape(4.dp))
+                .clickable { onItemClicked.invoke(document, index) }
 
-            if (painter.state is AsyncImagePainter.State.Loading) {
-                val holderModifier = Modifier
-                    .fillMaxWidth()
-                    .height(256.dp)
-                    .align(Alignment.Center)
-                    .border(BorderStroke(1.dp, Black))
-                    .background(ColorSystemGray2)
-                    .placeholder(
-                        visible = true,
-                        highlight = PlaceholderHighlight.shimmer(),
-                    )
-
-                Text(
-                    modifier = holderModifier,
-                    text = "",
-                    textAlign = TextAlign.Center
-                )
-            } else {
-                val imageModifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .border(BorderStroke(1.dp, Black))
-                    .background(ColorSystemGray10)
-                    .clip(RoundedCornerShape(4.dp))
-                    .clickable { onItemClicked.invoke(document, index) }
-
-                Image(
-                    modifier = imageModifier,
-                    painter = painter,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-            }
+            Image(
+                modifier = imageModifier,
+                painter = painter,
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
         }
     }
 }
@@ -127,32 +124,28 @@ fun PhotoItem(
 fun PhotoItemPreview(modifier: Modifier = Modifier) {
     val verticalPadding = 4.dp
 
-    Surface(modifier = modifier.fillMaxWidth()) {
-        BoxWithConstraints(
-            modifier = modifier
-                .padding(0.dp, verticalPadding)
-                .clip(RoundedCornerShape(4.dp))
-        ) {
-            val imageUrl = "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg"
-            val painter = loadImagePainter(
-                data = imageUrl,
-                size = Size.ORIGINAL
-            )
+    Card(
+        modifier = modifier.padding(0.dp, verticalPadding),
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+    ) {
+        val imageUrl = "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg"
+        val painter = loadImagePainter(
+            data = imageUrl,
+            size = Size.ORIGINAL
+        )
 
-            val imageModifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .border(BorderStroke(1.dp, Black))
-                .background(ColorSystemGray10)
-                .clip(RoundedCornerShape(4.dp))
-                .clickable { }
+        val imageModifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .background(ColorSystemGray10)
+            .clip(RoundedCornerShape(4.dp))
+            .clickable { }
 
-            Image(
-                modifier = imageModifier,
-                painter = painter,
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-        }
+        Image(
+            modifier = imageModifier,
+            painter = painter,
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
     }
 }
