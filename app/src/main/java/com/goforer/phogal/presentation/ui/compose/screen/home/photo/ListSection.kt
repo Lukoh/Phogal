@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
 import com.goforer.phogal.data.model.response.Document
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
@@ -31,6 +32,7 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 fun ListSection(
     modifier: Modifier = Modifier,
     state: ListSectionState = rememberListSectionState(),
+    photos: LazyPagingItems<Document>,
     onItemClicked: (item: Document, index: Int) -> Unit,
 ) {
     BoxWithConstraints(
@@ -42,14 +44,16 @@ fun ListSection(
                 .animateContentSize(),
             state = state.lazyListState,
         ) {
-            itemsIndexed(state.photos , key = { _, item -> item.datetime }, itemContent = { index, item ->
+            itemsIndexed(photos.itemSnapshotList , key = { _, item -> item?.datetime!! }, itemContent = { index, item ->
                 PhotoItem(
                     modifier = modifier,
                     index = index,
-                    document = item,
+                    document = item as Document,
                     onItemClicked = onItemClicked
                 )
             })
+
+
         }
 
         AnimatedVisibility(
