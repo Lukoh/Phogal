@@ -48,6 +48,7 @@ fun PhotosContent(
     onItemClicked: (item: Document, index: Int) -> Unit
 ) {
     var searched by rememberSaveable { mutableStateOf(false) }
+    var searchedKeyword by rememberSaveable { mutableStateOf("") }
 
     BoxWithConstraints(modifier = modifier) {
         Column(
@@ -62,6 +63,7 @@ fun PhotosContent(
             SearchSection(
                 modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
                 onSearched = { keyword ->
+                    searchedKeyword = keyword
                     state.baseUiState.keyboardController?.hide()
                     photoViewModel.trigger(2, Params(keyword))
                     searched = true
@@ -71,18 +73,23 @@ fun PhotosContent(
                 val photosState = photoViewModel.photosStateFlow.collectAsStateWithLifecycle()
                 @Suppress("UNCHECKED_CAST")
                 val photos = flowOf(photosState.value.data as PagingData<Document>).collectAsLazyPagingItems()
+                val listSectionState = rememberListSectionState(scope = state.baseUiState.scope)
 
                 when(photosState.value.status) {
                     Status.SUCCESS -> {
                         state.enabledList.value = true
+                        listSectionState.refreshing.value = false
                         ListSection(
                             modifier = Modifier
                                 .padding(4.dp, 4.dp)
                                 .weight(1f),
-                            state = rememberListSectionState(scope = state.baseUiState.scope),
+                            state = listSectionState,
                             photos,
                             onItemClicked = { document, index ->
                                 onItemClicked(document, index)
+                            },
+                            onRefresh = {
+                                photoViewModel.trigger(2, Params(searchedKeyword))
                             }
                         )
                     }

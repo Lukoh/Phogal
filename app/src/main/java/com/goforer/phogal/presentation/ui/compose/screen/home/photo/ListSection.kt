@@ -6,6 +6,8 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +15,11 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -39,77 +45,91 @@ import com.goforer.phogal.data.model.response.Document
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ListSection(
     modifier: Modifier = Modifier,
     state: ListSectionState = rememberListSectionState(),
     photos: LazyPagingItems<Document>,
     onItemClicked: (item: Document, index: Int) -> Unit,
+    onRefresh: () -> Unit
 ) {
     var openedErrorDialog by rememberSaveable { mutableStateOf(false) }
+    val refreshState = rememberPullRefreshState(state.refreshing.value, onRefresh = {
+        state.scope.launch {
+            state.refreshing.value = true
+            onRefresh()
+        }
+    })
 
     BoxWithConstraints(
         modifier = modifier
             .clip(RoundedCornerShape(4.dp))
+            .pullRefresh(refreshState)
     ) {
         LazyColumn(
             modifier = Modifier
                 .animateContentSize(),
             state = state.lazyListState,
         ) {
-            itemsIndexed(photos.itemSnapshotList.items , key = { _, item -> item.datetime }, itemContent = { index, item ->
-                PhotoItem(
-                    modifier = modifier,
-                    index = index,
-                    document = item,
-                    onItemClicked = onItemClicked
-                )
-            })
+            if (!state.refreshing.value) {
+                itemsIndexed(photos.itemSnapshotList.items , key = { _, item -> item.datetime }, itemContent = { index, item ->
+                    PhotoItem(
+                        modifier = modifier,
+                        index = index,
+                        document = item,
+                        onItemClicked = onItemClicked
+                    )
+                })
 
-            openedErrorDialog = when(photos.loadState.refresh) {
-                is LoadState.Error -> {
-                    true
-                }
-
-                is LoadState.Loading -> {
-                    item {
-                        Column(
-                            modifier = Modifier.fillParentMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                        ) {
-                            Text(modifier = Modifier.padding(8.dp), text = "Refresh Loading")
-                            CircularProgressIndicator(color = Color.Black)
-                        }
+                openedErrorDialog = when(photos.loadState.refresh) {
+                    is LoadState.Error -> {
+                        true
                     }
 
-                    false
+                    is LoadState.Loading -> {
+                        item {
+                            Column(
+                                modifier = Modifier.fillParentMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
+                            ) {
+                                Text(modifier = Modifier.padding(8.dp), text = "Refresh Loading")
+                                Spacer(modifier = Modifier.height(8.dp))
+                                CircularProgressIndicator(color = Color.Black)
+                            }
+                        }
+
+                        false
+                    }
+
+                    else -> {
+                        false
+                    }
                 }
 
-                else -> {
-                    false
-                }
-            }
+                openedErrorDialog = when(photos.loadState.append) {
+                    is LoadState.Error -> {
+                        true
+                    }
 
-            openedErrorDialog = when(photos.loadState.append) {
-                is LoadState.Error -> {
-                    true
-                }
+                    is LoadState.Loading -> {
+                        Timber.d("Pagination Loading")
 
-                is LoadState.Loading -> {
-                    Timber.d("Pagination Loading")
+                        false
+                    }
 
-                    false
-                }
-
-                else -> {
-                    false
+                    else -> {
+                        false
+                    }
                 }
             }
         }
 
+        PullRefreshIndicator(state.refreshing.value, refreshState, Modifier.align(Alignment.TopCenter))
         AnimatedVisibility(
             visible = state.visibleUpButtonState.value,
             modifier = Modifier.align(Alignment.BottomEnd)

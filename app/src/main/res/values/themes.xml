@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.Phogal" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="NightAdjusted.Theme.Phogal" parent="android:Theme.Material.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:windowDisablePreview">true</item>
         <item name="android:background">@android:color/transparent</item>
@@ -21,9 +21,14 @@
         <item name="android:spotShadowAlpha">0.05</item>
     </style>
 
+    <style name="PlatformAdjusted.Theme.Phogal" parent="NightAdjusted.Theme.Phogal">
+        <item name="android:statusBarColor">@color/black_30</item>
+    </style>
+
+    <style name="Theme.Phogal" parent="PlatformAdjusted.Theme.Phogal" />
+
     <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <style name="Theme.Phogal.Splash" parent="NightAdjusted.Theme.Splash">

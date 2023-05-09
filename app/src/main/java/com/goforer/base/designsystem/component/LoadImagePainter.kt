@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.component
+package com.goforer.base.designsystem.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext

@@ -25,9 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.response.Document
-import com.goforer.phogal.presentation.ui.compose.component.CardSnackBar
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

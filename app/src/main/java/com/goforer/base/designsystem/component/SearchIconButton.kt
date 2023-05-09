@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.component
+package com.goforer.base.designsystem.component
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility

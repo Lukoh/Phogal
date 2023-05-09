@@ -13,8 +13,13 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.size.Size
-import com.goforer.base.ui.compose.loadImagePainter
+import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.data.model.response.Document
 import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray10
@@ -40,6 +45,7 @@ fun PhotoItem(
     document: Document,
     onItemClicked: (item: Document, index: Int) -> Unit
 ) {
+    var isClicked by rememberSaveable { mutableStateOf(false) }
     val verticalPadding = if (index == 0)
         2.dp
     else
@@ -47,7 +53,21 @@ fun PhotoItem(
 
     Card(
         modifier = modifier.padding(0.dp, verticalPadding),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        colors = CardDefaults.cardColors(
+            contentColor = MaterialTheme.colorScheme.primary,
+            containerColor =
+            if (isClicked)
+                MaterialTheme.colorScheme.primaryContainer
+            else
+                MaterialTheme.colorScheme.surfaceVariant,
+            disabledContentColor = MaterialTheme.colorScheme.surface,
+            disabledContainerColor = MaterialTheme.colorScheme.onSurface
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8. dp,
+            pressedElevation = 2. dp,
+            focusedElevation = 4. dp
+        )
     ) {
         val imageUrl = document.image_url ?: document.thumbnail
         val painter = loadImagePainter(
@@ -79,7 +99,10 @@ fun PhotoItem(
                 .border(BorderStroke(1.dp, Black))
                 .background(ColorSystemGray10)
                 .clip(RoundedCornerShape(4.dp))
-                .clickable { onItemClicked.invoke(document, index) }
+                .clickable {
+                    isClicked = true
+                    onItemClicked.invoke(document, index)
+                }
 
             Image(
                 modifier = imageModifier,
@@ -101,10 +124,25 @@ fun PhotoItem(
 @Composable
 fun PhotoItemPreview(modifier: Modifier = Modifier) {
     val verticalPadding = 4.dp
+    var isClicked by rememberSaveable { mutableStateOf(false) }
 
     Card(
         modifier = modifier.padding(0.dp, verticalPadding),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        colors = CardDefaults.cardColors(
+            contentColor = MaterialTheme.colorScheme.primary,
+            containerColor =
+            if (isClicked)
+                MaterialTheme.colorScheme.primaryContainer
+            else
+                MaterialTheme.colorScheme.surfaceVariant,
+            disabledContentColor = MaterialTheme.colorScheme.surface,
+            disabledContainerColor = MaterialTheme.colorScheme.onSurface
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8. dp,
+            pressedElevation = 2. dp,
+            focusedElevation = 4. dp
+        )
     ) {
         val imageUrl = "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg"
         val painter = loadImagePainter(
@@ -117,7 +155,7 @@ fun PhotoItemPreview(modifier: Modifier = Modifier) {
             .wrapContentHeight()
             .background(ColorSystemGray10)
             .clip(RoundedCornerShape(4.dp))
-            .clickable { }
+            .clickable { isClicked = true }
 
         Image(
             modifier = imageModifier,

@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.component
+package com.goforer.base.designsystem.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
