@@ -73,6 +73,7 @@ fun SearchSection(
             else
                 state.editableInputState.textState,
             onValueChange = {
+                state.keywordChanged.value = true
                 state.editableInputState.textState = it
             },
             leadingIcon = {
@@ -120,9 +121,10 @@ fun SearchSection(
                 }
         )
         SearchIconButton(
-            modifier = modifier.padding(2.dp, 4.dp),
+            modifier = modifier.padding(horizontal = 2.dp),
             onClick = {
-                onSearched(state.editableInputState.textState)
+                if (state.keywordChanged.value)
+                    onSearched(state.editableInputState.textState)
             },
             icon = {
                 Icon(
@@ -223,7 +225,7 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
                     }
             )
             SearchIconButton(
-                modifier = modifier.padding(2.dp, 4.dp),
+                modifier = modifier.padding(horizontal = 2.dp),
                 onClick = {},
                 icon = {
                     Icon(

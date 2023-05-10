@@ -1,9 +1,7 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.photo
 
 import android.content.res.Configuration
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.placeholder.PlaceholderHighlight
@@ -38,7 +35,6 @@ fun LoadingPhotos(
                         modifier = modifier
                             .fillMaxWidth()
                             .height(256.dp)
-                            .border(BorderStroke(1.dp, Black))
                             .background(ColorSystemGray2)
                             .placeholder(
                                 visible = true,
@@ -74,7 +70,6 @@ fun LoadingPhotosPreview(modifier: Modifier = Modifier) {
                             modifier = modifier
                                 .fillMaxWidth()
                                 .height(256.dp)
-                                .border(BorderStroke(1.dp, Black))
                                 .background(ColorSystemGray2)
                                 .placeholder(
                                     visible = true,

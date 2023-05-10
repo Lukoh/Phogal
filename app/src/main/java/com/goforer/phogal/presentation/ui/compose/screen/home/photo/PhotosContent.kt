@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,7 +20,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
@@ -33,7 +33,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.photos.PhotosCon
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
-import com.goforer.phogal.presentation.ui.theme.ColorText3
+import com.goforer.phogal.presentation.ui.theme.Blue40
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import kotlinx.coroutines.flow.flowOf
 import timber.log.Timber
@@ -58,25 +58,28 @@ fun PhotosContent(
                     contentPadding.calculateTopPadding(),
                     0.dp,
                     0.dp
-                )
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SearchSection(
                 modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
                 onSearched = { keyword ->
-                    searchedKeyword = keyword
-                    state.baseUiState.keyboardController?.hide()
-                    photoViewModel.trigger(2, Params(keyword))
-                    searched = true
+                    if (keyword.isNotEmpty()) {
+                        searchedKeyword = keyword
+                        state.baseUiState.keyboardController?.hide()
+                        photoViewModel.trigger(2, Params(keyword))
+                        searched = true
+                    }
                 }
             )
             if (searched) {
                 val photosState = photoViewModel.photosStateFlow.collectAsStateWithLifecycle()
-                @Suppress("UNCHECKED_CAST")
-                val photos = flowOf(photosState.value.data as PagingData<Document>).collectAsLazyPagingItems()
                 val listSectionState = rememberListSectionState(scope = state.baseUiState.scope)
 
                 when(photosState.value.status) {
                     Status.SUCCESS -> {
+                        @Suppress("UNCHECKED_CAST")
+                        val photos = flowOf(photosState.value.data as PagingData<Document>).collectAsLazyPagingItems()
                         state.enabledList.value = true
                         listSectionState.refreshing.value = false
                         ListSection(
@@ -108,11 +111,10 @@ fun PhotosContent(
                 BoxWithConstraints(modifier = Modifier.weight(1f)) {
                     Text(
                         text = stringResource(id = R.string.search_photos),
+                        style = typography.titleMedium.copy(color = Blue40),
                         modifier = Modifier.align(Alignment.Center),
-                        color = ColorText3,
                         fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 17.sp
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }
@@ -148,11 +150,10 @@ fun PhotosContentPreview(modifier: Modifier = Modifier) {
                 BoxWithConstraints(modifier = Modifier.weight(1f)) {
                     Text(
                         text = stringResource(id = R.string.search_photos),
+                        style = typography.titleMedium.copy(color = Blue40),
                         modifier = Modifier.align(Alignment.Center),
-                        color = ColorText3,
                         fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 17.sp
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }
