@@ -16,8 +16,7 @@ fun CheckPermission(
         listOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.CAMERA,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.CAMERA
         )
     ),
     onPermissionGranted: () -> Unit,
@@ -30,9 +29,7 @@ fun CheckPermission(
         onPermissionDenied(
             getGivenPermissionsText(
                 multiplePermissionsState.revokedPermissions,
-                multiplePermissionsState.shouldShowRationale,
-                stringResource(id = R.string.permission_rationale),
-                stringResource(id = R.string.permission_denied)
+                stringResource(id = R.string.permission_rationale)
             )
         )
     }
@@ -41,9 +38,7 @@ fun CheckPermission(
 @OptIn(ExperimentalPermissionsApi::class)
 private fun getGivenPermissionsText(
     permissions: List<PermissionState>,
-    shouldShowRationale: Boolean,
-    rationaleText: String,
-    deniedText: String
+    rationaleText: String
 ): String {
     val revokedPermissionsSize = permissions.size
     if (revokedPermissionsSize == 0) return ""
@@ -66,14 +61,10 @@ private fun getGivenPermissionsText(
             }
         }
     }
+
+    textToShow.append("\n\n\n")
     textToShow.append(if (revokedPermissionsSize == 1) "Permission is " else "Permissions are ")
-    textToShow.append(
-        if (shouldShowRationale) {
-            rationaleText
-        } else {
-            deniedText
-        }
-    )
+    textToShow.append(rationaleText)
 
     return textToShow.toString()
 }
