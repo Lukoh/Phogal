@@ -247,6 +247,7 @@ dependencies {
     implementation "androidx.hilt:hilt-navigation-compose:$navigation_compose_hilt_version"
 
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
 
     implementation "com.jakewharton.timber:timber:$timber_version"
 

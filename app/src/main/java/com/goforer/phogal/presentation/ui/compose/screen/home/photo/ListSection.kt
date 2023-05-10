@@ -95,7 +95,7 @@ fun ListSection(
                             Column(
                                 modifier = Modifier.fillParentMaxSize(),
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
+                                verticalArrangement = Arrangement.Center
                             ) {
                                 Text(modifier = Modifier.padding(8.dp), text = "Refresh Loading")
                                 Spacer(modifier = Modifier.height(8.dp))

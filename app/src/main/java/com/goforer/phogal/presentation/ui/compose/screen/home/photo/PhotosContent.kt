@@ -1,13 +1,16 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.photo
 
+import android.Manifest
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,14 +34,20 @@ import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.stateholder.business.home.photo.PhotoViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.PhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPermissionDeniedState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.Blue40
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.flowOf
 import timber.log.Timber
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class,
+    ExperimentalMaterial3Api::class
+)
 @Composable
 fun PhotosContent(
     modifier: Modifier = Modifier,
@@ -49,6 +58,8 @@ fun PhotosContent(
 ) {
     var searched by rememberSaveable { mutableStateOf(false) }
     var searchedKeyword by rememberSaveable { mutableStateOf("") }
+    val enabledSearch: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
+    var showPermissionDeniedBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     BoxWithConstraints(modifier = modifier) {
         Column(
@@ -63,6 +74,7 @@ fun PhotosContent(
         ) {
             SearchSection(
                 modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
+                state = rememberSearchSectionState(searchEnabled = enabledSearch),
                 onSearched = { keyword ->
                     if (keyword.isNotEmpty()) {
                         searchedKeyword = keyword
@@ -99,7 +111,10 @@ fun PhotosContent(
                     Status.LOADING -> {
                         // To Do : run the loading animation or shimmer
                         state.enabledList.value = false
-                        LoadingPhotos(Modifier.padding(4.dp, 8.dp).weight(1f), 3)
+                        LoadingPhotos(
+                            Modifier
+                                .padding(4.dp, 8.dp)
+                                .weight(1f), 3)
                     }
                     Status.ERROR -> {
                         // To Do : handle the error
@@ -120,6 +135,36 @@ fun PhotosContent(
             }
         }
     }
+
+    val multiplePermissionsState = rememberMultiplePermissionsState(
+        listOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    )
+    val deniedTextState: MutableState<String> = rememberSaveable { mutableStateOf("") }
+
+    CheckPermission(
+        multiplePermissionsState= multiplePermissionsState,
+        onPermissionGranted = {
+            enabledSearch.value = true
+            showPermissionDeniedBottomSheet = false
+        },
+        onPermissionDenied = {
+            deniedTextState.value = it
+            enabledSearch.value = false
+            showPermissionDeniedBottomSheet = true
+        }
+    )
+
+    if (showPermissionDeniedBottomSheet)
+        PermissionDeniedBottomSheet(
+            permissionDeniedState = rememberPermissionDeniedState(deniedTextState = deniedTextState)
+        ) {
+            multiplePermissionsState.launchMultiplePermissionRequest()
+        }
 }
 
 @Preview(name = "Light Mode")

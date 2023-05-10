@@ -76,6 +76,7 @@ fun SearchSection(
                 state.keywordChanged.value = true
                 state.editableInputState.textState = it
             },
+            enabled = state.searchEnabled.value,
             leadingIcon = {
                 Icon(
                     modifier = Modifier.padding(0.dp, 4.dp, 0.dp, 0.dp),

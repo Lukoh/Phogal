@@ -14,4 +14,7 @@
     <string name="error_dialog_content">Failed to get the photo list.</string>
 
     <string name="search_photos">Search your photos</string>
+    <string name="permission_rationale"> important. Please grant all of them for the app to function properly.</string>
+    <string name="permission_denied"> denied. The app cannot function without them..</string>
+    <string name="permission_request">Request permissions</string>
 </resources>

@@ -14,18 +14,21 @@ import com.goforer.phogal.presentation.stateholder.uistate.rememberEditableInput
 class SearchSectionState(
     val editableInputState: EditableInputState,
     val interactionSource: MutableInteractionSource,
-    val keywordChanged: MutableState<Boolean>
+    val keywordChanged: MutableState<Boolean>,
+    val searchEnabled: MutableState<Boolean>
 )
 
 @Composable
 fun rememberSearchSectionState(
     editableInputState: EditableInputState = rememberEditableInputState(hint = "Search"),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    keywordChanged: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
+    keywordChanged: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    searchEnabled: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): SearchSectionState = remember {
     SearchSectionState(
         editableInputState = editableInputState,
         interactionSource = interactionSource,
-        keywordChanged = keywordChanged
+        keywordChanged = keywordChanged,
+        searchEnabled = searchEnabled
     )
 }
