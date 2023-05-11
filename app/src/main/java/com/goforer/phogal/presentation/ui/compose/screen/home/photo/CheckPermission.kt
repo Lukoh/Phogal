@@ -29,7 +29,9 @@ fun CheckPermission(
         onPermissionDenied(
             getGivenPermissionsText(
                 multiplePermissionsState.revokedPermissions,
-                stringResource(id = R.string.permission_rationale)
+                stringResource(id = R.string.permission_rationale),
+                stringResource(id = R.string.permission_location_request),
+                stringResource(id = R.string.permission_camera_request)
             )
         )
     }
@@ -38,31 +40,32 @@ fun CheckPermission(
 @OptIn(ExperimentalPermissionsApi::class)
 private fun getGivenPermissionsText(
     permissions: List<PermissionState>,
-    rationaleText: String
+    rationaleText: String,
+    requestLocationText: String,
+    requestCameraText: String
 ): String {
     val revokedPermissionsSize = permissions.size
-    if (revokedPermissionsSize == 0) return ""
-
     val textToShow = StringBuilder().apply {
-        append("The ")
+        append("")
     }
 
+    if (revokedPermissionsSize == 0) return ""
+
     for (i in permissions.indices) {
-        textToShow.append(permissions[i].permission)
-        when {
-            revokedPermissionsSize > 1 && i == revokedPermissionsSize - 2 -> {
-                textToShow.append(", and ")
+        when(permissions[i].permission) {
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
+                textToShow.append(requestLocationText)
+                textToShow.append("\n")
             }
-            i == revokedPermissionsSize - 1 -> {
-                textToShow.append(" ")
-            }
-            else -> {
-                textToShow.append(", ")
+
+            Manifest.permission.CAMERA -> {
+                textToShow.append(requestCameraText)
+                textToShow.append("\n")
             }
         }
     }
 
-    textToShow.append("\n\n\n")
+    textToShow.append("\n\n")
     textToShow.append(if (revokedPermissionsSize == 1) "Permission is " else "Permissions are ")
     textToShow.append(rationaleText)
 

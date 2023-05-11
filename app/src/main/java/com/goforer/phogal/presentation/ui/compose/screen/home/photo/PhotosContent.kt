@@ -34,7 +34,7 @@ import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.stateholder.business.home.photo.PhotoViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.PhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPermissionDeniedState
+import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPermissionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
@@ -59,7 +59,7 @@ fun PhotosContent(
     var searched by rememberSaveable { mutableStateOf(false) }
     var searchedKeyword by rememberSaveable { mutableStateOf("") }
     val enabledSearch: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
-    var showPermissionDeniedBottomSheet by rememberSaveable { mutableStateOf(false) }
+    var showPermissionBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     BoxWithConstraints(modifier = modifier) {
         Column(
@@ -150,18 +150,18 @@ fun PhotosContent(
         multiplePermissionsState= multiplePermissionsState,
         onPermissionGranted = {
             enabledSearch.value = true
-            showPermissionDeniedBottomSheet = false
+            showPermissionBottomSheet = false
         },
         onPermissionDenied = {
             deniedTextState.value = it
             enabledSearch.value = false
-            showPermissionDeniedBottomSheet = true
+            showPermissionBottomSheet = true
         }
     )
 
-    if (showPermissionDeniedBottomSheet)
-        PermissionDeniedBottomSheet(
-            permissionDeniedState = rememberPermissionDeniedState(deniedTextState = deniedTextState)
+    if (showPermissionBottomSheet)
+        PermissionBottomSheet(
+            permissionState = rememberPermissionState(deniedTextState = deniedTextState)
         ) {
             multiplePermissionsState.launchMultiplePermissionRequest()
         }

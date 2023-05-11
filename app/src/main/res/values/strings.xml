@@ -17,4 +17,6 @@
     <string name="permission_rationale"> important. Please grant all of them for the app to function properly.</string>
     <string name="permission_denied"> denied. The app cannot function without them..</string>
     <string name="permission_request">Request permissions</string>
+    <string name="permission_location_request">Request Location Permissions</string>
+    <string name="permission_camera_request">Request Camera Permissions</string>
 </resources>
