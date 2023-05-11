@@ -57,7 +57,6 @@ private fun getGivenPermissionsText(
                 textToShow.append(requestLocationText)
                 textToShow.append("\n")
             }
-
             Manifest.permission.CAMERA -> {
                 textToShow.append(requestCameraText)
                 textToShow.append("\n")
@@ -65,7 +64,7 @@ private fun getGivenPermissionsText(
         }
     }
 
-    textToShow.append("\n\n")
+    textToShow.append("\n")
     textToShow.append(if (revokedPermissionsSize == 1) "Permission is " else "Permissions are ")
     textToShow.append(rationaleText)
 

@@ -143,7 +143,7 @@ fun PhotosContent(
             Manifest.permission.CAMERA
         )
     )
-    val deniedTextState: MutableState<String> = rememberSaveable { mutableStateOf("") }
+    val rationaleTextState: MutableState<String> = rememberSaveable { mutableStateOf("") }
 
     CheckPermission(
         multiplePermissionsState= multiplePermissionsState,
@@ -152,7 +152,7 @@ fun PhotosContent(
             showPermissionBottomSheet = false
         },
         onPermissionDenied = {
-            deniedTextState.value = it
+            rationaleTextState.value = it
             enabledSearch.value = false
             showPermissionBottomSheet = true
         }
@@ -160,7 +160,7 @@ fun PhotosContent(
 
     if (showPermissionBottomSheet)
         PermissionBottomSheet(
-            permissionState = rememberPermissionState(deniedTextState = deniedTextState)
+            permissionState = rememberPermissionState(rationaleTextState = rationaleTextState)
         ) {
             multiplePermissionsState.launchMultiplePermissionRequest()
         }

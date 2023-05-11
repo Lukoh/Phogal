@@ -18,7 +18,7 @@ class PermissionState(
     val openBottomSheetState: MutableState<Boolean>,
     val scope: CoroutineScope,
     val bottomSheetState: SheetState,
-    val deniedTextState: MutableState<String>
+    val rationaleTextState: MutableState<String>
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,12 +28,12 @@ fun rememberPermissionState(
     skipPartiallyExpanded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     scope: CoroutineScope = rememberCoroutineScope(),
     bottomSheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false),
-    deniedTextState: MutableState<String> = rememberSaveable { mutableStateOf("") }
-): PermissionState = remember(openBottomSheetState, skipPartiallyExpanded, scope, bottomSheetState, deniedTextState) {
+    rationaleTextState: MutableState<String> = rememberSaveable { mutableStateOf("") }
+): PermissionState = remember(openBottomSheetState, skipPartiallyExpanded, scope, bottomSheetState, rationaleTextState) {
     PermissionState(
         openBottomSheetState = openBottomSheetState,
         scope = scope,
         bottomSheetState = bottomSheetState,
-        deniedTextState = deniedTextState
+        rationaleTextState = rationaleTextState
     )
 }

@@ -7,20 +7,27 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.PermissionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPermissionState
-import com.goforer.phogal.presentation.ui.theme.DarkGreen30
+import com.goforer.phogal.presentation.ui.theme.Blue20
+import com.goforer.phogal.presentation.ui.theme.ColorSystemGray8
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,12 +45,46 @@ fun PermissionBottomSheet(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = permissionState.deniedTextState.value,
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.bodyMedium.copy(color = DarkGreen30),
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Medium
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = ParagraphStyle(
+                            lineHeight = 30.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    ) {
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 22.sp,
+                                color = Blue20,
+                                baselineShift = BaselineShift.Superscript
+                            )
+                        ) {
+                            append(
+                                permissionState.rationaleTextState.value.substring(
+                                    0, permissionState.rationaleTextState.value.indexOf("Permissions")
+                                )
+                            )
+                        }
 
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 16.sp,
+                                color = ColorSystemGray8
+                            )
+                        ) {
+                            append(
+                                permissionState.rationaleTextState.value.substring(
+                                    permissionState.rationaleTextState.value.indexOf("Permissions"),
+                                    permissionState.rationaleTextState.value.length
+                                )
+                            )
+                        }
+                    }
+                },
+                modifier = Modifier.padding(16.dp),
+                fontFamily = FontFamily.SansSerif
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
@@ -61,7 +102,7 @@ fun PermissionBottomSheet(
             ) {
                 Text(text = stringResource(id = R.string.permission_request))
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
