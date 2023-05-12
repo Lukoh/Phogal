@@ -20,13 +20,13 @@ fun CheckPermission(
         )
     ),
     onPermissionGranted: () -> Unit,
-    onPermissionDenied: (text: String) -> Unit
+    onPermissionNotGranted: (text: String) -> Unit
 ) {
     if (multiplePermissionsState.allPermissionsGranted) {
         // If all permissions are granted, then show screen with the feature enabled
         onPermissionGranted()
     } else {
-        onPermissionDenied(
+        onPermissionNotGranted(
             getGivenPermissionsText(
                 multiplePermissionsState.revokedPermissions,
                 stringResource(id = R.string.permission_rationale),
@@ -65,7 +65,7 @@ private fun getGivenPermissionsText(
     }
 
     textToShow.append("\n")
-    textToShow.append(if (revokedPermissionsSize == 1) "Permission is " else "Permissions are ")
+    textToShow.append(if (revokedPermissionsSize == 1) "Setting Permission is " else "Setting Permissions are ")
     textToShow.append(rationaleText)
 
     return textToShow.toString()

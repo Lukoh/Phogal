@@ -34,10 +34,21 @@ import kotlinx.coroutines.launch
 @Composable
 fun PermissionBottomSheet(
     permissionState: PermissionState = rememberPermissionState(),
+    onDismissedRequest: () -> Unit,
     onClicked: () -> Unit
 ) {
     ModalBottomSheet(
-        onDismissRequest = { permissionState.openBottomSheetState.value = false },
+        onDismissRequest = {
+            permissionState.scope.launch {
+                permissionState.bottomSheetState.hide()
+            }.invokeOnCompletion {
+                if (!permissionState.bottomSheetState.isVisible) {
+                    permissionState.openBottomSheetState.value = false
+                }
+            }
+
+            onDismissedRequest()
+        },
         sheetState = permissionState.bottomSheetState,
     ) {
         Column(
@@ -62,7 +73,7 @@ fun PermissionBottomSheet(
                         ) {
                             append(
                                 permissionState.rationaleTextState.value.substring(
-                                    0, permissionState.rationaleTextState.value.indexOf("Permissions")
+                                    0, permissionState.rationaleTextState.value.indexOf("Setting")
                                 )
                             )
                         }
@@ -76,7 +87,7 @@ fun PermissionBottomSheet(
                         ) {
                             append(
                                 permissionState.rationaleTextState.value.substring(
-                                    permissionState.rationaleTextState.value.indexOf("Permissions"),
+                                    permissionState.rationaleTextState.value.indexOf("Setting"),
                                     permissionState.rationaleTextState.value.length
                                 )
                             )

@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.Document
+import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme

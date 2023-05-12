@@ -27,7 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.Document
+import com.goforer.phogal.data.model.remote.response.photos.Document
+import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +40,7 @@ fun PhotosScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
-        contentColor = Color.White,
+        contentColor = ColorBgSecondary,
         snackbarHost = { SnackbarHost(
             snackbarHostState, snackbar = { snackbarData: SnackbarData ->
                 CardSnackBar(modifier = Modifier, snackbarData)

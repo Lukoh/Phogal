@@ -14,16 +14,23 @@
     <string name="error_dialog_content">Failed to get the photo list.</string>
 
     <string name="search_photos">Search your photos</string>
-    <string name="permission_rationale"> important. Please grant all of them for the app to function properly.</string>
+    <string name="permission_rationale"> important.\n⚠️⚠️⚠️ Please grant all of them for the app to function properly.</string>
     <string name="permission_denied"> denied. The app cannot function without them..</string>
     <string name="permission_request">Request permissions</string>
-    <string name="permission_location_request">Request Location Permissions</string>
-    <string name="permission_camera_request">Request Camera Permissions</string>
+    <string name="permission_location_request">Location Permission</string>
+    <string name="permission_camera_request">Camera Permission</string>
 
-    <string name="setting_system_permission">System Permission</string>
     <string name="setting_bookmark">My Bookmark Photos</string>
     <string name="setting_follower">My Followers</string>
     <string name="setting_alarm">Notification</string>
     <string name="setting_privacy_policy">Privacy Policy</string>
     <string name="setting_app_info">Phogal Information</string>
+    <string name="setting_profile_edit">Edit</string>
+
+    <string name="setting_send_feedback">Send Feedback</string>
+    <string name="setting_give_start">Rating Start</string>
+    <string name="setting_homepage">Homepage</string>
+
+    <string name="setting_terms_and_conditions">Terms and Conditions</string>
+    <string name="setting_view_contact">View Contact</string>
 </resources>

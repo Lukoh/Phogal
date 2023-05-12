@@ -28,7 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.Document
+import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.stateholder.business.home.photo.PhotoViewModel
@@ -151,19 +151,26 @@ fun PhotosContent(
             enabledSearch.value = true
             showPermissionBottomSheet = false
         },
-        onPermissionDenied = {
+        onPermissionNotGranted = {
             rationaleTextState.value = it
             enabledSearch.value = false
             showPermissionBottomSheet = true
         }
     )
 
-    if (showPermissionBottomSheet)
+    if (showPermissionBottomSheet) {
         PermissionBottomSheet(
-            permissionState = rememberPermissionState(rationaleTextState = rationaleTextState)
-        ) {
-            multiplePermissionsState.launchMultiplePermissionRequest()
-        }
+            permissionState = rememberPermissionState(rationaleTextState = rationaleTextState),
+            onDismissedRequest = {
+                enabledSearch.value = false
+                showPermissionBottomSheet = false
+            },
+            onClicked = {
+                multiplePermissionsState.launchMultiplePermissionRequest()
+                showPermissionBottomSheet = false
+            }
+        )
+    }
 }
 
 @Preview(name = "Light Mode")

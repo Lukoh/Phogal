@@ -6,20 +6,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -29,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.decode.SvgDecoder
 import coil.size.Size
+import com.goforer.base.designsystem.component.IconContainer
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
@@ -54,25 +51,27 @@ fun SetItem(
                 onItemClicked(index)
             }
     ) {
-        Image(
-            painter = loadImagePainter(
-                data = drawable,
-                factory = SvgDecoder.Factory(),
-                size = Size.ORIGINAL
-            ),
-            contentDescription = "item",
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .wrapContentSize()
-                .clickable { },
-            Alignment.Center
-        )
-        Spacer(modifier = Modifier.width(8.dp))
+        IconContainer(36.dp) {
+            Image(
+                painter = loadImagePainter(
+                    data = drawable,
+                    factory = SvgDecoder.Factory(),
+                    size = Size.ORIGINAL
+                ),
+                contentDescription = "item",
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .wrapContentSize()
+                    .clickable { },
+                Alignment.Center
+            )
+        }
+        Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = text,
             modifier = Modifier.align(Alignment.CenterVertically),
             fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Normal,
+            fontWeight = FontWeight.Medium,
             fontSize = 15.sp,
             color = DarkGreen10,
             fontStyle = FontStyle.Normal
@@ -100,27 +99,28 @@ fun SetItemPreview(modifier: Modifier = Modifier) {
             .clickable {}
     ) {
         val painter = loadImagePainter(
-            data = R.drawable.ic_setting,
+            data = R.drawable.ic_privacy,
             factory = SvgDecoder.Factory(),
             size = Size.ORIGINAL
         )
 
-        Image(
-            painter = painter,
-            contentDescription = "item_image",
-            modifier = Modifier
-                .padding(4.dp)
-                .fillMaxSize()
-                .clip(CircleShape),
-            Alignment.CenterStart,
-            contentScale = ContentScale.Crop
-        )
-        Spacer(modifier = Modifier.width(8.dp))
+        IconContainer(36.dp) {
+            Image(
+                painter = painter,
+                contentDescription = "item",
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .wrapContentSize()
+                    .clickable { },
+                Alignment.Center
+            )
+        }
+        Spacer(modifier = Modifier.width(16.dp))
         Text(
             modifier = Modifier.align(Alignment.CenterVertically),
-            text = stringResource(id = R.string.setting_system_permission),
+            text = stringResource(id = R.string.setting_bookmark),
             fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Normal,
+            fontWeight = FontWeight.Medium,
             fontSize = 15.sp,
             color = DarkGreen10,
             fontStyle = FontStyle.Normal

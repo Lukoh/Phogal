@@ -52,6 +52,7 @@ import com.goforer.phogal.presentation.ui.navigation.graph.communityGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.notificationGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.photoGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.settingGraph
+import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.ColorBottomBar
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -75,7 +76,7 @@ fun HomeScreen(
     val bottomBarOffset by animateDpAsState(targetValue = if (bottomBarVisible) 0.dp else 56.dp)
 
     Scaffold(
-        containerColor = Color.Transparent,
+        containerColor = ColorBgSecondary,
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {

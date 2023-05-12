@@ -8,7 +8,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import com.goforer.phogal.data.model.remote.response.Document
+import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 
 @Stable
