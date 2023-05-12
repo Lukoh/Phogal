@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
-import com.goforer.phogal.data.model.response.Document
+import com.goforer.phogal.data.model.remote.response.Document
 import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray10
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2

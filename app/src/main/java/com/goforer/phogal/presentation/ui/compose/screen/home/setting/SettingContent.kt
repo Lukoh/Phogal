@@ -5,37 +5,44 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.goforer.phogal.R
+import com.goforer.phogal.data.model.local.SettingItem
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 
 @Composable
 fun SettingContent(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(4.dp)
+    contentPadding: PaddingValues = PaddingValues(4.dp),
+    onItemClicked: (index: Int) -> Unit
 ) {
+    val items = listOf(
+        SettingItem(stringResource(id = R.string.setting_system_permission),  R.drawable.ic_setting),
+        SettingItem(stringResource(id = R.string.setting_bookmark), R.drawable.ic_setting),
+        SettingItem(stringResource(id = R.string.setting_follower), R.drawable.ic_setting),
+        SettingItem(stringResource(id = R.string.setting_alarm), R.drawable.ic_setting),
+        SettingItem(stringResource(id = R.string.setting_privacy_policy), R.drawable.ic_setting),
+        SettingItem(stringResource(id = R.string.setting_app_info), R.drawable.ic_setting)
+    )
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(ColorBgSecondary)
-            .wrapContentSize(Alignment.Center)
+            //.wrapContentSize(Alignment.Center)
             .padding(0.dp, contentPadding.calculateTopPadding(), 0.dp, 0.dp)
     ) {
-        Text(
-            text = "is implementing....",
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
+        items.forEachIndexed { index, item ->
+            SetItem(
+                modifier = Modifier,
+                index = index,
+                text = item.text,
+                drawable = item.drawable,
+                onItemClicked = onItemClicked
+            )
+        }
     }
 }

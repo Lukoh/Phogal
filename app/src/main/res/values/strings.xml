@@ -16,7 +16,14 @@
     <string name="search_photos">Search your photos</string>
     <string name="permission_rationale"> important. Please grant all of them for the app to function properly.</string>
     <string name="permission_denied"> denied. The app cannot function without them..</string>
-    <string name="permission_request">Request permission</string>
-    <string name="permission_location_request">Location Permission</string>
-    <string name="permission_camera_request">Camera Permission</string>
+    <string name="permission_request">Request permissions</string>
+    <string name="permission_location_request">Request Location Permissions</string>
+    <string name="permission_camera_request">Request Camera Permissions</string>
+
+    <string name="setting_system_permission">System Permission</string>
+    <string name="setting_bookmark">My Bookmark Photos</string>
+    <string name="setting_follower">My Followers</string>
+    <string name="setting_alarm">Notification</string>
+    <string name="setting_privacy_policy">Privacy Policy</string>
+    <string name="setting_app_info">Phogal Information</string>
 </resources>

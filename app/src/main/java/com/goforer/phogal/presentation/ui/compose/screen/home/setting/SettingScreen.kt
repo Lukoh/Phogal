@@ -17,7 +17,10 @@ import com.goforer.phogal.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingScreen(modifier: Modifier = Modifier) {
+fun SettingScreen(
+    modifier: Modifier = Modifier,
+    onItemClicked: (index: Int) -> Unit
+) {
     Scaffold(
         contentColor = Color.White,
         topBar = {
@@ -35,7 +38,11 @@ fun SettingScreen(modifier: Modifier = Modifier) {
                 }
             )
         }, content = { paddingValues ->
-            SettingContent(modifier = modifier, contentPadding = paddingValues)
+            SettingContent(
+                modifier = modifier,
+                contentPadding = paddingValues,
+                onItemClicked = onItemClicked
+            )
         }
     )
 }

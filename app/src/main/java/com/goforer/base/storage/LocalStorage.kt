@@ -7,7 +7,7 @@ import android.security.keystore.KeyProperties
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
-import com.goforer.phogal.data.model.response.Document
+import com.goforer.phogal.data.model.remote.response.Document
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import timber.log.Timber

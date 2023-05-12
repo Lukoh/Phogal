@@ -5,7 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.goforer.phogal.data.mediator.PagingDataMediator
-import com.goforer.phogal.data.model.response.Document
+import com.goforer.phogal.data.model.remote.response.Document
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.data.repository.paging.source.BasePagingSource

@@ -81,7 +81,7 @@ val ColorSystemGray8 = Color(0xFF979797)
 val ColorSystemGray9 = Color(0xFFDEDEDE)
 val ColorSystemGray10 = Color(0xFFF7F8FF)
 
-val ColorBgSecondary = Color(0xFFF3FAFE)
+val ColorBgSecondary = Color(0xFFFFFFFF)
 
 val ColorBottomBar = Color(0xFFD4F2FF)
 

@@ -1,7 +1,7 @@
 package com.goforer.phogal.data.network.api
 
 import com.goforer.phogal.BuildConfig.apiKey
-import com.goforer.phogal.data.model.response.ImagesResponse
+import com.goforer.phogal.data.model.remote.response.ImagesResponse
 import com.goforer.phogal.data.network.response.ApiResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET

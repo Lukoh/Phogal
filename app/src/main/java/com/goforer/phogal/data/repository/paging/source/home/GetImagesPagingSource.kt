@@ -1,8 +1,8 @@
 package com.goforer.phogal.data.repository.paging.source.home
 
 import androidx.paging.PagingState
-import com.goforer.phogal.data.model.response.Document
-import com.goforer.phogal.data.model.response.ImagesResponse
+import com.goforer.phogal.data.model.remote.response.Document
+import com.goforer.phogal.data.model.remote.response.ImagesResponse
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.api.RestAPI
 import com.goforer.phogal.data.network.response.ApiResponse

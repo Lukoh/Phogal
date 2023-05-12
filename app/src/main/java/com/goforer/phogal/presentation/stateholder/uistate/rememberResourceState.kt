@@ -2,7 +2,7 @@ package com.goforer.phogal.presentation.stateholder.uistate
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
-import com.goforer.phogal.data.model.state.ResourceState
+import com.goforer.phogal.data.model.remote.state.ResourceState
 import com.goforer.phogal.data.network.response.Status
 import kotlinx.coroutines.flow.StateFlow
 

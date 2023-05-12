@@ -1,4 +1,4 @@
-package com.goforer.phogal.data.model.response
+package com.goforer.phogal.data.model.remote.response
 
 import android.os.Parcelable
 import com.goforer.phogal.data.model.BaseModel

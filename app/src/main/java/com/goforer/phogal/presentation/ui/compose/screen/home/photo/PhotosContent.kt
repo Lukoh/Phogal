@@ -28,7 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.response.Document
+import com.goforer.phogal.data.model.remote.response.Document
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.stateholder.business.home.photo.PhotoViewModel
