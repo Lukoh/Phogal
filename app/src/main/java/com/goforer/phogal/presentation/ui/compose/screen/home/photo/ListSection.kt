@@ -35,12 +35,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.goforer.base.designsystem.component.LoadingIndicator
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
-import com.goforer.phogal.presentation.ui.theme.DarkGreen10
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -73,7 +71,7 @@ fun ListSection(
             state = state.lazyListState,
         ) {
             if (!state.refreshing.value) {
-                itemsIndexed(photos.itemSnapshotList.items , key = { _, item -> item.datetime }, itemContent = { index, item ->
+                itemsIndexed(photos.itemSnapshotList.items , key = { _, item -> item.url!! }, itemContent = { index, item ->
                     PhotoItem(
                         modifier = modifier,
                         index = index,
