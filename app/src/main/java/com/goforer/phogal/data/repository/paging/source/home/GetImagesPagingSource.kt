@@ -11,7 +11,6 @@ import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_EMPTY
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_NORMAL
 import com.goforer.phogal.data.repository.paging.source.BasePagingSource
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -91,6 +90,8 @@ constructor() : BasePagingSource<Int, ImagesResponse, Document>() {
     override suspend fun requestAPI(params: Params) {
         val page = nextKey ?: 1
 
+        //In case of using Flow.combine...
+        /*
         val imageFlow = restAPI.getPhotoImages(
             RestAPI.AUTH_HEADER,
             params.args[0] as String,
@@ -98,7 +99,6 @@ constructor() : BasePagingSource<Int, ImagesResponse, Document>() {
             page,
             params.args[2] as Int
         )
-
         val videoFlow = restAPI.getVideoImages(
             RestAPI.AUTH_HEADER,
             params.args[0] as String,
@@ -126,6 +126,18 @@ constructor() : BasePagingSource<Int, ImagesResponse, Document>() {
 
         }.collectLatest {
             pagingItemResponse = it
+        }
+
+         */
+
+        restAPI.getPhotoImages(
+            RestAPI.AUTH_HEADER,
+            params.args[0] as String,
+            "recency",
+            page,
+            params.args[2] as Int
+        ).collectLatest {
+            pagingItemResponse = handleImagesResult(it)
         }
     }
 

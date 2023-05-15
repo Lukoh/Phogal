@@ -40,7 +40,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberP
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
-import com.goforer.phogal.presentation.ui.theme.Blue40
+import com.goforer.phogal.presentation.ui.theme.DarkGreen30
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -87,13 +87,14 @@ fun PhotosContent(
                 }
             )
             if (searched) {
-                val photosState = photoViewModel.photosStateFlow.collectAsStateWithLifecycle()
+                val photosUiState = photoViewModel.photosUiState.collectAsStateWithLifecycle()
                 val listSectionState = rememberListSectionState(scope = state.baseUiState.scope)
 
-                when(photosState.value.status) {
+                when(photosUiState.value.status) {
                     Status.SUCCESS -> {
                         @Suppress("UNCHECKED_CAST")
-                        val photos = flowOf(photosState.value.data as PagingData<Document>).collectAsLazyPagingItems()
+                        val photos = flowOf(photosUiState.value.data as PagingData<Document>).collectAsLazyPagingItems()
+
                         listSectionState.refreshing.value = false
                         ListSection(
                             modifier = Modifier
@@ -105,7 +106,7 @@ fun PhotosContent(
                                 onItemClicked(document, index)
                             },
                             onRefresh = {
-                                photoViewModel.trigger(2, Params(searchedKeyword))
+                                photoViewModel.trigger(2, Params(searchedKeyword, FIRST_PAGE, ITEM_COUNT))
                             }
                         )
                     }
@@ -118,14 +119,14 @@ fun PhotosContent(
                     }
                     Status.ERROR -> {
                         // To Do : handle the error
-                        Timber.d("Error Code - %d & Error Message - %s", photosState.value.errorCode, photosState.value.message)
+                        Timber.d("Error Code - %d & Error Message - %s", photosUiState.value.errorCode, photosUiState.value.message)
                     }
                 }
             } else {
                 BoxWithConstraints(modifier = Modifier.weight(1f)) {
                     Text(
                         text = stringResource(id = R.string.search_photos),
-                        style = typography.titleMedium.copy(color = Blue40),
+                        style = typography.titleMedium.copy(color = DarkGreen30),
                         modifier = Modifier.align(Alignment.Center),
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.Bold
@@ -200,7 +201,7 @@ fun PhotosContentPreview(modifier: Modifier = Modifier) {
                 BoxWithConstraints(modifier = Modifier.weight(1f)) {
                     Text(
                         text = stringResource(id = R.string.search_photos),
-                        style = typography.titleMedium.copy(color = Blue40),
+                        style = typography.titleMedium.copy(color = DarkGreen30),
                         modifier = Modifier.align(Alignment.Center),
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.Bold

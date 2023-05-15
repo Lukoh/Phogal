@@ -18,24 +18,17 @@ class PhotoViewModel
 @Inject constructor(
     private val getImagesRepository: GetImagesRepository
 ) : BaseViewModel() {
-    private val _photos = MutableStateFlow(Resource().loading(Status.LOADING))
-    val photosStateFlow: StateFlow<Resource> = _photos
-
-    /*
-    init {
-        viewModelScope.launch {
-            getImagesRepository.value.collectLatest {
-                _photos.value = it
-            }
-        }
-    }
-
-     */
+    private val _photosUiState = MutableStateFlow(resource.loading(Status.LOADING))
+    val photosUiState: StateFlow<Resource> = _photosUiState
 
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {
-            getImagesRepository.trigger(viewModelScope, replyCount = replyCount, params = params).collectLatest {
-                _photos.value = it
+            getImagesRepository.trigger(
+                viewModelScope = viewModelScope,
+                replyCount = replyCount,
+                params = params
+            ).collectLatest {
+                _photosUiState.value = it
             }
         }
     }

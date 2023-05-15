@@ -1,10 +1,8 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.photo
 
 import android.content.res.Configuration
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,8 +29,6 @@ import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.data.model.remote.response.photos.Document
-import com.goforer.phogal.presentation.ui.theme.Black
-import com.goforer.phogal.presentation.ui.theme.ColorSystemGray10
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
@@ -64,12 +60,12 @@ fun PhotoItem(
             disabledContainerColor = MaterialTheme.colorScheme.onSurface
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 8. dp,
-            pressedElevation = 2. dp,
-            focusedElevation = 4. dp
+            defaultElevation = 8.dp,
+            pressedElevation = 2.dp,
+            focusedElevation = 4.dp
         )
     ) {
-        val imageUrl = document.image_url ?: document.thumbnail
+        val imageUrl = document.thumbnail_url ?: document.thumbnail
         val painter = loadImagePainter(
             data = imageUrl!!,
             size = Size.ORIGINAL
@@ -80,7 +76,6 @@ fun PhotoItem(
                 .fillMaxWidth()
                 .height(256.dp)
                 .align(Alignment.CenterHorizontally)
-                .border(BorderStroke(1.dp, Black))
                 .background(ColorSystemGray2)
                 .placeholder(
                     visible = true,
@@ -96,8 +91,6 @@ fun PhotoItem(
             val imageModifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .border(BorderStroke(1.dp, Black))
-                .background(ColorSystemGray10)
                 .clip(RoundedCornerShape(4.dp))
                 .clickable {
                     isClicked = true
@@ -153,7 +146,6 @@ fun PhotoItemPreview(modifier: Modifier = Modifier) {
         val imageModifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(ColorSystemGray10)
             .clip(RoundedCornerShape(4.dp))
             .clickable { isClicked = true }
 

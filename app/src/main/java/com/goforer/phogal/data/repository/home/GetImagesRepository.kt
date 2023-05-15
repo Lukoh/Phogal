@@ -29,12 +29,12 @@ constructor() : Repository() {
         return object : PagingDataMediator<PagingData<Document>>(viewModelScope, replyCount) {
             override fun load(): Flow<PagingData<Document>> = Pager(
                 config = PagingConfig(
-                    pageSize = (params.args[2] as Int).times(3),
-                    prefetchDistance = ITEM_COUNT.times(3) - 5,
-                    initialLoadSize = ITEM_COUNT.times(3)
+                    pageSize = params.args[2] as Int,
+                    prefetchDistance = ITEM_COUNT - 5,
+                    initialLoadSize = ITEM_COUNT
                 )
             ) {
-                BasePagingSource.pageSize = (params.args[2] as Int).times(3)
+                BasePagingSource.pageSize = params.args[2] as Int
                 pagingSource.setPagingParam(params)
                 pagingSource
 

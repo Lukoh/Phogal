@@ -71,7 +71,7 @@ fun ListSection(
             state = state.lazyListState,
         ) {
             if (!state.refreshing.value) {
-                itemsIndexed(photos.itemSnapshotList.items , key = { _, item -> item.url!! }, itemContent = { index, item ->
+                itemsIndexed(photos.itemSnapshotList.items , key = { _, item -> item.thumbnail_url!! }, itemContent = { index, item ->
                     PhotoItem(
                         modifier = modifier,
                         index = index,
