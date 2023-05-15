@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -15,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.goforer.base.designsystem.component.LoadingIndicator
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
+import com.goforer.phogal.presentation.ui.theme.DarkGreen10
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
@@ -24,7 +27,8 @@ import com.google.accompanist.placeholder.material.shimmer
 @Composable
 fun LoadingPhotos(
     modifier: Modifier = Modifier,
-    count: Int
+    count: Int,
+    enableLoadIndicator: Boolean = false
 ) {
     BoxWithConstraints(modifier = modifier.clip(RoundedCornerShape(4.dp))) {
         Column {
@@ -43,6 +47,9 @@ fun LoadingPhotos(
                 Spacer(modifier = Modifier.height(4.dp))
             }
         }
+
+        if (enableLoadIndicator)
+            LoadingIndicator(modifier.padding(vertical = 22.dp), DarkGreen10)
     }
 }
 
@@ -76,6 +83,8 @@ fun LoadingPhotosPreview(modifier: Modifier = Modifier) {
                     Spacer(modifier = Modifier.height(4.dp))
                 }
             }
+
+            LoadingIndicator(modifier, DarkGreen10)
         }
     }
 }

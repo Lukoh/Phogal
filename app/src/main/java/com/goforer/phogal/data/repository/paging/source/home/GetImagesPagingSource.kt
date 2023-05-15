@@ -90,7 +90,7 @@ constructor() : BasePagingSource<Int, ImagesResponse, Document>() {
     override suspend fun requestAPI(params: Params) {
         val page = nextKey ?: 1
 
-        //In case of using Flow.combine...
+        //In case of getting photos and videos at the same time, use Flow.combine...
         /*
         val imageFlow = restAPI.getPhotoImages(
             RestAPI.AUTH_HEADER,

@@ -42,8 +42,8 @@ import com.goforer.phogal.presentation.stateholder.uistate.EditableInputState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.SearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberEditableInputState
-import com.goforer.phogal.presentation.ui.theme.ColorSearchBarBorder
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
+import com.goforer.phogal.presentation.ui.theme.Teal80
 
 @Composable
 fun SearchSection(
@@ -62,7 +62,7 @@ fun SearchSection(
             .wrapContentHeight(Alignment.Top)
             .border(
                 width = 1.dp,
-                color = Color(0xFFAAE9E6),
+                color = Teal80,
                 shape = RoundedCornerShape(size = 4.dp)
             )
             .fillMaxWidth()
@@ -168,7 +168,7 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
                 .wrapContentHeight(Alignment.Top)
                 .border(
                     width = 1.dp,
-                    color = ColorSearchBarBorder,
+                    color = Teal80,
                     shape = RoundedCornerShape(size = 4.dp)
                 )
                 .fillMaxWidth()

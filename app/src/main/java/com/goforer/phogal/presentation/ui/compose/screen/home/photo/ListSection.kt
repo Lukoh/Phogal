@@ -87,8 +87,11 @@ fun ListSection(
 
                     is LoadState.Loading -> {
                         item {
-                            LoadingPhotos(Modifier.padding(4.dp, 8.dp),3)
-                            //LoadingIndicator(modifier = Modifier, DarkGreen10)
+                            LoadingPhotos(
+                                modifier = Modifier.padding(4.dp, 4.dp),
+                                count = 3,
+                                enableLoadIndicator = true
+                            )
                         }
 
                         false
