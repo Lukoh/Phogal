@@ -31,6 +31,8 @@ import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Status
+import com.goforer.phogal.data.repository.Repository.Companion.FIRST_PAGE
+import com.goforer.phogal.data.repository.Repository.Companion.ITEM_COUNT
 import com.goforer.phogal.presentation.stateholder.business.home.photo.PhotoViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.PhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
@@ -79,7 +81,7 @@ fun PhotosContent(
                     if (keyword.isNotEmpty()) {
                         searchedKeyword = keyword
                         state.baseUiState.keyboardController?.hide()
-                        photoViewModel.trigger(2, Params(keyword))
+                        photoViewModel.trigger(2, Params(keyword, FIRST_PAGE, ITEM_COUNT))
                         searched = true
                     }
                 }

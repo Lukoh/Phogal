@@ -7,35 +7,34 @@ import androidx.paging.cachedIn
 import com.goforer.phogal.data.mediator.PagingDataMediator
 import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.data.network.api.Params
+import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.data.repository.paging.source.BasePagingSource
 import com.goforer.phogal.data.repository.paging.source.home.GetImagesPagingSource
-import com.goforer.phogal.di.module.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class GetImagesRepository
 @Inject
-constructor(
-    @ApplicationScope private val externalScope: CoroutineScope
-) : Repository(externalScope) {
+constructor() : Repository() {
     @Inject
     lateinit var pagingSource: GetImagesPagingSource
 
-    override fun trigger(replyCount: Int, params: Params) {
+    override fun trigger(viewModelScope: CoroutineScope, replyCount: Int, params: Params): SharedFlow<Resource> {
         Repository.replyCount = replyCount
-        value = object : PagingDataMediator<PagingData<Document>>(externalScope, replyCount) {
+        return object : PagingDataMediator<PagingData<Document>>(viewModelScope, replyCount) {
             override fun load(): Flow<PagingData<Document>> = Pager(
                 config = PagingConfig(
-                    pageSize = ITEM_COUNT.times(3),
+                    pageSize = (params.args[2] as Int).times(3),
                     prefetchDistance = ITEM_COUNT.times(3) - 5,
                     initialLoadSize = ITEM_COUNT.times(3)
                 )
             ) {
-                BasePagingSource.pageSize = ITEM_COUNT.times(3)
+                BasePagingSource.pageSize = (params.args[2] as Int).times(3)
                 pagingSource.setPagingParam(params)
                 pagingSource
 
@@ -44,7 +43,7 @@ constructor(
                 pagingSource
 
                  */
-            }.flow.cachedIn(externalScope)
+            }.flow.cachedIn(viewModelScope)
         }.asSharedFlow
     }
 

@@ -5,39 +5,19 @@ import com.goforer.phogal.data.network.response.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import timber.log.Timber
-import javax.inject.Inject
 
 abstract class PagingDataMediator<T> constructor(viewModelScope: CoroutineScope, replyCount: Int = 0) {
-    @Inject
-    lateinit var resource: Resource
+    private val resource by lazy {
+        Resource()
+    }
 
     internal val asSharedFlow = flow {
-        load().map { apiResponse ->
-            when (apiResponse) {
-                is ApiSuccessResponse<*> -> {
-                    emit(resource.success(apiResponse.body))
-                }
-
-                is ApiEmptyResponse<*> -> {
-                    emit(resource.success(""))
-                }
-
-                is ApiErrorResponse<*> -> {
-                    Timber.e("Network-Error: ${apiResponse.errorMessage}")
-                    emit(resource.error(apiResponse.errorMessage, apiResponse.statusCode))
-                    onNetworkError(apiResponse.errorMessage, apiResponse.statusCode)
-                }
-            }
-        }.onStart {
-            emit(resource.loading(Status.LOADING))
-        }.catch {
-            emit(resource.error(it.message, 400))
+        emit(resource.loading(Status.LOADING))
+        load().collect {
+            emit(resource.success(it))
         }
     }.shareIn(
         scope = viewModelScope,

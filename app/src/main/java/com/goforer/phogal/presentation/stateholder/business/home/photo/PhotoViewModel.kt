@@ -21,6 +21,7 @@ class PhotoViewModel
     private val _photos = MutableStateFlow(Resource().loading(Status.LOADING))
     val photosStateFlow: StateFlow<Resource> = _photos
 
+    /*
     init {
         viewModelScope.launch {
             getImagesRepository.value.collectLatest {
@@ -29,7 +30,13 @@ class PhotoViewModel
         }
     }
 
+     */
+
     override fun trigger(replyCount: Int, params: Params) {
-        getImagesRepository.trigger(replyCount = replyCount, params = params)
+        viewModelScope.launch {
+            getImagesRepository.trigger(viewModelScope, replyCount = replyCount, params = params).collectLatest {
+                _photos.value = it
+            }
+        }
     }
 }
