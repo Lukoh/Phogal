@@ -94,7 +94,6 @@ fun PhotosContent(
                     Status.SUCCESS -> {
                         @Suppress("UNCHECKED_CAST")
                         val photos = flowOf(photosState.value.data as PagingData<Document>).collectAsLazyPagingItems()
-                        state.enabledList.value = true
                         listSectionState.refreshing.value = false
                         ListSection(
                             modifier = Modifier
@@ -112,7 +111,6 @@ fun PhotosContent(
                     }
                     Status.LOADING -> {
                         // To Do : run the loading animation or shimmer
-                        state.enabledList.value = false
                         LoadingPhotos(
                             Modifier
                                 .padding(4.dp, 8.dp)
@@ -120,7 +118,6 @@ fun PhotosContent(
                     }
                     Status.ERROR -> {
                         // To Do : handle the error
-                        state.enabledList.value = false
                         Timber.d("Error Code - %d & Error Message - %s", photosState.value.errorCode, photosState.value.message)
                     }
                 }

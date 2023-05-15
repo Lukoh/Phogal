@@ -14,7 +14,6 @@ import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 @Stable
 class PhotosContentState(
     var searchedKeywordState: MutableState<String>,
-    var enabledList: MutableState<Boolean>,
     val showTopButtonState: State<Boolean>,
     var clickedState: MutableState<Boolean>,
     val baseUiState: BaseUiState,
@@ -24,14 +23,12 @@ class PhotosContentState(
 @Composable
 fun rememberPhotosContentState(
     searchedKeywordState: MutableState<String> = rememberSaveable { mutableStateOf("") },
-    enabledList: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     showTopButtonState: State<Boolean> = remember { derivedStateOf { searchedKeywordState.value.isNotEmpty() } },
     clickedState: MutableState<Boolean> = remember { mutableStateOf(false) },
     baseUiState: BaseUiState,
     photos: MutableState<List<Document>> = rememberSaveable { mutableStateOf(emptyList()) }
 ): PhotosContentState = remember(
     searchedKeywordState,
-    enabledList,
     showTopButtonState,
     clickedState,
     baseUiState,
@@ -39,7 +36,6 @@ fun rememberPhotosContentState(
 ) {
     PhotosContentState(
         searchedKeywordState = searchedKeywordState,
-        enabledList = enabledList,
         showTopButtonState = showTopButtonState,
         clickedState = clickedState,
         baseUiState = baseUiState,
