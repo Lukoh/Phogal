@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import timber.log.Timber
-import javax.inject.Inject
 
 abstract class DataMediator<T> constructor(viewModelScope: CoroutineScope, replyCount: Int = 0) {
-    @Inject
-    lateinit var resource: Resource
+    private val resource by lazy {
+        Resource()
+    }
 
     internal val asSharedFlow = flow {
         load().map { apiResponse ->
