@@ -100,7 +100,6 @@ fun PhotoItem(
             )
         } else {
             val imageModifier = Modifier
-                .fillMaxWidth()
                 .then(
                     ((painter.state as? AsyncImagePainter.State.Success)
                         ?.painter
