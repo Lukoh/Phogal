@@ -35,6 +35,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
@@ -71,14 +73,20 @@ fun ListSection(
             state = state.lazyListState,
         ) {
             if (!state.refreshing.value) {
-                itemsIndexed(photos.itemSnapshotList.items , key = { _, item -> item.thumbnail_url!! }, itemContent = { index, item ->
+                items(
+                    count = photos.itemCount,
+                    key = photos.itemKey(),
+                    contentType = photos.itemContentType()
+                )
+                { index ->
                     PhotoItem(
                         modifier = modifier,
                         index = index,
-                        document = item,
+                        document = photos[index]!!,
                         onItemClicked = onItemClicked
                     )
-                })
+
+                }
 
                 openedErrorDialog = when(photos.loadState.refresh) {
                     is LoadState.Error -> {
