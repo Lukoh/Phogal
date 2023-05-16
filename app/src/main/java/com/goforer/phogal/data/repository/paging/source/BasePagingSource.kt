@@ -10,9 +10,7 @@ import com.goforer.phogal.data.network.response.ApiSuccessResponse
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_EMPTY
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_NORMAL
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 abstract class BasePagingSource<Key : Any, Response : Any, Value : Any> : PagingSource<Key, Value>() {
     protected lateinit var pagingList: MutableList<Value>
 

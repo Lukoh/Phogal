@@ -32,17 +32,11 @@ constructor() : Repository() {
                     pageSize = params.args[2] as Int,
                     prefetchDistance = ITEM_COUNT - 5,
                     initialLoadSize = ITEM_COUNT
-                )
+                ),
             ) {
                 BasePagingSource.pageSize = params.args[2] as Int
                 pagingSource.setPagingParam(params)
                 pagingSource
-
-                /*
-                pagingSource.setPagingParam(query, value)
-                pagingSource
-
-                 */
             }.flow.cachedIn(viewModelScope)
         }.asSharedFlow
     }

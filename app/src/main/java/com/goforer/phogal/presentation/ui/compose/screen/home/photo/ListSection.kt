@@ -42,7 +42,6 @@ import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -56,10 +55,7 @@ fun ListSection(
 ) {
     var openedErrorDialog by rememberSaveable { mutableStateOf(false) }
     val refreshState = rememberPullRefreshState(state.refreshing.value, onRefresh = {
-        state.scope.launch {
-            state.refreshing.value = true
-            onRefresh()
-        }
+        onRefresh()
     })
 
     BoxWithConstraints(
@@ -85,7 +81,6 @@ fun ListSection(
                         document = photos[index]!!,
                         onItemClicked = onItemClicked
                     )
-
                 }
 
                 openedErrorDialog = when(photos.loadState.refresh) {

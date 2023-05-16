@@ -9,6 +9,7 @@ import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,6 +22,10 @@ class PhotoViewModel
     private val _photosUiState = MutableStateFlow(resource.loading(Status.LOADING))
     val photosUiState: StateFlow<Resource> = _photosUiState
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean>
+        get() = _isRefreshing.asStateFlow()
+
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {
             getImagesRepository.trigger(
@@ -29,6 +34,7 @@ class PhotoViewModel
                 params = params
             ).collectLatest {
                 _photosUiState.value = it
+                _isRefreshing.value = false
             }
         }
     }
