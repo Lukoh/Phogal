@@ -34,7 +34,8 @@ class PhotoViewModel
                 params = params
             ).collectLatest {
                 _photosUiState.value = it
-                _isRefreshing.value = false
+                if (it.status == Status.SUCCESS)
+                    _isRefreshing.value = false
             }
         }
     }
