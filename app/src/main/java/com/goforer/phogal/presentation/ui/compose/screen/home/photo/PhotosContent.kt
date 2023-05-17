@@ -11,10 +11,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -107,20 +105,14 @@ fun PhotosContent(
 
             when(photosUiState.value.status) {
                 Status.SUCCESS -> {
-                    @Suppress("UNCHECKED_CAST")
-                    val photos by remember(searchedKeyword) {
-                        derivedStateOf {
-                            flowOf(photosUiState.value.data as PagingData<Document>)
-                        }
-                    }
-
                     listSectionState.refreshing.value = false
                     ListSection(
                         modifier = Modifier
                             .padding(4.dp, 4.dp)
                             .weight(1f),
                         state = listSectionState,
-                        photos.collectAsLazyPagingItems(),
+                        @Suppress("UNCHECKED_CAST")
+                        flowOf(photosUiState.value.data as PagingData<Document>).collectAsLazyPagingItems(),
                         onItemClicked = { document, index ->
                             onItemClicked(document, index)
                         },
