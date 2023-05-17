@@ -12,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-abstract class Repository constructor() {
+abstract class Repository {
     @Inject
     lateinit var restAPI: RestAPI
 
