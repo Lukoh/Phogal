@@ -1,6 +1,5 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.photo
 
-import android.Manifest
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -12,9 +11,6 @@ import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -45,7 +41,6 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.flowOf
-import timber.log.Timber
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class,
     ExperimentalMaterial3Api::class
@@ -58,11 +53,6 @@ fun PhotosContent(
     state: PhotosContentState = rememberPhotosContentState(baseUiState = rememberBaseUiState()),
     onItemClicked: (item: Document, index: Int) -> Unit
 ) {
-    var searched by rememberSaveable { mutableStateOf(false) }
-    var searchedKeyword by rememberSaveable { mutableStateOf("") }
-    val enabledSearch: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
-    var showPermissionBottomSheet by rememberSaveable { mutableStateOf(false) }
-
     BoxWithConstraints(modifier = modifier) {
         Column(
             modifier = modifier
@@ -76,18 +66,35 @@ fun PhotosContent(
         ) {
             SearchSection(
                 modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
-                state = rememberSearchSectionState(searchEnabled = enabledSearch),
+                state = rememberSearchSectionState(searchEnabled = state.enabledSearch),
                 onSearched = { keyword ->
                     if (keyword.isNotEmpty()) {
-                        searchedKeyword = keyword
-                        state.baseUiState.keyboardController?.hide()
-                        photoViewModel.trigger(2, Params(keyword, FIRST_PAGE, ITEM_COUNT))
-                        searched = true
+                        with(state) {
+                            searchKeyword.value = keyword
+                            baseUiState.keyboardController?.hide()
+                            photoViewModel.trigger(2, Params(keyword, FIRST_PAGE, ITEM_COUNT))
+                        }
                     }
                 }
             )
 
-            if (!searched) {
+            val photosUiState by photoViewModel.photosUiState.collectAsStateWithLifecycle()
+            val isRefreshing = photoViewModel.isRefreshing.collectAsStateWithLifecycle()
+
+            if (photosUiState.data is PagingData<*> && photosUiState.status == Status.SUCCESS) {
+                ListSection(
+                    modifier = Modifier.padding(4.dp, 4.dp).weight(1f),
+                    state = rememberListSectionState(scope = state.baseUiState.scope, refreshing = isRefreshing as MutableState<Boolean>),
+                    @Suppress("UNCHECKED_CAST")
+                    flowOf(photosUiState.data as PagingData<Document>).collectAsLazyPagingItems(),
+                    onItemClicked = { document, index ->
+                        onItemClicked(document, index)
+                    },
+                    onRefresh = {
+                        photoViewModel.trigger(2, Params(state.searchKeyword.value, FIRST_PAGE, ITEM_COUNT))
+                    }
+                )
+            } else {
                 BoxWithConstraints(modifier = Modifier.weight(1f)) {
                     Text(
                         text = stringResource(id = R.string.search_photos),
@@ -98,74 +105,37 @@ fun PhotosContent(
                     )
                 }
             }
-
-            val photosUiState = photoViewModel.photosUiState.collectAsStateWithLifecycle()
-            val isRefreshing = photoViewModel.isRefreshing.collectAsStateWithLifecycle()
-            val listSectionState = rememberListSectionState(scope = state.baseUiState.scope, refreshing = isRefreshing as MutableState<Boolean>)
-
-            when(photosUiState.value.status) {
-                Status.SUCCESS -> {
-                    listSectionState.refreshing.value = false
-                    ListSection(
-                        modifier = Modifier
-                            .padding(4.dp, 4.dp)
-                            .weight(1f),
-                        state = listSectionState,
-                        @Suppress("UNCHECKED_CAST")
-                        flowOf(photosUiState.value.data as PagingData<Document>).collectAsLazyPagingItems(),
-                        onItemClicked = { document, index ->
-                            onItemClicked(document, index)
-                        },
-                        onRefresh = {
-                            photoViewModel.trigger(2, Params(searchedKeyword, FIRST_PAGE, ITEM_COUNT))
-                            listSectionState.refreshing.value = isRefreshing.value
-                        }
-                    )
-                }
-                Status.LOADING -> {
-                }
-                Status.ERROR -> {
-                    // To Do : handle the error
-                    Timber.d("Error Code - %d & Error Message - %s", photosUiState.value.errorCode, photosUiState.value.message)
-                }
-            }
         }
     }
 
-    val multiplePermissionsState = rememberMultiplePermissionsState(
-        listOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.CAMERA
-        )
-    )
-    val rationaleTextState: MutableState<String> = rememberSaveable { mutableStateOf("") }
+    val multiplePermissionsState = rememberMultiplePermissionsState(state.permissions)
 
-    CheckPermission(
-        multiplePermissionsState= multiplePermissionsState,
-        onPermissionGranted = {
-            enabledSearch.value = true
-            showPermissionBottomSheet = false
-        },
-        onPermissionNotGranted = {
-            rationaleTextState.value = it
-            enabledSearch.value = false
-            showPermissionBottomSheet = true
-        }
-    )
-
-    if (showPermissionBottomSheet) {
-        PermissionBottomSheet(
-            permissionState = rememberPermissionState(rationaleTextState = rationaleTextState),
-            onDismissedRequest = {
-                enabledSearch.value = false
-                showPermissionBottomSheet = false
+    with(state) {
+        CheckPermission(
+            multiplePermissionsState = multiplePermissionsState,
+            onPermissionGranted = {
+                enabledSearch.value = true
+                showPermissionBottomSheet.value = false
             },
-            onClicked = {
-                multiplePermissionsState.launchMultiplePermissionRequest()
-                showPermissionBottomSheet = false
+            onPermissionNotGranted = {
+                rationaleTextState.value = it
+                enabledSearch.value = false
+                showPermissionBottomSheet.value = true
             }
         )
+        if (showPermissionBottomSheet.value) {
+            PermissionBottomSheet(
+                permissionState = rememberPermissionState(rationaleTextState = rationaleTextState),
+                onDismissedRequest = {
+                    enabledSearch.value = false
+                    showPermissionBottomSheet.value = false
+                },
+                onClicked = {
+                    multiplePermissionsState.launchMultiplePermissionRequest()
+                    showPermissionBottomSheet.value = false
+                }
+            )
+        }
     }
 }
 
