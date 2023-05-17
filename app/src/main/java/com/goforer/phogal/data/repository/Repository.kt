@@ -37,7 +37,7 @@ abstract class Repository constructor() {
      */
 
     companion object {
-        internal const val ITEM_COUNT = 30
+        internal const val ITEM_COUNT = 10
         internal const val FIRST_PAGE = 1
 
         internal var replyCount = 0

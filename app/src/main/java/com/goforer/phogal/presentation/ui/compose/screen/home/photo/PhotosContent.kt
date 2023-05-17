@@ -10,10 +10,11 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,7 +46,6 @@ import com.goforer.phogal.presentation.ui.theme.DarkGreen30
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
 import timber.log.Timber
 
@@ -64,7 +64,6 @@ fun PhotosContent(
     var searchedKeyword by rememberSaveable { mutableStateOf("") }
     val enabledSearch: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
     var showPermissionBottomSheet by rememberSaveable { mutableStateOf(false) }
-    var enableClear by rememberSaveable { mutableStateOf(false) }
 
     BoxWithConstraints(modifier = modifier) {
         Column(
@@ -82,10 +81,6 @@ fun PhotosContent(
                 state = rememberSearchSectionState(searchEnabled = enabledSearch),
                 onSearched = { keyword ->
                     if (keyword.isNotEmpty()) {
-                        enableClear = if (searchedKeyword.isEmpty())
-                            false
-                        else
-                            keyword != searchedKeyword
                         searchedKeyword = keyword
                         state.baseUiState.keyboardController?.hide()
                         photoViewModel.trigger(2, Params(keyword, FIRST_PAGE, ITEM_COUNT))
@@ -113,12 +108,9 @@ fun PhotosContent(
             when(photosUiState.value.status) {
                 Status.SUCCESS -> {
                     @Suppress("UNCHECKED_CAST")
-                    val photos = flowOf(photosUiState.value.data as PagingData<Document>).collectAsLazyPagingItems()
-
-                    if (enableClear) {
-                        LaunchedEffect(true) {
-                            delay(1000L)
-                            enableClear = false
+                    val photos by remember(searchedKeyword) {
+                        derivedStateOf {
+                            flowOf(photosUiState.value.data as PagingData<Document>)
                         }
                     }
 
@@ -128,11 +120,7 @@ fun PhotosContent(
                             .padding(4.dp, 4.dp)
                             .weight(1f),
                         state = listSectionState,
-                        if (enableClear) {
-                            photos.refresh()
-                            flowOf(PagingData.empty<Document>()).collectAsLazyPagingItems()
-                        } else
-                            photos,
+                        photos.collectAsLazyPagingItems(),
                         onItemClicked = { document, index ->
                             onItemClicked(document, index)
                         },
