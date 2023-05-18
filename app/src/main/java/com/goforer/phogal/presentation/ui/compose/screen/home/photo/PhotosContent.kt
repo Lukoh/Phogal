@@ -53,6 +53,9 @@ fun PhotosContent(
     state: PhotosContentState = rememberPhotosContentState(baseUiState = rememberBaseUiState()),
     onItemClicked: (item: Document, index: Int) -> Unit
 ) {
+    val photosUiState by photoViewModel.photosUiState.collectAsStateWithLifecycle()
+    val isRefreshing = photoViewModel.isRefreshing.collectAsStateWithLifecycle()
+
     BoxWithConstraints(modifier = modifier) {
         Column(
             modifier = modifier
@@ -78,15 +81,14 @@ fun PhotosContent(
                 }
             )
 
-            val photosUiState by photoViewModel.photosUiState.collectAsStateWithLifecycle()
-            val isRefreshing = photoViewModel.isRefreshing.collectAsStateWithLifecycle()
-
             if (photosUiState.data is PagingData<*> && photosUiState.status == Status.SUCCESS) {
+                @Suppress("UNCHECKED_CAST")
+                val photos = flowOf(photosUiState.data as PagingData<Document>).collectAsLazyPagingItems()
+
                 ListSection(
                     modifier = Modifier.padding(4.dp, 4.dp).weight(1f),
                     state = rememberListSectionState(scope = state.baseUiState.scope, refreshing = isRefreshing as MutableState<Boolean>),
-                    @Suppress("UNCHECKED_CAST")
-                    flowOf(photosUiState.data as PagingData<Document>).collectAsLazyPagingItems(),
+                    photos,
                     onItemClicked = { document, index ->
                         onItemClicked(document, index)
                     },

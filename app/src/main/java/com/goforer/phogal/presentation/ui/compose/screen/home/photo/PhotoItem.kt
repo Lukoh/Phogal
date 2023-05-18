@@ -55,6 +55,7 @@ fun PhotoItem(
     else
         4.dp
 
+    document.alreadySearched = true
     Card(
         modifier = modifier.padding(0.dp, verticalPadding),
         colors = CardDefaults.cardColors(

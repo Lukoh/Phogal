@@ -20,5 +20,6 @@ data class Document(
     val url: String? = null,
     val width: Int? = null,
     var liked: Boolean = false,
-    var deleted: Boolean = false
+    var deleted: Boolean = false,
+    var alreadySearched: Boolean = false
 ) : BaseModel(), Parcelable

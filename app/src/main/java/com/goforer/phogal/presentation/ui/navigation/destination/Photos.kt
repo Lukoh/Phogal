@@ -12,12 +12,14 @@ import timber.log.Timber
 object Photos : PhogalDestination {
     override val icon = Icons.Sharp.Photo
     override val route = photosStartRoute
-    override val screen: @Composable (navController: NavHostController, bundle: Bundle?) -> Unit = { _, _ ->
-        PhotosScreen(
-            onItemClicked = { item, index ->
-                Timber.d("${item.title}${" - "}${"Index - "}${index}")
-            }
-        )
+    override val screen: @Composable (navController: NavHostController, bundle: Bundle?) -> Unit = { navController, _ ->
+        navController.currentBackStackEntry?.let {
+            PhotosScreen(
+                onItemClicked = { item, index ->
+                    Timber.d("${item.title}${" - "}${"Index - "}${index}")
+                }
+            )
+        }
     }
 }
 

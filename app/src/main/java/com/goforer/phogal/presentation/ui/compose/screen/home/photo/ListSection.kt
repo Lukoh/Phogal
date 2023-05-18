@@ -64,28 +64,31 @@ fun ListSection(
             .pullRefresh(refreshState)
     ) {
         LazyColumn(
-            modifier = Modifier
-                .animateContentSize(),
+            modifier = Modifier.animateContentSize(),
             state = state.lazyListState,
         ) {
             if (!state.refreshing.value) {
-                items(
-                    count = photos.itemCount,
-                    key = photos.itemKey(),
-                    contentType = photos.itemContentType()
-                )
-                { index ->
-                    PhotoItem(
-                        modifier = modifier,
-                        index = index,
-                        document = photos[index]!!,
-                        onItemClicked = onItemClicked
-                    )
-                }
-
                 openedErrorDialog = when(photos.loadState.refresh) {
                     is LoadState.Error -> {
                         true
+                    }
+
+                    is LoadState.NotLoading -> {
+                        items(
+                            count = photos.itemCount,
+                            key = photos.itemKey(),
+                            contentType = photos.itemContentType()
+                        )
+                        { index ->
+                            PhotoItem(
+                                modifier = modifier,
+                                index = index,
+                                document = photos[index]!!,
+                                onItemClicked = onItemClicked
+                            )
+                        }
+
+                        false
                     }
 
                     is LoadState.Loading -> {
