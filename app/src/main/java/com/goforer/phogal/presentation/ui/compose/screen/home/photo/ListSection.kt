@@ -37,6 +37,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import com.goforer.base.extension.composable.rememberLazyListState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
@@ -48,8 +49,8 @@ import timber.log.Timber
 @Composable
 fun ListSection(
     modifier: Modifier = Modifier,
-    state: ListSectionState = rememberListSectionState(),
     photos: LazyPagingItems<Document>,
+    state: ListSectionState = rememberListSectionState(),
     onItemClicked: (item: Document, index: Int) -> Unit,
     onRefresh: () -> Unit
 ) {
@@ -65,7 +66,7 @@ fun ListSection(
     ) {
         LazyColumn(
             modifier = Modifier.animateContentSize(),
-            state = state.lazyListState,
+            state = photos.rememberLazyListState(state.lazyListState),
         ) {
             if (!state.refreshing.value) {
                 openedErrorDialog = when(photos.loadState.refresh) {

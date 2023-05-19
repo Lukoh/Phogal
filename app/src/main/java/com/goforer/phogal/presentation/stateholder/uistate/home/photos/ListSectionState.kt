@@ -15,7 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @Stable
 class ListSectionState(
-    val lazyListState: LazyListState,
+    var lazyListState: LazyListState,
     val visibleUpButtonState: State<Boolean>,
     val scope: CoroutineScope,
     val refreshing: MutableState<Boolean>,

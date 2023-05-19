@@ -88,7 +88,7 @@ fun PhotosContent(
                 ListSection(
                     modifier = Modifier.padding(4.dp, 4.dp).weight(1f),
                     state = rememberListSectionState(scope = state.baseUiState.scope, refreshing = isRefreshing as MutableState<Boolean>),
-                    photos,
+                    photos = photos,
                     onItemClicked = { document, index ->
                         onItemClicked(document, index)
                     },
