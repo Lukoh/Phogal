@@ -56,7 +56,7 @@ fun ListSection(
     onItemClicked: (item: Document, index: Int) -> Unit,
     onRefresh: () -> Unit
 ) {
-    val lazyListState = rememberLazyListState()
+    val lazyListState = photos.rememberLazyListState()
     var openedErrorDialog by rememberSaveable { mutableStateOf(false) }
     val refreshState = rememberPullRefreshState(state.refreshing.value, onRefresh = {
         onRefresh()
@@ -69,7 +69,7 @@ fun ListSection(
     ) {
         LazyColumn(
             modifier = Modifier.animateContentSize(),
-            state = lazyListState,
+            state = lazyListState
         ) {
             if (!state.refreshing.value) {
                 openedErrorDialog = when(photos.loadState.refresh) {
