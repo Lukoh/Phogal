@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.goforer.base.extension.composable.rememberLazyListState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.data.network.api.Params
@@ -91,8 +92,11 @@ fun PhotosContent(
                     modifier = Modifier
                         .padding(4.dp, 4.dp)
                         .weight(1f),
-                    state = rememberListSectionState(scope = state.baseUiState.scope, refreshing = isRefreshing as MutableState<Boolean>),
                     photos = photos,
+                    state = rememberListSectionState(
+                        scope = state.baseUiState.scope,
+                        refreshing = isRefreshing as MutableState<Boolean>
+                    ),
                     onItemClicked = { document, index ->
                         onItemClicked(document, index)
                     },

@@ -23,8 +23,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -54,6 +56,7 @@ fun ListSection(
     onItemClicked: (item: Document, index: Int) -> Unit,
     onRefresh: () -> Unit
 ) {
+    val lazyListState = rememberLazyListState()
     var openedErrorDialog by rememberSaveable { mutableStateOf(false) }
     val refreshState = rememberPullRefreshState(state.refreshing.value, onRefresh = {
         onRefresh()
@@ -66,7 +69,7 @@ fun ListSection(
     ) {
         LazyColumn(
             modifier = Modifier.animateContentSize(),
-            state = photos.rememberLazyListState(state.lazyListState),
+            state = lazyListState,
         ) {
             if (!state.refreshing.value) {
                 openedErrorDialog = when(photos.loadState.refresh) {
@@ -128,8 +131,14 @@ fun ListSection(
         }
 
         PullRefreshIndicator(state.refreshing.value, refreshState, Modifier.align(Alignment.TopCenter))
+        val visibleUpButtonState by remember {
+            derivedStateOf {
+                lazyListState.firstVisibleItemIndex > 0
+            }
+        }
+
         AnimatedVisibility(
-            visible = state.visibleUpButtonState.value,
+            visible = visibleUpButtonState,
             modifier = Modifier.align(Alignment.BottomEnd)
         ) {
             FloatingActionButton(
@@ -153,9 +162,9 @@ fun ListSection(
             }
         }
 
-        LaunchedEffect(state.lazyListState, state.visibleUpButtonState.value, state.clickedState.value) {
-            if (state.visibleUpButtonState.value && state.clickedState.value)
-                state.lazyListState.scrollToItem (0)
+        LaunchedEffect(lazyListState, visibleUpButtonState, state.clickedState.value) {
+            if (visibleUpButtonState && state.clickedState.value)
+                lazyListState.scrollToItem (0)
 
             state.clickedState.value = false
         }
