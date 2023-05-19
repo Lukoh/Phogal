@@ -10,7 +10,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -50,11 +49,15 @@ fun PhotosContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     photoViewModel: PhotoViewModel = hiltViewModel(),
-    state: PhotosContentState = rememberPhotosContentState(baseUiState = rememberBaseUiState()),
+    state: PhotosContentState = rememberPhotosContentState(
+        baseUiState = rememberBaseUiState(),
+        photosUiState = photoViewModel.photosUiState,
+        isRefreshing = photoViewModel.isRefreshing
+    ),
     onItemClicked: (item: Document, index: Int) -> Unit
 ) {
-    val photosUiState by photoViewModel.photosUiState.collectAsStateWithLifecycle()
-    val isRefreshing = photoViewModel.isRefreshing.collectAsStateWithLifecycle()
+    val photosUiState = state.photosUiState.collectAsStateWithLifecycle()
+    val isRefreshing = state.isRefreshing.collectAsStateWithLifecycle()
 
     BoxWithConstraints(modifier = modifier) {
         Column(
@@ -81,12 +84,14 @@ fun PhotosContent(
                 }
             )
 
-            if (photosUiState.data is PagingData<*> && photosUiState.status == Status.SUCCESS) {
+            if (photosUiState.value.data is PagingData<*> && photosUiState.value.status == Status.SUCCESS) {
                 @Suppress("UNCHECKED_CAST")
-                val photos = flowOf(photosUiState.data as PagingData<Document>).collectAsLazyPagingItems()
+                val photos = flowOf(photosUiState.value.data as PagingData<Document>).collectAsLazyPagingItems()
 
                 ListSection(
-                    modifier = Modifier.padding(4.dp, 4.dp).weight(1f),
+                    modifier = Modifier
+                        .padding(4.dp, 4.dp)
+                        .weight(1f),
                     state = rememberListSectionState(scope = state.baseUiState.scope, refreshing = isRefreshing as MutableState<Boolean>),
                     photos = photos,
                     onItemClicked = { document, index ->

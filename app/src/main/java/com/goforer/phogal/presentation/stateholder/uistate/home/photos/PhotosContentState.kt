@@ -9,7 +9,11 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import com.goforer.phogal.data.network.response.Resource
+import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Stable
 class PhotosContentState(
@@ -21,6 +25,8 @@ class PhotosContentState(
     val enabledSearch: MutableState<Boolean>,
     val showPermissionBottomSheet: MutableState<Boolean>,
     val rationaleTextState: MutableState<String>,
+    val photosUiState: StateFlow<Resource>,
+    val isRefreshing: StateFlow<Boolean>
 ) {
     val permissions = listOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -38,12 +44,16 @@ fun rememberPhotosContentState(
     searchKeyword: MutableState<String> = rememberSaveable { mutableStateOf("") },
     enabledSearch: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     showPermissionBottomSheet: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    rationaleTextState: MutableState<String> = rememberSaveable { mutableStateOf("") }
+    rationaleTextState: MutableState<String> = rememberSaveable { mutableStateOf("") },
+    photosUiState: StateFlow<Resource> = remember { MutableStateFlow(Resource().loading(Status.LOADING)) },
+    isRefreshing: StateFlow<Boolean> = remember { MutableStateFlow(false) }
 ): PhotosContentState = remember(
     searchedKeywordState,
     showTopButtonState,
     clickedState,
-    baseUiState
+    baseUiState,
+    photosUiState,
+    isRefreshing
 ) {
     PhotosContentState(
         searchedKeywordState = searchedKeywordState,
@@ -53,6 +63,8 @@ fun rememberPhotosContentState(
         searchKeyword = searchKeyword,
         enabledSearch = enabledSearch,
         showPermissionBottomSheet = showPermissionBottomSheet,
-        rationaleTextState = rationaleTextState
+        rationaleTextState = rationaleTextState,
+        photosUiState = photosUiState,
+        isRefreshing = isRefreshing
     )
 }
