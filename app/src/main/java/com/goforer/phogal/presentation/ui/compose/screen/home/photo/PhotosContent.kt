@@ -25,7 +25,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.data.repository.Repository.Companion.FIRST_PAGE
 import com.goforer.phogal.data.repository.Repository.Companion.ITEM_COUNT
 import com.goforer.phogal.presentation.stateholder.business.home.photo.PhotoViewModel
@@ -84,9 +83,9 @@ fun PhotosContent(
                 }
             )
 
-            if (photosUiState.value.data is PagingData<*> && photosUiState.value.status == Status.SUCCESS) {
+            if (photosUiState.value is PagingData<*>) {
                 @Suppress("UNCHECKED_CAST")
-                val photos = flowOf(photosUiState.value.data as PagingData<Document>).collectAsLazyPagingItems()
+                val photos = flowOf(photosUiState.value as PagingData<Document>).collectAsLazyPagingItems()
 
                 ListSection(
                     modifier = Modifier
