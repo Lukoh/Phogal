@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -80,20 +79,16 @@ fun PhotosContent(
                 }
             )
 
-            val isRefreshing = state.isRefreshing.collectAsStateWithLifecycle()
-
             if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
                 @Suppress("UNCHECKED_CAST")
-                val photos = (state.photosUiState as StateFlow<PagingData<Document>>).collectAsLazyPagingItems()
-
                 ListSection(
                     modifier = Modifier
                         .padding(4.dp, 4.dp)
                         .weight(1f),
-                    photos = photos,
+                    photos = (state.photosUiState as StateFlow<PagingData<Document>>).collectAsLazyPagingItems(),
                     state = rememberListSectionState(
                         scope = state.baseUiState.scope,
-                        refreshing = isRefreshing as MutableState<Boolean>
+                        refreshing = state.isRefreshing.collectAsStateWithLifecycle()
                     ),
                     onItemClicked = { document, index ->
                         onItemClicked(document, index)
