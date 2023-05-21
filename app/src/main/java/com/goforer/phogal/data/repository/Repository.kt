@@ -5,9 +5,7 @@ import com.goforer.phogal.data.network.NetworkErrorHandler
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.api.RestAPI
 import com.goforer.phogal.data.network.response.Resource
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharedFlow
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
