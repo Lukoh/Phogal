@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.data.network.api.Params
@@ -37,7 +36,6 @@ import com.goforer.phogal.presentation.ui.theme.DarkGreen30
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class,
     ExperimentalMaterial3Api::class
@@ -80,14 +78,13 @@ fun PhotosContent(
             )
 
             if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
-                @Suppress("UNCHECKED_CAST")
                 ListSection(
                     modifier = Modifier
                         .padding(4.dp, 4.dp)
                         .weight(1f),
-                    photos = (state.photosUiState as StateFlow<PagingData<Document>>).collectAsLazyPagingItems(),
                     state = rememberListSectionState(
                         scope = state.baseUiState.scope,
+                        photosUiState = state.photosUiState,
                         refreshing = state.isRefreshing.collectAsStateWithLifecycle()
                     ),
                     onItemClicked = { document, index ->

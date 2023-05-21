@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.goforer.phogal.presentation.ui.compose.screen.home.photo
 
 import android.content.res.Configuration
@@ -34,7 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.goforer.base.extension.composable.rememberLazyListState
@@ -43,17 +46,18 @@ import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
+import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ListSection(
     modifier: Modifier = Modifier,
-    photos: LazyPagingItems<Document>,
     state: ListSectionState = rememberListSectionState(),
     onItemClicked: (item: Document, index: Int) -> Unit,
     onRefresh: () -> Unit
 ) {
+    val photos = (state.photosUiState as StateFlow<PagingData<Document>>).collectAsLazyPagingItems()
     val lazyListState = photos.rememberLazyListState()
     var openedErrorDialog by rememberSaveable { mutableStateOf(false) }
     val refreshState = rememberPullRefreshState(state.refreshing.value, onRefresh = {
