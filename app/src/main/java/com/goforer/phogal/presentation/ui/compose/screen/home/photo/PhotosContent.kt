@@ -85,7 +85,7 @@ fun PhotosContent(
                     state = rememberListSectionState(
                         scope = state.baseUiState.scope,
                         photosUiState = state.photosUiState,
-                        refreshing = state.isRefreshing.collectAsStateWithLifecycle()
+                        refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
                     ),
                     onItemClicked = { document, index ->
                         onItemClicked(document, index)

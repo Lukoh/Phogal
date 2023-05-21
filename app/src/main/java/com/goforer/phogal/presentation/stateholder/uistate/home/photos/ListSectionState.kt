@@ -16,23 +16,29 @@ import kotlinx.coroutines.flow.StateFlow
 class ListSectionState(
     val photosUiState: StateFlow<Any>,
     val scope: CoroutineScope,
-    val refreshing: State<Boolean>,
+    val refreshingState: State<Boolean>,
     var clickedState: MutableState<Boolean>,
+    var visibleUpButtonState: MutableState<Boolean>,
+    var openedErrorDialogState: MutableState<Boolean>
 )
 
 @Composable
 fun rememberListSectionState(
     scope: CoroutineScope = rememberCoroutineScope(),
-    photosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
-    refreshing: State<Boolean> = rememberSaveable { mutableStateOf(false) },
-    clickedState: MutableState<Boolean> = remember { mutableStateOf(false) },
+    photosUiState: StateFlow<Any> = rememberSaveable { MutableStateFlow(Any()) },
+    refreshingState: State<Boolean> = rememberSaveable { mutableStateOf(false) },
+    clickedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    visibleUpButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    openedErrorDialogState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): ListSectionState = remember(
     clickedState,
 ) {
     ListSectionState(
         scope = scope,
         photosUiState = photosUiState,
-        refreshing = refreshing,
-        clickedState = clickedState
+        refreshingState = refreshingState,
+        clickedState = clickedState,
+        visibleUpButtonState = visibleUpButtonState,
+        openedErrorDialogState = openedErrorDialogState
     )
 }
