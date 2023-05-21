@@ -128,6 +128,7 @@ fun HomeScreen(
             }
         },
         content = { innerPadding ->
+
             BoxWithConstraints(
                 Modifier.padding(
                     start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),

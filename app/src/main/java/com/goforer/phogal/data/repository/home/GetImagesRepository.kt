@@ -3,42 +3,41 @@ package com.goforer.phogal.data.repository.home
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.goforer.phogal.data.mediator.PagingDataMediator
 import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.data.repository.paging.source.BasePagingSource
 import com.goforer.phogal.data.repository.paging.source.home.GetImagesPagingSource
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class GetImagesRepository
 @Inject
-constructor() : Repository() {
+constructor() : Repository<PagingData<Document>>() {
     @Inject
     lateinit var pagingSource: GetImagesPagingSource
 
-    override fun trigger(viewModelScope: CoroutineScope, replyCount: Int, params: Params): SharedFlow<Resource> {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun trigger(replyCount: Int, params: Params): Flow<PagingData<Document>> {
         Repository.replyCount = replyCount
-        return object : PagingDataMediator<PagingData<Document>>(viewModelScope, replyCount) {
-            override fun load(): Flow<PagingData<Document>> = Pager(
-                config = PagingConfig(
-                    pageSize = params.args[2] as Int,
-                    prefetchDistance = ITEM_COUNT - 5,
-                    initialLoadSize = ITEM_COUNT
-                ),
-            ) {
-                BasePagingSource.pageSize = params.args[2] as Int
-                pagingSource.setPagingParam(params)
-                pagingSource
-            }.flow.cachedIn(viewModelScope)
-        }.asSharedFlow
+        return Pager(
+            config = PagingConfig(
+                pageSize = params.args[2] as Int,
+                prefetchDistance = ITEM_COUNT - 5,
+                initialLoadSize = ITEM_COUNT
+            ),
+        ) {
+            BasePagingSource.pageSize = params.args[2] as Int
+            pagingSource.setPagingParam(params)
+            pagingSource
+        }.flow.mapLatest {
+            it
+        }
     }
 
     override fun invalidatePagingSource() {

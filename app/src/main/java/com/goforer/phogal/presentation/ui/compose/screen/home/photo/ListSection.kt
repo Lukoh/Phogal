@@ -23,10 +23,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -131,14 +129,17 @@ fun ListSection(
         }
 
         PullRefreshIndicator(state.refreshing.value, refreshState, Modifier.align(Alignment.TopCenter))
+        /*
         val visibleUpButtonState by remember {
             derivedStateOf {
                 lazyListState.firstVisibleItemIndex > 0
             }
         }
 
+         */
+
         AnimatedVisibility(
-            visible = visibleUpButtonState,
+            visible = true,
             modifier = Modifier.align(Alignment.BottomEnd)
         ) {
             FloatingActionButton(
@@ -162,8 +163,8 @@ fun ListSection(
             }
         }
 
-        LaunchedEffect(lazyListState, visibleUpButtonState, state.clickedState.value) {
-            if (visibleUpButtonState && state.clickedState.value)
+        LaunchedEffect(lazyListState, true, state.clickedState.value) {
+            if (state.clickedState.value)
                 lazyListState.scrollToItem (0)
 
             state.clickedState.value = false

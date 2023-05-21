@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.goforer.base.extension.composable.rememberLazyListState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.photos.Document
 import com.goforer.phogal.data.network.api.Params
@@ -39,7 +38,7 @@ import com.goforer.phogal.presentation.ui.theme.DarkGreen30
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class,
     ExperimentalMaterial3Api::class
@@ -56,9 +55,6 @@ fun PhotosContent(
     ),
     onItemClicked: (item: Document, index: Int) -> Unit
 ) {
-    val photosUiState = state.photosUiState.collectAsStateWithLifecycle()
-    val isRefreshing = state.isRefreshing.collectAsStateWithLifecycle()
-
     BoxWithConstraints(modifier = modifier) {
         Column(
             modifier = modifier
@@ -84,9 +80,11 @@ fun PhotosContent(
                 }
             )
 
-            if (photosUiState.value is PagingData<*>) {
+            val isRefreshing = state.isRefreshing.collectAsStateWithLifecycle()
+
+            if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
                 @Suppress("UNCHECKED_CAST")
-                val photos = flowOf(photosUiState.value as PagingData<Document>).collectAsLazyPagingItems()
+                val photos = (state.photosUiState as StateFlow<PagingData<Document>>).collectAsLazyPagingItems()
 
                 ListSection(
                     modifier = Modifier
@@ -105,15 +103,7 @@ fun PhotosContent(
                     }
                 )
             } else {
-                BoxWithConstraints(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = stringResource(id = R.string.search_photos),
-                        style = typography.titleMedium.copy(color = DarkGreen30),
-                        modifier = Modifier.align(Alignment.Center),
-                        fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                NoSearchResult(modifier = Modifier.weight(1f))
             }
         }
     }
@@ -146,6 +136,19 @@ fun PhotosContent(
                 }
             )
         }
+    }
+}
+
+@Composable
+fun NoSearchResult(modifier: Modifier) {
+    BoxWithConstraints(modifier = modifier) {
+        Text(
+            text = stringResource(id = R.string.search_photos),
+            style = typography.titleMedium.copy(color = DarkGreen30),
+            modifier = Modifier.align(Alignment.Center),
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 

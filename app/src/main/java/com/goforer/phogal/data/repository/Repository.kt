@@ -6,13 +6,14 @@ import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.api.RestAPI
 import com.goforer.phogal.data.network.response.Resource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-abstract class Repository {
+abstract class Repository<T> {
     @Inject
     lateinit var restAPI: RestAPI
 
@@ -25,17 +26,6 @@ abstract class Repository {
     @Inject
     lateinit var resource: Resource
 
-    /*
-    var value: SharedFlow<Resource> = flow {
-        emit(resource.loading(Status.LOADING))
-    }.shareIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        replay = 2
-    )
-
-     */
-
     companion object {
         internal const val ITEM_COUNT = 10
         internal const val FIRST_PAGE = 1
@@ -43,7 +33,7 @@ abstract class Repository {
         internal var replyCount = 0
     }
 
-    abstract fun trigger(viewModelScope: CoroutineScope, replyCount: Int, params: Params): SharedFlow<Resource>
+    abstract fun trigger(replyCount: Int, params: Params): Flow<T>
 
     open fun invalidatePagingSource() {
         Timber.d("invalidatePagingSource")
