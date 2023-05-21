@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -58,11 +59,33 @@ fun ListSection(
     onRefresh: () -> Unit
 ) {
     val photos = (state.photosUiState as StateFlow<PagingData<Document>>).collectAsLazyPagingItems()
+    // After recreation, LazyPagingItems first return 0 items, then the cached items.
+    // This behavior/issue is resetting the LazyListState scroll position.
+    // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
+    // If this bug will got fixed... then have to be removed below code
     val lazyListState = photos.rememberLazyListState()
+    // After recreation, LazyPagingItems first return 0 items, then the cached items.
+    // This behavior/issue is resetting the LazyListState scroll position.
+    // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
+    // If this bug will got fixed... then have to be unblocked below code
+    //val lazyListState = rememberLazyListState()
     var openedErrorDialog by rememberSaveable { mutableStateOf(false) }
     val refreshState = rememberPullRefreshState(state.refreshing.value, onRefresh = {
         onRefresh()
     })
+    var visibleUpButtonState by remember { mutableStateOf(false) }
+    // After recreation, LazyPagingItems first return 0 items, then the cached items.
+    // This behavior/issue is resetting the LazyListState scroll position.
+    // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
+    // If this bug will got fixed... then have to be unblocked below code
+    /*
+    val visibleUpButtonState by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemIndex > 0
+        }
+    }
+
+     */
 
     BoxWithConstraints(
         modifier = modifier
@@ -84,8 +107,14 @@ fun ListSection(
                             count = photos.itemCount,
                             key = photos.itemKey(),
                             contentType = photos.itemContentType()
-                        )
-                        { index ->
+                        ) { index ->
+                            // After recreation, LazyPagingItems first return 0 items, then the cached items.
+                            // This behavior/issue is resetting the LazyListState scroll position.
+                            // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
+                            // If this bug will got fixed... then have to be removed below code
+                            if (index == 4)
+                                visibleUpButtonState = true
+
                             PhotoItem(
                                 modifier = modifier,
                                 index = index,
@@ -133,17 +162,8 @@ fun ListSection(
         }
 
         PullRefreshIndicator(state.refreshing.value, refreshState, Modifier.align(Alignment.TopCenter))
-        /*
-        val visibleUpButtonState by remember {
-            derivedStateOf {
-                lazyListState.firstVisibleItemIndex > 0
-            }
-        }
-
-         */
-
         AnimatedVisibility(
-            visible = true,
+            visible = visibleUpButtonState,
             modifier = Modifier.align(Alignment.BottomEnd)
         ) {
             FloatingActionButton(
@@ -168,8 +188,10 @@ fun ListSection(
         }
 
         LaunchedEffect(lazyListState, true, state.clickedState.value) {
-            if (state.clickedState.value)
-                lazyListState.scrollToItem (0)
+            if (state.clickedState.value) {
+                lazyListState.scrollToItem(0)
+                visibleUpButtonState = false
+            }
 
             state.clickedState.value = false
         }
