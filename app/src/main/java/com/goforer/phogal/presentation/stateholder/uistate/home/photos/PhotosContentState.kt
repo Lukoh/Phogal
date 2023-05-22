@@ -4,8 +4,6 @@ import android.Manifest
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -15,9 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Stable
 class PhotosContentState(
-    var searchedKeywordState: MutableState<String>,
-    val showTopButtonState: State<Boolean>,
-    var clickedState: MutableState<Boolean>,
     val baseUiState: BaseUiState,
     val searchKeyword: MutableState<String>,
     val enabledSearch: MutableState<Boolean>,
@@ -35,9 +30,6 @@ class PhotosContentState(
 
 @Composable
 fun rememberPhotosContentState(
-    searchedKeywordState: MutableState<String> = rememberSaveable { mutableStateOf("") },
-    showTopButtonState: State<Boolean> = remember { derivedStateOf { searchedKeywordState.value.isNotEmpty() } },
-    clickedState: MutableState<Boolean> = remember { mutableStateOf(false) },
     baseUiState: BaseUiState,
     searchKeyword: MutableState<String> = rememberSaveable { mutableStateOf("") },
     enabledSearch: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
@@ -46,17 +38,11 @@ fun rememberPhotosContentState(
     photosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
     isRefreshing: StateFlow<Boolean> = remember { MutableStateFlow(false) }
 ): PhotosContentState = remember(
-    searchedKeywordState,
-    showTopButtonState,
-    clickedState,
     baseUiState,
     photosUiState,
     isRefreshing
 ) {
     PhotosContentState(
-        searchedKeywordState = searchedKeywordState,
-        showTopButtonState = showTopButtonState,
-        clickedState = clickedState,
         baseUiState = baseUiState,
         searchKeyword = searchKeyword,
         enabledSearch = enabledSearch,
