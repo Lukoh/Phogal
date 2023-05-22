@@ -1,9 +1,13 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.photo
 
 import android.content.res.Configuration
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -32,7 +38,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberP
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
-import com.goforer.phogal.presentation.ui.theme.DarkGreen30
+import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -133,14 +139,29 @@ fun PhotosContent(
 
 @Composable
 fun NoSearchResult(modifier: Modifier) {
-    BoxWithConstraints(modifier = modifier) {
-        Text(
-            text = stringResource(id = R.string.search_photos),
-            style = typography.titleMedium.copy(color = DarkGreen30),
-            modifier = Modifier.align(Alignment.Center),
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Bold
-        )
+    BoxWithConstraints(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.img_photo_search),
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = stringResource(id = R.string.search_photos),
+                style = typography.titleMedium.copy(color = ColorSystemGray7),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.Medium
+            )
+        }
     }
 }
 
@@ -172,7 +193,7 @@ fun PhotosContentPreview(modifier: Modifier = Modifier) {
                 BoxWithConstraints(modifier = Modifier.weight(1f)) {
                     Text(
                         text = stringResource(id = R.string.search_photos),
-                        style = typography.titleMedium.copy(color = DarkGreen30),
+                        style = typography.titleMedium.copy(color = ColorSystemGray7),
                         modifier = Modifier.align(Alignment.Center),
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.Bold
