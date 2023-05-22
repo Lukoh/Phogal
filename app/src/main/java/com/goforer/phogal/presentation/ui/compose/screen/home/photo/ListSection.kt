@@ -105,11 +105,7 @@ fun ListSection(
                             // This behavior/issue is resetting the LazyListState scroll position.
                             // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
                             // If this bug will got fixed... then have to be removed below code
-                            when {
-                                index == 2 -> state.visibleUpButtonState.value = true
-                                index < 2-> state.visibleUpButtonState.value = false
-                            }
-
+                            state.visibleUpButtonState.value = visibleUpButton(index)
                             PhotoItem(
                                 modifier = modifier,
                                 index = index,
@@ -157,31 +153,13 @@ fun ListSection(
         }
 
         PullRefreshIndicator(state.refreshingState.value, refreshState, Modifier.align(Alignment.TopCenter))
-        AnimatedVisibility(
+        ShowUpButton(
+            modifier = Modifier.align(Alignment.BottomEnd),
             visible = state.visibleUpButtonState.value,
-            modifier = Modifier.align(Alignment.BottomEnd)
-        ) {
-            FloatingActionButton(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .navigationBarsPadding()
-                    .padding(bottom = 4.dp, end = 8.dp),
-                backgroundColor = MaterialTheme.colorScheme.primary,
-                onClick = {
-                    state.clickedState.value = true
-                    // Can scrolling to the first item using below code....
-                    /*
-                    state.scope.launch {
-                        state.lazyListState.scrollToItem(0)
-                    }
-
-                     */
-                }
-            ) {
-                Text("Up!")
+            onClick = {
+                state.clickedState.value = true
             }
-        }
-
+        )
         LaunchedEffect(lazyListState, true, state.clickedState.value) {
             if (state.clickedState.value) {
                 lazyListState.scrollToItem(0)
@@ -193,25 +171,60 @@ fun ListSection(
     }
 
     if (state.openedErrorDialogState.value) {
-        AlertDialog(
+        ShowAlertDialog(
             onDismissRequest = {
                 state.openedErrorDialogState.value = false
             },
-            title = {
-                Text(text = stringResource(id = R.string.error_dialog_title))
-            },
-            text = {
-                Text(stringResource(id = R.string.error_dialog_content))
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        state.openedErrorDialogState.value = false
-                    }) {
-                    Text(stringResource(id = R.string.confirm))
-                }
-            },
+            onConfirmClick = {
+                state.openedErrorDialogState.value = false
+            }
         )
+    }
+}
+
+@Composable
+fun ShowUpButton(modifier: Modifier, visible: Boolean, onClick: () -> Unit) {
+    AnimatedVisibility(
+        visible = visible,
+        modifier = modifier
+    ) {
+        FloatingActionButton(
+            modifier = modifier
+                .navigationBarsPadding()
+                .padding(bottom = 4.dp, end = 8.dp),
+            backgroundColor = MaterialTheme.colorScheme.primary,
+            onClick = onClick
+        ) {
+            Text("Up!")
+        }
+    }
+}
+
+@Composable
+fun ShowAlertDialog(onDismissRequest: () -> Unit, onConfirmClick: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = {
+            Text(text = stringResource(id = R.string.error_dialog_title))
+        },
+        text = {
+            Text(stringResource(id = R.string.error_dialog_content))
+        },
+        confirmButton = {
+            Button(
+                onClick = onConfirmClick
+            ) {
+                Text(stringResource(id = R.string.confirm))
+            }
+        },
+    )
+}
+
+private fun visibleUpButton(index: Int): Boolean {
+    return when {
+        index > 2 -> true
+        index < 2-> false
+        else -> true
     }
 }
 
