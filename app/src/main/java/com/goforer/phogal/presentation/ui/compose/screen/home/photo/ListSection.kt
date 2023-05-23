@@ -153,13 +153,16 @@ fun ListSection(
         }
 
         PullRefreshIndicator(state.refreshingState.value, refreshState, Modifier.align(Alignment.TopCenter))
-        ShowUpButton(
-            modifier = Modifier.align(Alignment.BottomEnd),
-            visible = state.visibleUpButtonState.value,
-            onClick = {
-                state.clickedState.value = true
-            }
-        )
+        if (!lazyListState.isScrollInProgress) {
+            ShowUpButton(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                visible = state.visibleUpButtonState.value,
+                onClick = {
+                    state.clickedState.value = true
+                }
+            )
+        }
+
         LaunchedEffect(lazyListState, true, state.clickedState.value) {
             if (state.clickedState.value) {
                 lazyListState.scrollToItem(0)
