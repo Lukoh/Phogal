@@ -77,7 +77,7 @@ fun PhotosContent(
                         with(state) {
                             searchKeyword.value = keyword
                             baseUiState.keyboardController?.hide()
-                            photoViewModel.trigger(2, Params(keyword, FIRST_PAGE, ITEM_COUNT))
+                            photoViewModel.trigger(2, Params(keyword, ITEM_COUNT))
                         }
                     }
                 }

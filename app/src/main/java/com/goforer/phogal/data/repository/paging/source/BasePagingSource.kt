@@ -9,14 +9,16 @@ import com.goforer.phogal.data.network.response.ApiResponse
 import com.goforer.phogal.data.network.response.ApiSuccessResponse
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_EMPTY
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_NORMAL
+import timber.log.Timber
 import javax.inject.Inject
 
 abstract class BasePagingSource<Key : Any, Response : Any, Value : Any> : PagingSource<Key, Value>() {
     protected lateinit var pagingList: MutableList<Value>
 
     protected var errorMessage = PAGING_NORMAL
+    protected var errorCode = 200
 
-    protected lateinit var params: Params
+    private lateinit var params: Params
 
     protected var next = 0
 
@@ -53,12 +55,15 @@ abstract class BasePagingSource<Key : Any, Response : Any, Value : Any> : Paging
 
             is ApiErrorResponse -> {
                 errorMessage = response.errorMessage
+                errorCode = response.statusCode
                 null
             }
         }
     }
 
-    protected open suspend fun requestAPI(params: Params) {}
+    protected open suspend fun requestAPI(params: Params) {
+        Timber.d("Called REST API")
+    }
 
     internal fun setPagingParam(params: Params) {
         this.params = params

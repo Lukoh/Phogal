@@ -61,7 +61,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import timber.log.Timber
 
 @Stable
-sealed class BottomNavDestination(var route: String, @DrawableRes val icon: Int, @StringRes val title: Int) {
+sealed class BottomNavDestination(val route: String, @DrawableRes val icon: Int, @StringRes val title: Int) {
     object Photo : BottomNavDestination(photosHomeRoute, R.drawable.ic_photo, R.string.bottom_navigation_photo)
     object Community :  BottomNavDestination(communityHomeRoute, R.drawable.ic_community, R.string.bottom_navigation_community)
     object Notification :  BottomNavDestination(notificationHomeRoute, R.drawable.ic_notification, R.string.bottom_navigation_notification)

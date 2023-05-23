@@ -11,6 +11,7 @@
     <string name="internet_not_connected">⚠️ You aren’t connected to the internet</string>
 
     <string name="error_dialog_title">Error</string>
+    <string name="error_dialog_network_title">Network Error</string>
     <string name="error_dialog_content">Failed to get the photo list.</string>
 
     <string name="search_photos">Search your photos</string>

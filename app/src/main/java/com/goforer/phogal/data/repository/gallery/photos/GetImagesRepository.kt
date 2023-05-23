@@ -26,12 +26,12 @@ constructor() : Repository<PagingData<Photo>>() {
         Repository.replyCount = replyCount
         return Pager(
             config = PagingConfig(
-                pageSize = params.args[2] as Int,
+                pageSize = params.args[1] as Int,
                 prefetchDistance = ITEM_COUNT - 5,
                 initialLoadSize = ITEM_COUNT
             ),
         ) {
-            BasePagingSource.pageSize = params.args[2] as Int
+            BasePagingSource.pageSize = params.args[1] as Int
             pagingSource.setPagingParam(params)
             pagingSource
         }.flow.mapLatest {

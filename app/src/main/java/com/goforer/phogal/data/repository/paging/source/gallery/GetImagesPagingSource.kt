@@ -21,9 +21,8 @@ class GetImagesPagingSource
 @Inject
 constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
     private var pagingItemResponse: PhotosResponse? = null
-    private var nextKey: Int? = null
+    private var nextKey: Int = 1
 
-    @Suppress("KotlinConstantConditions")
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Photo> {
         val offset = params.key ?: 0
 
@@ -34,21 +33,16 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
             when {
                 errorMessage == PAGING_EMPTY -> LoadResult.Error(Throwable(errorMessage))
                 errorMessage.contains("AccessDeniedError") -> LoadResult.Error(Throwable(errorMessage))
-                pagingItemResponse?.results?.size!! >= 0 -> {
+                errorMessage.contains("Rate Limit Exceeded") -> LoadResult.Error(Throwable(errorMessage))
+                pagingItemResponse?.results?.size!! > 0 || pagingItemResponse?.total_pages == 0  -> {
                     LoadResult.Page(
                         data = pagingItemResponse?.results!!,
                         prevKey = null,
                         nextKey = nextKey
                     )
                 }
-                pagingItemResponse?.total_pages == 0  -> {
-                    if (pagingItemResponse?.total_pages == 0) {
-                        if (pagingItemResponse?.results?.isEmpty()!!)
-                            errorMessage = PagingErrorMessage.PAGING_END
-                    } else {
-                        errorMessage = PAGING_EMPTY
-                    }
-
+                nextKey > pagingItemResponse?.total_pages!! -> {
+                    errorMessage = PagingErrorMessage.PAGING_END
                     LoadResult.Error(Throwable(errorMessage))
                 }
                 else -> LoadResult.Error(Throwable(errorMessage))
@@ -78,7 +72,7 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
     }
 
     override suspend fun requestAPI(params: Params) {
-        val page = nextKey ?: 1
+        val page = nextKey
 
         //In case of getting photos and videos at the same time, use Flow.combine...
         /*
@@ -124,7 +118,7 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
             BuildConfig.clientId,
             params.args[0] as String,
             page,
-            params.args[2] as Int
+            params.args[1] as Int
         ).collectLatest {
             pagingItemResponse = handleImagesResult(it)
         }
