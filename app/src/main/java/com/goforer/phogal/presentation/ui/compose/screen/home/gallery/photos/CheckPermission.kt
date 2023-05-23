@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.photo
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
 
 import android.Manifest
 import androidx.compose.runtime.Composable

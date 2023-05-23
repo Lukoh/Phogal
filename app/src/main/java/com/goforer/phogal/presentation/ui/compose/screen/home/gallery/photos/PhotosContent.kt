@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.photo
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
@@ -27,11 +27,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.photos.Document
+import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.repository.Repository.Companion.FIRST_PAGE
 import com.goforer.phogal.data.repository.Repository.Companion.ITEM_COUNT
-import com.goforer.phogal.presentation.stateholder.business.home.photo.PhotoViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.PhotoViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.PhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPermissionState
@@ -56,7 +56,7 @@ fun PhotosContent(
         photosUiState = photoViewModel.photosUiState,
         isRefreshing = photoViewModel.isRefreshing
     ),
-    onItemClicked: (item: Document, index: Int) -> Unit
+    onItemClicked: (item: Photo, index: Int) -> Unit
 ) {
     BoxWithConstraints(modifier = modifier) {
         Column(
@@ -93,8 +93,8 @@ fun PhotosContent(
                         photosUiState = state.photosUiState,
                         refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
                     ),
-                    onItemClicked = { document, index ->
-                        onItemClicked(document, index)
+                    onItemClicked = { photo, index ->
+                        onItemClicked(photo, index)
                     },
                     onRefresh = {
                         photoViewModel.trigger(2, Params(state.searchKeyword.value, FIRST_PAGE, ITEM_COUNT))

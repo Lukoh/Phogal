@@ -7,9 +7,6 @@ import android.security.keystore.KeyProperties
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
-import com.goforer.phogal.data.model.remote.response.photos.Document
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -88,43 +85,5 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         editor.clear()
         editor.apply()
         editor.commit()
-    }
-
-    internal fun getLikedImages(): MutableList<Document>? {
-        val json = pref.getString(key_images, null)
-        val type = object : TypeToken<ArrayList<Document>>() {}.type
-
-        return Gson().fromJson(json, type)
-    }
-
-    internal fun setLikedImages(likedImage: Document): MutableList<Document>? {
-        val editor = pref.edit()
-        val images = getLikedImages()
-        val json: String
-        val type = object : TypeToken<ArrayList<Document>>() {}.type
-
-        if (images.isNullOrEmpty()) {
-            images?.add(likedImage)
-            json = Gson().toJson(images)
-            editor.apply()
-            editor.putString(key_images, json)
-            editor.apply()
-        } else {
-            val image = images.find { it.datetime == likedImage.datetime && it.image_url == likedImage.image_url }
-
-            if (image == null) {
-                images.add(likedImage)
-
-            } else {
-                if (!likedImage.liked)
-                    images.remove(image)
-            }
-
-            json = Gson().toJson(images)
-            editor.putString(key_images, json)
-            editor.apply()
-        }
-
-        return Gson().fromJson(json, type)
     }
 }

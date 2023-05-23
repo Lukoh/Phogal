@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.photo
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.photos.Document
+import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
@@ -35,7 +35,7 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun PhotosScreen(
     modifier: Modifier = Modifier,
-    onItemClicked: (item: Document, index: Int) -> Unit
+    onItemClicked: (item: Photo, index: Int) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 

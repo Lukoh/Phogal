@@ -5,17 +5,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Photo
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.goforer.phogal.presentation.ui.compose.screen.home.photo.PhotosScreen
+import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos.PhotosScreen
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.photosStartRoute
 import timber.log.Timber
 
-object Photos : PhogalDestination {
+object Gallery : PhogalDestination {
     override val icon = Icons.Sharp.Photo
     override val route = photosStartRoute
     override val screen: @Composable (navController: NavHostController, bundle: Bundle?) -> Unit = { _, _ ->
         PhotosScreen(
             onItemClicked = { item, index ->
-                Timber.d("${item.title}${" - "}${"Index - "}${index}")
+                Timber.d("${item.description}${" - "}${"Index - "}${index}")
             }
         )
     }

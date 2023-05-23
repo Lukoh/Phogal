@@ -1,18 +1,13 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package com.goforer.phogal.presentation.ui.compose.screen.home.photo
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
@@ -29,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -38,10 +32,9 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.goforer.base.extension.composable.rememberLazyListState
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.photos.Document
+import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
-import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 
@@ -50,10 +43,10 @@ import timber.log.Timber
 fun ListSection(
     modifier: Modifier = Modifier,
     state: ListSectionState = rememberListSectionState(),
-    onItemClicked: (item: Document, index: Int) -> Unit,
+    onItemClicked: (item: Photo, index: Int) -> Unit,
     onRefresh: () -> Unit
 ) {
-    val photos = (state.photosUiState as StateFlow<PagingData<Document>>).collectAsLazyPagingItems()
+    val photos = (state.photosUiState as StateFlow<PagingData<Photo>>).collectAsLazyPagingItems()
     // After recreation, LazyPagingItems first return 0 items, then the cached items.
     // This behavior/issue is resetting the LazyListState scroll position.
     // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
@@ -109,7 +102,7 @@ fun ListSection(
                             PhotoItem(
                                 modifier = modifier,
                                 index = index,
-                                document = photos[index]!!,
+                                photo = photos[index]!!,
                                 onItemClicked = onItemClicked
                             )
                         }
@@ -165,7 +158,7 @@ fun ListSection(
 
         LaunchedEffect(lazyListState, true, state.clickedState.value) {
             if (state.clickedState.value) {
-                lazyListState.scrollToItem(0)
+                lazyListState.animateScrollToItem (0)
                 state.visibleUpButtonState.value = false
             }
 
@@ -231,6 +224,7 @@ private fun visibleUpButton(index: Int): Boolean {
     }
 }
 
+/*
 @Preview(name = "Light Mode")
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
@@ -269,7 +263,7 @@ fun ListSectionPreview(modifier: Modifier = Modifier) {
                         PhotoItem(
                             modifier = modifier,
                             index = index,
-                            document = item,
+                            photo = item,
                             onItemClicked = { _, _ -> }
                         )
                     })
@@ -294,3 +288,5 @@ fun ListSectionPreview(modifier: Modifier = Modifier) {
         }
     }
 }
+
+ */

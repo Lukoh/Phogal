@@ -23,6 +23,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,17 +50,18 @@ import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestinati
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingStartRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopToGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.communityGraph
+import com.goforer.phogal.presentation.ui.navigation.graph.galleryGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.notificationGraph
-import com.goforer.phogal.presentation.ui.navigation.graph.photoGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.settingGraph
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.ColorBottomBar
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import timber.log.Timber
 
 @Stable
-sealed class BottomNavDestination(val route: String, @DrawableRes val icon: Int, @StringRes val title: Int) {
+sealed class BottomNavDestination(var route: String, @DrawableRes val icon: Int, @StringRes val title: Int) {
     object Photo : BottomNavDestination(photosHomeRoute, R.drawable.ic_photo, R.string.bottom_navigation_photo)
     object Community :  BottomNavDestination(communityHomeRoute, R.drawable.ic_community, R.string.bottom_navigation_community)
     object Notification :  BottomNavDestination(notificationHomeRoute, R.drawable.ic_notification, R.string.bottom_navigation_notification)
@@ -74,6 +76,7 @@ fun HomeScreen(
 ) {
     var bottomBarVisible by remember { mutableStateOf(false) }
     val bottomBarOffset by animateDpAsState(targetValue = if (bottomBarVisible) 0.dp else 56.dp)
+    var currentRoute by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         containerColor = ColorBgSecondary,
@@ -118,7 +121,13 @@ fun HomeScreen(
                             selected = state.currentDestination?.hierarchy?.any { it.route == item.route } == true,
                             alwaysShowLabel = false,
                             onClick = {
-                                state.navigateToTopLevelDestination(item)
+                                if (item.route == photosHomeRoute && item.route == currentRoute) {
+                                    Timber.d("route is identical")
+                                } else {
+                                    state.navigateToTopLevelDestination(item)
+                                }
+
+                                currentRoute = item.route
                             }
                         )
                     }
@@ -143,7 +152,7 @@ fun HomeScreen(
                     navController = state.navController,
                     startDestination = photosHomeRoute
                 ) {
-                    photoGraph(
+                    galleryGraph(
                         navController = state.navController,
                         startDestination =  photosStartRoute,
                         route = photosHomeRoute
@@ -248,7 +257,7 @@ fun ProfilerHomeScreenPreview(
                     startDestination = photosHomeRoute,
                     modifier = modifier.padding(0.dp, 0.dp, 0.dp, innerPadding.calculateBottomPadding()),
                 ) {
-                    photoGraph(
+                    galleryGraph(
                         navController = navController,
                         startDestination =  photosStartRoute,
                         route = photosHomeRoute

@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.photo
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
 
 import android.content.res.Configuration
 import androidx.compose.animation.core.animateFloatAsState
@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
-import com.goforer.phogal.data.model.remote.response.photos.Document
+import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
@@ -46,8 +46,8 @@ import java.lang.Float.min
 fun PhotoItem(
     modifier: Modifier = Modifier,
     index: Int,
-    document: Document,
-    onItemClicked: (item: Document, index: Int) -> Unit
+    photo: Photo,
+    onItemClicked: (item: Photo, index: Int) -> Unit
 ) {
     var isClicked by rememberSaveable { mutableStateOf(false) }
     val verticalPadding = if (index == 0)
@@ -55,7 +55,7 @@ fun PhotoItem(
     else
         4.dp
 
-    document.alreadySearched = true
+    photo.alreadySearched = true
     Card(
         modifier = modifier.padding(0.dp, verticalPadding),
         colors = CardDefaults.cardColors(
@@ -74,10 +74,10 @@ fun PhotoItem(
             focusedElevation = 4.dp
         )
     ) {
-        val imageUrl = document.thumbnail_url ?: document.image_url
+        val imageUrl = photo.urls.regular
         val painter = loadImagePainter(
-            data = imageUrl!!,
-            size = Size.ORIGINAL
+            data = imageUrl,
+            size = Size(photo.width.div(8), photo.height.div(8))
         )
         val transition by animateFloatAsState(
             targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f
@@ -112,7 +112,7 @@ fun PhotoItem(
                 .clip(RoundedCornerShape(4.dp))
                 .clickable {
                     isClicked = true
-                    onItemClicked.invoke(document, index)
+                    onItemClicked.invoke(photo, index)
                 }
                 .scale(.8f + (.2f * transition))
                 .graphicsLayer { rotationX = (1f - transition) * 5f }

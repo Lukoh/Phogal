@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.photo
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

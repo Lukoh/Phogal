@@ -6,19 +6,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.photosStartRoute
-import com.goforer.phogal.presentation.ui.navigation.destination.Photos
+import com.goforer.phogal.presentation.ui.navigation.destination.Gallery
 import com.google.accompanist.navigation.animation.composable
 
 @OptIn(ExperimentalAnimationApi::class)
 @Stable
-fun NavGraphBuilder.photoGraph(
+fun NavGraphBuilder.galleryGraph(
     navController: NavHostController,
     startDestination: String,
     route: String
 ) {
     navigation(startDestination = startDestination, route = route) {
         composable(route = photosStartRoute) {
-            Photos.screen(navController, it.arguments)
+            Gallery.screen(navController, it.arguments)
         }
     }
 }

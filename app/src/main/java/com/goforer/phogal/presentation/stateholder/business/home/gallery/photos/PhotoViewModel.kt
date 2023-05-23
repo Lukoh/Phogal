@@ -1,9 +1,9 @@
-package com.goforer.phogal.presentation.stateholder.business.home.photo
+package com.goforer.phogal.presentation.stateholder.business.home.gallery.photos
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.repository.home.GetImagesRepository
+import com.goforer.phogal.data.repository.gallery.photos.GetImagesRepository
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

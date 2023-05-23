@@ -122,8 +122,8 @@ android {
             dimension "default"
             manifestPlaceholders = [appNameGradle: "Phogal"]
             manifestPlaceholders = [appLabel: "@string/app_name"]
-            buildConfigField "String", "apiServer", "\"https://dapi.kakao.com/\""
-            buildConfigField "String", "apiKey", "\"0ccd20e97886affaeba21b3580824d32\""
+            buildConfigField "String", "apiServer", "\" https://api.unsplash.com/\""
+            buildConfigField "String", "clientId", "\"kRkgT0sRzmHQR27BRdi7HQALiTJyN9SbPPVPcR6sNPs\""
         }
 
         stg {
@@ -131,8 +131,8 @@ android {
             applicationIdSuffix = ".stg"
             manifestPlaceholders = [appNameGradle: "Phogal_stg"]
             manifestPlaceholders = [appLabel: "Phogal_Stg"]
-            buildConfigField "String", "apiServer", "\"https://dapi.kakao.com/\""
-            buildConfigField "String", "apiKey", "\"0ccd20e97886affaeba21b3580824d32\""
+            buildConfigField "String", "apiServer", "\" https://api.unsplash.com/\""
+            buildConfigField "String", "clientId", "\"kRkgT0sRzmHQR27BRdi7HQALiTJyN9SbPPVPcR6sNPs\""
         }
 
         dev {
@@ -140,8 +140,8 @@ android {
             applicationIdSuffix = ".dev"
             manifestPlaceholders = [appNameGradle: "Phogal_Dev"]
             manifestPlaceholders = [appLabel: "Phogal_Dev"]
-            buildConfigField "String", "apiServer", "\"https://dapi.kakao.com/\""
-            buildConfigField "String", "apiKey", "\"0ccd20e97886affaeba21b3580824d32\""
+            buildConfigField "String", "apiServer", "\" https://api.unsplash.com/\""
+            buildConfigField "String", "clientId", "\"kRkgT0sRzmHQR27BRdi7HQALiTJyN9SbPPVPcR6sNPs\""
         }
     }
 

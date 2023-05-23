@@ -1,10 +1,10 @@
-package com.goforer.phogal.data.repository.paging.source.home
+package com.goforer.phogal.data.repository.paging.source.gallery
 
 import androidx.paging.PagingState
-import com.goforer.phogal.data.model.remote.response.photos.Document
-import com.goforer.phogal.data.model.remote.response.photos.ImagesResponse
+import com.goforer.phogal.BuildConfig
+import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
+import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponse
 import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.network.api.RestAPI
 import com.goforer.phogal.data.network.response.ApiResponse
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_EMPTY
@@ -19,12 +19,12 @@ import javax.inject.Singleton
 @Singleton
 class GetImagesPagingSource
 @Inject
-constructor() : BasePagingSource<Int, ImagesResponse, Document>() {
-    private var pagingItemResponse: ImagesResponse? = null
+constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
+    private var pagingItemResponse: PhotosResponse? = null
     private var nextKey: Int? = null
 
     @Suppress("KotlinConstantConditions")
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Document> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Photo> {
         val offset = params.key ?: 0
 
         nextKey = offset.plus(1)
@@ -34,26 +34,16 @@ constructor() : BasePagingSource<Int, ImagesResponse, Document>() {
             when {
                 errorMessage == PAGING_EMPTY -> LoadResult.Error(Throwable(errorMessage))
                 errorMessage.contains("AccessDeniedError") -> LoadResult.Error(Throwable(errorMessage))
-                pagingItemResponse?.documents?.size!! >= 0 -> {
-                    if (pagingItemResponse?.meta?.is_end!!) {
-                        nextKey = null
-                    }
-
-                    pagingItemResponse?.documents?.let {
-                        pagingItemResponse?.documents = it.sortedByDescending { document ->
-                            document.datetime
-                        }.toMutableList()
-                    }
-
+                pagingItemResponse?.results?.size!! >= 0 -> {
                     LoadResult.Page(
-                        data = pagingItemResponse?.documents!!,
+                        data = pagingItemResponse?.results!!,
                         prevKey = null,
                         nextKey = nextKey
                     )
                 }
-                pagingItemResponse?.meta?.is_end!! -> {
-                    if (pagingItemResponse?.meta?.total_count!! > 0) {
-                        if (pagingItemResponse?.documents?.isEmpty()!!)
+                pagingItemResponse?.total_pages == 0  -> {
+                    if (pagingItemResponse?.total_pages == 0) {
+                        if (pagingItemResponse?.results?.isEmpty()!!)
                             errorMessage = PagingErrorMessage.PAGING_END
                     } else {
                         errorMessage = PAGING_EMPTY
@@ -73,7 +63,7 @@ constructor() : BasePagingSource<Int, ImagesResponse, Document>() {
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Document>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Photo>): Int? {
         // Try to find the page key of the closest page to anchorPosition, from
         // either the prevKey or the nextKey, but you need to handle nullability
         // here:
@@ -130,10 +120,9 @@ constructor() : BasePagingSource<Int, ImagesResponse, Document>() {
 
          */
 
-        restAPI.getPhotoImages(
-            RestAPI.AUTH_HEADER,
+        restAPI.getPhotos(
+            BuildConfig.clientId,
             params.args[0] as String,
-            "recency",
             page,
             params.args[2] as Int
         ).collectLatest {
@@ -141,12 +130,12 @@ constructor() : BasePagingSource<Int, ImagesResponse, Document>() {
         }
     }
 
-    private fun handleImagesResult(response: ApiResponse<ImagesResponse>) : ImagesResponse? {
+    private fun handleImagesResult(response: ApiResponse<PhotosResponse>) : PhotosResponse? {
         val pagingItemResponse = handleResponse(response)
 
         pagingItemResponse?.let {
             errorMessage = if (errorMessage == PAGING_EMPTY
-                && (it.meta.total_count == 0 || it.documents.isEmpty())) {
+                && (it.total_pages == 0 || it.results.isEmpty())) {
                 PAGING_EMPTY
             } else {
                 PAGING_NORMAL
