@@ -91,6 +91,7 @@ fun ListSection(
             .pullRefresh(refreshState)
     ) {
         if (photos.itemCount == 0) {
+            state.visibleUpButtonState.value = false
             Text(
                 text = stringResource(id = R.string.no_picture),
                 style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
@@ -136,7 +137,13 @@ fun ListSection(
                                             stringResource(id = R.string.error_dialog_network_title)
                                         else
                                             stringResource(id = R.string.error_dialog_title),
-                                        message = (append as LoadState.Error).error.message.toString()
+                                        message = if ((append as LoadState.Error).error.message == null)
+                                            stringResource(id = R.string.error_dialog_content)
+                                        else
+                                            (append as LoadState.Error).error.message.toString(),
+                                        onRetry = {
+                                            photos.retry()
+                                        }
                                     )
                                 }
                             }
@@ -146,6 +153,23 @@ fun ListSection(
                                         modifier = Modifier.padding(4.dp, 4.dp),
                                         count = 3,
                                         enableLoadIndicator = true
+                                    )
+                                }
+                            }
+                            refresh is LoadState.Error -> {
+                                item {
+                                    ErrorContent(
+                                        title = if ((refresh as LoadState.Error).error is HttpException)
+                                            stringResource(id = R.string.error_dialog_network_title)
+                                        else
+                                            stringResource(id = R.string.error_dialog_title),
+                                        message = if ((refresh as LoadState.Error).error.message == null)
+                                            stringResource(id = R.string.error_dialog_content)
+                                        else
+                                            (refresh as LoadState.Error).error.message.toString(),
+                                        onRetry = {
+                                            photos.retry()
+                                        }
                                     )
                                 }
                             }
@@ -197,7 +221,11 @@ fun ShowUpButton(modifier: Modifier, visible: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun ErrorContent(title: String, message: String) {
+fun ErrorContent(
+    title: String,
+    message: String,
+    onRetry: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -212,24 +240,27 @@ fun ErrorContent(title: String, message: String) {
             contentScale = ContentScale.Fit,
             contentDescription = ""
         )
-        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = title,
-            modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Medium
         )
         Text(
             text = message,
-            modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Medium
         )
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-
+            onRetry()
         }) {
             Text(
                 text = "Try Again",
