@@ -125,6 +125,7 @@ fun PhotoItem(
                 modifier = imageModifier,
                 colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(transition) })
             )
+            UserContainer(modifier = Modifier, photo.user)
         }
     }
 }
