@@ -2,6 +2,7 @@ package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -58,7 +59,9 @@ fun PhotosContent(
     ),
     onItemClicked: (item: Photo, index: Int) -> Unit
 ) {
-    BoxWithConstraints(modifier = modifier) {
+    BoxWithConstraints(modifier = modifier.clickable {
+        state.baseUiState.keyboardController?.hide()
+    }) {
         Column(
             modifier = modifier
                 .padding(

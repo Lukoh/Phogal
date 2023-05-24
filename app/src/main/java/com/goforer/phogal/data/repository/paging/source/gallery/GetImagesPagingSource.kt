@@ -8,7 +8,7 @@ import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.ApiResponse
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_EMPTY
-import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_NORMAL
+import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_RATE_OVER_LIMIT
 import com.goforer.phogal.data.repository.paging.source.BasePagingSource
 import kotlinx.coroutines.flow.collectLatest
 import retrofit2.HttpException
@@ -127,11 +127,17 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
         val pagingItemResponse = handleResponse(response)
 
         pagingItemResponse?.let {
-            errorMessage = if (errorMessage == PAGING_EMPTY
-                && (it.total_pages == 0 || it.results.isEmpty())) {
-                PAGING_EMPTY
-            } else {
-                PAGING_NORMAL
+            errorMessage = when(errorMessage) {
+                PAGING_EMPTY -> {
+                    if (it.total_pages == 0 || it.results.isEmpty())
+                        PAGING_EMPTY
+                    else
+                        errorMessage
+                }
+                PAGING_RATE_OVER_LIMIT -> {
+                    PAGING_RATE_OVER_LIMIT
+                }
+                else -> errorMessage
             }
         }
 
