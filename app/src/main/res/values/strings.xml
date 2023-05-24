@@ -13,6 +13,7 @@
     <string name="error_dialog_title">Error</string>
     <string name="error_dialog_network_title">Network Error</string>
     <string name="error_dialog_content">Failed to get the photo list.</string>
+    <string name="no_picture">No pictures were found.</string>
 
     <string name="search_photos">Search your photos</string>
     <string name="permission_rationale"> important.\n⚠️⚠️⚠️ Please grant all of them for the app to function properly.</string>

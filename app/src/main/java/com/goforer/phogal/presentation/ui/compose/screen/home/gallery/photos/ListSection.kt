@@ -4,9 +4,16 @@ package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -14,7 +21,6 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,7 +29,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -35,7 +45,9 @@ import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
+import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import kotlinx.coroutines.flow.StateFlow
+import retrofit2.HttpException
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -78,68 +90,67 @@ fun ListSection(
             .clip(RoundedCornerShape(4.dp))
             .pullRefresh(refreshState)
     ) {
-        LazyColumn(
-            modifier = Modifier.animateContentSize(),
-            state = lazyListState
-        ) {
-            if (!state.refreshingState.value) {
-                state.openedErrorDialogState.value = when(photos.loadState.refresh) {
-                    is LoadState.Error -> {
-                        true
+        if (photos.itemCount == 0) {
+            Text(
+                text = stringResource(id = R.string.no_picture),
+                style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
+                modifier = Modifier.align(Alignment.Center),
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.Medium
+            )
+        } else {
+            LazyColumn(
+                modifier = Modifier.animateContentSize(),
+                state = lazyListState
+            ) {
+                if (!state.refreshingState.value) {
+                    items(
+                        count = photos.itemCount,
+                        key = photos.itemKey(),
+                        contentType = photos.itemContentType()
+                    ) { index ->
+                        // After recreation, LazyPagingItems first return 0 items, then the cached items.
+                        // This behavior/issue is resetting the LazyListState scroll position.
+                        // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
+                        // If this bug will got fixed... then have to be removed below code
+                        state.visibleUpButtonState.value = visibleUpButton(index)
+                        PhotoItem(
+                            modifier = modifier,
+                            index = index,
+                            photo = photos[index]!!,
+                            onItemClicked = onItemClicked
+                        )
                     }
 
-                    is LoadState.NotLoading -> {
-                        items(
-                            count = photos.itemCount,
-                            key = photos.itemKey(),
-                            contentType = photos.itemContentType()
-                        ) { index ->
-                            // After recreation, LazyPagingItems first return 0 items, then the cached items.
-                            // This behavior/issue is resetting the LazyListState scroll position.
-                            // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
-                            // If this bug will got fixed... then have to be removed below code
-                            state.visibleUpButtonState.value = visibleUpButton(index)
-                            PhotoItem(
-                                modifier = modifier,
-                                index = index,
-                                photo = photos[index]!!,
-                                onItemClicked = onItemClicked
-                            )
+                    photos.loadState.apply {
+                        when {
+                            append is LoadState.Loading -> {
+                                Timber.d("Pagination Loading")
+                            }
+                            append is LoadState.Error -> {
+                                Timber.d("Pagination broken Error")
+
+                                item {
+                                    ErrorContent(
+                                        title = if ((append as LoadState.Error).error is HttpException)
+                                            stringResource(id = R.string.error_dialog_network_title)
+                                        else
+                                            stringResource(id = R.string.error_dialog_title),
+                                        message = (append as LoadState.Error).error.message.toString()
+                                    )
+                                }
+                            }
+                            refresh is LoadState.Loading -> {
+                                item {
+                                    LoadingPhotos(
+                                        modifier = Modifier.padding(4.dp, 4.dp),
+                                        count = 3,
+                                        enableLoadIndicator = true
+                                    )
+                                }
+                            }
+                            else -> {}
                         }
-
-                        false
-                    }
-
-                    is LoadState.Loading -> {
-                        item {
-                            LoadingPhotos(
-                                modifier = Modifier.padding(4.dp, 4.dp),
-                                count = 3,
-                                enableLoadIndicator = true
-                            )
-                        }
-
-                        false
-                    }
-
-                    else -> {
-                        false
-                    }
-                }
-
-                state.openedErrorDialogState.value = when(photos.loadState.append) {
-                    is LoadState.Error -> {
-                        true
-                    }
-
-                    is LoadState.Loading -> {
-                        Timber.d("Pagination Loading")
-
-                        false
-                    }
-
-                    else -> {
-                        false
                     }
                 }
             }
@@ -165,17 +176,6 @@ fun ListSection(
             state.clickedState.value = false
         }
     }
-
-    if (state.openedErrorDialogState.value) {
-        ShowAlertDialog(
-            onDismissRequest = {
-                state.openedErrorDialogState.value = false
-            },
-            onConfirmClick = {
-                state.openedErrorDialogState.value = false
-            }
-        )
-    }
 }
 
 @Composable
@@ -197,41 +197,122 @@ fun ShowUpButton(modifier: Modifier, visible: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun ShowAlertDialog(
-    error: Error? = null,
-    onDismissRequest: () -> Unit,
-    onConfirmClick: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = {
-            if (error?.errorCode in 200..299)
-                Text(text = stringResource(id = R.string.error_dialog_title))
-            else
-                Text(text = stringResource(id = R.string.error_dialog_network_title))
-        },
-        text = {
-            Text("stringResource(id = R.string.error_dialog_content)${"\\n"}${error?.errorCause ?: ""}${"\\n"}${error?.errorMessage ?: ""}")
-        },
-        confirmButton = {
-            Button(
-                onClick = onConfirmClick
-            ) {
-                Text(stringResource(id = R.string.confirm))
-            }
-        },
-    )
+fun ErrorContent(title: String, message: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter =  painterResource(id = R.drawable.img_error),
+            modifier = Modifier.sizeIn(250.dp, 250.dp),
+            alignment = Alignment.Center,
+            contentScale = ContentScale.Fit,
+            contentDescription = ""
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = title,
+            modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally),
+            style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Medium
+        )
+        Text(
+            text = message,
+            modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally),
+            style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Medium
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+        Button(onClick = {
+
+        }) {
+            Text(
+                text = "Try Again",
+                style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
 }
+
 
 private fun visibleUpButton(index: Int): Boolean {
     return when {
-        index > 2 -> true
-        index < 2-> false
+        index > 5 -> true
+        index < 5-> false
         else -> true
     }
 }
 
-data class Error(
-    val errorCode: Int? = null,
-    val errorCause: String? = null,
-    val errorMessage: String
+/*
+@Preview(name = "Light Mode")
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    name = "Dark Mode",
+    showSystemUi = true
 )
+@Composable
+fun ListSectionPreview(modifier: Modifier = Modifier) {
+    PhogalTheme {
+        val lazyListState: LazyListState = rememberLazyListState()
+        val photos = mutableListOf(
+            Document("_SBS","news", "2017-01-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457, "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
+            Document("_JTBC","news", "2017-02-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457, "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
+            Document("_KBS","news", "2017-03-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457, "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
+            Document("_SBS","news", "2017-04-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457,"http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
+            Document("_SBS","news", "2017-05-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457,"http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
+            Document("_SBS","news", "2017-06-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457,"http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
+            Document("_SBS","news", "2017-07-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457, "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
+            Document("_SBS","news", "2017-08-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457, "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
+            Document("_SBS","news", "2017-09-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457, "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
+            Document("_SBS","news", "2017-10-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457, "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634"),
+            Document("_SBS","news", "2017-11-21T15:59:30.000+09:00", "한국경제TV","http://v.media.daum.net/v/20170621155930002",457, "http://t1.daumcdn.net/news/201706/21/kedtv/20170621155930292vyyx.jpg", 185,"https://search2.kakaocdn.net/argon/138x78_80_pr/FRkbdWEKr4F", "https://search2.kakaocdn.net/argon/130x130_85_c/36hQpoTrVZp","AOA 지민·김용만, 돼지꼬리 맛에 정신혼미 ‘극찬세례’", "http://tv.kakao.com/channel/2653417/cliplink/304487728?playlistId=87634")
+        )
+
+        BoxWithConstraints(modifier = modifier) {
+            LazyColumn(
+                modifier = Modifier,
+                state = lazyListState,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                itemsIndexed(
+                    photos,
+                    key = { _, item -> item.datetime },
+                    itemContent = { index, item ->
+                        PhotoItem(
+                            modifier = modifier,
+                            index = index,
+                            photo = item,
+                            onItemClicked = { _, _ -> }
+                        )
+                    })
+            }
+
+            AnimatedVisibility(
+                visible = true,
+                modifier = Modifier.align(Alignment.BottomEnd)
+            ) {
+                FloatingActionButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .navigationBarsPadding()
+                        .padding(bottom = 4.dp, end = 8.dp),
+                    backgroundColor = MaterialTheme.colorScheme.primary,
+                    onClick = {
+                    }
+                ) {
+                    Text("Up!")
+                }
+            }
+        }
+    }
+}
+
+ */

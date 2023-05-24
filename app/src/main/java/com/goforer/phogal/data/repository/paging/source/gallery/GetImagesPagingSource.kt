@@ -33,7 +33,6 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
             when {
                 errorMessage == PAGING_EMPTY -> LoadResult.Error(Throwable(errorMessage))
                 errorMessage.contains("AccessDeniedError") -> LoadResult.Error(Throwable(errorMessage))
-                errorMessage.contains("Rate Limit Exceeded") -> LoadResult.Error(Throwable(errorMessage))
                 pagingItemResponse?.results?.size!! > 0 || pagingItemResponse?.total_pages == 0  -> {
                     LoadResult.Page(
                         data = pagingItemResponse?.results!!,

@@ -18,8 +18,7 @@ class ListSectionState(
     val scope: CoroutineScope,
     val refreshingState: State<Boolean>,
     var clickedState: MutableState<Boolean>,
-    var visibleUpButtonState: MutableState<Boolean>,
-    var openedErrorDialogState: MutableState<Boolean>
+    var visibleUpButtonState: MutableState<Boolean>
 )
 
 @Composable
@@ -28,8 +27,7 @@ fun rememberListSectionState(
     photosUiState: StateFlow<Any> = rememberSaveable { MutableStateFlow(Any()) },
     refreshingState: State<Boolean> = rememberSaveable { mutableStateOf(false) },
     clickedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    visibleUpButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    openedErrorDialogState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
+    visibleUpButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): ListSectionState = remember(
     clickedState,
 ) {
@@ -38,7 +36,6 @@ fun rememberListSectionState(
         photosUiState = photosUiState,
         refreshingState = refreshingState,
         clickedState = clickedState,
-        visibleUpButtonState = visibleUpButtonState,
-        openedErrorDialogState = openedErrorDialogState
+        visibleUpButtonState = visibleUpButtonState
     )
 }
