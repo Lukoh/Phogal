@@ -5,6 +5,7 @@ package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -272,7 +273,8 @@ fun ErrorContent(
             .fillMaxHeight()
             .fillMaxWidth()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Image(
             painter =  painterResource(id = R.drawable.img_error),
