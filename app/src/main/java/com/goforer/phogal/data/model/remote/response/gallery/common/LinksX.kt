@@ -1,4 +1,4 @@
-package com.goforer.phogal.data.model.remote.response.gallery.photos
+package com.goforer.phogal.data.model.remote.response.gallery.common
 
 import android.os.Parcelable
 import com.goforer.phogal.data.model.BaseModel
@@ -12,5 +12,6 @@ data class LinksX(
     val likes: String,
     val photos: String,
     val portfolio: String,
+    val related: String? = null,
     val self: String
 ) : BaseModel(), Parcelable

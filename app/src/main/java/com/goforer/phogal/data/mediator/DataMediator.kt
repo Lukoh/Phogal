@@ -2,22 +2,19 @@ package com.goforer.phogal.data.mediator
 
 import androidx.annotation.MainThread
 import com.goforer.phogal.data.network.response.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 import timber.log.Timber
 
-abstract class DataMediator<T> constructor(viewModelScope: CoroutineScope, replyCount: Int = 0) {
+abstract class DataMediator<T> {
     private val resource by lazy {
         Resource()
     }
 
-    internal val asSharedFlow = flow {
+    internal val asFlow = flow {
         load().map { apiResponse ->
             when (apiResponse) {
                 is ApiSuccessResponse -> {
@@ -39,11 +36,7 @@ abstract class DataMediator<T> constructor(viewModelScope: CoroutineScope, reply
         }.catch {
             emit(resource.error(it.message, 400))
         }
-    }.shareIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        replay = replyCount
-    )
+    }
 
     protected open suspend fun onNetworkError(errorMessage: String, errorCode: Int) {
         Timber.d("errorMessage")

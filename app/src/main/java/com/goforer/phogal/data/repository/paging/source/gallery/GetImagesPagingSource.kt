@@ -7,6 +7,7 @@ import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosRespon
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.ApiResponse
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage
+import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_CHAIN_VALIDATION_FAILED
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_EMPTY
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_RATE_OVER_LIMIT
 import com.goforer.phogal.data.repository.paging.source.BasePagingSource
@@ -32,6 +33,7 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
             request()
             when {
                 errorMessage == PAGING_EMPTY -> LoadResult.Error(Throwable(errorMessage))
+                errorMessage == PAGING_CHAIN_VALIDATION_FAILED -> LoadResult.Error(Throwable(errorMessage))
                 errorMessage.contains("AccessDeniedError") -> LoadResult.Error(Throwable(errorMessage))
                 pagingItemResponse?.results?.size!! > 0 || pagingItemResponse?.total_pages == 0  -> {
                     LoadResult.Page(

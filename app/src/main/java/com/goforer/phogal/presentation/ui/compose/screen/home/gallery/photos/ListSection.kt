@@ -92,13 +92,54 @@ fun ListSection(
     ) {
         if (photos.itemCount == 0) {
             state.visibleUpButtonState.value = false
-            Text(
-                text = stringResource(id = R.string.no_picture),
-                style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
-                modifier = Modifier.align(Alignment.Center),
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Medium
-            )
+            photos.loadState.apply {
+                when {
+                    append is LoadState.Loading -> {
+                        Timber.d("Pagination Loading")
+                    }
+                    append is LoadState.Error -> {
+                        Timber.d("Pagination broken Error")
+                        ErrorContent(
+                            title = if ((append as LoadState.Error).error is HttpException)
+                                stringResource(id = R.string.error_dialog_network_title)
+                            else
+                                stringResource(id = R.string.error_dialog_title),
+                            message = if ((append as LoadState.Error).error.message == null)
+                                stringResource(id = R.string.error_dialog_content)
+                            else
+                                (append as LoadState.Error).error.message.toString(),
+                            onRetry = {
+                                photos.retry()
+                            }
+                        )
+                    }
+
+                    refresh is LoadState.Error -> {
+                        ErrorContent(
+                            title = if ((refresh as LoadState.Error).error is HttpException)
+                                stringResource(id = R.string.error_dialog_network_title)
+                            else
+                                stringResource(id = R.string.error_dialog_title),
+                            message = if ((refresh as LoadState.Error).error.message == null)
+                                stringResource(id = R.string.error_dialog_content)
+                            else
+                                (refresh as LoadState.Error).error.message.toString(),
+                            onRetry = {
+                                photos.retry()
+                            }
+                        )
+                    }
+                    else -> {
+                        Text(
+                            text = stringResource(id = R.string.no_picture),
+                            style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
+                            modifier = Modifier.align(Alignment.Center),
+                            fontFamily = FontFamily.SansSerif,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+            }
         } else {
             LazyColumn(
                 modifier = Modifier.animateContentSize(),

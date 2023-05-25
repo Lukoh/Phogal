@@ -41,7 +41,7 @@ import com.goforer.base.designsystem.component.IconContainer
 import com.goforer.base.designsystem.component.ImageCrossFade
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.gallery.photos.User
+import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
