@@ -7,16 +7,17 @@ import com.goforer.phogal.data.network.response.ApiEmptyResponse
 import com.goforer.phogal.data.network.response.ApiErrorResponse
 import com.goforer.phogal.data.network.response.ApiResponse
 import com.goforer.phogal.data.network.response.ApiSuccessResponse
-import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_EMPTY
-import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_NORMAL
+import com.goforer.phogal.data.network.response.Resource
+import com.goforer.phogal.data.network.response.Status
 import timber.log.Timber
 import javax.inject.Inject
 
 abstract class BasePagingSource<Key : Any, Response : Any, Value : Any> : PagingSource<Key, Value>() {
     protected lateinit var pagingList: MutableList<Value>
 
-    protected var errorMessage = PAGING_NORMAL
-    protected var errorCode = 200
+    protected val resource by lazy {
+        Resource()
+    }
 
     private lateinit var params: Params
 
@@ -42,21 +43,20 @@ abstract class BasePagingSource<Key : Any, Response : Any, Value : Any> : Paging
         }
     }
 
-    protected fun handleResponse(response: ApiResponse<Response>): Response? {
+    protected fun handleResponse(response: ApiResponse<Response>): Resource {
+        resource.loading(Status.LOADING)
+
         return when (response) {
             is ApiSuccessResponse -> {
-                response.body
+                resource.success(response.body)
             }
 
             is ApiEmptyResponse -> {
-                errorMessage = PAGING_EMPTY
-                null
+                resource.success("")
             }
 
             is ApiErrorResponse -> {
-                errorMessage = response.errorMessage
-                errorCode = response.statusCode
-                null
+                resource.error(response.errorMessage, response.statusCode)
             }
         }
     }

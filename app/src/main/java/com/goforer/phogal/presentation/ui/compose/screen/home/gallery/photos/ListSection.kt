@@ -163,6 +163,7 @@ fun ListSection(
                             }
 
                             refresh is LoadState.Loading -> {
+                                state.clickedState.value = true
                                 item {
                                     LoadingPhotos(
                                         modifier = Modifier.padding(4.dp, 4.dp),

@@ -5,11 +5,7 @@ import com.goforer.phogal.BuildConfig
 import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
 import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponse
 import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.network.response.ApiResponse
-import com.goforer.phogal.data.repository.paging.PagingErrorMessage
-import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_CHAIN_VALIDATION_FAILED
-import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_EMPTY
-import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_RATE_OVER_LIMIT
+import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.data.repository.paging.source.BasePagingSource
 import kotlinx.coroutines.flow.collectLatest
 import retrofit2.HttpException
@@ -21,7 +17,6 @@ import javax.inject.Singleton
 class GetImagesPagingSource
 @Inject
 constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
-    private var pagingItemResponse: PhotosResponse? = null
     private var nextKey: Int = 1
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Photo> {
@@ -31,22 +26,24 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
 
         return try {
             request()
-            when {
-                errorMessage == PAGING_EMPTY -> LoadResult.Error(Throwable(errorMessage))
-                errorMessage == PAGING_CHAIN_VALIDATION_FAILED -> LoadResult.Error(Throwable(errorMessage))
-                errorMessage.contains("AccessDeniedError") -> LoadResult.Error(Throwable(errorMessage))
-                pagingItemResponse?.results?.size!! > 0 || pagingItemResponse?.total_pages == 0  -> {
+            when(resource.status) {
+                Status.SUCCESS -> {
                     LoadResult.Page(
-                        data = pagingItemResponse?.results!!,
+                        data = (resource.data as PhotosResponse).results,
                         prevKey = null,
                         nextKey = nextKey
                     )
                 }
-                nextKey > pagingItemResponse?.total_pages!! -> {
-                    errorMessage = PagingErrorMessage.PAGING_END
-                    LoadResult.Error(Throwable(errorMessage))
+                Status.ERROR -> {
+                    LoadResult.Error(Throwable(resource.message))
                 }
-                else -> LoadResult.Error(Throwable(errorMessage))
+                Status.LOADING -> {
+                    LoadResult.Page(
+                        data = (resource.data as PhotosResponse).results,
+                        prevKey = null,
+                        nextKey = nextKey
+                    )
+                }
             }
         } catch (exception: IOException) {
             return LoadResult.Error(exception)
@@ -121,28 +118,7 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
             page,
             params.args[1] as Int
         ).collectLatest {
-            pagingItemResponse = handleImagesResult(it)
+            handleResponse(it)
         }
-    }
-
-    private fun handleImagesResult(response: ApiResponse<PhotosResponse>) : PhotosResponse? {
-        val pagingItemResponse = handleResponse(response)
-
-        pagingItemResponse?.let {
-            errorMessage = when(errorMessage) {
-                PAGING_EMPTY -> {
-                    if (it.total_pages == 0 || it.results.isEmpty())
-                        PAGING_EMPTY
-                    else
-                        errorMessage
-                }
-                PAGING_RATE_OVER_LIMIT -> {
-                    PAGING_RATE_OVER_LIMIT
-                }
-                else -> errorMessage
-            }
-        }
-
-        return pagingItemResponse
     }
 }
