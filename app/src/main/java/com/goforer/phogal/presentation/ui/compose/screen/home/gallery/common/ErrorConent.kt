@@ -48,7 +48,6 @@ fun ErrorContent(
         Text(
             text = title,
             modifier = Modifier
-                .padding(8.dp)
                 .align(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
             fontFamily = FontFamily.SansSerif,

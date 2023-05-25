@@ -5,6 +5,8 @@ package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,6 +35,7 @@ import androidx.paging.compose.itemKey
 import com.goforer.base.extension.composable.rememberLazyListState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
+import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_RATE_OVER_LIMIT
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
@@ -81,46 +84,15 @@ fun ListSection(
             .clip(RoundedCornerShape(4.dp))
             .pullRefresh(refreshState)
     ) {
-        if (photos.itemCount == 0) {
-            state.visibleUpButtonState.value = false
-            photos.loadState.apply {
-                when {
-                    append is LoadState.Loading -> {
-                        Timber.d("Pagination Loading")
-                    }
-                    append is LoadState.Error -> {
-                        Timber.d("Pagination broken Error")
-                        ErrorContent(
-                            title = if ((append as LoadState.Error).error is HttpException)
-                                stringResource(id = R.string.error_dialog_network_title)
-                            else
-                                stringResource(id = R.string.error_dialog_title),
-                            message = if ((append as LoadState.Error).error.message == null)
-                                stringResource(id = R.string.error_dialog_content)
-                            else
-                                (append as LoadState.Error).error.message.toString(),
-                            onRetry = {
-                                photos.retry()
-                            }
-                        )
-                    }
-
-                    refresh is LoadState.Error -> {
-                        ErrorContent(
-                            title = if ((refresh as LoadState.Error).error is HttpException)
-                                stringResource(id = R.string.error_dialog_network_title)
-                            else
-                                stringResource(id = R.string.error_dialog_title),
-                            message = if ((refresh as LoadState.Error).error.message == null)
-                                stringResource(id = R.string.error_dialog_content)
-                            else
-                                (refresh as LoadState.Error).error.message.toString(),
-                            onRetry = {
-                                photos.retry()
-                            }
-                        )
-                    }
-                    else -> {
+        LazyColumn(
+            modifier = Modifier.animateContentSize(),
+            state = lazyListState
+        ) {
+            if (!state.refreshingState.value) {
+                if (photos.itemCount == 0) {
+                    state.visibleUpButtonState.value = false
+                    item {
+                        Spacer(modifier = Modifier.height(320.dp))
                         Text(
                             text = stringResource(id = R.string.no_picture),
                             style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
@@ -129,16 +101,8 @@ fun ListSection(
                             fontWeight = FontWeight.Medium
                         )
                     }
-                }
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier.animateContentSize(),
-                state = lazyListState
-            ) {
-                if (!state.refreshingState.value) {
-                    items(
-                        count = photos.itemCount,
+                } else {
+                    items(count = photos.itemCount,
                         key = photos.itemKey(),
                         contentType = photos.itemContentType()
                     ) { index ->
@@ -160,9 +124,9 @@ fun ListSection(
                             append is LoadState.Loading -> {
                                 Timber.d("Pagination Loading")
                             }
+
                             append is LoadState.Error -> {
                                 Timber.d("Pagination broken Error")
-
                                 item {
                                     ErrorContent(
                                         title = if ((append as LoadState.Error).error is HttpException)
@@ -179,19 +143,11 @@ fun ListSection(
                                     )
                                 }
                             }
-                            refresh is LoadState.Loading -> {
-                                item {
-                                    LoadingPhotos(
-                                        modifier = Modifier.padding(4.dp, 4.dp),
-                                        count = 3,
-                                        enableLoadIndicator = true
-                                    )
-                                }
-                            }
+
                             refresh is LoadState.Error -> {
                                 item {
                                     ErrorContent(
-                                        title = if ((refresh as LoadState.Error).error is HttpException)
+                                        title = if ((refresh as LoadState.Error).error.message == PAGING_RATE_OVER_LIMIT)
                                             stringResource(id = R.string.error_dialog_network_title)
                                         else
                                             stringResource(id = R.string.error_dialog_title),
@@ -205,7 +161,16 @@ fun ListSection(
                                     )
                                 }
                             }
-                            else -> {}
+
+                            refresh is LoadState.Loading -> {
+                                item {
+                                    LoadingPhotos(
+                                        modifier = Modifier.padding(4.dp, 4.dp),
+                                        count = 3,
+                                        enableLoadIndicator = true
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -254,8 +219,8 @@ fun ShowUpButton(modifier: Modifier, visible: Boolean, onClick: () -> Unit) {
 
 private fun visibleUpButton(index: Int): Boolean {
     return when {
-        index > 5 -> true
-        index < 5-> false
+        index > 4 -> true
+        index < 4-> false
         else -> true
     }
 }
