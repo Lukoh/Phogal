@@ -15,7 +15,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetImagesRepository
+class GetPhotosRepository
 @Inject
 constructor() : Repository<PagingData<Photo>>() {
     @Inject

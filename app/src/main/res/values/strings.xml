@@ -14,6 +14,7 @@
     <string name="error_dialog_network_title">Network Error</string>
     <string name="error_dialog_content">Failed to get the photo list.</string>
     <string name="no_picture">No pictures were found.</string>
+    <string name="error_get_picture">Failed to get the picture</string>
 
     <string name="search_photos">Search your pictures</string>
     <string name="permission_rationale"> important.\n⚠️⚠️⚠️ Please grant all of them for the app to function properly.</string>
@@ -35,4 +36,6 @@
 
     <string name="setting_terms_and_conditions">Terms and Conditions</string>
     <string name="setting_view_contact">View Contact</string>
+
+    <string name="picture_title">Phogal+</string>
 </resources>

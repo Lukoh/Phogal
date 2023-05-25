@@ -2,22 +2,54 @@ package com.goforer.phogal.presentation.ui.navigation.destination
 
 import android.os.Bundle
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.sharp.Photo
+import androidx.compose.material.icons.filled.Photo
+import androidx.compose.material.icons.sharp.ViewList
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photo.PictureScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos.PhotosScreen
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.photosStartRoute
-import timber.log.Timber
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.pictureRoute
+import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopTo
 
 object Gallery : PhogalDestination {
-    override val icon = Icons.Sharp.Photo
+    override val icon = Icons.Sharp.ViewList
     override val route = photosStartRoute
-    override val screen: @Composable (navController: NavHostController, bundle: Bundle?) -> Unit = { _, _ ->
+    override val screen: @Composable (navController: NavHostController, bundle: Bundle?) -> Unit = { navController, _ ->
         PhotosScreen(
-            onItemClicked = { item, index ->
-                Timber.d("${item.description}${" - "}${"Index - "}${index}")
+            onItemClicked = { id ->
+                navController.navigateSingleTopTo("${Picture.route}/$id")
             }
         )
+    }
+}
+
+object Picture : PhogalDestination {
+    override val icon = Icons.Filled.Photo
+    override val route = pictureRoute
+    private const val idTypeArg = "id"
+    val routeWithArgs = "$route/{$idTypeArg}"
+    val arguments = listOf(
+        navArgument(idTypeArg) { type = NavType.StringType }
+    )
+
+    @Stable
+    override val screen: @Composable (navController: NavHostController, bundle: Bundle?) -> Unit = { navController, bundle ->
+        navController.previousBackStackEntry?.let {
+            val id = bundle?.getString(idTypeArg)
+
+            id?.let {
+                PictureScreen(
+                    id = it,
+                    onBackPressed = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+        }
     }
 }
 

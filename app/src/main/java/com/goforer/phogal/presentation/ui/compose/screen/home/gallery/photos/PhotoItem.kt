@@ -37,6 +37,7 @@ import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
+import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
@@ -125,7 +126,7 @@ fun PhotoItem(
                 modifier = imageModifier,
                 colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(transition) })
             )
-            UserContainer(modifier = Modifier, photo.user)
+            UserContainer(modifier = Modifier, photo.user, DarkGreen60)
         }
     }
 }

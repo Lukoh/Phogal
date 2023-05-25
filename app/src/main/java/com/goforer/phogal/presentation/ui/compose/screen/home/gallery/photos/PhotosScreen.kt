@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
@@ -35,7 +34,7 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun PhotosScreen(
     modifier: Modifier = Modifier,
-    onItemClicked: (item: Photo, index: Int) -> Unit
+    onItemClicked: (id: String) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 

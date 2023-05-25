@@ -1,6 +1,7 @@
 package com.goforer.phogal.presentation.stateholder.business.home.gallery.photo
 
 import androidx.lifecycle.viewModelScope
+import com.goforer.phogal.data.model.remote.response.gallery.photo.Picture
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.repository.gallery.photo.GetPictureRepository
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class PictureViewModel
 @Inject constructor(
     private val getPictureRepository: GetPictureRepository
-) : BaseViewModel() {
+) : BaseViewModel<Picture>() {
     private val _pictureUiState = MutableStateFlow(Any())
     val pictureUiState: StateFlow<Any> = _pictureUiState
 
@@ -27,7 +28,9 @@ class PictureViewModel
                 params = params
             ).stateIn(viewModelScope)
              .collectLatest {
-                _pictureUiState.value = it
+                 val response = handleResponse(it)
+
+                _pictureUiState.value = response
              }
         }
     }

@@ -48,11 +48,12 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun UserContainer(
     modifier: Modifier = Modifier,
-    user: User
+    user: User,
+    backgroundColor: Color
 ) {
     Column(
-        modifier = modifier.background(DarkGreen60),
-        verticalArrangement = Arrangement.Bottom
+        modifier = modifier.background(backgroundColor),
+        verticalArrangement = Arrangement.Top
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

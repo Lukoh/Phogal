@@ -2,11 +2,10 @@ package com.goforer.phogal.data.mediator
 
 import androidx.annotation.MainThread
 import com.goforer.phogal.data.network.response.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import timber.log.Timber
 
 abstract class DataMediator<T> {
@@ -14,8 +13,10 @@ abstract class DataMediator<T> {
         Resource()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     internal val asFlow = flow {
-        load().map { apiResponse ->
+        emit(resource.loading(Status.LOADING))
+        load().collectLatest { apiResponse ->
             when (apiResponse) {
                 is ApiSuccessResponse -> {
                     emit(resource.success(apiResponse.body))
@@ -31,10 +32,6 @@ abstract class DataMediator<T> {
                     onNetworkError(apiResponse.errorMessage, apiResponse.statusCode)
                 }
             }
-        }.onStart {
-            emit(resource.loading(Status.LOADING))
-        }.catch {
-            emit(resource.error(it.message, 400))
         }
     }
 
