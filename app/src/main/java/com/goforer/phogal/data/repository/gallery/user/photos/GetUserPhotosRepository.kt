@@ -1,4 +1,4 @@
-package com.goforer.phogal.data.repository.gallery.photos
+package com.goforer.phogal.data.repository.gallery.user.photos
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -7,7 +7,7 @@ import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.data.repository.paging.source.BasePagingSource
-import com.goforer.phogal.data.repository.paging.source.gallery.GetPhotosPagingSource
+import com.goforer.phogal.data.repository.paging.source.user.GetUserPhotosPagingSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest
@@ -15,11 +15,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetPhotosRepository
+class GetUserPhotosRepository
 @Inject
 constructor() : Repository<PagingData<Photo>>() {
     @Inject
-    lateinit var pagingSource: GetPhotosPagingSource
+    lateinit var pagingSource: GetUserPhotosPagingSource
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun trigger(replyCount: Int, params: Params): Flow<PagingData<Photo>> {

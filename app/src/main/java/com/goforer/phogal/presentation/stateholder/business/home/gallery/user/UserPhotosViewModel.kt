@@ -1,10 +1,10 @@
-package com.goforer.phogal.presentation.stateholder.business.home.gallery.photos
+package com.goforer.phogal.presentation.stateholder.business.home.gallery.user
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.repository.gallery.photos.GetPhotosRepository
+import com.goforer.phogal.data.repository.gallery.user.photos.GetUserPhotosRepository
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,9 +16,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GalleryViewModel
+class UserPhotosViewModel
 @Inject constructor(
-    private val getPhotosRepository: GetPhotosRepository
+    private val getUserPhotosRepository: GetUserPhotosRepository
 ) : BaseViewModel<Photo>() {
     private val _photosUiState = MutableStateFlow(Any())
     val photosUiState: StateFlow<Any> = _photosUiState
@@ -29,14 +29,14 @@ class GalleryViewModel
 
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {
-            getPhotosRepository.trigger(
+            getUserPhotosRepository.trigger(
                 replyCount = replyCount,
                 params = params
             ).cachedIn(viewModelScope)
-             .stateIn(viewModelScope)
-             .collectLatest {
-                 _photosUiState.value = it
-             }
+                .stateIn(viewModelScope)
+                .collectLatest {
+                    _photosUiState.value = it
+                }
         }
     }
 }

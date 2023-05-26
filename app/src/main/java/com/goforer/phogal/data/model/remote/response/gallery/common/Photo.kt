@@ -1,12 +1,7 @@
-package com.goforer.phogal.data.model.remote.response.gallery.photos
+package com.goforer.phogal.data.model.remote.response.gallery.common
 
 import android.os.Parcelable
 import com.goforer.phogal.data.model.BaseModel
-import com.goforer.phogal.data.model.remote.response.gallery.common.Links
-import com.goforer.phogal.data.model.remote.response.gallery.common.Sponsorship
-import com.goforer.phogal.data.model.remote.response.gallery.common.Tag
-import com.goforer.phogal.data.model.remote.response.gallery.common.Urls
-import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
-import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
+import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.UserContainer
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
@@ -77,7 +77,7 @@ fun PhotoItem(
             focusedElevation = 4.dp
         )
     ) {
-        val imageUrl = photo.urls.regular
+        val imageUrl = photo.urls.full
         val painter = loadImagePainter(
             data = imageUrl,
             size = Size(photo.width.div(8), photo.height.div(8))

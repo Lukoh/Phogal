@@ -3,6 +3,7 @@ package com.goforer.phogal.data.network.api
 import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponse
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.data.model.remote.response.gallery.photo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.data.network.response.ApiResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET
@@ -28,4 +29,12 @@ interface RestAPI {
     fun getUserPublicProfile(
         @Path("username") username: String
     ): Flow<ApiResponse<User>>
+
+    @GET("users/{username}/photos")
+    fun getUserPhotos(
+        @Path("username") username: String,
+        @Query("client_id") clientId: String,
+        @Query("page") page: Int?,
+        @Query("per_page") per_page: Int?
+    ): Flow<ApiResponse<MutableList<Photo>>>
 }

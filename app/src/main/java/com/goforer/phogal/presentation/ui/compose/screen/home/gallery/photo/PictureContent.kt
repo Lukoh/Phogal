@@ -245,6 +245,31 @@ fun PictureContent(
                                     Spacer(modifier = Modifier.height(16.dp))
                                 }
 
+                                Row(
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_date),
+                                        contentDescription = "Date",
+                                        modifier = Modifier
+                                            .size(22.dp)
+                                            .padding(horizontal = 4.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = "${picture.created_at}${" "}${stringResource(id = R.string.picture_posted)}",
+                                        color = ColorBlackLight,
+                                        fontFamily = FontFamily.SansSerif,
+                                        fontWeight = FontWeight.Normal,
+                                        fontSize = 14.sp,
+                                        fontStyle = FontStyle.Normal,
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.height(16.dp))
+
                                 picture.exif?.let { exif ->
                                     Row(
                                         horizontalArrangement = Arrangement.Center,

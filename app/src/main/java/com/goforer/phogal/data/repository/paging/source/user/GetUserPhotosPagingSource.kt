@@ -1,9 +1,11 @@
-package com.goforer.phogal.data.repository.paging.source.gallery
+@file:Suppress("UNCHECKED_CAST")
+
+package com.goforer.phogal.data.repository.paging.source.user
 
 import androidx.paging.PagingState
 import com.goforer.phogal.BuildConfig
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
-import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
+import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponse
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Status
@@ -16,9 +18,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetImagesPagingSource
+class GetUserPhotosPagingSource
 @Inject
-constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
+constructor() : BasePagingSource<Int, MutableList<Photo>, Photo>() {
     private var nextKey: Int = 1
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Photo> {
@@ -31,7 +33,7 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
             when(resource.status) {
                 Status.SUCCESS -> {
                     LoadResult.Page(
-                        data = (resource.data as PhotosResponse).results,
+                        data = resource.data as MutableList<Photo>,
                         prevKey = null,
                         nextKey = nextKey
                     )
@@ -120,9 +122,9 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
 
          */
 
-        restAPI.getPhotos(
-            BuildConfig.clientId,
+        restAPI.getUserPhotos(
             params.args[0] as String,
+            BuildConfig.clientId,
             page,
             params.args[1] as Int
         ).collectLatest {
