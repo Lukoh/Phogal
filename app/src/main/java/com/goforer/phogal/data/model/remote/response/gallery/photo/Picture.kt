@@ -17,7 +17,7 @@ data class Picture(
     val created_at: String,
     val description: String? = null,
     val downloads: Int,
-    val exif: Exif,
+    val exif: Exif?,
     val height: Int,
     val id: String,
     val liked_by_user: Boolean,

@@ -70,6 +70,7 @@ internal val Teal80 = Color(0xFFA2CED9)
 internal val Teal90 = Color(0xFFBEEAF6)
 
 val Black = Color(0xFF000000)
+val ColorBlackLight = Color(0xFF242224)
 
 val ColorSystemGray1 = Color(0xFF8E8E93)
 val ColorSystemGray2 = Color(0xFFAEAEB2)

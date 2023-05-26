@@ -39,5 +39,7 @@
 
     <string name="picture_title">Phogal Picture +</string>
     <string name="picture_no_location">No Location Information</string>
+    <string name="picture_no_camera_name">No Camera Model</string>
     <string name="picture_likes">likes</string>
+    <string name="picture_downloads">downloads</string>
 </resources>

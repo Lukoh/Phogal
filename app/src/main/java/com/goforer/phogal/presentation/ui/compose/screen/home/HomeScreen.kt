@@ -255,7 +255,7 @@ fun ProfilerHomeScreenPreview(
                 AnimatedNavHost(
                     navController = navController,
                     startDestination = photosHomeRoute,
-                    modifier = modifier.padding(0.dp, 0.dp, 0.dp, innerPadding.calculateBottomPadding()),
+                    modifier = modifier.padding(0.dp, 0.dp, 0.dp, innerPadding.calculateBottomPadding())
                 ) {
                     galleryGraph(
                         navController = navController,

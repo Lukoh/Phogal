@@ -1,6 +1,9 @@
 package com.goforer.phogal.presentation.ui.navigation.graph
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Stable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -18,8 +21,22 @@ fun NavGraphBuilder.galleryGraph(
     startDestination: String,
     route: String
 ) {
-    navigation(startDestination = startDestination, route = route) {
-        composable(route = photosStartRoute) {
+    navigation(startDestination = startDestination, route = route,) {
+        composable(
+            route = photosStartRoute,
+            enterTransition = {
+                fadeIn(animationSpec = tween(2000))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(2000))
+            },
+            popEnterTransition = {
+                fadeIn(animationSpec = tween(2000))
+            },
+            popExitTransition = {
+                fadeOut(animationSpec = tween(2000))
+            }
+        ) {
             Gallery.screen(navController, it.arguments)
         }
 
