@@ -25,16 +25,16 @@ fun NavGraphBuilder.galleryGraph(
         composable(
             route = photosStartRoute,
             enterTransition = {
-                fadeIn(animationSpec = tween(2000))
+                fadeIn(animationSpec = tween(2500))
             },
             exitTransition = {
-                fadeOut(animationSpec = tween(2000))
+                fadeOut(animationSpec = tween(2500))
             },
             popEnterTransition = {
-                fadeIn(animationSpec = tween(2000))
+                fadeIn(animationSpec = tween(2500))
             },
             popExitTransition = {
-                fadeOut(animationSpec = tween(2000))
+                fadeOut(animationSpec = tween(2500))
             }
         ) {
             Gallery.screen(navController, it.arguments)

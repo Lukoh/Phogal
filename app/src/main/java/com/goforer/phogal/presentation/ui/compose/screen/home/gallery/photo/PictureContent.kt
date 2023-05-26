@@ -62,11 +62,10 @@ import com.goforer.phogal.presentation.ui.theme.ColorBlackLight
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray1
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
-import com.goforer.phogal.presentation.ui.theme.Teal10
+import com.goforer.phogal.presentation.ui.theme.ColorText4
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
-import java.lang.Float
 
 @Composable
 fun PictureContent(
@@ -159,7 +158,7 @@ fun PictureContent(
                                     }
                                     .scale(.8f + (.2f * transition))
                                     .graphicsLayer { rotationX = (1f - transition) * 5f }
-                                    .alpha(Float.min(1f, transition / .2f))
+                                    .alpha(transition / .2f)
 
                                 Image(
                                     painter = painter,
@@ -183,9 +182,20 @@ fun PictureContent(
                                         fontStyle = FontStyle.Normal,
                                         style = MaterialTheme.typography.titleMedium
                                     )
-                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Spacer(modifier = Modifier.width(2.dp))
                                     Text(
                                         text = "${picture.downloads}${" "}${stringResource(id = R.string.picture_downloads)}",
+                                        modifier = Modifier.padding(8.dp, 4.dp),
+                                        color = Black,
+                                        fontFamily = FontFamily.SansSerif,
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = 16.sp,
+                                        fontStyle = FontStyle.Normal,
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                    Spacer(modifier = Modifier.width(2.dp))
+                                    Text(
+                                        text = "${picture.views}${" "}${stringResource(id = R.string.picture_views)}",
                                         modifier = Modifier.padding(8.dp, 4.dp),
                                         color = Black,
                                         fontFamily = FontFamily.SansSerif,
@@ -200,7 +210,7 @@ fun PictureContent(
                                 Text(
                                     text = picture.description ?: picture.alt_description,
                                     modifier = Modifier.padding(8.dp, 4.dp),
-                                    color = Teal10,
+                                    color = ColorText4,
                                     fontFamily = FontFamily.SansSerif,
                                     fontWeight = FontWeight.W400,
                                     fontSize = 18.sp,
@@ -262,7 +272,7 @@ fun PictureContent(
                                     exif.name?.let {
                                         Spacer(modifier = Modifier.height(4.dp))
                                         Text(
-                                            text = "${"Lens\n"}${"f"}${exif.aperture}${"  "}${exif.focal_length}${"mm  "}${exif.exposure_time}${"s  iso "}${exif.iso}",
+                                            text = "${"Lens\n"}${"f/"}${exif.aperture}${"  "}${exif.focal_length}${"mm  "}${exif.exposure_time}${"s  iso "}${exif.iso}",
                                             modifier = Modifier.padding(horizontal = 28.dp),
                                             color = ColorBlackLight,
                                             fontFamily = FontFamily.SansSerif,
@@ -290,7 +300,10 @@ fun PictureContent(
             }
             Status.ERROR-> {
                 ErrorContent(
-                    title = stringResource(id = R.string.error_dialog_title),
+                    title = if (resource.errorCode !in 200..299)
+                            stringResource(id = R.string.error_dialog_network_title)
+                        else
+                            stringResource(id = R.string.error_dialog_title),
                     message = "${stringResource(id = R.string.error_get_picture)}${"\n\n"}${resource.message.toString()}",
                     onRetry = {
                         pictureViewModel.trigger(2, Params(id))

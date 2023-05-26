@@ -42,4 +42,5 @@
     <string name="picture_no_camera_name">No Camera Model</string>
     <string name="picture_likes">likes</string>
     <string name="picture_downloads">downloads</string>
+    <string name="picture_views">views</string>
 </resources>

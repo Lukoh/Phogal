@@ -36,7 +36,6 @@ import com.goforer.base.extension.composable.rememberLazyListState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
-import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_RATE_OVER_LIMIT
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
@@ -160,15 +159,18 @@ fun ListSection(
                         append is LoadState.Error -> {
                             Timber.d("Pagination broken Error")
                             item {
+                                val error = (append as LoadState.Error).error.message
+                                val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
+
                                 ErrorContent(
-                                    title = if ((append as LoadState.Error).error.message == PAGING_RATE_OVER_LIMIT)
+                                    title = if (errorThrowable.code !in 200..299)
                                         stringResource(id = R.string.error_dialog_network_title)
                                     else
                                         stringResource(id = R.string.error_dialog_title),
                                     message = if ((append as LoadState.Error).error.message == null)
                                         stringResource(id = R.string.error_dialog_content)
                                     else
-                                        (append as LoadState.Error).error.message.toString(),
+                                        errorThrowable.message,
                                     onRetry = {
                                         photos.retry()
                                     }
