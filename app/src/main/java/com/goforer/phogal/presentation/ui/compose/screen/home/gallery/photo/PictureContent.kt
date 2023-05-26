@@ -4,15 +4,19 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
@@ -32,6 +36,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -52,10 +57,12 @@ import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.PictureViewModel
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.UserContainer
+import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray1
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
 import com.goforer.phogal.presentation.ui.theme.ColorText4
+import com.goforer.phogal.presentation.ui.theme.Teal10
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
@@ -96,7 +103,7 @@ fun PictureContent(
                         val verticalPadding = 2.dp
 
                         Card(
-                            modifier = modifier.padding(0.dp, verticalPadding).fillMaxSize(),
+                            modifier = modifier.padding(0.dp, verticalPadding),
                             colors = CardDefaults.cardColors(
                                 contentColor = MaterialTheme.colorScheme.onPrimary,
                                 containerColor =  MaterialTheme.colorScheme.onPrimary,
@@ -163,17 +170,56 @@ fun PictureContent(
                                 )
                                 Spacer(modifier = Modifier.height(12.dp))
                                 Text(
-                                    text = picture.description ?: picture.alt_description,
+                                    text = "${picture.likes}${" "}${stringResource(id = R.string.picture_likes)}",
                                     modifier = Modifier.padding(8.dp, 4.dp),
-                                    color = ColorText4,
+                                    color = Black,
                                     fontFamily = FontFamily.SansSerif,
-                                    fontWeight = FontWeight.Medium,
+                                    fontWeight = FontWeight.SemiBold,
                                     fontSize = 16.sp,
                                     fontStyle = FontStyle.Normal,
                                     style = MaterialTheme.typography.titleMedium
                                 )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(
+                                    text = picture.description ?: picture.alt_description,
+                                    modifier = Modifier.padding(8.dp, 4.dp),
+                                    color = Teal10,
+                                    fontFamily = FontFamily.SansSerif,
+                                    fontWeight = FontWeight.W400,
+                                    fontSize = 16.sp,
+                                    fontStyle = FontStyle.Normal,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Spacer(modifier = Modifier.height(24.dp))
+                                picture.location?.let {
+                                    Row(
+                                        horizontalArrangement = Arrangement.Center,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.ic_location),
+                                            contentDescription = "Location",
+                                            modifier = Modifier
+                                                .size(22.dp)
+                                                .padding(horizontal = 4.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text(
+                                            text = it.name ?: stringResource(id = R.string.picture_no_location),
+                                            color = ColorText4,
+                                            fontFamily = FontFamily.SansSerif,
+                                            fontWeight = FontWeight.Normal,
+                                            fontSize = 14.sp,
+                                            fontStyle = FontStyle.Normal,
+                                            style = MaterialTheme.typography.titleMedium
+                                        )
+                                        Spacer(modifier = Modifier.height(30.dp))
+                                    }
+                                }
                             }
                         }
+
+                        Spacer(modifier = Modifier.height(30.dp))
                     }
                 }
             }

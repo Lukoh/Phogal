@@ -42,8 +42,9 @@ import com.goforer.phogal.presentation.stateholder.uistate.EditableInputState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.SearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberEditableInputState
+import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
+import com.goforer.phogal.presentation.ui.theme.ColorSystemGray9
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
-import com.goforer.phogal.presentation.ui.theme.Teal80
 
 @Composable
 fun SearchSection(
@@ -62,8 +63,8 @@ fun SearchSection(
             .wrapContentHeight(Alignment.Top)
             .border(
                 width = 1.dp,
-                color = Teal80,
-                shape = RoundedCornerShape(size = 4.dp)
+                color = ColorSystemGray9,
+                shape = RoundedCornerShape(size = 8.dp)
             )
             .fillMaxWidth()
     ) {
@@ -168,8 +169,8 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
                 .wrapContentHeight(Alignment.Top)
                 .border(
                     width = 1.dp,
-                    color = Teal80,
-                    shape = RoundedCornerShape(size = 4.dp)
+                    color = ColorSystemGray9,
+                    shape = RoundedCornerShape(size = 8.dp)
                 )
                 .fillMaxWidth()
         ) {
@@ -213,7 +214,7 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
                 ),
                 modifier = modifier
                     .weight(4f)
-                    .background(Color.Transparent)
+                    .background(ColorSnowWhite)
                     .drawBehind {
                         val strokeWidth =  0.5.dp.value * density
                         val y = size.height - strokeWidth / 2

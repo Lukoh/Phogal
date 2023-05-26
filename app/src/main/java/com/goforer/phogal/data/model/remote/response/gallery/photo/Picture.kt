@@ -23,7 +23,7 @@ data class Picture(
     val liked_by_user: Boolean,
     val likes: Int,
     val links: Links,
-    val location: Location,
+    val location: Location?,
     val meta: Meta,
     val promoted_at: String,
     val public_domain: Boolean,
