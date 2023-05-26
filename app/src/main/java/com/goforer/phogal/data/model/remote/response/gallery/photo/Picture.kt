@@ -15,7 +15,7 @@ data class Picture(
     val blur_hash: String,
     val color: String,
     val created_at: String,
-    val description: String,
+    val description: String? = null,
     val downloads: Int,
     val exif: Exif,
     val height: Int,

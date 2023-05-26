@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,9 +31,14 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImagePainter
@@ -45,9 +51,11 @@ import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.PictureViewModel
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
-import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos.UserContainer
+import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.UserContainer
+import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
+import com.goforer.phogal.presentation.ui.theme.ColorSystemGray1
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
-import com.goforer.phogal.presentation.ui.theme.DarkGreenGray20
+import com.goforer.phogal.presentation.ui.theme.ColorText4
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
@@ -88,10 +96,10 @@ fun PictureContent(
                         val verticalPadding = 2.dp
 
                         Card(
-                            modifier = modifier.padding(0.dp, verticalPadding),
+                            modifier = modifier.padding(0.dp, verticalPadding).fillMaxSize(),
                             colors = CardDefaults.cardColors(
-                                contentColor = MaterialTheme.colorScheme.primary,
-                                containerColor =  MaterialTheme.colorScheme.surfaceVariant,
+                                contentColor = MaterialTheme.colorScheme.onPrimary,
+                                containerColor =  MaterialTheme.colorScheme.onPrimary,
                                 disabledContentColor = MaterialTheme.colorScheme.surface,
                                 disabledContainerColor = MaterialTheme.colorScheme.onSurface
                             ),
@@ -114,7 +122,7 @@ fun PictureContent(
                             if (painter.state is AsyncImagePainter.State.Loading) {
                                 val holderModifier = Modifier
                                     .fillMaxWidth()
-                                    .height(512.dp)
+                                    .height(LocalConfiguration.current.screenHeightDp.dp)
                                     .align(Alignment.CenterHorizontally)
                                     .background(ColorSystemGray2)
                                     .placeholder(
@@ -128,7 +136,7 @@ fun PictureContent(
                                     textAlign = TextAlign.Center
                                 )
                             } else {
-                                UserContainer(modifier = Modifier, picture.user, DarkGreenGray20)
+                                UserContainer(modifier = Modifier, picture.user, 48.dp, ColorSystemGray1, ColorSystemGray1, ColorSnowWhite)
 
                                 val imageModifier = Modifier
                                     .then(
@@ -152,6 +160,17 @@ fun PictureContent(
                                     contentScale = ContentScale.Crop,
                                     modifier = imageModifier,
                                     colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(transition) })
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Text(
+                                    text = picture.description ?: picture.alt_description,
+                                    modifier = Modifier.padding(8.dp, 4.dp),
+                                    color = ColorText4,
+                                    fontFamily = FontFamily.SansSerif,
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 16.sp,
+                                    fontStyle = FontStyle.Normal,
+                                    style = MaterialTheme.typography.titleMedium
                                 )
                             }
                         }

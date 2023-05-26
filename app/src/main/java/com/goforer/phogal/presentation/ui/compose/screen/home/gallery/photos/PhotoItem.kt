@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.graphicsLayer
@@ -36,6 +37,7 @@ import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
+import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.UserContainer
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.google.accompanist.placeholder.PlaceholderHighlight
@@ -126,7 +128,7 @@ fun PhotoItem(
                 modifier = imageModifier,
                 colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(transition) })
             )
-            UserContainer(modifier = Modifier, photo.user, DarkGreen60)
+            UserContainer(modifier = Modifier, photo.user, 36.dp, Color.White, Color.White, DarkGreen60)
         }
     }
 }

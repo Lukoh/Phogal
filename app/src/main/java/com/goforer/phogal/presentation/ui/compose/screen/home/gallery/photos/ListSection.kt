@@ -34,14 +34,15 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.goforer.base.extension.composable.rememberLazyListState
 import com.goforer.phogal.R
+import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage.PAGING_RATE_OVER_LIMIT
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.StateFlow
-import retrofit2.HttpException
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -89,88 +90,89 @@ fun ListSection(
             state = lazyListState
         ) {
             if (!state.refreshingState.value) {
-                if (photos.itemCount == 0) {
-                    state.visibleUpButtonState.value = false
-                    item {
-                        Spacer(modifier = Modifier.height(320.dp))
-                        Text(
-                            text = stringResource(id = R.string.no_picture),
-                            style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
-                            modifier = Modifier.align(Alignment.Center),
-                            fontFamily = FontFamily.SansSerif,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
-                } else {
-                    items(count = photos.itemCount,
-                        key = photos.itemKey(),
-                        contentType = photos.itemContentType()
-                    ) { index ->
-                        // After recreation, LazyPagingItems first return 0 items, then the cached items.
-                        // This behavior/issue is resetting the LazyListState scroll position.
-                        // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
-                        // If this bug will got fixed... then have to be removed below code
-                        state.visibleUpButtonState.value = visibleUpButton(index)
-                        PhotoItem(
-                            modifier = modifier,
-                            index = index,
-                            photo = photos[index]!!,
-                            onItemClicked = onItemClicked
-                        )
-                    }
-
-                    photos.loadState.apply {
-                        when {
-                            append is LoadState.Loading -> {
-                                Timber.d("Pagination Loading")
+                photos.loadState.apply {
+                    when {
+                        refresh is LoadState.Loading -> {
+                            state.clickedState.value = true
+                            item {
+                                LoadingPhotos(
+                                    modifier = Modifier.padding(4.dp, 4.dp),
+                                    count = 3,
+                                    enableLoadIndicator = true
+                                )
                             }
-
-                            append is LoadState.Error -> {
-                                Timber.d("Pagination broken Error")
+                        }
+                        refresh is LoadState.NotLoading -> {
+                            if (photos.itemCount == 0 ) {
+                                state.visibleUpButtonState.value = false
                                 item {
-                                    ErrorContent(
-                                        title = if ((append as LoadState.Error).error is HttpException)
-                                            stringResource(id = R.string.error_dialog_network_title)
-                                        else
-                                            stringResource(id = R.string.error_dialog_title),
-                                        message = if ((append as LoadState.Error).error.message == null)
-                                            stringResource(id = R.string.error_dialog_content)
-                                        else
-                                            (append as LoadState.Error).error.message.toString(),
-                                        onRetry = {
-                                            photos.retry()
-                                        }
+                                    Spacer(modifier = Modifier.height(320.dp))
+                                    Text(
+                                        text = stringResource(id = R.string.no_picture),
+                                        style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
+                                        modifier = Modifier.align(Alignment.Center),
+                                        fontFamily = FontFamily.SansSerif,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                }
+                            } else {
+                                items(count = photos.itemCount,
+                                    key = photos.itemKey(),
+                                    contentType = photos.itemContentType()
+                                ) { index ->
+                                    // After recreation, LazyPagingItems first return 0 items, then the cached items.
+                                    // This behavior/issue is resetting the LazyListState scroll position.
+                                    // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
+                                    // If this bug will got fixed... then have to be removed below code
+                                    state.visibleUpButtonState.value = visibleUpButton(index)
+                                    PhotoItem(
+                                        modifier = modifier,
+                                        index = index,
+                                        photo = photos[index]!!,
+                                        onItemClicked = onItemClicked
                                     )
                                 }
                             }
+                        }
+                        refresh is LoadState.Error -> {
+                            item {
+                                val error = (refresh as LoadState.Error).error.message
+                                val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
 
-                            refresh is LoadState.Error -> {
-                                item {
-                                    ErrorContent(
-                                        title = if ((refresh as LoadState.Error).error.message == PAGING_RATE_OVER_LIMIT)
-                                            stringResource(id = R.string.error_dialog_network_title)
-                                        else
-                                            stringResource(id = R.string.error_dialog_title),
-                                        message = if ((refresh as LoadState.Error).error.message == null)
-                                            stringResource(id = R.string.error_dialog_content)
-                                        else
-                                            (refresh as LoadState.Error).error.message.toString(),
-                                        onRetry = {
-                                            photos.retry()
-                                        }
-                                    )
-                                }
+                                ErrorContent(
+                                    title = if (errorThrowable.code !in 200..299)
+                                        stringResource(id = R.string.error_dialog_network_title)
+                                    else
+                                        stringResource(id = R.string.error_dialog_title),
+                                    message = if ((refresh as LoadState.Error).error.message == null)
+                                        stringResource(id = R.string.error_dialog_content)
+                                    else
+                                        errorThrowable.message,
+                                    onRetry = {
+                                        photos.retry()
+                                    }
+                                )
                             }
-
-                            refresh is LoadState.Loading -> {
-                                state.clickedState.value = true
-                                item {
-                                    LoadingPhotos(
-                                        modifier = Modifier.padding(4.dp, 4.dp),
-                                        count = 3,
-                                        enableLoadIndicator = true
-                                    )
-                                }
+                        }
+                        append is LoadState.Loading -> {
+                            Timber.d("Pagination Loading")
+                        }
+                        append is LoadState.Error -> {
+                            Timber.d("Pagination broken Error")
+                            item {
+                                ErrorContent(
+                                    title = if ((append as LoadState.Error).error.message == PAGING_RATE_OVER_LIMIT)
+                                        stringResource(id = R.string.error_dialog_network_title)
+                                    else
+                                        stringResource(id = R.string.error_dialog_title),
+                                    message = if ((append as LoadState.Error).error.message == null)
+                                        stringResource(id = R.string.error_dialog_content)
+                                    else
+                                        (append as LoadState.Error).error.message.toString(),
+                                    onRetry = {
+                                        photos.retry()
+                                    }
+                                )
                             }
                         }
                     }

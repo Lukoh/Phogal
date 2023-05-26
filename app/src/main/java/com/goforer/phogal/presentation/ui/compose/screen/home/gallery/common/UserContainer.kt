@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
@@ -49,6 +50,9 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 fun UserContainer(
     modifier: Modifier = Modifier,
     user: User,
+    profileSize: Dp,
+    firstTextColor: Color,
+    secondTextColor: Color,
     backgroundColor: Color
 ) {
     Column(
@@ -65,7 +69,7 @@ fun UserContainer(
                 .heightIn(68.dp, 122.dp)
                 .clickable {},
         ) {
-            IconContainer(36.dp) {
+            IconContainer(profileSize) {
                 Box {
                     val painter = loadImagePainter(
                         data = user.profile_image.small,
@@ -108,7 +112,7 @@ fun UserContainer(
             ) {
                 Text(
                     text = user.name,
-                    color = Color.White,
+                    color = firstTextColor,
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,
@@ -121,7 +125,7 @@ fun UserContainer(
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 13.sp,
                     fontStyle = FontStyle.Normal,
-                    color = Color.White,
+                    color = secondTextColor,
                     style = MaterialTheme.typography.titleSmall
                 )
             }

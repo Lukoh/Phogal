@@ -2,11 +2,13 @@ package com.goforer.phogal.data.repository.paging.source.gallery
 
 import androidx.paging.PagingState
 import com.goforer.phogal.BuildConfig
+import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.photos.Photo
 import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponse
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.data.repository.paging.source.BasePagingSource
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
 import retrofit2.HttpException
 import java.io.IOException
@@ -35,7 +37,13 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
                     )
                 }
                 Status.ERROR -> {
-                    LoadResult.Error(Throwable(resource.message))
+                    val error = ErrorThrowable(
+                        code = resource.errorCode,
+                        message = resource.message.toString()
+                    )
+                    val gson = Gson()
+                    val json = gson.toJson(error)
+                    LoadResult.Error(Throwable(json.toString()))
                 }
                 Status.LOADING -> {
                     LoadResult.Page(
