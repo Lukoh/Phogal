@@ -21,6 +21,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Photo
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
 import coil.size.Size
+import com.goforer.base.designsystem.component.IconButton
 import com.goforer.base.designsystem.component.IconContainer
 import com.goforer.base.designsystem.component.ImageCrossFade
 import com.goforer.base.designsystem.component.loadImagePainter
@@ -53,7 +58,9 @@ fun UserContainer(
     profileSize: Dp,
     firstTextColor: Color,
     secondTextColor: Color,
-    backgroundColor: Color
+    backgroundColor: Color,
+    visibleViewPhotosButton: Boolean,
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
 ) {
     Column(
         modifier = modifier.background(backgroundColor),
@@ -62,11 +69,11 @@ fun UserContainer(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(4.dp)
+                .padding(start = 4.dp, end = 4.dp)
                 .background(Color.Transparent)
                 .wrapContentHeight(Alignment.CenterVertically)
                 .fillMaxWidth()
-                .heightIn(68.dp, 122.dp)
+                .heightIn(68.dp, 114.dp)
                 .clickable {},
         ) {
             IconContainer(profileSize) {
@@ -121,14 +128,41 @@ fun UserContainer(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    user.links.portfolio,
+                    "${user.total_likes}${" "}" +
+                            "${stringResource(id = R.string.picture_likes)}${" "}${user.total_collections}${" "}" +
+                            "${stringResource(id = R.string.picture_collections)}${" "}" +
+                            "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
                     fontFamily = FontFamily.SansSerif,
-                    fontSize = 13.sp,
+                    fontSize = 12.sp,
                     fontStyle = FontStyle.Normal,
                     color = secondTextColor,
                     style = MaterialTheme.typography.titleSmall
                 )
             }
+        }
+
+        if (visibleViewPhotosButton) {
+            val lastName = user.last_name ?: stringResource(id = R.string.picture_no_last_name)
+
+            IconButton(
+                32.dp,
+                modifier = Modifier.padding(start = 56.dp, top = 0.dp, bottom = 2.dp),
+                onClick = { onViewPhotos(user.username, user.first_name,  lastName, user.username) },
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Photo,
+                        contentDescription = null,
+                    )
+                },
+                text = {
+                    Text(
+                        "${stringResource(id = R.string.picture_view_photos, user.name)}${" "}${user.total_photos}${" "}${stringResource(id = R.string.picture_photos, user.name)}",
+                        fontFamily = FontFamily.SansSerif,
+                        fontSize = 11.sp,
+                        fontStyle = FontStyle.Italic
+                    )
+                }
+            )
         }
     }
 }
@@ -144,16 +178,17 @@ fun UserContainer(
 fun UserContainerPreview() {
     PhogalTheme {
         Column(
-            modifier = Modifier.background(DarkGreen60)
+            modifier = Modifier.background(DarkGreen60),
+            verticalArrangement = Arrangement.Center
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(4.dp)
+                    .padding(start = 4.dp, end = 4.dp)
                     .background(Color.Transparent)
                     .wrapContentHeight(Alignment.CenterVertically)
                     .fillMaxWidth()
-                    .heightIn(68.dp, 122.dp)
+                    .heightIn(68.dp, 114.dp)
                     .clickable {},
             ) {
                 IconContainer(36.dp) {
@@ -194,8 +229,8 @@ fun UserContainerPreview() {
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Column(modifier = Modifier
-                    .height(IntrinsicSize.Min)
-                    .widthIn(186.dp)
+                    .wrapContentHeight()
+                    .widthIn(178.dp)
                 ) {
                     Text(
                         "Lukoh",
@@ -208,7 +243,7 @@ fun UserContainerPreview() {
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        "남성",
+                        "https://api.unsplash.com/users/jimmyexample/portfolio",
                         fontFamily = FontFamily.SansSerif,
                         fontSize = 13.sp,
                         fontStyle = FontStyle.Normal,
@@ -217,6 +252,26 @@ fun UserContainerPreview() {
                     )
                 }
             }
+
+            IconButton(
+                32.dp,
+                modifier = Modifier.padding(start = 56.dp, top = 0.dp, bottom = 2.dp),
+                onClick = {},
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Photo,
+                        contentDescription = null,
+                    )
+                },
+                text = {
+                    Text(
+                        stringResource(id = R.string.picture_view_photos, "Lukoh"),
+                        fontFamily = FontFamily.SansSerif,
+                        fontSize = 10.sp,
+                        fontStyle = FontStyle.Italic
+                    )
+                }
+            )
         }
     }
 }

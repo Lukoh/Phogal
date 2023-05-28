@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -36,11 +36,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.goforer.base.designsystem.component.SearchIconButton
+import com.goforer.base.designsystem.component.IconButton
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.uistate.EditableInputState
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.SearchSectionState
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberSearchSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.SearchSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberEditableInputState
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray9
@@ -122,7 +122,8 @@ fun SearchSection(
                     )
                 }
         )
-        SearchIconButton(
+        IconButton(
+            48.dp,
             modifier = modifier.padding(horizontal = 2.dp),
             onClick = {
                 if (state.keywordChanged.value)
@@ -226,7 +227,8 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
                         )
                     }
             )
-            SearchIconButton(
+            IconButton(
+                48.dp,
                 modifier = modifier.padding(horizontal = 2.dp),
                 onClick = {},
                 icon = {

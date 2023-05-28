@@ -8,7 +8,6 @@ import com.goforer.phogal.data.network.response.ApiErrorResponse
 import com.goforer.phogal.data.network.response.ApiResponse
 import com.goforer.phogal.data.network.response.ApiSuccessResponse
 import com.goforer.phogal.data.network.response.Resource
-import com.goforer.phogal.data.network.response.Status
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,8 +43,6 @@ abstract class BasePagingSource<Key : Any, Response : Any, Value : Any> : Paging
     }
 
     protected fun handleResponse(response: ApiResponse<Response>): Resource {
-        resource.loading(Status.LOADING)
-
         return when (response) {
             is ApiSuccessResponse -> {
                 resource.success(response.body)

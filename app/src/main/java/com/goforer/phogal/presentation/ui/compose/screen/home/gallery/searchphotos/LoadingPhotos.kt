@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background

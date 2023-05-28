@@ -12,7 +12,7 @@ import com.goforer.base.designsystem.theme.LocalGradientColors
 import com.goforer.base.utils.connect.NetworkMonitor
 import com.goforer.phogal.presentation.stateholder.uistate.MainScreenState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberMainScreenState
-import com.goforer.phogal.presentation.ui.compose.screen.home.BottomNavDestination.Photo
+import com.goforer.phogal.presentation.ui.compose.screen.home.BottomNavDestination.Gallery
 import com.goforer.phogal.presentation.ui.compose.screen.home.HomeScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.OfflineScreen
 
@@ -51,7 +51,7 @@ fun MainScreen(
 
      */
 
-    val shouldShowGradientBackground = state.currentTopLevelDestination == Photo
+    val shouldShowGradientBackground = state.currentTopLevelDestination == Gallery
 
     Background {
         GradientBackground(

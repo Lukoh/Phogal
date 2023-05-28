@@ -3,8 +3,12 @@ package com.goforer.phogal.presentation.ui.compose.screen.home
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -45,7 +49,7 @@ import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestinati
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.notificationHomeRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.notificationsStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.photosHomeRoute
-import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.photosStartRoute
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingHomeRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingStartRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopToGraph
@@ -62,7 +66,7 @@ import timber.log.Timber
 
 @Stable
 sealed class BottomNavDestination(val route: String, @DrawableRes val icon: Int, @StringRes val title: Int) {
-    object Photo : BottomNavDestination(photosHomeRoute, R.drawable.ic_photo, R.string.bottom_navigation_photo)
+    object Gallery : BottomNavDestination(photosHomeRoute, R.drawable.ic_photo, R.string.bottom_navigation_photo)
     object Community :  BottomNavDestination(communityHomeRoute, R.drawable.ic_community, R.string.bottom_navigation_community)
     object Notification :  BottomNavDestination(notificationHomeRoute, R.drawable.ic_notification, R.string.bottom_navigation_notification)
     object Setting : BottomNavDestination(settingHomeRoute, R.drawable.ic_setting, R.string.bottom_navigation_setting)
@@ -85,7 +89,7 @@ fun HomeScreen(
         bottomBar = {
             if (state.shouldShowBottomBar) {
                 val items = listOf(
-                    BottomNavDestination.Photo,
+                    BottomNavDestination.Gallery,
                     BottomNavDestination.Community,
                     BottomNavDestination.Notification,
                     BottomNavDestination.Setting,
@@ -137,7 +141,6 @@ fun HomeScreen(
             }
         },
         content = { innerPadding ->
-
             BoxWithConstraints(
                 Modifier.padding(
                     start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
@@ -154,7 +157,7 @@ fun HomeScreen(
                 ) {
                     galleryGraph(
                         navController = state.navController,
-                        startDestination =  photosStartRoute,
+                        startDestination =  searchPhotosRoute,
                         route = photosHomeRoute
                     )
                     communityGraph(
@@ -179,7 +182,7 @@ fun HomeScreen(
 
     state.navController.addOnDestinationChangedListener { _, destination, _ ->
         bottomBarVisible = when(destination.route) {
-            photosStartRoute, communitiesStartRoute, notificationsStartRoute, settingStartRoute -> {
+            searchPhotosRoute, communitiesStartRoute, notificationsStartRoute, settingStartRoute -> {
                 true
             }
 
@@ -207,7 +210,7 @@ fun ProfilerHomeScreenPreview(
         Scaffold(
             bottomBar = {
                 val items = listOf(
-                    BottomNavDestination.Photo,
+                    BottomNavDestination.Gallery,
                     BottomNavDestination.Community,
                     BottomNavDestination.Notification,
                     BottomNavDestination.Setting,
@@ -255,11 +258,26 @@ fun ProfilerHomeScreenPreview(
                 AnimatedNavHost(
                     navController = navController,
                     startDestination = photosHomeRoute,
-                    modifier = modifier.padding(0.dp, 0.dp, 0.dp, innerPadding.calculateBottomPadding())
+                    modifier = modifier.padding(0.dp, 0.dp, 0.dp, innerPadding.calculateBottomPadding()),
+                    enterTransition = {
+                        if (initialState.destination.route == photosHomeRoute)
+                            EnterTransition.None
+                        else
+                            fadeIn(animationSpec = tween(700))
+                    },
+                    exitTransition = {
+                        fadeOut(animationSpec = tween(1500))
+                    },
+                    popEnterTransition = {
+                        fadeIn(animationSpec = tween(1500))
+                    },
+                    popExitTransition = {
+                        fadeOut(animationSpec = tween(1500))
+                    }
                 ) {
                     galleryGraph(
                         navController = navController,
-                        startDestination =  photosStartRoute,
+                        startDestination =  searchPhotosRoute,
                         route = photosHomeRoute
                     )
                     communityGraph(

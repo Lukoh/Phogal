@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common
 
 import android.content.res.Configuration
 import androidx.compose.animation.core.animateFloatAsState
@@ -37,7 +37,6 @@ import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
-import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.UserContainer
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.google.accompanist.placeholder.PlaceholderHighlight
@@ -50,7 +49,9 @@ fun PhotoItem(
     modifier: Modifier = Modifier,
     index: Int,
     photo: Photo,
-    onItemClicked: (item: Photo, index: Int) -> Unit
+    visibleViewPhotosButton: Boolean,
+    onItemClicked: (item: Photo, index: Int) -> Unit,
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit
 ) {
     var isClicked by rememberSaveable { mutableStateOf(false) }
     val verticalPadding = if (index == 0)
@@ -128,7 +129,16 @@ fun PhotoItem(
                 modifier = imageModifier,
                 colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(transition) })
             )
-            UserContainer(modifier = Modifier, photo.user, 36.dp, Color.White, Color.White, DarkGreen60)
+            UserContainer(
+                modifier = Modifier,
+                user = photo.user,
+                profileSize = 36.dp,
+                firstTextColor = Color.White,
+                secondTextColor = Color.White,
+                backgroundColor = DarkGreen60,
+                visibleViewPhotosButton = visibleViewPhotosButton,
+                onViewPhotos = onViewPhotos
+            )
         }
     }
 }

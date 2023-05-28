@@ -1,14 +1,10 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos
 
 import android.content.res.Configuration
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,8 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -26,18 +20,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.paging.PagingData
 import com.goforer.phogal.R
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.repository.Repository.Companion.FIRST_PAGE
 import com.goforer.phogal.data.repository.Repository.Companion.ITEM_COUNT
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.PhotosContentState
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPermissionState
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPhotosContentState
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberSearchSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.SearchPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberPermissionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
+import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.NoSearchResult
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -47,16 +43,18 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
     ExperimentalMaterial3Api::class
 )
 @Composable
-fun PhotosContent(
+fun SearchPhotosContent(
     modifier: Modifier = Modifier,
+    navBackStackEntry: NavBackStackEntry,
     contentPadding: PaddingValues = PaddingValues(4.dp),
-    photoViewModel: GalleryViewModel = hiltViewModel(),
-    state: PhotosContentState = rememberPhotosContentState(
+    photoViewModel: GalleryViewModel = hiltViewModel(navBackStackEntry),
+    state: SearchPhotosContentState = rememberSearchPhotosContentState(
         baseUiState = rememberBaseUiState(),
         photosUiState = photoViewModel.photosUiState,
         isRefreshing = photoViewModel.isRefreshing
     ),
-    onItemClicked: (id: String) -> Unit
+    onItemClicked: (id: String) -> Unit,
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit
 ) {
     BoxWithConstraints(modifier = modifier.clickable {
         state.baseUiState.keyboardController?.hide()
@@ -86,11 +84,11 @@ fun PhotosContent(
             )
 
             if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
-                ListSection(
+                SearchPhotosSection(
                     modifier = Modifier
                         .padding(4.dp, 4.dp)
                         .weight(1f),
-                    state = rememberListSectionState(
+                    state = rememberSearchPhotosSectionState(
                         scope = state.baseUiState.scope,
                         photosUiState = state.photosUiState,
                         refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
@@ -100,7 +98,8 @@ fun PhotosContent(
                     },
                     onRefresh = {
                         photoViewModel.trigger(2, Params(state.searchKeyword.value, FIRST_PAGE, ITEM_COUNT))
-                    }
+                    },
+                    onViewPhotos = onViewPhotos
                 )
             } else {
                 NoSearchResult(modifier = Modifier.weight(1f))
@@ -134,34 +133,6 @@ fun PhotosContent(
                     multiplePermissionsState.launchMultiplePermissionRequest()
                     showPermissionBottomSheet.value = false
                 }
-            )
-        }
-    }
-}
-
-@Composable
-fun NoSearchResult(modifier: Modifier) {
-    BoxWithConstraints(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = modifier,
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.img_photo_search),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = stringResource(id = R.string.search_photos),
-                style = typography.titleMedium.copy(color = ColorSystemGray7),
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Medium
             )
         }
     }

@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.stateholder.uistate.home.photos
+package com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState

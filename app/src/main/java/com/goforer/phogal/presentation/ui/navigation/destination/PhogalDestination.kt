@@ -13,8 +13,9 @@ interface PhogalDestination {
     companion object {
         // Photo Bottom Navigation
         internal const val photosHomeRoute = "home/photoHome"
-        internal const val photosStartRoute = "home/photoHome/photos"
+        internal const val searchPhotosRoute = "home/photoHome/searchPhotos"
         internal const val pictureRoute = "home/photoHome/picture"
+        internal const val userPhotosRoute = "home/photoHome/userPhotos"
 
         // Community Bottom Navigation
         internal const val communityHomeRoute = "home/communityHome"

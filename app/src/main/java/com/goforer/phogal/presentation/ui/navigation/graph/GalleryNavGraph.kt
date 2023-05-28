@@ -8,10 +8,12 @@ import androidx.compose.runtime.Stable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
-import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.photosStartRoute
-import com.goforer.phogal.presentation.ui.navigation.destination.Gallery
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.Picture
-import com.goforer.phogal.presentation.ui.navigation.destination.Picture.routeWithArgs
+import com.goforer.phogal.presentation.ui.navigation.destination.Picture.pictureRouteArgs
+import com.goforer.phogal.presentation.ui.navigation.destination.SearchPhotos
+import com.goforer.phogal.presentation.ui.navigation.destination.UserPhotos
+import com.goforer.phogal.presentation.ui.navigation.destination.UserPhotos.userPhotosRouteArgs
 import com.google.accompanist.navigation.animation.composable
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -21,27 +23,43 @@ fun NavGraphBuilder.galleryGraph(
     startDestination: String,
     route: String
 ) {
-    navigation(startDestination = startDestination, route = route,) {
+    navigation(startDestination = startDestination, route = route) {
         composable(
-            route = photosStartRoute,
+            route = searchPhotosRoute,
             enterTransition = {
-                fadeIn(animationSpec = tween(2500))
+                fadeIn(initialAlpha = 1f, animationSpec = tween(4000))
             },
             exitTransition = {
-                fadeOut(animationSpec = tween(2500))
-            },
-            popEnterTransition = {
-                fadeIn(animationSpec = tween(2500))
-            },
-            popExitTransition = {
-                fadeOut(animationSpec = tween(2500))
+                fadeOut(targetAlpha = 1f, animationSpec = tween(4000))
             }
         ) {
-            Gallery.screen(navController, it.arguments)
+            SearchPhotos.screen(navController, it.arguments)
         }
 
-        composable(route = routeWithArgs, arguments = Picture.arguments) {
+        composable(
+            route = pictureRouteArgs,
+            arguments = Picture.arguments,
+            enterTransition = {
+                fadeIn(initialAlpha = 1f, animationSpec = tween(4000))
+            },
+            exitTransition = {
+                fadeOut(targetAlpha = 1f, animationSpec = tween(4000))
+            }
+        ) {
             Picture.screen(navController, it.arguments)
+        }
+
+        composable(
+            route = userPhotosRouteArgs,
+            arguments = UserPhotos.arguments,
+            enterTransition = {
+                fadeIn(initialAlpha = 1f, animationSpec = tween(4000))
+            },
+            exitTransition = {
+                fadeOut(targetAlpha = 1f, animationSpec = tween(4000))
+            }
+        ) {
+            UserPhotos.screen(navController, it.arguments)
         }
     }
 }

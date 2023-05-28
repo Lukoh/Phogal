@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavBackStackEntry
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
@@ -32,9 +33,11 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PhotosScreen(
+fun SearchPhotosScreen(
     modifier: Modifier = Modifier,
-    onItemClicked: (id: String) -> Unit
+    navBackStackEntry: NavBackStackEntry,
+    onItemClicked: (id: String) -> Unit,
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -76,10 +79,12 @@ fun PhotosScreen(
                 }
             )
         }, content = { paddingValues ->
-            PhotosContent(
+            SearchPhotosContent(
                 modifier = modifier,
+                navBackStackEntry = navBackStackEntry,
                 contentPadding = paddingValues,
-                onItemClicked = onItemClicked
+                onItemClicked = onItemClicked,
+                onViewPhotos = onViewPhotos
             )
         }
     )
@@ -95,7 +100,7 @@ fun PhotosScreen(
 )
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PhotosScreenPreview() {
+fun SearchPhotosScreenPreview() {
     PhogalTheme {
         Scaffold(
             contentColor = Color.White,

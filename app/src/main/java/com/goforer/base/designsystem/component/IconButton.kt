@@ -28,13 +28,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
 @Composable
-internal inline fun SearchIconButton(
+internal inline fun IconButton(
+    height: Dp,
     noinline onClick: () -> Unit,
     crossinline icon: @Composable () -> Unit,
     crossinline text: @Composable () -> Unit,
@@ -55,7 +57,7 @@ internal inline fun SearchIconButton(
         onClick = onClick,
         modifier = modifier
             .wrapContentWidth()
-            .heightIn(48.dp),
+            .heightIn(height),
         shape = MaterialTheme.shapes.small,
         interactionSource = interactionSource
     ) {
@@ -79,7 +81,7 @@ internal inline fun SearchIconButton(
     showSystemUi = true
 )
 @Composable
-fun SearchIconButtonPreview(modifier: Modifier = Modifier) {
+fun IconButtonPreview(modifier: Modifier = Modifier) {
     PhogalTheme {
         val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
         val isPressed by interactionSource.collectIsPressedAsState()

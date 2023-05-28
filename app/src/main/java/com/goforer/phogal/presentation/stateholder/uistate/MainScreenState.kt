@@ -15,13 +15,13 @@ import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.goforer.base.utils.connect.NetworkMonitor
 import com.goforer.phogal.presentation.ui.compose.screen.home.BottomNavDestination
-import com.goforer.phogal.presentation.ui.compose.screen.home.BottomNavDestination.Photo
+import com.goforer.phogal.presentation.ui.compose.screen.home.BottomNavDestination.Gallery
 import com.goforer.phogal.presentation.ui.compose.screen.home.BottomNavDestination.Community
 import com.goforer.phogal.presentation.ui.compose.screen.home.BottomNavDestination.Notification
 import com.goforer.phogal.presentation.ui.compose.screen.home.BottomNavDestination.Setting
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.communitiesStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.notificationsStartRoute
-import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.photosStartRoute
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingStartRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopToGraph
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -42,7 +42,7 @@ class MainScreenState(
 
     val currentTopLevelDestination: BottomNavDestination?
         @Composable get() = when (currentDestination?.route) {
-            photosStartRoute -> Photo
+            searchPhotosRoute -> Gallery
             communitiesStartRoute -> Community
             notificationsStartRoute -> Notification
             settingStartRoute -> Setting

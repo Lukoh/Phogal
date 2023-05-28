@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,8 +24,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.goforer.phogal.R
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.PermissionState
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberPermissionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.PermissionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberPermissionState
 import com.goforer.phogal.presentation.ui.theme.Blue20
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray8
 import kotlinx.coroutines.launch

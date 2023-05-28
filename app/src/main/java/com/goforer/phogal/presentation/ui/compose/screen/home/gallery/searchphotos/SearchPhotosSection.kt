@@ -1,11 +1,13 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photos
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -36,9 +38,10 @@ import com.goforer.base.extension.composable.rememberLazyListState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.ListSectionState
-import com.goforer.phogal.presentation.stateholder.uistate.home.photos.rememberListSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.SearchPhotosSectionState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosSectionState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
+import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.PhotoItem
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.StateFlow
@@ -46,11 +49,12 @@ import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ListSection(
+fun SearchPhotosSection(
     modifier: Modifier = Modifier,
-    state: ListSectionState = rememberListSectionState(),
+    state: SearchPhotosSectionState = rememberSearchPhotosSectionState(),
     onItemClicked: (item: Photo, index: Int) -> Unit,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit
 ) {
     val photos = (state.photosUiState as StateFlow<PagingData<Photo>>).collectAsLazyPagingItems()
     // After recreation, LazyPagingItems first return 0 items, then the cached items.
@@ -85,7 +89,7 @@ fun ListSection(
             .pullRefresh(refreshState)
     ) {
         LazyColumn(
-            modifier = Modifier.animateContentSize(),
+            modifier = Modifier.animateContentSize().fillMaxWidth().fillMaxHeight(),
             state = lazyListState
         ) {
             if (!state.refreshingState.value) {
@@ -128,7 +132,9 @@ fun ListSection(
                                         modifier = modifier,
                                         index = index,
                                         photo = photos[index]!!,
-                                        onItemClicked = onItemClicked
+                                        visibleViewPhotosButton = true,
+                                        onItemClicked = onItemClicked,
+                                        onViewPhotos = onViewPhotos
                                     )
                                 }
                             }
@@ -139,6 +145,7 @@ fun ListSection(
                                 val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
 
                                 ErrorContent(
+                                    modifier = modifier,
                                     title = if (errorThrowable.code !in 200..299)
                                         stringResource(id = R.string.error_dialog_network_title)
                                     else

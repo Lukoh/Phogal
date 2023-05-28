@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.stateholder.uistate.home.photos
+package com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable

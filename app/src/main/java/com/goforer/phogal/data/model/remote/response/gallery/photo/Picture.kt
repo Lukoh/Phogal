@@ -11,7 +11,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Picture(
-    val alt_description: String,
+    val alt_description: String?,
     val blur_hash: String,
     val color: String,
     val created_at: String,

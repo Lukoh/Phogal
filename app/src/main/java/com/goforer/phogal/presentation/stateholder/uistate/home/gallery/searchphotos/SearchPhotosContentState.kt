@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.stateholder.uistate.home.photos
+package com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos
 
 import android.Manifest
 import androidx.compose.runtime.Composable
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Stable
-class PhotosContentState(
+class SearchPhotosContentState(
     val baseUiState: BaseUiState,
     val searchKeyword: MutableState<String>,
     val enabledSearch: MutableState<Boolean>,
@@ -29,7 +29,7 @@ class PhotosContentState(
 }
 
 @Composable
-fun rememberPhotosContentState(
+fun rememberSearchPhotosContentState(
     baseUiState: BaseUiState,
     searchKeyword: MutableState<String> = rememberSaveable { mutableStateOf("") },
     enabledSearch: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
@@ -37,12 +37,12 @@ fun rememberPhotosContentState(
     rationaleTextState: MutableState<String> = rememberSaveable { mutableStateOf("") },
     photosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
     isRefreshing: StateFlow<Boolean> = remember { MutableStateFlow(false) }
-): PhotosContentState = remember(
+): SearchPhotosContentState = remember(
     baseUiState,
     photosUiState,
     isRefreshing
 ) {
-    PhotosContentState(
+    SearchPhotosContentState(
         baseUiState = baseUiState,
         searchKeyword = searchKeyword,
         enabledSearch = enabledSearch,

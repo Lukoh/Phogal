@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.stateholder.uistate.home.photos
+package com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Stable
-class ListSectionState(
+class SearchPhotosSectionState(
     val photosUiState: StateFlow<Any>,
     val scope: CoroutineScope,
     val refreshingState: State<Boolean>,
@@ -22,16 +22,16 @@ class ListSectionState(
 )
 
 @Composable
-fun rememberListSectionState(
+fun rememberSearchPhotosSectionState(
     scope: CoroutineScope = rememberCoroutineScope(),
     photosUiState: StateFlow<Any> = rememberSaveable { MutableStateFlow(Any()) },
     refreshingState: State<Boolean> = rememberSaveable { mutableStateOf(false) },
     clickedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     visibleUpButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
-): ListSectionState = remember(
+): SearchPhotosSectionState = remember(
     clickedState,
 ) {
-    ListSectionState(
+    SearchPhotosSectionState(
         scope = scope,
         photosUiState = photosUiState,
         refreshingState = refreshingState,

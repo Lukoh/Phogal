@@ -18,13 +18,17 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavBackStackEntry
 import com.goforer.phogal.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PictureScreen(
     modifier: Modifier = Modifier,
+    navBackStackEntry: NavBackStackEntry,
     id: String,
+    visibleViewPhotosButton: Boolean,
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onBackPressed: () -> Unit
 ) {
     Scaffold(
@@ -62,8 +66,11 @@ fun PictureScreen(
         }, content = { paddingValues ->
             PictureContent(
                 modifier = modifier,
+                navBackStackEntry = navBackStackEntry,
                 contentPadding = paddingValues,
-                id = id
+                id = id,
+                visibleViewPhotosButton = visibleViewPhotosButton,
+                onViewPhotos = onViewPhotos
             )
         }
     )
