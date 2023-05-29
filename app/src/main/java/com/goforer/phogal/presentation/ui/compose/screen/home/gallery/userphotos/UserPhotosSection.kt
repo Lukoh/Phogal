@@ -42,7 +42,7 @@ import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.UserPhotosSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosSectionState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
-import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.PhotoItem
+import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.PhotosItem
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos.LoadingPhotos
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.google.gson.Gson
@@ -133,7 +133,7 @@ fun UserPhotosSection(
                                     // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
                                     // If this bug will got fixed... then have to be removed below code
                                     state.visibleUpButtonState.value = visibleUpButton(index)
-                                    PhotoItem(
+                                    PhotosItem(
                                         modifier = modifier,
                                         index = index,
                                         photo = photos[index]!!,

@@ -17,9 +17,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavBackStackEntry
 import androidx.paging.PagingData
 import com.goforer.phogal.R
 import com.goforer.phogal.data.network.api.Params
@@ -38,10 +36,9 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun UserPhotosContent(
     modifier: Modifier = Modifier,
-    navBackStackEntry: NavBackStackEntry,
     name: String,
     contentPadding: PaddingValues = PaddingValues(4.dp),
-    userPhotosViewModel: UserPhotosViewModel = hiltViewModel(navBackStackEntry),
+    userPhotosViewModel: UserPhotosViewModel,
     state: UserPhotosContentState = rememberUserPhotosContentState(
         baseUiState = rememberBaseUiState(),
         photosUiState = userPhotosViewModel.photosUiState,

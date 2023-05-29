@@ -1,6 +1,5 @@
 package com.goforer.phogal.presentation.ui.navigation.destination
 
-import android.os.Bundle
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Commute
 import androidx.compose.runtime.Composable
@@ -13,9 +12,7 @@ object Community : PhogalDestination {
     override val route = communitiesStartRoute
     override val screen: @Composable (
         navController: NavHostController,
-        arguments: Bundle?,
         navBackStackEntry: NavBackStackEntry
-    ) -> Unit = { _, _, _->
-        //CommunityScreen()
+    ) -> Unit = { _, _ ->
     }
 }

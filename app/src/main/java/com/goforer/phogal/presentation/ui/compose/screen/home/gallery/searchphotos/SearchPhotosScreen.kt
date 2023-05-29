@@ -25,9 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavBackStackEntry
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
+import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
@@ -35,7 +35,7 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun SearchPhotosScreen(
     modifier: Modifier = Modifier,
-    navBackStackEntry: NavBackStackEntry,
+    galleryViewModel: GalleryViewModel,
     onItemClicked: (id: String) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit
 ) {
@@ -81,7 +81,7 @@ fun SearchPhotosScreen(
         }, content = { paddingValues ->
             SearchPhotosContent(
                 modifier = modifier,
-                navBackStackEntry = navBackStackEntry,
+                galleryViewModel = galleryViewModel,
                 contentPadding = paddingValues,
                 onItemClicked = onItemClicked,
                 onViewPhotos = onViewPhotos

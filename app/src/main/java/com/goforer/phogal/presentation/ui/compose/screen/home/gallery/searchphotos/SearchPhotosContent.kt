@@ -18,9 +18,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavBackStackEntry
 import androidx.paging.PagingData
 import com.goforer.phogal.R
 import com.goforer.phogal.data.network.api.Params
@@ -45,13 +43,12 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 @Composable
 fun SearchPhotosContent(
     modifier: Modifier = Modifier,
-    navBackStackEntry: NavBackStackEntry,
     contentPadding: PaddingValues = PaddingValues(4.dp),
-    photoViewModel: GalleryViewModel = hiltViewModel(navBackStackEntry),
+    galleryViewModel: GalleryViewModel,
     state: SearchPhotosContentState = rememberSearchPhotosContentState(
         baseUiState = rememberBaseUiState(),
-        photosUiState = photoViewModel.photosUiState,
-        isRefreshing = photoViewModel.isRefreshing
+        photosUiState = galleryViewModel.photosUiState,
+        isRefreshing = galleryViewModel.isRefreshing
     ),
     onItemClicked: (id: String) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit
@@ -77,7 +74,7 @@ fun SearchPhotosContent(
                         with(state) {
                             searchKeyword.value = keyword
                             baseUiState.keyboardController?.hide()
-                            photoViewModel.trigger(2, Params(keyword, ITEM_COUNT))
+                            galleryViewModel.trigger(2, Params(keyword, ITEM_COUNT))
                         }
                     }
                 }
@@ -97,7 +94,7 @@ fun SearchPhotosContent(
                         onItemClicked(photo.id)
                     },
                     onRefresh = {
-                        photoViewModel.trigger(2, Params(state.searchKeyword.value, FIRST_PAGE, ITEM_COUNT))
+                        galleryViewModel.trigger(2, Params(state.searchKeyword.value, FIRST_PAGE, ITEM_COUNT))
                     },
                     onViewPhotos = onViewPhotos
                 )

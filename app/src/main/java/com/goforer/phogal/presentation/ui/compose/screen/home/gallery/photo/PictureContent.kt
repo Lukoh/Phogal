@@ -46,9 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavBackStackEntry
 import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
@@ -73,11 +71,10 @@ import com.google.accompanist.placeholder.material.shimmer
 @Composable
 fun PictureContent(
     modifier: Modifier = Modifier,
-    navBackStackEntry: NavBackStackEntry,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     id : String,
     visibleViewPhotosButton: Boolean,
-    pictureViewModel: PictureViewModel = hiltViewModel(navBackStackEntry),
+    pictureViewModel: PictureViewModel,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
 ) {
     pictureViewModel.trigger(2, Params(id))

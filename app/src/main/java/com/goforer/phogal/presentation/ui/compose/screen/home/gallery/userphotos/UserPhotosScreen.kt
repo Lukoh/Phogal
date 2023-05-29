@@ -26,9 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavBackStackEntry
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
+import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
@@ -36,7 +36,7 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun UserPhotosScreen(
     modifier: Modifier = Modifier,
-    navBackStackEntry: NavBackStackEntry,
+    userPhotosViewModel: UserPhotosViewModel,
     name: String,
     firstName: String,
     onItemClicked: (id: String) -> Unit,
@@ -84,9 +84,9 @@ fun UserPhotosScreen(
         }, content = { paddingValues ->
             UserPhotosContent(
                 modifier = modifier,
-                navBackStackEntry = navBackStackEntry,
-                name,
+                name = name,
                 contentPadding = paddingValues,
+                userPhotosViewModel = userPhotosViewModel,
                 onItemClicked = onItemClicked
             )
         }

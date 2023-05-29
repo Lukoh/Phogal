@@ -1,6 +1,5 @@
 package com.goforer.phogal.presentation.ui.navigation.destination
 
-import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavBackStackEntry
@@ -9,7 +8,7 @@ import androidx.navigation.NavHostController
 interface PhogalDestination {
     val icon: ImageVector
     val route: String
-    val screen: @Composable (NavHostController, Bundle?, NavBackStackEntry) -> Unit
+    val screen: @Composable (NavHostController, NavBackStackEntry) -> Unit
 
     companion object {
         // Photo Bottom Navigation

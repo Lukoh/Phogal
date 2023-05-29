@@ -45,7 +45,7 @@ import com.google.accompanist.placeholder.material.shimmer
 import java.lang.Float.min
 
 @Composable
-fun PhotoItem(
+fun PhotosItem(
     modifier: Modifier = Modifier,
     index: Int,
     photo: Photo,
@@ -151,7 +151,7 @@ fun PhotoItem(
     showSystemUi = true
 )
 @Composable
-fun PhotoItemPreview(modifier: Modifier = Modifier) {
+fun PhotosItemPreview(modifier: Modifier = Modifier) {
     val verticalPadding = 4.dp
     var isClicked by rememberSaveable { mutableStateOf(false) }
 

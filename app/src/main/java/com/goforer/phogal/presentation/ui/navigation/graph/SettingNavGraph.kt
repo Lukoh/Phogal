@@ -23,7 +23,7 @@ fun NavGraphBuilder.settingGraph(
                 navController.getBackStackEntry(route)
             }
 
-            Setting.screen(navController, backStackEntry.arguments, navBackStackEntry)
+            Setting.screen(navController, navBackStackEntry)
         }
     }
 }

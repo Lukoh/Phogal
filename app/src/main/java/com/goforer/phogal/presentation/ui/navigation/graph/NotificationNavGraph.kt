@@ -23,7 +23,7 @@ fun NavGraphBuilder.notificationGraph(
                 navController.getBackStackEntry(route)
             }
 
-            Community.screen(navController, backStackEntry.arguments, navBackStackEntry)
+            Community.screen(navController, navBackStackEntry)
         }
     }
 }

@@ -18,14 +18,14 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavBackStackEntry
 import com.goforer.phogal.R
+import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.PictureViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PictureScreen(
     modifier: Modifier = Modifier,
-    navBackStackEntry: NavBackStackEntry,
+    pictureViewModel: PictureViewModel,
     id: String,
     visibleViewPhotosButton: Boolean,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
@@ -66,8 +66,8 @@ fun PictureScreen(
         }, content = { paddingValues ->
             PictureContent(
                 modifier = modifier,
-                navBackStackEntry = navBackStackEntry,
                 contentPadding = paddingValues,
+                pictureViewModel = pictureViewModel,
                 id = id,
                 visibleViewPhotosButton = visibleViewPhotosButton,
                 onViewPhotos = onViewPhotos

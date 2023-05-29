@@ -5,7 +5,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
@@ -34,11 +33,7 @@ fun NavGraphBuilder.galleryGraph(
                 fadeOut(targetAlpha = 1f, animationSpec = tween(700))
             }
         ) {backStackEntry ->
-            val navBackStackEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(route)
-            }
-
-            SearchPhotos.screen(navController, backStackEntry.arguments, navBackStackEntry)
+            SearchPhotos.screen(navController, backStackEntry)
         }
 
         composable(
@@ -51,11 +46,7 @@ fun NavGraphBuilder.galleryGraph(
                 fadeOut(targetAlpha = 1f, animationSpec = tween(700))
             }
         ) {backStackEntry ->
-            val navBackStackEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(route)
-            }
-
-            Picture.screen(navController, backStackEntry.arguments, navBackStackEntry)
+            Picture.screen(navController, backStackEntry)
         }
 
         composable(
@@ -68,11 +59,7 @@ fun NavGraphBuilder.galleryGraph(
                 fadeOut(targetAlpha = 1f, animationSpec = tween(700))
             }
         ) {backStackEntry ->
-            val navBackStackEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(route)
-            }
-
-            UserPhotos.screen(navController, backStackEntry.arguments, navBackStackEntry)
+            UserPhotos.screen(navController, backStackEntry)
         }
     }
 }

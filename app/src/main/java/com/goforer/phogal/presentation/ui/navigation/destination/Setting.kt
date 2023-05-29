@@ -1,6 +1,5 @@
 package com.goforer.phogal.presentation.ui.navigation.destination
 
-import android.os.Bundle
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Settings
 import androidx.compose.runtime.Composable
@@ -15,9 +14,8 @@ object Setting : PhogalDestination {
     override val route = settingStartRoute
     override val screen: @Composable (
         navController: NavHostController,
-        arguments: Bundle?,
         navBackStackEntry: NavBackStackEntry
-    ) -> Unit = { _, _, _ ->
+    ) -> Unit = { _, _ ->
         SettingScreen(
             onItemClicked = { index ->
                 Timber.d("${"Index - "}${index}")

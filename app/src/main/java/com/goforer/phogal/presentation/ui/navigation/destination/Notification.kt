@@ -1,6 +1,5 @@
 package com.goforer.phogal.presentation.ui.navigation.destination
 
-import android.os.Bundle
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Notifications
 import androidx.compose.runtime.Composable
@@ -13,10 +12,7 @@ object Notification : PhogalDestination {
     override val route = notificationsStartRoute
     override val screen: @Composable (
         navController: NavHostController,
-        arguments: Bundle?,
         navBackStackEntry: NavBackStackEntry
-    ) -> Unit = { navController, _, _ ->
-        navController.currentBackStackEntry?.let {
-        }
+    ) -> Unit = { _, _ ->
     }
 }
