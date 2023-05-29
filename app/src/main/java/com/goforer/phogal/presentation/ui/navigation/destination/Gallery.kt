@@ -99,11 +99,7 @@ object Picture : PhogalDestination {
                     navController.navigateSingleTopTo("${UserPhotos.route}/$json")
                 },
                 onBackPressed = {
-                    navController.popBackStack(
-                        destinationId = backStackEntry.destination.id,
-                        inclusive = true,
-                        saveState = false
-                    )
+                    navController.popBackStack()
                 }
             )
         }
@@ -145,11 +141,7 @@ object UserPhotos : PhogalDestination {
                     navController.navigateSingleTopTo("${Picture.route}/$json")
                 },
                 onBackPressed = {
-                    navController.popBackStack(
-                        destinationId = backStackEntry.destination.id,
-                        inclusive = true,
-                        saveState = false
-                    )
+                    navController.popBackStack()
                 }
             )
         }
