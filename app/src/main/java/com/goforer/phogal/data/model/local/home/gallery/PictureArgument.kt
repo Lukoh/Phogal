@@ -5,9 +5,7 @@ import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Name(
-    val name: String,
-    val firstName: String,
-    val lastName: String,
-    val username: String
+data class PictureArgument(
+    val id: String,
+    val visibleViewPhotosButton: Boolean
 ) : BaseModel(), Parcelable

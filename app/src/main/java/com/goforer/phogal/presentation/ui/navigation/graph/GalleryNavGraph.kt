@@ -28,10 +28,10 @@ fun NavGraphBuilder.galleryGraph(
         composable(
             route = searchPhotosRoute,
             enterTransition = {
-                fadeIn(initialAlpha = 1f, animationSpec = tween(4000))
+                fadeIn(initialAlpha = 1f, animationSpec = tween(700))
             },
             exitTransition = {
-                fadeOut(targetAlpha = 1f, animationSpec = tween(4000))
+                fadeOut(targetAlpha = 1f, animationSpec = tween(700))
             }
         ) {backStackEntry ->
             val navBackStackEntry = remember(backStackEntry) {
@@ -45,10 +45,10 @@ fun NavGraphBuilder.galleryGraph(
             route = pictureRouteArgs,
             arguments = Picture.arguments,
             enterTransition = {
-                fadeIn(initialAlpha = 1f, animationSpec = tween(4000))
+                fadeIn(initialAlpha = 1f, animationSpec = tween(700))
             },
             exitTransition = {
-                fadeOut(targetAlpha = 1f, animationSpec = tween(4000))
+                fadeOut(targetAlpha = 1f, animationSpec = tween(700))
             }
         ) {backStackEntry ->
             val navBackStackEntry = remember(backStackEntry) {
@@ -62,10 +62,10 @@ fun NavGraphBuilder.galleryGraph(
             route = userPhotosRouteArgs,
             arguments = UserPhotos.arguments,
             enterTransition = {
-                fadeIn(initialAlpha = 1f, animationSpec = tween(4000))
+                fadeIn(initialAlpha = 1f, animationSpec = tween(700))
             },
             exitTransition = {
-                fadeOut(targetAlpha = 1f, animationSpec = tween(4000))
+                fadeOut(targetAlpha = 1f, animationSpec = tween(700))
             }
         ) {backStackEntry ->
             val navBackStackEntry = remember(backStackEntry) {

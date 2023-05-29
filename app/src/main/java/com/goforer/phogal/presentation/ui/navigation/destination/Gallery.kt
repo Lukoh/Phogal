@@ -1,7 +1,6 @@
 package com.goforer.phogal.presentation.ui.navigation.destination
 
 import android.os.Bundle
-import android.os.Parcelable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.ViewList
@@ -12,8 +11,8 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.goforer.phogal.data.model.BaseModel
-import com.goforer.phogal.data.model.local.home.gallery.Name
+import com.goforer.phogal.data.model.local.home.gallery.NameArgument
+import com.goforer.phogal.data.model.local.home.gallery.PictureArgument
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photo.PictureScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos.SearchPhotosScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.userphotos.UserPhotosScreen
@@ -22,7 +21,6 @@ import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestinati
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.userPhotosRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopTo
 import com.google.gson.Gson
-import kotlinx.parcelize.Parcelize
 
 object SearchPhotos : PhogalDestination {
     override val icon = Icons.Sharp.ViewList
@@ -35,7 +33,7 @@ object SearchPhotos : PhogalDestination {
         SearchPhotosScreen(
             navBackStackEntry = navBackStackEntry,
             onItemClicked = { id ->
-                val pictureRoute = PictureRoute(
+                val pictureRoute = PictureArgument(
                     id = id,
                     visibleViewPhotosButton = true
                 )
@@ -44,7 +42,7 @@ object SearchPhotos : PhogalDestination {
                 navController.navigateSingleTopTo("${Picture.route}/$json")
             },
             onViewPhotos = { name, firstName, lastName, username ->
-                val userName = Name(
+                val userName = NameArgument(
                     name = name,
                     firstName = firstName,
                     lastName = lastName,
@@ -62,10 +60,10 @@ object SearchPhotos : PhogalDestination {
 object Picture : PhogalDestination {
     override val icon = Icons.Filled.Photo
     override val route = pictureRoute
-    private const val idTypeArg = "id"
-    val pictureRouteArgs = "$route/{$idTypeArg}"
+    private const val argumentTypeArg = "argument"
+    val pictureRouteArgs = "$route/{$argumentTypeArg}"
     val arguments = listOf(
-        navArgument(idTypeArg) { type = NavType.StringType }
+        navArgument(argumentTypeArg) { type = NavType.StringType }
     )
 
     @Stable
@@ -74,16 +72,16 @@ object Picture : PhogalDestination {
         arguments: Bundle?,
         navBackStackEntry: NavBackStackEntry
     ) -> Unit = { navController, arguments, navBackStackEntry ->
-        val id = arguments?.getString(idTypeArg)
-        val pictureRoute = Gson().fromJson(id, PictureRoute::class.java)
+        val argument = arguments?.getString(argumentTypeArg)
+        val pictureArgument = Gson().fromJson(argument, PictureArgument::class.java)
 
-        pictureRoute?.let {
+        pictureArgument?.let {
             PictureScreen(
                 navBackStackEntry = navBackStackEntry,
-                id = pictureRoute.id,
-                visibleViewPhotosButton = pictureRoute.visibleViewPhotosButton,
+                id = pictureArgument.id,
+                visibleViewPhotosButton = pictureArgument.visibleViewPhotosButton,
                 onViewPhotos = { name, firstName, lastName, username ->
-                    val userName = Name(
+                    val userName = NameArgument(
                         name = name,
                         firstName = firstName,
                         lastName = lastName,
@@ -104,11 +102,11 @@ object Picture : PhogalDestination {
 object UserPhotos : PhogalDestination {
     override val icon = Icons.Filled.ViewList
     override val route = userPhotosRoute
-    private const val nameTypeArg = "name"
-    val userPhotosRouteArgs = "$route/{$nameTypeArg}"
+    private const val argumentTypeArg = "argument"
+    val userPhotosRouteArgs = "$route/{$argumentTypeArg}"
 
     val arguments = listOf(
-        navArgument(nameTypeArg) { type = NavType.StringType }
+        navArgument(argumentTypeArg) { type = NavType.StringType }
     )
 
     @Stable
@@ -117,16 +115,16 @@ object UserPhotos : PhogalDestination {
         arguments: Bundle?,
         navBackStackEntry: NavBackStackEntry
     ) -> Unit = { navController,arguments, navBackStackEntry ->
-        val name = arguments?.getString(nameTypeArg)
-        val userName = Gson().fromJson(name, Name::class.java)
+        val argument = arguments?.getString(argumentTypeArg)
+        val nameArgument = Gson().fromJson(argument, NameArgument::class.java)
 
-        name?.let {
+        nameArgument?.let {
             UserPhotosScreen(
                 navBackStackEntry = navBackStackEntry,
-                name = userName.name,
-                firstName = userName.firstName,
+                name = nameArgument.name,
+                firstName = nameArgument.firstName,
                 onItemClicked = { id ->
-                    val pictureRoute = PictureRoute(
+                    val pictureRoute = PictureArgument(
                         id = id,
                         visibleViewPhotosButton = false
                     )
@@ -141,9 +139,3 @@ object UserPhotos : PhogalDestination {
         }
     }
 }
-
-@Parcelize
-data class PictureRoute(
-    val id: String,
-    val visibleViewPhotosButton: Boolean
-) : BaseModel(), Parcelable
