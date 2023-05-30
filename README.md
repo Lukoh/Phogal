@@ -20,7 +20,7 @@ Now let’s dive into my open-source project, Profiler, which is based on the An
 Here is the demo vidoe. 
 
 
-<img src="https://github.com/Lukoh/Phogal/blob/main/screenshot.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="400" height="800" /> <img src="https://github.com/Lukoh/Phogal/blob/main/Shot1.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="400" height="800" />
+<img src="https://github.com/Lukoh/Phogal/blob/main/screenshot.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="300" height="600" /> <img src="https://github.com/Lukoh/Phogal/blob/main/Shot1.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="300" height="600" /> <img src="https://github.com/Lukoh/Phogal/blob/main/Shot2.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="300" height="600" /> <img src="https://github.com/Lukoh/Phogal/blob/main/Shot3.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="300" height="600" />
 Demo Video(https://youtu.be/U_mvFoxypjM). 
 
 
