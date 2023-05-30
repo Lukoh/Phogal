@@ -48,6 +48,7 @@ fun UserPhotosContent(
     onItemClicked: (id: String) -> Unit
 ) {
     if (state.enabledLoadPhotos.value) {
+        state.enabledLoadPhotos.value = false
         userPhotosViewModel.trigger(2, Params(name, Repository.ITEM_COUNT))
     }
 
