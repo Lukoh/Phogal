@@ -46,6 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImagePainter
 import coil.size.Size
@@ -74,7 +75,7 @@ fun PictureContent(
     contentPadding: PaddingValues = PaddingValues(4.dp),
     id : String,
     visibleViewPhotosButton: Boolean,
-    pictureViewModel: PictureViewModel,
+    pictureViewModel: PictureViewModel = hiltViewModel(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
 ) {
     pictureViewModel.trigger(2, Params(id))

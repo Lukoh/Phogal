@@ -1,6 +1,7 @@
 package com.goforer.phogal.presentation.ui.navigation.graph
 
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -21,22 +22,26 @@ fun NavGraphBuilder.galleryGraph(
     navigation(startDestination = startDestination, route = route) {
         composable(
             route = searchPhotosRoute
-        ) {backStackEntry ->
-            SearchPhotos.screen(navController, backStackEntry, route)
+        ) { backStackEntry ->
+            SearchPhotos.screen(navController, backStackEntry)
         }
 
         composable(
             route = pictureRouteArgs,
             arguments = Picture.arguments
-        ) {backStackEntry ->
-            Picture.screen(navController, backStackEntry, route)
+        ) { backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(pictureRouteArgs)
+            }
+
+            Picture.screen(navController, backStackEntry)
         }
 
         composable(
             route = userPhotosRouteArgs,
             arguments = UserPhotos.arguments
-        ) {backStackEntry ->
-            UserPhotos.screen(navController, backStackEntry, route)
+        ) { backStackEntry ->
+            UserPhotos.screen(navController, backStackEntry)
         }
     }
 }

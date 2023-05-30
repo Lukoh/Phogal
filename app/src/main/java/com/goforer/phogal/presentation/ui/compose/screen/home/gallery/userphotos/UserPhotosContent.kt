@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import com.goforer.phogal.R
@@ -38,7 +39,7 @@ fun UserPhotosContent(
     modifier: Modifier = Modifier,
     name: String,
     contentPadding: PaddingValues = PaddingValues(4.dp),
-    userPhotosViewModel: UserPhotosViewModel,
+    userPhotosViewModel: UserPhotosViewModel = hiltViewModel(),
     state: UserPhotosContentState = rememberUserPhotosContentState(
         baseUiState = rememberBaseUiState(),
         photosUiState = userPhotosViewModel.photosUiState,
