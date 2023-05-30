@@ -5,7 +5,7 @@ buildscript {
         timber_version = '5.0.1'
         dagger_hilt_version = '2.45'
         navigation_compose_hilt_version = '1.0.0'
-        nav_version = '2.6.0-rc01'
+        nav_version = '2.7.0-alpha01'
         accompanist_version = '0.31.1-alpha'
         kotlin_version = '1.8.21'
     }

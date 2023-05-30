@@ -16,12 +16,12 @@ fun NavGraphBuilder.settingGraph(
     route: String
 ) {
     navigation(startDestination = startDestination, route = route) {
-        composable(route = settingStartRoute) {backStackEntry ->
+        composable(route = settingStartRoute) { backStackEntry ->
             val navBackStackEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(route)
             }
 
-            Setting.screen(navController, navBackStackEntry, route)
+            Setting.screen(navController, navBackStackEntry)
         }
     }
 }

@@ -16,12 +16,12 @@ fun NavGraphBuilder.notificationGraph(
     route: String
 ) {
     navigation(startDestination = startDestination, route = route) {
-        composable(route = notificationsStartRoute) {backStackEntry ->
+        composable(route = notificationsStartRoute) { backStackEntry ->
             val navBackStackEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(route)
             }
 
-            Community.screen(navController, navBackStackEntry, route)
+            Community.screen(navController, navBackStackEntry)
         }
     }
 }

@@ -18,4 +18,11 @@ fun NavHostController.navigateSingleTopToGraph(route: String) =
     }
 
 fun NavHostController.navigateSingleTopTo(route: String) =
-    navigate(route)
+    navigate(route) {
+        popUpTo(graph.findStartDestination().id) {
+            saveState = true
+        }
+
+        launchSingleTop = true
+        restoreState = false
+    }

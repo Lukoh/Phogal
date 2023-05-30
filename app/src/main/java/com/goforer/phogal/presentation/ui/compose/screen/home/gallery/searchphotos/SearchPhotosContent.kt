@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import com.goforer.phogal.R
@@ -44,7 +45,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 fun SearchPhotosContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(4.dp),
-    galleryViewModel: GalleryViewModel,
+    galleryViewModel: GalleryViewModel = hiltViewModel(),
     state: SearchPhotosContentState = rememberSearchPhotosContentState(
         baseUiState = rememberBaseUiState(),
         photosUiState = galleryViewModel.photosUiState,

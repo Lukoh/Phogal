@@ -7,7 +7,6 @@ import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material.icons.sharp.ViewList
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -21,8 +20,8 @@ import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.Us
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photo.PictureScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos.SearchPhotosScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.userphotos.UserPhotosScreen
-import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.pictureRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosRoute
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPictureRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.userPhotosRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopTo
 import com.google.gson.Gson
@@ -32,10 +31,9 @@ object SearchPhotos : PhogalDestination {
     override val route = searchPhotosRoute
     override val screen: @Composable (
         navController: NavHostController,
-        backStackEntry: NavBackStackEntry,
-        route: String
-    ) -> Unit = { navController, backStackEntry, route ->
-        val galleryViewModel = hiltViewModel<GalleryViewModel>(backStackEntry)
+        parentEntry: NavBackStackEntry
+    ) -> Unit = { navController, parentEntry ->
+        val galleryViewModel = hiltViewModel<GalleryViewModel>(parentEntry)
 
         SearchPhotosScreen(
             galleryViewModel = galleryViewModel,
@@ -67,7 +65,7 @@ object SearchPhotos : PhogalDestination {
 
 object Picture : PhogalDestination {
     override val icon = Icons.Filled.Photo
-    override val route = pictureRoute
+    override val route = searchPictureRoute
     private const val argumentTypeArg = "argument"
     val pictureRouteArgs = "$route/{$argumentTypeArg}"
     val arguments = listOf(
@@ -77,15 +75,11 @@ object Picture : PhogalDestination {
     @Stable
     override val screen: @Composable (
         navController: NavHostController,
-        backStackEntry: NavBackStackEntry,
-        route: String
-    ) -> Unit = { navController, backStackEntry, route ->
-        val argument = backStackEntry.arguments?.getString(argumentTypeArg)
+        parentEntry: NavBackStackEntry
+    ) -> Unit = { navController, parentEntry ->
+        val argument = parentEntry.arguments?.getString(argumentTypeArg)
         val pictureArgument = Gson().fromJson(argument, PictureArgument::class.java)
-        val parentEntry = remember(backStackEntry) {
-            navController.getBackStackEntry(route)
-        }
-        val pictureViewModel = hiltViewModel<PictureViewModel>(backStackEntry)
+        val pictureViewModel = hiltViewModel<PictureViewModel>(parentEntry)
 
         pictureArgument?.let {
             PictureScreen(
@@ -125,15 +119,11 @@ object UserPhotos : PhogalDestination {
     @Stable
     override val screen: @Composable (
         navController: NavHostController,
-        backStackEntry: NavBackStackEntry,
-        route: String
-    ) -> Unit = { navController, backStackEntry, route ->
-        val argument = backStackEntry.arguments?.getString(argumentTypeArg)
+        parentEntry: NavBackStackEntry
+    ) -> Unit = { navController, parentEntry ->
+        val argument = parentEntry.arguments?.getString(argumentTypeArg)
         val nameArgument = Gson().fromJson(argument, NameArgument::class.java)
-        val parentEntry = remember(backStackEntry) {
-            navController.getBackStackEntry(route)
-        }
-        val userPhotosViewModel = hiltViewModel<UserPhotosViewModel>(backStackEntry)
+        val userPhotosViewModel = hiltViewModel<UserPhotosViewModel>(navController.currentBackStackEntry!!)
 
         nameArgument?.let {
             UserPhotosScreen(

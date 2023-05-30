@@ -16,12 +16,12 @@ fun NavGraphBuilder.communityGraph(
     route: String
 ) {
     navigation(startDestination = startDestination, route = route) {
-        composable(route = communitiesStartRoute) {backStackEntry ->
+        composable(route = communitiesStartRoute) { backStackEntry ->
             val navBackStackEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(route)
             }
 
-            Community.screen(navController, navBackStackEntry, route)
+            Community.screen(navController, navBackStackEntry)
         }
     }
 }

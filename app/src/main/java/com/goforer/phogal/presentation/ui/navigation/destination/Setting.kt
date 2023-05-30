@@ -14,9 +14,8 @@ object Setting : PhogalDestination {
     override val route = settingStartRoute
     override val screen: @Composable (
         navController: NavHostController,
-        navBackStackEntry: NavBackStackEntry,
-        route: String
-    ) -> Unit = { _, _, _ ->
+        navBackStackEntry: NavBackStackEntry
+    ) -> Unit = { _, _ ->
         SettingScreen(
             onItemClicked = { index ->
                 Timber.d("${"Index - "}${index}")
