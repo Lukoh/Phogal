@@ -19,9 +19,8 @@ Now let’s dive into my open-source project, Profiler, which is based on the An
 
 Here is the demo vidoe. 
 
-[![alt mad-arch-overview-ui](screenshot.png)](https://youtu.be/U_mvFoxypjM). 
 
-<img src="https://github.com/Lukoh/Phogal/blob/main/screenshot.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="200" height="400" />(https://youtu.be/U_mvFoxypjM). 
+<img src="https://github.com/Lukoh/Phogal/blob/main/screenshot.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="200" height="400" />Demo Video(https://youtu.be/U_mvFoxypjM). 
 
 
 An app for keeping up to date with the latest techs and developments in Android.
