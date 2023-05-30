@@ -3,12 +3,8 @@ package com.goforer.phogal.presentation.ui.compose.screen.home
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -41,7 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.uistate.MainScreenState
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.communitiesStartRoute
@@ -60,8 +58,6 @@ import com.goforer.phogal.presentation.ui.navigation.graph.settingGraph
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.ColorBottomBar
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import timber.log.Timber
 
 @Stable
@@ -72,7 +68,6 @@ sealed class BottomNavDestination(val route: String, @DrawableRes val icon: Int,
     object Setting : BottomNavDestination(settingHomeRoute, R.drawable.ic_setting, R.string.bottom_navigation_setting)
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -151,7 +146,7 @@ fun HomeScreen(
                     else
                         0.dp)
             ) {
-                AnimatedNavHost(
+                NavHost(
                     navController = state.navController,
                     startDestination = photosHomeRoute
                 ) {
@@ -204,7 +199,7 @@ fun HomeScreen(
 @Composable
 fun ProfilerHomeScreenPreview(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberAnimatedNavController()
+    navController: NavHostController = rememberNavController()
 ) {
     PhogalTheme {
         Scaffold(
@@ -255,25 +250,10 @@ fun ProfilerHomeScreenPreview(
                 }
             },
             content = { innerPadding ->
-                AnimatedNavHost(
+                NavHost(
                     navController = navController,
                     startDestination = photosHomeRoute,
-                    modifier = modifier.padding(0.dp, 0.dp, 0.dp, innerPadding.calculateBottomPadding()),
-                    enterTransition = {
-                        if (initialState.destination.route == photosHomeRoute)
-                            EnterTransition.None
-                        else
-                            fadeIn(animationSpec = tween(700))
-                    },
-                    exitTransition = {
-                        fadeOut(animationSpec = tween(1500))
-                    },
-                    popEnterTransition = {
-                        fadeIn(animationSpec = tween(1500))
-                    },
-                    popExitTransition = {
-                        fadeOut(animationSpec = tween(1500))
-                    }
+                    modifier = modifier.padding(0.dp, 0.dp, 0.dp, innerPadding.calculateBottomPadding())
                 ) {
                     galleryGraph(
                         navController = navController,

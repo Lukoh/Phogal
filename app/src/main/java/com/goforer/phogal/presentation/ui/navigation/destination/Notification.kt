@@ -12,7 +12,8 @@ object Notification : PhogalDestination {
     override val route = notificationsStartRoute
     override val screen: @Composable (
         navController: NavHostController,
-        navBackStackEntry: NavBackStackEntry
-    ) -> Unit = { _, _ ->
+        navBackStackEntry: NavBackStackEntry,
+        route: String
+    ) -> Unit = { _, _, _ ->
     }
 }

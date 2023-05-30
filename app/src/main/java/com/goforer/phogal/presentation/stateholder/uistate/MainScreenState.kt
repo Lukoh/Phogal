@@ -1,6 +1,5 @@
 package com.goforer.phogal.presentation.stateholder.uistate
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -11,6 +10,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.goforer.base.utils.connect.NetworkMonitor
@@ -24,7 +24,6 @@ import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestinati
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingStartRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopToGraph
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -81,13 +80,12 @@ class MainScreenState(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun rememberMainScreenState(
     windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navController: NavHostController = rememberAnimatedNavController(),
+    navController: NavHostController = rememberNavController(),
 ): MainScreenState {
     return remember(navController, coroutineScope, windowSizeClass, networkMonitor) {
         MainScreenState(

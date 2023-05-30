@@ -123,7 +123,7 @@ android {
             manifestPlaceholders = [appNameGradle: "Phogal"]
             manifestPlaceholders = [appLabel: "@string/app_name"]
             buildConfigField "String", "apiServer", "\" https://api.unsplash.com/\""
-            buildConfigField "String", "clientId", "\"kRkgT0sRzmHQR27BRdi7HQALiTJyN9SbPPVPcR6sNPs\""
+            buildConfigField "String", "clientId", "\"V9sYHDmwcPc46chEOLA_bhTV3hwsWG0P1ta1vNZjmLscR6sNPs\""
         }
 
         stg {
@@ -132,7 +132,7 @@ android {
             manifestPlaceholders = [appNameGradle: "Phogal_stg"]
             manifestPlaceholders = [appLabel: "Phogal_Stg"]
             buildConfigField "String", "apiServer", "\" https://api.unsplash.com/\""
-            buildConfigField "String", "clientId", "\"kRkgT0sRzmHQR27BRdi7HQALiTJyN9SbPPVPcR6sNPs\""
+            buildConfigField "String", "clientId", "\"V9sYHDmwcPc46chEOLA_bhTV3hwsWG0P1ta1vNZjmLs\""
         }
 
         dev {
@@ -141,7 +141,7 @@ android {
             manifestPlaceholders = [appNameGradle: "Phogal_Dev"]
             manifestPlaceholders = [appLabel: "Phogal_Dev"]
             buildConfigField "String", "apiServer", "\" https://api.unsplash.com/\""
-            buildConfigField "String", "clientId", "\"kRkgT0sRzmHQR27BRdi7HQALiTJyN9SbPPVPcR6sNPs\""
+            buildConfigField "String", "clientId", "\"V9sYHDmwcPc46chEOLA_bhTV3hwsWG0P1ta1vNZjmLs\""
         }
     }
 
@@ -179,7 +179,7 @@ dependencies {
     implementation 'androidx.paging:paging-runtime-ktx:3.1.1'
     implementation 'androidx.paging:paging-compose:1.0.0-alpha19'
     implementation 'androidx.security:security-crypto-ktx:1.1.0-alpha06'
-    implementation 'com.google.android.gms:play-services-measurement-api:21.2.2'
+    implementation 'com.google.android.gms:play-services-measurement-api:21.3.0'
     implementation 'androidx.core:core-ktx:1.10.1'
     def composeBom = platform('androidx.compose:compose-bom:2023.04.01')
     implementation(composeBom)
