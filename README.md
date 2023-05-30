@@ -20,7 +20,7 @@ Now let’s dive into my open-source project, Profiler, which is based on the An
 Here is the demo vidoe. 
 
 
-<img src="https://github.com/Lukoh/Phogal/blob/main/screenshot.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="200" height="400" /> <img src="https://github.com/Lukoh/Phogal/blob/main/Shot1.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="200" height="400" /> <img src="https://github.com/Lukoh/Phogal/blob/main/Shot2.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="200" height="200" /> <img src="https://github.com/Lukoh/Phogal/blob/main/Shot3.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="200" height="400" />
+<img src="https://github.com/Lukoh/Phogal/blob/main/screenshot.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="200" height="400" /> <img src="https://github.com/Lukoh/Phogal/blob/main/Shot1.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="200" height="400" /> <img src="https://github.com/Lukoh/Phogal/blob/main/shot2.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="200" height="200" /> <img src="https://github.com/Lukoh/Phogal/blob/main/Shot3.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="200" height="400" />
 Demo Video(https://youtu.be/U_mvFoxypjM). 
 
 
