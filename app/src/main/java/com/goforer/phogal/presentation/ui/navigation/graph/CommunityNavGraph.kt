@@ -21,7 +21,7 @@ fun NavGraphBuilder.communityGraph(
                 navController.getBackStackEntry(route)
             }
 
-            Community.screen(navController, navBackStackEntry)
+            Community.screen(navController, navBackStackEntry, route)
         }
     }
 }

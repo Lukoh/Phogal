@@ -12,7 +12,8 @@ object Community : PhogalDestination {
     override val route = communitiesStartRoute
     override val screen: @Composable (
         navController: NavHostController,
-        navBackStackEntry: NavBackStackEntry
-    ) -> Unit = { _, _ ->
+        navBackStackEntry: NavBackStackEntry,
+        route: String
+    ) -> Unit = { _, _, _ ->
     }
 }

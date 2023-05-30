@@ -8,13 +8,13 @@ import androidx.navigation.NavHostController
 interface PhogalDestination {
     val icon: ImageVector
     val route: String
-    val screen: @Composable (NavHostController, NavBackStackEntry) -> Unit
+    val screen: @Composable (NavHostController, NavBackStackEntry, String) -> Unit
 
     companion object {
         // Photo Bottom Navigation
         internal const val photosHomeRoute = "photoHome"
         internal const val searchPhotosRoute = "photoHome/searchPhotos"
-        internal const val searchPictureRoute = "photoHome/searchPicture"
+        internal const val pictureRoute = "photoHome/picture"
         internal const val userPhotosRoute = "photoHome/userPhotos"
 
         // Community Bottom Navigation
