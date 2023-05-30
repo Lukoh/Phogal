@@ -13,11 +13,9 @@
 # Phogal 
 ## Better Android Apps Using latest advanced Android Architecture Guidelines + Dependency injection with Hilt + Jetpack Compose + Navigation(Navigating with Compose). Using Android Architecture Guidelines
 
-Phogal is based on Android latest architectural components,Jetpack, and follows MVVM design pattern. Also Phogal App Architecture consist of Presentation layer, DI layer and Repository layer. And new latest technologies were applied into Phogal App as Advanced Android App Architecture. The many advanced functions already were applied into Phogal App. These stuff make Android Apps to be extended being more competitive power and help them to maintain consistency. And I'm also applying Kotlin Language into all modules in Phogal. I'd like to help someone who are trying to learn Kotlin Language to apply Kotlin Language into their project.
+Phogal is based on Android latest architectural components, Jetpack library, Clean Architecture, Coroutine & Flow and follows MVVM design pattern. Also Profiler App Architecture consist of Presentation layer, DI(Dependency Injection) and Repository layer. And All new latest technologies were applied into Profiler App as Advanced Android App Architecture. The many advanced functions already were applied into Profiler App. These stuff make Android Apps to be extended being more competitive power and help them to maintain consistency. Profiler open source was developed to help you building real apps with all the latest Android technologies mentioned below.
 
-I was confident that I could develop high performance apps using Android architecture components and Kotlin Coroutine and Flow.
-
-Now let’s dive into my open-source project, Phogal, which is based on the Android MVVM with Clean Architecture and the latest libraries like Jetpack Compose. 
+Now let’s dive into my open-source project, Profiler, which is based on the Android MVVM with Clean Architecture and the latest libraries like Jetpack & Hilt libraries. And the latest Jetpack Compose(Navigating with Compose + Adding a Hilt ViewModel to the Navigation graph) will help you develop your code very easily.
 
 Here is the [demo video](https://youtu.be/U_mvFoxypjM). 
 
