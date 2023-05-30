@@ -21,4 +21,4 @@ I was confident that I could develop high performance apps using Android archite
 
 Now let’s dive into my open-source project, Phogal, which is based on the Android MVVM with Clean Architecture and the latest libraries like Jetpack Compose. 
 
-Here is the [demo video]([https://youtu.be/U_mvFoxypjM]). 
+Here is the [demo video](https://youtu.be/U_mvFoxypjM). 
