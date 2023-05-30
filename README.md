@@ -19,7 +19,7 @@ Now let’s dive into my open-source project, Profiler, which is based on the An
 
 Here is the demo vidoe. 
 
-[![alt mad-arch-overview-ui](screenshot.png)](https://youtu.be/U_mvFoxypjM). 
+[![alt mad-arch-overview-ui](screenshot.png)](https://youtu.be/U_mvFoxypjM=250x250). 
 
 
 An app for keeping up to date with the latest techs and developments in Android.
