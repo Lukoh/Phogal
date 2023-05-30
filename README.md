@@ -21,6 +21,7 @@ Here is the demo vidoe.
 
 
 <img src="https://github.com/Lukoh/Phogal/blob/main/screenshot.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="400" height="800" />
+<img src="https://github.com/Lukoh/Phogal/blob/main/shot1.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="400" height="800" />
 Demo Video(https://youtu.be/U_mvFoxypjM). 
 
 
