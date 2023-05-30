@@ -19,9 +19,9 @@ Now let’s dive into my open-source project, Profiler, which is based on the An
 
 Here is the demo vidoe. 
 
-[![alt mad-arch-overview-ui](screenshot.png=640x4800)](https://youtu.be/U_mvFoxypjM). 
+[![alt mad-arch-overview-ui](screenshot.png=640x480)](https://youtu.be/U_mvFoxypjM). 
 
-<img src="https://camo.githubusercontent.com/..." data-canonical-src="screenshot.png=640x4800" width="200" height="400" />
+<img src="https://youtu.be/U_mvFoxypjM" data-canonical-src="screenshot.png=640x4800" width="200" height="400" />
 
 
 An app for keeping up to date with the latest techs and developments in Android.
