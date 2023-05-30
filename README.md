@@ -14,3 +14,11 @@
 ## Better Android Apps Using latest advanced Android Architecture Guidelines + Dependency injection with Hilt + Jetpack Compose + Navigation(Navigating with Compose)
 
 # On designing & developing(Using Android Architecture Guidelines)
+
+Phogal is based on Android latest architectural components,Jetpack, and follows MVVM design pattern. Also Phogal App Architecture consist of Presentation layer, DI layer and Repository layer. And new latest technologies were applied into Phogal App as Advanced Android App Architecture. The many advanced functions already were applied into Phogal App. These stuff make Android Apps to be extended being more competitive power and help them to maintain consistency. And I'm also applying Kotlin Language into all modules in Phogal. I'd like to help someone who are trying to learn Kotlin Language to apply Kotlin Language into their project.
+
+I was confident that I could develop high performance apps using Android architecture components and Kotlin Coroutine and Flow.
+
+Now let’s dive into my open-source project, Phogal, which is based on the Android MVVM with Clean Architecture and the latest libraries like Jetpack Compose. 
+
+Here is the [demo video]([https://youtu.be/U_mvFoxypjM]). 
