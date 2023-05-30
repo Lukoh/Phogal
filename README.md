@@ -21,6 +21,8 @@ Here is the demo vidoe.
 
 [![alt mad-arch-overview-ui](screenshot.png=640x4800)](https://youtu.be/U_mvFoxypjM). 
 
+<img src="https://camo.githubusercontent.com/..." data-canonical-src="screenshot.png=640x4800" width="200" height="400" />
+
 
 An app for keeping up to date with the latest techs and developments in Android.
  * Entirely written in Kotlin.
