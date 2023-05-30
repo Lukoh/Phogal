@@ -37,17 +37,20 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun UserPhotosContent(
     modifier: Modifier = Modifier,
-    name: String,
     contentPadding: PaddingValues = PaddingValues(4.dp),
+    name: String,
     userPhotosViewModel: UserPhotosViewModel = hiltViewModel(),
     state: UserPhotosContentState = rememberUserPhotosContentState(
         baseUiState = rememberBaseUiState(),
         photosUiState = userPhotosViewModel.photosUiState,
-        isRefreshing = userPhotosViewModel.isRefreshing
+        isRefreshing = userPhotosViewModel.isRefreshing,
     ),
     onItemClicked: (id: String) -> Unit
 ) {
-    userPhotosViewModel.trigger(2, Params(name, Repository.ITEM_COUNT))
+    if (state.enabledLoadPhotos.value) {
+        userPhotosViewModel.trigger(2, Params(name, Repository.ITEM_COUNT))
+    }
+
     BoxWithConstraints(
         modifier = modifier
             .padding(
@@ -69,6 +72,7 @@ fun UserPhotosContent(
                     refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
                 ),
                 onItemClicked = { photo, _ ->
+                    state.enabledLoadPhotos.value = false
                     onItemClicked(photo.id)
                 },
                 onRefresh = {

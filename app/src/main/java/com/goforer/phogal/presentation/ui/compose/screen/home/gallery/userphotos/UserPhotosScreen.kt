@@ -84,8 +84,8 @@ fun UserPhotosScreen(
         }, content = { paddingValues ->
             UserPhotosContent(
                 modifier = modifier,
-                name = name,
                 contentPadding = paddingValues,
+                name = name,
                 userPhotosViewModel = userPhotosViewModel,
                 onItemClicked = onItemClicked
             )
