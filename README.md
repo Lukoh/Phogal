@@ -21,7 +21,7 @@ Here is the demo vidoe.
 
 [![alt mad-arch-overview-ui](screenshot.png)](https://youtu.be/U_mvFoxypjM). 
 
-<img src="https://youtu.be/U_mvFoxypjM" data-canonical-src="https://github.com/Lukoh/Phogal/blob/main/screenshot.png" width="200" height="400" />
+<img src="https://youtu.be/U_mvFoxypjM](https://github.com/Lukoh/Phogal/blob/main/screenshot.png" data-canonical-src="https://github.com/Lukoh/Phogal/blob/main/screenshot.png" width="200" height="400" />
 
 
 An app for keeping up to date with the latest techs and developments in Android.
