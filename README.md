@@ -17,7 +17,7 @@ Phogal is based on Android latest architectural components, Jetpack library, Cle
 
 Now let’s dive into my open-source project, Profiler, which is based on the Android MVVM with Clean Architecture and the latest libraries like Jetpack & Hilt libraries. And the latest Jetpack Compose(Navigating with Compose + Adding a Hilt ViewModel to the Navigation graph) will help you develop your code very easily.
 
-Here is the [![alt mad-arch-overview-ui](screenshot.png)](https://youtu.be/U_mvFoxypjM). 
+Here is the demo vidoe. [![alt mad-arch-overview-ui](screenshot.png)](https://youtu.be/U_mvFoxypjM). 
 
 
 An app for keeping up to date with the latest techs and developments in Android.
