@@ -17,5 +17,16 @@ fun NavHostController.navigateSingleTopToGraph(route: String) =
         restoreState = true
     }
 
-fun NavHostController.navigateSingleTopTo(route: String) =
-    navigate(route)
+fun NavHostController.navigateSingleTopTo(
+    route: String,
+    saveState: Boolean = true,
+    launchSingleTop: Boolean = true,
+    restoreState: Boolean = true
+) = navigate(route) {
+        popUpTo(route) {
+            this.saveState = saveState
+        }
+
+        this.launchSingleTop = launchSingleTop
+        this.restoreState = restoreState
+    }

@@ -152,7 +152,7 @@ fun HomeScreen(
                 ) {
                     galleryGraph(
                         navController = state.navController,
-                        startDestination =  searchPhotosRoute,
+                        startDestination = searchPhotosRoute,
                         route = photosHomeRoute
                     )
                     communityGraph(

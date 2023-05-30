@@ -7,7 +7,6 @@ import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material.icons.sharp.ViewList
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -34,7 +33,7 @@ object SearchPhotos : PhogalDestination {
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
         route: String
-    ) -> Unit = { navController, backStackEntry, route ->
+    ) -> Unit = { navController, backStackEntry, _ ->
         val galleryViewModel = hiltViewModel<GalleryViewModel>(backStackEntry)
 
         SearchPhotosScreen(
@@ -59,7 +58,7 @@ object SearchPhotos : PhogalDestination {
                 val gson = Gson()
                 val json = Uri.encode(gson.toJson(nameArgument))
 
-                navController.navigateSingleTopTo("${UserPhotos.route}/$json")
+                navController.navigateSingleTopTo(route = "${UserPhotos.route}/$json")
             }
         )
     }
@@ -79,12 +78,9 @@ object Picture : PhogalDestination {
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
         route: String
-    ) -> Unit = { navController, backStackEntry, route ->
+    ) -> Unit = { navController, backStackEntry, _ ->
         val argument = backStackEntry.arguments?.getString(argumentTypeArg)
         val pictureArgument = Gson().fromJson(argument, PictureArgument::class.java)
-        val parentEntry = remember(backStackEntry) {
-            navController.getBackStackEntry(route)
-        }
         val pictureViewModel = hiltViewModel<PictureViewModel>(backStackEntry)
 
         pictureArgument?.let {
@@ -102,10 +98,10 @@ object Picture : PhogalDestination {
                     val gson = Gson()
                     val json = Uri.encode(gson.toJson(nameArgument))
 
-                    navController.navigateSingleTopTo("${UserPhotos.route}/$json")
+                    navController.navigateSingleTopTo(route = "${UserPhotos.route}/$json")
                 },
                 onBackPressed = {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }
             )
         }
@@ -127,12 +123,9 @@ object UserPhotos : PhogalDestination {
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
         route: String
-    ) -> Unit = { navController, backStackEntry, route ->
+    ) -> Unit = { navController, backStackEntry, _ ->
         val argument = backStackEntry.arguments?.getString(argumentTypeArg)
         val nameArgument = Gson().fromJson(argument, NameArgument::class.java)
-        val parentEntry = remember(backStackEntry) {
-            navController.getBackStackEntry(route)
-        }
         val userPhotosViewModel = hiltViewModel<UserPhotosViewModel>(backStackEntry)
 
         nameArgument?.let {
@@ -148,10 +141,10 @@ object UserPhotos : PhogalDestination {
                     val gson = Gson()
                     val json = Uri.encode(gson.toJson(pictureRoute))
 
-                    navController.navigateSingleTopTo("${Picture.route}/$json")
+                    navController.navigateSingleTopTo(route = "${Picture.route}/$json")
                 },
                 onBackPressed = {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }
             )
         }
