@@ -203,28 +203,47 @@ fun MyApp() {
 
 If you need to retrieve the instance of a ViewModel scoped to navigation routes or the navigation graph instead, use the hiltViewModel composable function and pass the corresponding backStackEntry as a parameter:
 
-
+```
 // import androidx.hilt.navigation.compose.hiltViewModel
-// import androidx.navigation.compose.getBackStackEntry
+// import androidx.navigation.NavBackStackEntry
+// import androidx.navigation.NavHostController
+// import androidx.navigation.NavType
 
-@Composable
-fun MyApp() {
-    val navController = rememberNavController()
-    val startRoute = "example"
-    val innerStartRoute = "exampleWithRoute"
-    NavHost(navController, startDestination = startRoute) {
-        navigation(startDestination = innerStartRoute, route = "Parent") {
-            // ...
-            composable("exampleWithRoute") { backStackEntry ->
-                val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry("Parent")
+@Stable
+    override val screen: @Composable (
+        navController: NavHostController,
+        backStackEntry: NavBackStackEntry,
+        route: String
+    ) -> Unit = { navController, backStackEntry, _ ->
+        val argument = backStackEntry.arguments?.getString(argumentTypeArg)
+        val pictureArgument = Gson().fromJson(argument, PictureArgument::class.java)
+        val pictureViewModel = hiltViewModel<PictureViewModel>(backStackEntry)
+
+        pictureArgument?.let {
+            PictureScreen(
+                pictureViewModel = pictureViewModel,
+                id = pictureArgument.id,
+                visibleViewPhotosButton = pictureArgument.visibleViewPhotosButton,
+                onViewPhotos = { name, firstName, lastName, username ->
+                    val nameArgument = NameArgument(
+                        name = name,
+                        firstName = firstName,
+                        lastName = lastName,
+                        username = username
+                    )
+                    val gson = Gson()
+                    val json = Uri.encode(gson.toJson(nameArgument))
+
+                    navController.navigateSingleTopTo(route = "${UserPhotos.route}/$json")
+                },
+                onBackPressed = {
+                    navController.navigateUp()
                 }
-                val parentViewModel = hiltViewModel<ParentViewModel>(parentEntry)
-                ExampleWithRouteScreen(parentViewModel)
-            }
+            )
         }
     }
 }
+```
 
 
 Jump to [Navigating with Compose](https://developer.android.com/jetpack/compose/navigation) if you’d like to learn it.
