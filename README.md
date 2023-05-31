@@ -68,7 +68,7 @@ The UI layer is made up of two things:
 <img src="https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-overview-ui.png" data-canonical-src="https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-overview-ui.png" width="600" height="550" /> 
 Figure 2. The UI layer's role in app architecture.
 
-To learn more about this layer, see the [UI layer page](https://developer.android.com/topic/architecture/ui-layer).
+#### To learn more about this layer, see the [UI layer page](https://developer.android.com/topic/architecture/ui-layer).
 
 ### Data layer
 The data layer of an app contains the business logic. The business logic is what gives value to your app—it's made of rules that determine how your app creates, stores, and changes data.
