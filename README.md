@@ -170,6 +170,7 @@ The Navigation component provides support for Jetpack Compose applications. You 
 Hilt and Navigation
 Hilt also integrates with the Navigation Compose library. Add the following additional dependencies to your Gradle file:
 
+```
 Groovy
 Kotlin
 
@@ -177,10 +178,11 @@ dependencies {
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 }
 When using Navigation Compose, always use the hiltViewModel composable function to obtain an instance of your @HiltViewModel annotated ViewModel. This works with fragments or activities that are annotated with @AndroidEntryPoint.
+```
 
 For example, if ExampleScreen is a destination in a navigation graph, call hiltViewModel() to get an instance of ExampleViewModel scoped to the destination as shown in the code snippet below:
 
-
+```
 // import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
@@ -197,6 +199,8 @@ fun MyApp() {
         /* ... */
     }
 }
+```
+
 If you need to retrieve the instance of a ViewModel scoped to navigation routes or the navigation graph instead, use the hiltViewModel composable function and pass the corresponding backStackEntry as a parameter:
 
 
