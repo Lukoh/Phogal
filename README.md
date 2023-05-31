@@ -46,6 +46,7 @@ You can add an additional layer called the domain layer to simplify and reuse th
 Figure 1. Diagram of a typical app architecture.
 
 
+
 This Modern App Architecture encourages using the following techniques, among others:
 
  * A reactive and layered architecture.
