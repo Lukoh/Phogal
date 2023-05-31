@@ -3,7 +3,6 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.userphotos
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -99,11 +98,10 @@ fun UserPhotosSection(
     ) {
         LazyColumn(
             modifier = Modifier
-                .animateContentSize()
                 .fillMaxWidth()
                 .fillMaxHeight(),
             state = lazyListState,
-            contentPadding = PaddingValues(vertical = 8.dp),
+            contentPadding = PaddingValues(vertical = 4.dp),
         ) {
             if (!state.refreshingState.value) {
                 photos.loadState.apply {
@@ -202,7 +200,6 @@ fun UserPhotosSection(
         }
         
         Spacer(modifier = Modifier.height(32.dp))
-
         PullRefreshIndicator(state.refreshingState.value, refreshState, Modifier.align(Alignment.TopCenter))
         if (!lazyListState.isScrollInProgress) {
             ShowUpButton(
