@@ -167,6 +167,62 @@ If you’re working on an Android app, chances are you’ll need some form of na
 
 The Navigation component provides support for Jetpack Compose applications. You can navigate between composables while taking advantage of the Navigation component’s infrastructure and features.
 
+Hilt and Navigation
+Hilt also integrates with the Navigation Compose library. Add the following additional dependencies to your Gradle file:
+
+Groovy
+Kotlin
+
+dependencies {
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+}
+When using Navigation Compose, always use the hiltViewModel composable function to obtain an instance of your @HiltViewModel annotated ViewModel. This works with fragments or activities that are annotated with @AndroidEntryPoint.
+
+For example, if ExampleScreen is a destination in a navigation graph, call hiltViewModel() to get an instance of ExampleViewModel scoped to the destination as shown in the code snippet below:
+
+
+// import androidx.hilt.navigation.compose.hiltViewModel
+
+@Composable
+fun MyApp() {
+    val navController = rememberNavController()
+    val startRoute = "example"
+    NavHost(navController, startDestination = startRoute) {
+        composable("example") { backStackEntry ->
+            // Creates a ViewModel from the current BackStackEntry
+            // Available in the androidx.hilt:hilt-navigation-compose artifact
+            val viewModel = hiltViewModel<MyViewModel>()
+            MyScreen(viewModel)
+        }
+        /* ... */
+    }
+}
+If you need to retrieve the instance of a ViewModel scoped to navigation routes or the navigation graph instead, use the hiltViewModel composable function and pass the corresponding backStackEntry as a parameter:
+
+
+// import androidx.hilt.navigation.compose.hiltViewModel
+// import androidx.navigation.compose.getBackStackEntry
+
+@Composable
+fun MyApp() {
+    val navController = rememberNavController()
+    val startRoute = "example"
+    val innerStartRoute = "exampleWithRoute"
+    NavHost(navController, startDestination = startRoute) {
+        navigation(startDestination = innerStartRoute, route = "Parent") {
+            // ...
+            composable("exampleWithRoute") { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry("Parent")
+                }
+                val parentViewModel = hiltViewModel<ParentViewModel>(parentEntry)
+                ExampleWithRouteScreen(parentViewModel)
+            }
+        }
+    }
+}
+
+
 Jump to [Navigating with Compose](https://developer.android.com/jetpack/compose/navigation) if you’d like to learn it.
 
 If you go through the above process, you can understand the source code more easily.
@@ -177,6 +233,10 @@ My purpose with this open-source project was to understand MVVM with Clean Archi
 Use Kotlin Coroutine and Flow to remove callbacks and make it a little neater. Use states to represent your UI. (For that, check out this amazing talk by Jake Wharton.) Use Dagger2 to inject dependencies.
 
 This is one of the best and most scalable architectures for Android apps. I hope you enjoyed this article, and I look forward to hearing how you’ve used this approach in your own apps!
+
+# Compose and other libraries
+You can use your favorite libraries in Compose. If you'd like to know how to incorporate a few of the most useful libraries, please refer to the Compose and other libraries section as below:
+[Compose and other libraries Section](https://developer.android.com/jetpack/compose/libraries)
 
 # Android runtime permissions support for Jetpack Compose
 If you'd like to know how to apply Android runtime permissions into your App, please read my medium article of Android runtime permissions support for Jetpack Compose below link:
