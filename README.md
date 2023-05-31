@@ -65,7 +65,7 @@ The UI layer is made up of two things:
  * UI elements that render the data on the screen. You build these elements using Views or Jetpack Compose functions.
  * State holders (such as [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) classes) that hold data, expose it to the UI, and handle logic.
 
-![alt mad-arch-overview-ui]<img src="https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-overview-ui.png" data-canonical-src="https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-overview-ui.png" width="600" height="550" />
+<img src="https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-overview-ui.png" data-canonical-src="https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-overview-ui.png" width="600" height="550" /> 
 Figure 2. The UI layer's role in app architecture.
 
 To learn more about this layer, see the [UI layer page](https://developer.android.com/topic/architecture/ui-layer).
