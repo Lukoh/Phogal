@@ -22,7 +22,7 @@ Now let’s dive into my open-source project, Profiler, which is based on the An
 
 <img src="https://github.com/Lukoh/Phogal/blob/main/screenshot.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="220" height="450" /> <img src="https://github.com/Lukoh/Phogal/blob/main/Shot1.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="220" height="450" /> <img src="https://github.com/Lukoh/Phogal/blob/main/shot2.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="220" height="450" /> <img src="https://github.com/Lukoh/Phogal/blob/main/shot3.png" data-canonical-src="https://youtu.be/U_mvFoxypjM" width="220" height="450" />
 
-# An app for keeping up to date with the latest techs and developments in Android.
+### An app for keeping up to date with the latest techs and developments in Android.
  * Entirely written in Kotlin.
  * UI completely written in Jetpack Compose.
  * Uses Kotlin Coroutines & Flow
@@ -47,7 +47,7 @@ You can add an additional layer called the domain layer to simplify and reuse th
 
 
 
-This Modern App Architecture encourages using the following techniques, among others:
+### This Modern App Architecture encourages using the following techniques, among others:
 
  * A reactive and layered architecture.
  * Unidirectional Data Flow (UDF) in all layers of the app.
