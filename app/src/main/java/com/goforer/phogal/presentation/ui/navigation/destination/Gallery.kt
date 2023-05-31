@@ -130,9 +130,9 @@ object UserPhotos : PhogalDestination {
 
         nameArgument?.let {
             UserPhotosScreen(
-                userPhotosViewModel = userPhotosViewModel,
                 name = nameArgument.name,
                 firstName = nameArgument.firstName,
+                userPhotosViewModel = userPhotosViewModel,
                 onItemClicked = { id ->
                     val pictureRoute = PictureArgument(
                         id = id,

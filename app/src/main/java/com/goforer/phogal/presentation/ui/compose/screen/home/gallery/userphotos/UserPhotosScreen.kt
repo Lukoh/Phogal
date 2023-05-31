@@ -36,9 +36,9 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun UserPhotosScreen(
     modifier: Modifier = Modifier,
-    userPhotosViewModel: UserPhotosViewModel,
     name: String,
     firstName: String,
+    userPhotosViewModel: UserPhotosViewModel,
     onItemClicked: (id: String) -> Unit,
     onBackPressed: () -> Unit
 ) {

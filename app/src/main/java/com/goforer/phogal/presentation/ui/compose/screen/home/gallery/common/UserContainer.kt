@@ -62,6 +62,8 @@ fun UserContainer(
     visibleViewPhotosButton: Boolean,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
 ) {
+    val lastName = user.last_name ?: stringResource(id = R.string.picture_no_last_name)
+
     Column(
         modifier = modifier.background(backgroundColor),
         verticalArrangement = Arrangement.Top
@@ -76,6 +78,7 @@ fun UserContainer(
                 .heightIn(68.dp, 114.dp)
                 .clickable {},
         ) {
+
             IconContainer(profileSize) {
                 Box {
                     val painter = loadImagePainter(
@@ -91,7 +94,16 @@ fun UserContainer(
                             .padding(1.dp)
                             .fillMaxSize()
                             .clip(CircleShape)
-                            .border(0.5.dp, MaterialTheme.colorScheme.secondary, CircleShape),
+                            .border(0.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
+                            .clickable {
+                                if (visibleViewPhotosButton)
+                                    onViewPhotos(
+                                        user.username,
+                                        user.first_name,
+                                        lastName,
+                                        user.username
+                                    )
+                            },
                         Alignment.CenterStart,
                         contentScale = ContentScale.Crop
                     )
@@ -142,8 +154,6 @@ fun UserContainer(
         }
 
         if (visibleViewPhotosButton) {
-            val lastName = user.last_name ?: stringResource(id = R.string.picture_no_last_name)
-
             IconButton(
                 32.dp,
                 modifier = Modifier.padding(start = 56.dp, top = 0.dp, bottom = 2.dp),
