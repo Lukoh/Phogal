@@ -6,16 +6,13 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Stable
 class UserPhotosSectionState(
     val photosUiState: StateFlow<Any>,
-    val scope: CoroutineScope,
     val refreshingState: State<Boolean>,
     var clickedState: MutableState<Boolean>,
     var visibleUpButtonState: MutableState<Boolean>
@@ -23,7 +20,6 @@ class UserPhotosSectionState(
 
 @Composable
 fun rememberUserPhotosSectionState(
-    scope: CoroutineScope = rememberCoroutineScope(),
     photosUiState: StateFlow<Any> = rememberSaveable { MutableStateFlow(Any()) },
     refreshingState: State<Boolean> = rememberSaveable { mutableStateOf(false) },
     clickedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
@@ -32,7 +28,6 @@ fun rememberUserPhotosSectionState(
     clickedState,
 ) {
     UserPhotosSectionState(
-        scope = scope,
         photosUiState = photosUiState,
         refreshingState = refreshingState,
         clickedState = clickedState,

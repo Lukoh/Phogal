@@ -1,7 +1,6 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.userphotos
 
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -27,13 +25,11 @@ import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.Us
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.UserPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosSectionState
-import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.NoSearchResult
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos.SearchSection
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun UserPhotosContent(
     modifier: Modifier = Modifier,
@@ -41,7 +37,6 @@ fun UserPhotosContent(
     name: String,
     userPhotosViewModel: UserPhotosViewModel = hiltViewModel(),
     state: UserPhotosContentState = rememberUserPhotosContentState(
-        baseUiState = rememberBaseUiState(),
         photosUiState = userPhotosViewModel.photosUiState,
         isRefreshing = userPhotosViewModel.isRefreshing,
     ),
@@ -52,38 +47,26 @@ fun UserPhotosContent(
         userPhotosViewModel.trigger(2, Params(name, Repository.ITEM_COUNT))
     }
 
-    BoxWithConstraints(
-        modifier = modifier
-            .padding(
-                0.dp,
-                contentPadding.calculateTopPadding(),
-                0.dp,
-                0.dp
-            ).clickable {
-                state.baseUiState.keyboardController?.hide()
-            }
-    ) {
-        if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
-            UserPhotosSection(
-                modifier = Modifier
-                    .padding(4.dp, 4.dp),
-                state = rememberUserPhotosSectionState(
-                    scope = state.baseUiState.scope,
-                    photosUiState = state.photosUiState,
-                    refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
-                ),
-                onItemClicked = { photo, _ ->
-                    state.enabledLoadPhotos.value = false
-                    onItemClicked(photo.id)
-                },
-                onRefresh = {
-                    userPhotosViewModel.trigger(2, Params(name, Repository.ITEM_COUNT))
-                },
-                onViewPhotos = { _, _, _, _ -> }
-            )
-        } else {
-            NoSearchResult(modifier = modifier)
-        }
+    if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
+        UserPhotosSection(
+            modifier = Modifier
+                .padding(4.dp, 4.dp),
+            contentPadding = contentPadding,
+            state = rememberUserPhotosSectionState(
+                photosUiState = state.photosUiState,
+                refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
+            ),
+            onItemClicked = { photo, _ ->
+                state.enabledLoadPhotos.value = false
+                onItemClicked(photo.id)
+            },
+            onRefresh = {
+                userPhotosViewModel.trigger(2, Params(name, Repository.ITEM_COUNT))
+            },
+            onViewPhotos = { _, _, _, _ -> }
+        )
+    } else {
+        NoSearchResult(modifier = modifier)
     }
 }
 

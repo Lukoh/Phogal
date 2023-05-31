@@ -53,6 +53,7 @@ import timber.log.Timber
 @Composable
 fun UserPhotosSection(
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues,
     state: UserPhotosSectionState = rememberUserPhotosSectionState(),
     onItemClicked: (item: Photo, index: Int) -> Unit,
     onRefresh: () -> Unit,
@@ -88,6 +89,12 @@ fun UserPhotosSection(
     BoxWithConstraints(
         modifier = modifier
             .clip(RoundedCornerShape(4.dp))
+            .padding(
+                0.dp,
+                contentPadding.calculateTopPadding(),
+                0.dp,
+                0.dp
+            )
             .pullRefresh(refreshState)
     ) {
         LazyColumn(
