@@ -178,7 +178,7 @@ Use Kotlin Coroutine and Flow to remove callbacks and make it a little neater. U
 
 This is one of the best and most scalable architectures for Android apps. I hope you enjoyed this article, and I look forward to hearing how you’ve used this approach in your own apps!
 
-
+# Android runtime permissions support for Jetpack Compose
 If you'd like to know how to apply Android runtime permissions into your App, please read my medium article of Android runtime permissions support for Jetpack Compose below link:
 [Android runtime permissions support for Jetpack Compose](https://medium.com/@lukohnam/jetpack-compose-permissions-using-accompanist-library-b1c0fbbe8831)
 
