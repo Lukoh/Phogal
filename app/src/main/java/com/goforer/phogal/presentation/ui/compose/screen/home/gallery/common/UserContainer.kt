@@ -326,7 +326,7 @@ fun UserInfoBottomSheet(
                         .size(22.dp)
                         .padding(horizontal = 4.dp)
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
                     color = DarkGreenGray10,
@@ -416,7 +416,7 @@ fun UserInfoBottomSheet(
                 )
             }
 
-            Spacer(modifier = Modifier.width(36.dp))
+            Spacer(modifier = Modifier.height(36.dp))
         }
     }
 }
