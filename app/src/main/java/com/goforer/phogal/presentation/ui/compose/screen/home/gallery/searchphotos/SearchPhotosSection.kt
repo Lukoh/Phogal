@@ -38,6 +38,7 @@ import com.goforer.base.extension.composable.rememberLazyListState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
+import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.SearchPhotosSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosSectionState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
@@ -136,6 +137,8 @@ fun SearchPhotosSection(
                                         onItemClicked = onItemClicked,
                                         onViewPhotos = onViewPhotos
                                     )
+
+                                    TrackScreenViewEvent(screenName = "SearchPhotosSection")
                                 }
                             }
                         }

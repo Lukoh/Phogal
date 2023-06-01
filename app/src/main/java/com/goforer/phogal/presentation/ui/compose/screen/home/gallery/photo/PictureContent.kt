@@ -56,6 +56,7 @@ import com.goforer.phogal.data.model.remote.response.gallery.photo.Picture
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.network.response.Status
+import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.PictureViewModel
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.UserContainer
@@ -329,6 +330,8 @@ fun PictureContent(
                         Spacer(modifier = Modifier.height(30.dp))
                     }
                 }
+
+                TrackScreenViewEvent(screenName = "PhotoContent")
             }
             Status.LOADING -> {
                 LoadingPicture(

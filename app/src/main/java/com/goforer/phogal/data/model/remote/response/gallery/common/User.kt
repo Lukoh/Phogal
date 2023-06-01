@@ -16,7 +16,7 @@ data class User(
     val links: LinksX,
     val location: String?,
     val name: String,
-    val portfolio_url: String,
+    val portfolio_url: String?,
     val profile_image: ProfileImage,
     val social: Social,
     val total_collections: Int,

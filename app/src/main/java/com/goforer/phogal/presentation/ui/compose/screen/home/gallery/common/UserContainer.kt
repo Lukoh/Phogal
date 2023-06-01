@@ -229,7 +229,7 @@ fun UserInfoBottomSheet(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(start = 4.dp, end = 4.dp)
+                    .padding(start = 8.dp, end = 8.dp)
                     .background(Color.Transparent)
                     .wrapContentHeight(Alignment.CenterVertically)
                     .fillMaxWidth()
@@ -289,7 +289,7 @@ fun UserInfoBottomSheet(
 
             Spacer(modifier = Modifier.height(8.dp))
             Row(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -315,7 +315,7 @@ fun UserInfoBottomSheet(
 
             Spacer(modifier = Modifier.height(8.dp))
             Row(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -326,7 +326,7 @@ fun UserInfoBottomSheet(
                         .size(22.dp)
                         .padding(horizontal = 4.dp)
                 )
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
                     color = DarkGreenGray10,
@@ -340,7 +340,7 @@ fun UserInfoBottomSheet(
 
             Spacer(modifier = Modifier.height(8.dp))
             Row(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -366,7 +366,7 @@ fun UserInfoBottomSheet(
 
             Spacer(modifier = Modifier.height(8.dp))
             Row(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -392,7 +392,85 @@ fun UserInfoBottomSheet(
 
             Spacer(modifier = Modifier.height(8.dp))
             Row(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_follower),
+                    contentDescription = "Follower",
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(horizontal = 4.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = user.links.followers,
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    color = DarkGreenGray10,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+                    fontStyle = FontStyle.Normal,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_following),
+                    contentDescription = "Following",
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(horizontal = 4.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = user.links.following,
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    color = DarkGreenGray10,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+                    fontStyle = FontStyle.Normal,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_portfolio),
+                    contentDescription = "Following",
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(horizontal = 4.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = user.portfolio_url ?: stringResource(id = R.string.user_info_no_portfolio),
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    color = DarkGreenGray10,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+                    fontStyle = FontStyle.Normal,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
