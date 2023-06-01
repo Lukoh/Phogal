@@ -56,6 +56,6 @@
     <string name="user_info_no_location_info">No user"'"s location information</string>
     <string name="user_info_no_instagram_name">No user"'"s Instagram name</string>
     <string name="user_info_no_twitter_name">No user"'"s Twitter name</string>
-    <string name="user_info_twitter_name">Twitter Name</string>
-    <string name="user_info_instagram_name">Instagram Name</string>
+    <string name="user_info_twitter_name">Twitter - Name :</string>
+    <string name="user_info_instagram_name">Instagram - Name :</string>
 </resources>
