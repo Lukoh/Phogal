@@ -81,6 +81,7 @@ fun SearchPhotosScreen(
         }, content = { paddingValues ->
             SearchPhotosContent(
                 modifier = modifier,
+                snackbarHostState = snackbarHostState,
                 galleryViewModel = galleryViewModel,
                 contentPadding = paddingValues,
                 onItemClicked = onItemClicked,

@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,6 +48,7 @@ import java.lang.Float.min
 @Composable
 fun PhotosItem(
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     index: Int,
     photo: Photo,
     visibleViewPhotosButton: Boolean,
@@ -131,6 +133,7 @@ fun PhotosItem(
             )
             UserContainer(
                 modifier = Modifier,
+                snackbarHostState = snackbarHostState,
                 user = photo.user,
                 profileSize = 36.dp,
                 firstTextColor = Color.White,

@@ -10,25 +10,32 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.ExperimentalComposeUiApi
+import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
+import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Stable
 class UserInfoState(
+    val baseUiState: BaseUiState,
     val openBottomSheetState: MutableState<Boolean>,
     val scope: CoroutineScope,
     val bottomSheetState: SheetState,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun rememberUserInfoState(
+    baseUiState: BaseUiState = rememberBaseUiState(),
     openBottomSheetState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     skipPartiallyExpanded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     scope: CoroutineScope = rememberCoroutineScope(),
     bottomSheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false),
-): UserInfoState = remember(openBottomSheetState, skipPartiallyExpanded, scope, bottomSheetState) {
+): UserInfoState = remember(
+    baseUiState, openBottomSheetState, skipPartiallyExpanded, scope, bottomSheetState) {
     UserInfoState(
+        baseUiState = baseUiState,
         openBottomSheetState = openBottomSheetState,
         scope = scope,
         bottomSheetState = bottomSheetState

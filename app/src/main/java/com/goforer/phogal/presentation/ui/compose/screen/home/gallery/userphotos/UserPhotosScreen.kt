@@ -84,6 +84,7 @@ fun UserPhotosScreen(
         }, content = { paddingValues ->
             UserPhotosContent(
                 modifier = modifier,
+                snackbarHostState = snackbarHostState,
                 contentPadding = paddingValues,
                 name = name,
                 userPhotosViewModel = userPhotosViewModel,

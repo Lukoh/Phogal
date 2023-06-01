@@ -19,6 +19,7 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,6 +53,7 @@ import timber.log.Timber
 @Composable
 fun SearchPhotosSection(
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     state: SearchPhotosSectionState = rememberSearchPhotosSectionState(),
     onItemClicked: (item: Photo, index: Int) -> Unit,
     onRefresh: () -> Unit,
@@ -131,6 +133,7 @@ fun SearchPhotosSection(
                                     state.visibleUpButtonState.value = visibleUpButton(index)
                                     PhotosItem(
                                         modifier = modifier,
+                                        snackbarHostState = snackbarHostState,
                                         index = index,
                                         photo = photos[index]!!,
                                         visibleViewPhotosButton = true,

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,7 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun UserPhotosContent(
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     name: String,
     userPhotosViewModel: UserPhotosViewModel = hiltViewModel(),
@@ -56,6 +58,7 @@ fun UserPhotosContent(
                 photosUiState = state.photosUiState,
                 refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
             ),
+            snackbarHostState = snackbarHostState,
             onItemClicked = { photo, _ ->
                 state.enabledLoadPhotos.value = false
                 onItemClicked(photo.id)

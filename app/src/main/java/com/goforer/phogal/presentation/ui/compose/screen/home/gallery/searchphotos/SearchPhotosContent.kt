@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -44,6 +45,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 @Composable
 fun SearchPhotosContent(
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     galleryViewModel: GalleryViewModel = hiltViewModel(),
     state: SearchPhotosContentState = rememberSearchPhotosContentState(
@@ -91,6 +93,7 @@ fun SearchPhotosContent(
                         photosUiState = state.photosUiState,
                         refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
                     ),
+                    snackbarHostState = snackbarHostState,
                     onItemClicked = { photo, _ ->
                         onItemClicked(photo.id)
                     },

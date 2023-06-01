@@ -59,4 +59,5 @@
     <string name="user_info_twitter_name">Twitter - Name :</string>
     <string name="user_info_instagram_name">Instagram - Name :</string>
     <string name="user_info_portfolio">%s Portfolio</string>
+    <string name="user_info_has_no_portfolio">has no portfolio</string>
 </resources>

@@ -23,6 +23,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,6 +53,7 @@ import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
+import com.goforer.phogal.data.model.remote.response.gallery.photo.Exif
 import com.goforer.phogal.data.model.remote.response.gallery.photo.Picture
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Resource
@@ -73,6 +75,7 @@ import com.google.accompanist.placeholder.material.shimmer
 @Composable
 fun PictureContent(
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     id : String,
     visibleViewPhotosButton: Boolean,
@@ -83,7 +86,6 @@ fun PictureContent(
 
     val pictureUiState = pictureViewModel.pictureUiState.collectAsStateWithLifecycle()
 
-    pictureViewModel.trigger(2, Params(id))
     if (pictureUiState.value is Resource) {
         val resource = pictureUiState.value as Resource
         when(resource.status) {
@@ -149,6 +151,7 @@ fun PictureContent(
                             } else {
                                 UserContainer(
                                     modifier = Modifier,
+                                    snackbarHostState = snackbarHostState,
                                     user = picture.user,
                                     profileSize = 48.dp,
                                     firstTextColor = ColorSystemGray1,
@@ -182,44 +185,7 @@ fun PictureContent(
                                     colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(transition) })
                                 )
                                 Spacer(modifier = Modifier.height(12.dp))
-                                Row(
-                                    horizontalArrangement = Arrangement.Center,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = "${picture.likes}${" "}${stringResource(id = R.string.picture_likes)}",
-                                        modifier = Modifier.padding(8.dp, 4.dp),
-                                        color = Black,
-                                        fontFamily = FontFamily.SansSerif,
-                                        fontWeight = FontWeight.SemiBold,
-                                        fontSize = 16.sp,
-                                        fontStyle = FontStyle.Normal,
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                    Spacer(modifier = Modifier.width(2.dp))
-                                    Text(
-                                        text = "${picture.downloads}${" "}${stringResource(id = R.string.picture_downloads)}",
-                                        modifier = Modifier.padding(8.dp, 4.dp),
-                                        color = Black,
-                                        fontFamily = FontFamily.SansSerif,
-                                        fontWeight = FontWeight.Medium,
-                                        fontSize = 16.sp,
-                                        fontStyle = FontStyle.Normal,
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                    Spacer(modifier = Modifier.width(2.dp))
-                                    Text(
-                                        text = "${picture.views}${" "}${stringResource(id = R.string.picture_views)}",
-                                        modifier = Modifier.padding(8.dp, 4.dp),
-                                        color = Black,
-                                        fontFamily = FontFamily.SansSerif,
-                                        fontWeight = FontWeight.Medium,
-                                        fontSize = 16.sp,
-                                        fontStyle = FontStyle.Normal,
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                }
-
+                                BehaviorItem(picture.likes, picture.downloads, picture.views)
                                 Spacer(modifier = Modifier.height(16.dp))
                                 Text(
                                     text = picture.description ?: picture.alt_description ?: stringResource(id = R.string.picture_no_description),
@@ -233,94 +199,15 @@ fun PictureContent(
                                 )
                                 Spacer(modifier = Modifier.height(24.dp))
                                 picture.location?.let {
-                                    Row(
-                                        horizontalArrangement = Arrangement.Center,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.ic_location),
-                                            contentDescription = "Location",
-                                            modifier = Modifier
-                                                .size(22.dp)
-                                                .padding(horizontal = 4.dp)
-                                        )
-                                        Spacer(modifier = Modifier.width(4.dp))
-                                        Text(
-                                            text = it.name ?: stringResource(id = R.string.picture_no_location),
-                                            color = ColorBlackLight,
-                                            fontFamily = FontFamily.SansSerif,
-                                            fontWeight = FontWeight.Normal,
-                                            fontSize = 14.sp,
-                                            fontStyle = FontStyle.Normal,
-                                            style = MaterialTheme.typography.titleMedium
-                                        )
-                                    }
-
+                                    LocationItem(it.name)
                                     Spacer(modifier = Modifier.height(16.dp))
                                 }
 
-                                Row(
-                                    horizontalArrangement = Arrangement.Center,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_date),
-                                        contentDescription = "Date",
-                                        modifier = Modifier
-                                            .size(22.dp)
-                                            .padding(horizontal = 4.dp)
-                                    )
-                                    Spacer(modifier = Modifier.width(4.dp))
-                                    Text(
-                                        text = "${picture.created_at}${" "}${stringResource(id = R.string.picture_posted)}",
-                                        color = ColorBlackLight,
-                                        fontFamily = FontFamily.SansSerif,
-                                        fontWeight = FontWeight.Normal,
-                                        fontSize = 14.sp,
-                                        fontStyle = FontStyle.Normal,
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                }
-
+                                DateItem(picture.created_at)
                                 Spacer(modifier = Modifier.height(16.dp))
 
                                 picture.exif?.let { exif ->
-                                    Row(
-                                        horizontalArrangement = Arrangement.Center,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.ic_camera),
-                                            contentDescription = "Exif",
-                                            modifier = Modifier
-                                                .size(22.dp)
-                                                .padding(horizontal = 4.dp)
-                                        )
-                                        Spacer(modifier = Modifier.width(4.dp))
-                                        Text(
-                                            text = exif.name ?: stringResource(id = R.string.picture_no_camera_name),
-                                            color = ColorBlackLight,
-                                            fontFamily = FontFamily.SansSerif,
-                                            fontWeight = FontWeight.Normal,
-                                            fontSize = 14.sp,
-                                            fontStyle = FontStyle.Normal,
-                                            style = MaterialTheme.typography.titleMedium
-                                        )
-                                    }
-
-                                    exif.name?.let {
-                                        Spacer(modifier = Modifier.height(4.dp))
-                                        Text(
-                                            text = "${"Lens\n"}${"f/"}${exif.aperture}${"  "}${exif.focal_length}${"mm  "}${exif.exposure_time}${"s  iso "}${exif.iso}",
-                                            modifier = Modifier.padding(horizontal = 28.dp),
-                                            color = ColorBlackLight,
-                                            fontFamily = FontFamily.SansSerif,
-                                            fontWeight = FontWeight.Normal,
-                                            fontSize = 14.sp,
-                                            fontStyle = FontStyle.Normal,
-                                            style = MaterialTheme.typography.titleMedium
-                                        )
-                                    }
+                                    ExifItem(exif)
                                 }
 
                                 Spacer(modifier = Modifier.height(30.dp))
@@ -352,6 +239,139 @@ fun PictureContent(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun BehaviorItem(likes: Int, downloads: Int, views: Int) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "${likes}${" "}${stringResource(id = R.string.picture_likes)}",
+            modifier = Modifier.padding(8.dp, 4.dp),
+            color = Black,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 16.sp,
+            fontStyle = FontStyle.Normal,
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(modifier = Modifier.width(2.dp))
+        Text(
+            text = "${downloads}${" "}${stringResource(id = R.string.picture_downloads)}",
+            modifier = Modifier.padding(8.dp, 4.dp),
+            color = Black,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
+            fontStyle = FontStyle.Normal,
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(modifier = Modifier.width(2.dp))
+        Text(
+            text = "${views}${" "}${stringResource(id = R.string.picture_views)}",
+            modifier = Modifier.padding(8.dp, 4.dp),
+            color = Black,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
+            fontStyle = FontStyle.Normal,
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+}
+
+@Composable
+fun LocationItem(location: String?) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_location),
+            contentDescription = "Location",
+            modifier = Modifier
+                .size(22.dp)
+                .padding(horizontal = 4.dp)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = location ?: stringResource(id = R.string.picture_no_location),
+            color = ColorBlackLight,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            fontStyle = FontStyle.Normal,
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+}
+
+@Composable
+fun DateItem(createdAt: String) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_date),
+            contentDescription = "Date",
+            modifier = Modifier
+                .size(22.dp)
+                .padding(horizontal = 4.dp)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = "${createdAt}${" "}${stringResource(id = R.string.picture_posted)}",
+            color = ColorBlackLight,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            fontStyle = FontStyle.Normal,
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+}
+
+@Composable
+fun ExifItem(exif: Exif) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_camera),
+            contentDescription = "Exif",
+            modifier = Modifier
+                .size(22.dp)
+                .padding(horizontal = 4.dp)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = exif.name ?: stringResource(id = R.string.picture_no_camera_name),
+            color = ColorBlackLight,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            fontStyle = FontStyle.Normal,
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+
+    exif.name?.let {
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "${"Lens\n"}${"f/"}${exif.aperture}${"  "}${exif.focal_length}${"mm  "}${exif.exposure_time}${"s  iso "}${exif.iso}",
+            modifier = Modifier.padding(horizontal = 28.dp),
+            color = ColorBlackLight,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            fontStyle = FontStyle.Normal,
+            style = MaterialTheme.typography.titleMedium
+        )
     }
 }
 

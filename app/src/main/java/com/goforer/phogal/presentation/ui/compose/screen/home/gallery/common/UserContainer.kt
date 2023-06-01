@@ -28,6 +28,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,8 +39,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -55,6 +56,7 @@ import com.goforer.base.designsystem.component.IconButton
 import com.goforer.base.designsystem.component.IconContainer
 import com.goforer.base.designsystem.component.ImageCrossFade
 import com.goforer.base.designsystem.component.loadImagePainter
+import com.goforer.base.extension.isNull
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserInfoState
@@ -70,6 +72,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun UserContainer(
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     user: User,
     profileSize: Dp,
     firstTextColor: Color,
@@ -197,6 +200,7 @@ fun UserContainer(
     if (showUserInfoBottomSheet) {
         UserInfoBottomSheet(
             userInfoState = rememberUserInfoState(),
+            snackbarHostState = snackbarHostState,
             user = user,
             onDismissedRequest = {
                 showUserInfoBottomSheet = false
@@ -209,6 +213,7 @@ fun UserContainer(
 @Composable
 fun UserInfoBottomSheet(
     userInfoState: UserInfoState = rememberUserInfoState(),
+    snackbarHostState: SnackbarHostState,
     user: User,
     onDismissedRequest: () -> Unit,
 ) {
@@ -230,250 +235,42 @@ fun UserInfoBottomSheet(
             modifier = Modifier.wrapContentHeight(),
             horizontalAlignment = Alignment.Start,
         ) {
-            val context = LocalContext.current
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .padding(start = 8.dp, end = 8.dp)
-                    .background(Color.Transparent)
-                    .wrapContentHeight(Alignment.CenterVertically)
-                    .fillMaxWidth()
-                    .heightIn(68.dp, 114.dp)
-                    .clickable {
-
-                    },
-            ) {
-                IconContainer(64.dp) {
-                    Box {
-                        val painter = loadImagePainter(
-                            data = user.profile_image.small,
-                            size = Size.ORIGINAL
-                        )
-
-                        ImageCrossFade(painter = painter, durationMillis = null)
-                        Image(
-                            painter = painter,
-                            contentDescription = "Profile",
-                            modifier = Modifier
-                                .padding(1.dp)
-                                .fillMaxSize()
-                                .clip(CircleShape)
-                                .border(0.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
-                                .clickable {},
-                            Alignment.CenterStart,
-                            contentScale = ContentScale.Crop
-                        )
-
-                        if (painter.state is AsyncImagePainter.State.Loading) {
-                            val preloadPainter = loadImagePainter(
-                                data = R.drawable.ic_profile_logo,
-                                size = Size.ORIGINAL
-                            )
-
-                            Image(
-                                painter = preloadPainter,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .align(Alignment.Center),
-                            )
-                        }
-                    }
-                }
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = user.name,
-                    color = DarkGreenGray10,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 17.sp,
-                    fontStyle = FontStyle.Normal,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
+            ProfileItem(user.profile_image.medium, user.name)
             Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_bio),
-                    contentDescription = "Location",
-                    modifier = Modifier
-                        .size(22.dp)
-                        .padding(horizontal = 4.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = user.bio ?: stringResource(id = R.string.user_info_no_sex_info),
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    color = DarkGreenGray10,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    fontStyle = FontStyle.Normal,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
+            UserInfoItem(
+                text = user.bio ?: stringResource(id = R.string.user_info_no_sex_info),
+                painter = painterResource(id = R.drawable.ic_bio)
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_location),
-                    contentDescription = "Location",
-                    modifier = Modifier
-                        .size(22.dp)
-                        .padding(horizontal = 4.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
-                    color = DarkGreenGray10,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    fontStyle = FontStyle.Normal,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
+            UserInfoItem(
+                text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
+                painter = painterResource(id = R.drawable.ic_location)
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_information),
-                    contentDescription = "Location",
-                    modifier = Modifier
-                        .size(22.dp)
-                        .padding(horizontal = 4.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    "${stringResource(id = R.string.user_info_instagram_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_instagram_name)}",
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    color = DarkGreenGray10,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    fontStyle = FontStyle.Normal,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
+            UserInfoItem(
+                text = "${stringResource(id = R.string.user_info_instagram_name)}${" "}${user.instagram_username ?: stringResource(id = R.string.user_info_no_instagram_name)}",
+                painter = painterResource(id = R.drawable.ic_instagram)
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_twitter),
-                    contentDescription = "Location",
-                    modifier = Modifier
-                        .size(22.dp)
-                        .padding(horizontal = 4.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "${stringResource(id = R.string.user_info_twitter_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_twitter_name)}",
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    color = DarkGreenGray10,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    fontStyle = FontStyle.Normal,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
+            UserInfoItem(
+                text = "${stringResource(id = R.string.user_info_twitter_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_twitter_name)}",
+                painter = painterResource(id = R.drawable.ic_twitter)
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_follower),
-                    contentDescription = "Follower",
-                    modifier = Modifier
-                        .size(22.dp)
-                        .padding(horizontal = 4.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = user.links.followers ?: "",
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    color = DarkGreenGray10,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    fontStyle = FontStyle.Normal,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
+            UserInfoItem(
+                text = user.links.followers ?: "",
+                painter = painterResource(id = R.drawable.ic_follower)
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_following),
-                    contentDescription = "Following",
-                    modifier = Modifier
-                        .size(22.dp)
-                        .padding(horizontal = 4.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = user.links.following ?: "",
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    color = DarkGreenGray10,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    fontStyle = FontStyle.Normal,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
+            UserInfoItem(
+                text = user.links.following ?: "",
+                painter = painterResource(id = R.drawable.ic_following)
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_date),
-                    contentDescription = "Location",
-                    modifier = Modifier
-                        .size(22.dp)
-                        .padding(horizontal = 4.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    color = DarkGreenGray10,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    fontStyle = FontStyle.Normal,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
+            UserInfoItem(
+                text = "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
+                painter = painterResource(id = R.drawable.ic_date)
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -499,14 +296,26 @@ fun UserInfoBottomSheet(
                         )
                     },
                     text = {
+                        val phrase = stringResource(id = R.string.user_info_has_no_portfolio)
+
                         Text(
                             text = stringResource(id = R.string.user_info_portfolio, user.first_name),
                             modifier = Modifier
                                 .padding(horizontal = 8.dp)
                                 .clickable {
-                                    user.portfolio_url?.let {
-                                        Caller.openBrowser(context, it)
-                                    }
+                                    user.portfolio_url.isNull({
+                                        userInfoState.baseUiState.scope.launch {
+                                            snackbarHostState.showSnackbar(
+                                                "${user.first_name}${" "}${phrase}"
+                                            )
+                                        }
+                                    }, { url ->
+                                        userInfoState.baseUiState.context?.let { context ->
+                                            Caller.openBrowser(
+                                                context, url
+                                            )
+                                        }
+                                    })
                                 },
                             color = DarkGreenGray99,
                             fontFamily = FontFamily.SansSerif,
@@ -522,6 +331,99 @@ fun UserInfoBottomSheet(
             Spacer(modifier = Modifier.height(36.dp))
         }
     }
+}
+
+@Composable
+fun ProfileItem(image: String, name: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(start = 8.dp, end = 8.dp)
+            .background(Color.Transparent)
+            .wrapContentHeight(Alignment.CenterVertically)
+            .fillMaxWidth()
+            .heightIn(68.dp, 114.dp)
+            .clickable {
+
+            },
+    ) {
+        IconContainer(64.dp) {
+            Box {
+                val painter = loadImagePainter(
+                    data = image,
+                    size = Size.ORIGINAL
+                )
+
+                ImageCrossFade(painter = painter, durationMillis = null)
+                Image(
+                    painter = painter,
+                    contentDescription = "Profile",
+                    modifier = Modifier
+                        .padding(1.dp)
+                        .fillMaxSize()
+                        .clip(CircleShape)
+                        .border(0.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
+                        .clickable {},
+                    Alignment.CenterStart,
+                    contentScale = ContentScale.Crop
+                )
+
+                if (painter.state is AsyncImagePainter.State.Loading) {
+                    val preloadPainter = loadImagePainter(
+                        data = R.drawable.ic_profile_logo,
+                        size = Size.ORIGINAL
+                    )
+
+                    Image(
+                        painter = preloadPainter,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(36.dp)
+                            .align(Alignment.Center),
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text = name,
+            color = DarkGreenGray10,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Bold,
+            fontSize = 17.sp,
+            fontStyle = FontStyle.Normal,
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+}
+
+@Composable
+fun UserInfoItem(text: String, painter: Painter) {
+    Row(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painter,
+            contentDescription = "UserInfoItem",
+            modifier = Modifier
+                .size(22.dp)
+                .padding(horizontal = 4.dp)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = text,
+            modifier = Modifier.padding(horizontal = 8.dp),
+            color = DarkGreenGray10,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp,
+            fontStyle = FontStyle.Normal,
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+
 }
 
 @Preview(name = "Light Mode")
