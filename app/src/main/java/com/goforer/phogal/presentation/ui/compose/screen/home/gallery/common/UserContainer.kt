@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -57,8 +59,10 @@ import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserInfoState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserInfoState
+import com.goforer.phogal.presentation.ui.Caller
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.goforer.phogal.presentation.ui.theme.DarkGreenGray10
+import com.goforer.phogal.presentation.ui.theme.DarkGreenGray99
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import kotlinx.coroutines.launch
 
@@ -226,6 +230,8 @@ fun UserInfoBottomSheet(
             modifier = Modifier.wrapContentHeight(),
             horizontalAlignment = Alignment.Start,
         ) {
+            val context = LocalContext.current
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -405,7 +411,7 @@ fun UserInfoBottomSheet(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = user.links.followers,
+                    text = user.links.followers ?: "",
                     modifier = Modifier.padding(horizontal = 8.dp),
                     color = DarkGreenGray10,
                     fontFamily = FontFamily.SansSerif,
@@ -431,33 +437,7 @@ fun UserInfoBottomSheet(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = user.links.following,
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    color = DarkGreenGray10,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    fontStyle = FontStyle.Normal,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_portfolio),
-                    contentDescription = "Following",
-                    modifier = Modifier
-                        .size(22.dp)
-                        .padding(horizontal = 4.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = user.portfolio_url ?: stringResource(id = R.string.user_info_no_portfolio),
+                    text = user.links.following ?: "",
                     modifier = Modifier.padding(horizontal = 8.dp),
                     color = DarkGreenGray10,
                     fontFamily = FontFamily.SansSerif,
@@ -491,6 +471,51 @@ fun UserInfoBottomSheet(
                     fontSize = 14.sp,
                     fontStyle = FontStyle.Normal,
                     style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_portfolio),
+                    contentDescription = "Following",
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(horizontal = 4.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                IconButton(
+                    32.dp,
+                    modifier = Modifier.padding(horizontal = 2.dp),
+                    onClick = {},
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.OpenInBrowser,
+                            contentDescription = null,
+                        )
+                    },
+                    text = {
+                        Text(
+                            text = stringResource(id = R.string.user_info_portfolio, user.first_name),
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .clickable {
+                                    user.portfolio_url?.let {
+                                        Caller.openBrowser(context, it)
+                                    }
+                                },
+                            color = DarkGreenGray99,
+                            fontFamily = FontFamily.SansSerif,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 14.sp,
+                            fontStyle = FontStyle.Normal,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
                 )
             }
 
