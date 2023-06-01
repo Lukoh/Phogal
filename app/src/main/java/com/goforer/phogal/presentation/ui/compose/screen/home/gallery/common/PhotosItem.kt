@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,12 +47,12 @@ import java.lang.Float.min
 @Composable
 fun PhotosItem(
     modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState,
     index: Int,
     photo: Photo,
     visibleViewPhotosButton: Boolean,
     onItemClicked: (item: Photo, index: Int) -> Unit,
-    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
+    onShowSnackBar: (text: String) -> Unit
 ) {
     var isClicked by rememberSaveable { mutableStateOf(false) }
     val verticalPadding = if (index == 0)
@@ -133,14 +132,14 @@ fun PhotosItem(
             )
             UserContainer(
                 modifier = Modifier,
-                snackbarHostState = snackbarHostState,
                 user = photo.user,
                 profileSize = 36.dp,
                 firstTextColor = Color.White,
                 secondTextColor = Color.White,
                 backgroundColor = DarkGreen60,
                 visibleViewPhotosButton = visibleViewPhotosButton,
-                onViewPhotos = onViewPhotos
+                onViewPhotos = onViewPhotos,
+                onShowSnackBar = onShowSnackBar
             )
         }
     }

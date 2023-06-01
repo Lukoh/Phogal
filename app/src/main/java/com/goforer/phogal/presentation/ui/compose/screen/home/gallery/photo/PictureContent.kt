@@ -23,7 +23,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -75,12 +74,12 @@ import com.google.accompanist.placeholder.material.shimmer
 @Composable
 fun PictureContent(
     modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     id : String,
     visibleViewPhotosButton: Boolean,
     pictureViewModel: PictureViewModel = hiltViewModel(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
+    onShowSnackBar: (text: String) -> Unit
 ) {
     pictureViewModel.trigger(2, Params(id))
 
@@ -151,14 +150,14 @@ fun PictureContent(
                             } else {
                                 UserContainer(
                                     modifier = Modifier,
-                                    snackbarHostState = snackbarHostState,
                                     user = picture.user,
                                     profileSize = 48.dp,
                                     firstTextColor = ColorSystemGray1,
                                     secondTextColor = ColorSystemGray1,
                                     backgroundColor = ColorSnowWhite,
                                     visibleViewPhotosButton = visibleViewPhotosButton,
-                                    onViewPhotos = onViewPhotos
+                                    onViewPhotos = onViewPhotos,
+                                    onShowSnackBar = onShowSnackBar
                                 )
 
                                 val imageModifier = Modifier

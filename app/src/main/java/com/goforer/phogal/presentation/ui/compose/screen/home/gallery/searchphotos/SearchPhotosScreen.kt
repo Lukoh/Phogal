@@ -16,6 +16,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -28,14 +29,23 @@ import androidx.compose.ui.unit.sp
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.SearchPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SearchPhotosScreen(
     modifier: Modifier = Modifier,
     galleryViewModel: GalleryViewModel,
+    state: SearchPhotosContentState = rememberSearchPhotosContentState(
+        baseUiState = rememberBaseUiState(),
+        photosUiState = galleryViewModel.photosUiState,
+        isRefreshing = galleryViewModel.isRefreshing
+    ),
     onItemClicked: (id: String) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit
 ) {
@@ -81,11 +91,16 @@ fun SearchPhotosScreen(
         }, content = { paddingValues ->
             SearchPhotosContent(
                 modifier = modifier,
-                snackbarHostState = snackbarHostState,
                 galleryViewModel = galleryViewModel,
+                state = state,
                 contentPadding = paddingValues,
                 onItemClicked = onItemClicked,
-                onViewPhotos = onViewPhotos
+                onViewPhotos = onViewPhotos,
+                onShowSnackBar = {
+                    state.baseUiState.scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
+                }
             )
         }
     )

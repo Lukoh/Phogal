@@ -14,6 +14,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -25,12 +26,16 @@ import androidx.compose.ui.unit.sp
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.PictureViewModel
+import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
+import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun PictureScreen(
     modifier: Modifier = Modifier,
     pictureViewModel: PictureViewModel,
+    baseUiState: BaseUiState = rememberBaseUiState(),
     id: String,
     visibleViewPhotosButton: Boolean,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
@@ -80,12 +85,16 @@ fun PictureScreen(
         }, content = { paddingValues ->
             PictureContent(
                 modifier = modifier,
-                snackbarHostState = snackbarHostState,
                 contentPadding = paddingValues,
                 pictureViewModel = pictureViewModel,
                 id = id,
                 visibleViewPhotosButton = visibleViewPhotosButton,
-                onViewPhotos = onViewPhotos
+                onViewPhotos = onViewPhotos,
+                onShowSnackBar = {
+                    baseUiState.scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
+                }
             )
         }
     )

@@ -29,8 +29,11 @@ import androidx.compose.ui.unit.sp
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.UserPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosContentState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,6 +42,10 @@ fun UserPhotosScreen(
     name: String,
     firstName: String,
     userPhotosViewModel: UserPhotosViewModel,
+    state: UserPhotosContentState = rememberUserPhotosContentState(
+        photosUiState = userPhotosViewModel.photosUiState,
+        isRefreshing = userPhotosViewModel.isRefreshing,
+    ),
     onItemClicked: (id: String) -> Unit,
     onBackPressed: () -> Unit
 ) {
@@ -84,11 +91,16 @@ fun UserPhotosScreen(
         }, content = { paddingValues ->
             UserPhotosContent(
                 modifier = modifier,
-                snackbarHostState = snackbarHostState,
                 contentPadding = paddingValues,
                 name = name,
                 userPhotosViewModel = userPhotosViewModel,
-                onItemClicked = onItemClicked
+                state = state,
+                onItemClicked = onItemClicked,
+                onShowSnackBar = {
+                    state.baseUiState.scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
+                }
             )
         }
     )

@@ -28,7 +28,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -72,7 +71,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun UserContainer(
     modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState,
     user: User,
     profileSize: Dp,
     firstTextColor: Color,
@@ -80,6 +78,7 @@ fun UserContainer(
     backgroundColor: Color,
     visibleViewPhotosButton: Boolean,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
+    onShowSnackBar: (text: String) -> Unit
 ) {
     val lastName = user.last_name ?: stringResource(id = R.string.picture_no_last_name)
     var showUserInfoBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -200,11 +199,11 @@ fun UserContainer(
     if (showUserInfoBottomSheet) {
         UserInfoBottomSheet(
             userInfoState = rememberUserInfoState(),
-            snackbarHostState = snackbarHostState,
             user = user,
             onDismissedRequest = {
                 showUserInfoBottomSheet = false
-            }
+            },
+            onShowSnackBar = onShowSnackBar
         )
     }
 }
@@ -213,9 +212,9 @@ fun UserContainer(
 @Composable
 fun UserInfoBottomSheet(
     userInfoState: UserInfoState = rememberUserInfoState(),
-    snackbarHostState: SnackbarHostState,
     user: User,
     onDismissedRequest: () -> Unit,
+    onShowSnackBar: (text: String) -> Unit
 ) {
     ModalBottomSheet(
         onDismissRequest = {
@@ -305,9 +304,7 @@ fun UserInfoBottomSheet(
                                 .clickable {
                                     user.portfolio_url.isNull({
                                         userInfoState.baseUiState.scope.launch {
-                                            snackbarHostState.showSnackbar(
-                                                "${user.first_name}${" "}${phrase}"
-                                            )
+                                            onShowSnackBar("${user.first_name}${" "}${phrase}")
                                         }
                                     }, { url ->
                                         userInfoState.baseUiState.context?.let { context ->

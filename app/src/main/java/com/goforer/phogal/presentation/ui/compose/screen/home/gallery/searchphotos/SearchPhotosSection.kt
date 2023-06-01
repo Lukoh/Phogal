@@ -19,7 +19,6 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,11 +52,11 @@ import timber.log.Timber
 @Composable
 fun SearchPhotosSection(
     modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState,
     state: SearchPhotosSectionState = rememberSearchPhotosSectionState(),
     onItemClicked: (item: Photo, index: Int) -> Unit,
     onRefresh: () -> Unit,
-    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
+    onShowSnackBar: (text: String) -> Unit
 ) {
     val photos = (state.photosUiState as StateFlow<PagingData<Photo>>).collectAsLazyPagingItems()
     // After recreation, LazyPagingItems first return 0 items, then the cached items.
@@ -133,12 +132,12 @@ fun SearchPhotosSection(
                                     state.visibleUpButtonState.value = visibleUpButton(index)
                                     PhotosItem(
                                         modifier = modifier,
-                                        snackbarHostState = snackbarHostState,
                                         index = index,
                                         photo = photos[index]!!,
                                         visibleViewPhotosButton = true,
                                         onItemClicked = onItemClicked,
-                                        onViewPhotos = onViewPhotos
+                                        onViewPhotos = onViewPhotos,
+                                        onShowSnackBar = onShowSnackBar
                                     )
 
                                     TrackScreenViewEvent(screenName = "SearchPhotosSection")
