@@ -51,4 +51,11 @@
     <string name="user_updated_at">Updated at</string>
     <string name="picture_no_description">No the picture"'"s description</string>
     <string name="picture_no_last_name">No last name</string>
+
+    <string name="user_info_no_sex_info">No information</string>
+    <string name="user_info_no_location_info">No user"'"s location information</string>
+    <string name="user_info_no_instagram_name">No user"'"s Instagram name</string>
+    <string name="user_info_no_twitter_name">No user"'"s Twitter name</string>
+    <string name="user_info_twitter_name">Twitter Name</string>
+    <string name="user_info_instagram_name">Instagram Name</string>
 </resources>

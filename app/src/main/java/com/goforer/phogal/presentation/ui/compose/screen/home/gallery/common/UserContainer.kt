@@ -23,15 +23,22 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Photo
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -48,9 +55,14 @@ import com.goforer.base.designsystem.component.ImageCrossFade
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserInfoState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserInfoState
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
+import com.goforer.phogal.presentation.ui.theme.DarkGreenGray10
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserContainer(
     modifier: Modifier = Modifier,
@@ -63,6 +75,7 @@ fun UserContainer(
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
 ) {
     val lastName = user.last_name ?: stringResource(id = R.string.picture_no_last_name)
+    var showUserInfoBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier.background(backgroundColor),
@@ -76,9 +89,10 @@ fun UserContainer(
                 .wrapContentHeight(Alignment.CenterVertically)
                 .fillMaxWidth()
                 .heightIn(68.dp, 114.dp)
-                .clickable {},
+                .clickable {
+                    showUserInfoBottomSheet = true
+                },
         ) {
-
             IconContainer(profileSize) {
                 Box {
                     val painter = loadImagePainter(
@@ -173,6 +187,236 @@ fun UserContainer(
                     )
                 }
             )
+        }
+    }
+
+    if (showUserInfoBottomSheet) {
+        UserInfoBottomSheet(
+            userInfoState = rememberUserInfoState(),
+            user = user,
+            onDismissedRequest = {
+                showUserInfoBottomSheet = false
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserInfoBottomSheet(
+    userInfoState: UserInfoState = rememberUserInfoState(),
+    user: User,
+    onDismissedRequest: () -> Unit,
+) {
+    ModalBottomSheet(
+        onDismissRequest = {
+            userInfoState.scope.launch {
+                userInfoState.bottomSheetState.hide()
+            }.invokeOnCompletion {
+                if (!userInfoState.bottomSheetState.isVisible) {
+                    userInfoState.openBottomSheetState.value = false
+                }
+            }
+
+            onDismissedRequest()
+        },
+        sheetState = userInfoState.bottomSheetState,
+    ) {
+        Column(
+            modifier = Modifier.wrapContentHeight(),
+            horizontalAlignment = Alignment.Start,
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(start = 4.dp, end = 4.dp)
+                    .background(Color.Transparent)
+                    .wrapContentHeight(Alignment.CenterVertically)
+                    .fillMaxWidth()
+                    .heightIn(68.dp, 114.dp)
+                    .clickable {
+
+                    },
+            ) {
+                IconContainer(64.dp) {
+                    Box {
+                        val painter = loadImagePainter(
+                            data = user.profile_image.small,
+                            size = Size.ORIGINAL
+                        )
+
+                        ImageCrossFade(painter = painter, durationMillis = null)
+                        Image(
+                            painter = painter,
+                            contentDescription = "Profile",
+                            modifier = Modifier
+                                .padding(1.dp)
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                                .border(0.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
+                                .clickable {},
+                            Alignment.CenterStart,
+                            contentScale = ContentScale.Crop
+                        )
+
+                        if (painter.state is AsyncImagePainter.State.Loading) {
+                            val preloadPainter = loadImagePainter(
+                                data = R.drawable.ic_profile_logo,
+                                size = Size.ORIGINAL
+                            )
+
+                            Image(
+                                painter = preloadPainter,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .align(Alignment.Center),
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = user.name,
+                    color = DarkGreenGray10,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 17.sp,
+                    fontStyle = FontStyle.Normal,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_gender),
+                    contentDescription = "Location",
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(horizontal = 4.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = user.bio ?: stringResource(id = R.string.user_info_no_sex_info),
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    color = DarkGreenGray10,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+                    fontStyle = FontStyle.Normal,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_location),
+                    contentDescription = "Location",
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(horizontal = 4.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
+                    color = DarkGreenGray10,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+                    fontStyle = FontStyle.Normal,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_information),
+                    contentDescription = "Location",
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(horizontal = 4.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    "${stringResource(id = R.string.user_info_instagram_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_instagram_name)}",
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    color = DarkGreenGray10,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+                    fontStyle = FontStyle.Normal,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_twitter),
+                    contentDescription = "Location",
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(horizontal = 4.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "${stringResource(id = R.string.user_info_twitter_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_twitter_name)}",
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    color = DarkGreenGray10,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+                    fontStyle = FontStyle.Normal,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_date),
+                    contentDescription = "Location",
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(horizontal = 4.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    color = DarkGreenGray10,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+                    fontStyle = FontStyle.Normal,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.width(36.dp))
         }
     }
 }
