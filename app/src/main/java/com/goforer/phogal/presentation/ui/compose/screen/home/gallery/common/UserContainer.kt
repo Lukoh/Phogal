@@ -294,7 +294,7 @@ fun UserInfoBottomSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_gender),
+                    painter = painterResource(id = R.drawable.ic_bio),
                     contentDescription = "Location",
                     modifier = Modifier
                         .size(22.dp)
@@ -326,7 +326,7 @@ fun UserInfoBottomSheet(
                         .size(22.dp)
                         .padding(horizontal = 4.dp)
                 )
-                Spacer(modifier = Modifier.width(9.dp))
+                Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
                     color = DarkGreenGray10,
