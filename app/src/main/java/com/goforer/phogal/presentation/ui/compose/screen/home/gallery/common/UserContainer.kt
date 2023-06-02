@@ -46,7 +46,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
@@ -58,7 +57,9 @@ import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.base.extension.isNull
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserInfoState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserInfoState
 import com.goforer.phogal.presentation.ui.Caller
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
@@ -72,11 +73,7 @@ import kotlinx.coroutines.launch
 fun UserContainer(
     modifier: Modifier = Modifier,
     user: User,
-    profileSize: Dp,
-    firstTextColor: Color,
-    secondTextColor: Color,
-    backgroundColor: Color,
-    visibleViewPhotosButton: Boolean,
+    state: UserContainerState = rememberUserContainerState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit
 ) {
@@ -84,7 +81,7 @@ fun UserContainer(
     var showUserInfoBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     Column(
-        modifier = modifier.background(backgroundColor),
+        modifier = modifier.background(state.colors[2]),
         verticalArrangement = Arrangement.Top
     ) {
         Row(
@@ -99,7 +96,7 @@ fun UserContainer(
                     showUserInfoBottomSheet = true
                 },
         ) {
-            IconContainer(profileSize) {
+            IconContainer(state.profileSize.value.dp) {
                 Box {
                     val painter = loadImagePainter(
                         data = user.profile_image.small,
@@ -116,7 +113,7 @@ fun UserContainer(
                             .clip(CircleShape)
                             .border(0.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
                             .clickable {
-                                if (visibleViewPhotosButton)
+                                if (state.visibleViewPhotosButton.value)
                                     onViewPhotos(
                                         user.username,
                                         user.first_name,
@@ -151,7 +148,7 @@ fun UserContainer(
             ) {
                 Text(
                     text = user.name,
-                    color = firstTextColor,
+                    color = state.colors[0],
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,
@@ -167,13 +164,13 @@ fun UserContainer(
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 12.sp,
                     fontStyle = FontStyle.Normal,
-                    color = secondTextColor,
+                    color = state.colors[1],
                     style = MaterialTheme.typography.titleSmall
                 )
             }
         }
 
-        if (visibleViewPhotosButton) {
+        if (state.visibleViewPhotosButton.value) {
             IconButton(
                 32.dp,
                 modifier = Modifier.padding(start = 56.dp, top = 0.dp, bottom = 2.dp),

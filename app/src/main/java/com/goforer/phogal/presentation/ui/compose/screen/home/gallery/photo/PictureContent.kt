@@ -26,6 +26,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -59,6 +62,7 @@ import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.PictureViewModel
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.UserContainer
 import com.goforer.phogal.presentation.ui.theme.Black
@@ -151,11 +155,11 @@ fun PictureContent(
                                 UserContainer(
                                     modifier = Modifier,
                                     user = picture.user,
-                                    profileSize = 48.dp,
-                                    firstTextColor = ColorSystemGray1,
-                                    secondTextColor = ColorSystemGray1,
-                                    backgroundColor = ColorSnowWhite,
-                                    visibleViewPhotosButton = visibleViewPhotosButton,
+                                    state = rememberUserContainerState(
+                                        profileSize = rememberSaveable { mutableDoubleStateOf(48.0) },
+                                        colors = rememberSaveable { listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite) },
+                                        visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) }
+                                    ),
                                     onViewPhotos = onViewPhotos,
                                     onShowSnackBar = onShowSnackBar
                                 )

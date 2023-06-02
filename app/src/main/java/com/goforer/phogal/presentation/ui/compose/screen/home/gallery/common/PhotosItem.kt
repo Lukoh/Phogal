@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -37,6 +38,7 @@ import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.google.accompanist.placeholder.PlaceholderHighlight
@@ -133,11 +135,11 @@ fun PhotosItem(
             UserContainer(
                 modifier = Modifier,
                 user = photo.user,
-                profileSize = 36.dp,
-                firstTextColor = Color.White,
-                secondTextColor = Color.White,
-                backgroundColor = DarkGreen60,
-                visibleViewPhotosButton = visibleViewPhotosButton,
+                state = rememberUserContainerState(
+                    profileSize = rememberSaveable { mutableDoubleStateOf(36.0) },
+                    colors = rememberSaveable { listOf(Color.White, Color.White, DarkGreen60) },
+                    visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) }
+                ),
                 onViewPhotos = onViewPhotos,
                 onShowSnackBar = onShowSnackBar
             )
