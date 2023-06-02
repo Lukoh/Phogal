@@ -31,7 +31,7 @@ fun rememberUserInfoState(
     openBottomSheetState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     skipPartiallyExpanded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     scope: CoroutineScope = rememberCoroutineScope(),
-    bottomSheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false),
+    bottomSheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
 ): UserInfoState = remember(
     baseUiState, openBottomSheetState, skipPartiallyExpanded, scope, bottomSheetState) {
     UserInfoState(
