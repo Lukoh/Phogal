@@ -139,7 +139,6 @@ fun SearchPhotosSection(
                                         onViewPhotos = onViewPhotos,
                                         onShowSnackBar = onShowSnackBar
                                     )
-
                                     TrackScreenViewEvent(screenName = "SearchPhotosSection")
                                 }
                             }

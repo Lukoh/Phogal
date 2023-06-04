@@ -1,7 +1,14 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photo
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,6 +44,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -180,41 +188,56 @@ fun PictureContent(
                                     .graphicsLayer { rotationX = (1f - transition) * 5f }
                                     .alpha(transition / .2f)
 
-                                Image(
-                                    painter = painter,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = imageModifier,
-                                    colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(transition) })
-                                )
-                                Spacer(modifier = Modifier.height(12.dp))
-                                BehaviorItem(picture.likes, picture.downloads, picture.views)
-                                Spacer(modifier = Modifier.height(16.dp))
-                                Text(
-                                    text = picture.description ?: picture.alt_description ?: stringResource(id = R.string.picture_no_description),
-                                    modifier = Modifier.padding(8.dp, 4.dp),
-                                    color = ColorText4,
-                                    fontFamily = FontFamily.SansSerif,
-                                    fontWeight = FontWeight.W400,
-                                    fontSize = 18.sp,
-                                    fontStyle = FontStyle.Normal,
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                                Spacer(modifier = Modifier.height(24.dp))
-                                picture.location?.let {
-                                    LocationItem(it.name)
+                                    AnimatedVisibility(
+                                        visible = true,
+                                        modifier = modifier,
+                                        enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                                                fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+                                        exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                                                fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+                                    ) {
+                                        Image(
+                                            painter = painter,
+                                            contentDescription = null,
+                                            contentScale = ContentScale.Crop,
+                                            modifier = imageModifier,
+                                            colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
+                                                setToSaturation(
+                                                    transition
+                                                )
+                                            })
+                                        )
+                                    }
+
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    BehaviorItem(picture.likes, picture.downloads, picture.views)
                                     Spacer(modifier = Modifier.height(16.dp))
+                                    Text(
+                                        text = picture.description ?: picture.alt_description
+                                        ?: stringResource(id = R.string.picture_no_description),
+                                        modifier = Modifier.padding(8.dp, 4.dp),
+                                        color = ColorText4,
+                                        fontFamily = FontFamily.SansSerif,
+                                        fontWeight = FontWeight.W400,
+                                        fontSize = 18.sp,
+                                        fontStyle = FontStyle.Normal,
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                    picture.location?.let {
+                                        LocationItem(it.name)
+                                        Spacer(modifier = Modifier.height(16.dp))
+                                    }
+
+                                    DateItem(picture.created_at)
+                                    Spacer(modifier = Modifier.height(16.dp))
+
+                                    picture.exif?.let { exif ->
+                                        ExifItem(exif)
+                                    }
+
+                                    Spacer(modifier = Modifier.height(30.dp))
                                 }
-
-                                DateItem(picture.created_at)
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                                picture.exif?.let { exif ->
-                                    ExifItem(exif)
-                                }
-
-                                Spacer(modifier = Modifier.height(30.dp))
-                            }
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))

@@ -1,7 +1,14 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,6 +36,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
@@ -44,7 +52,6 @@ import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
-import java.lang.Float.min
 
 @Composable
 fun PhotosItem(
@@ -63,86 +70,95 @@ fun PhotosItem(
         4.dp
 
     photo.alreadySearched = true
-    Card(
-        modifier = modifier.padding(0.dp, verticalPadding),
-        colors = CardDefaults.cardColors(
-            contentColor = MaterialTheme.colorScheme.primary,
-            containerColor =
-            if (isClicked)
-                MaterialTheme.colorScheme.primaryContainer
-            else
-                MaterialTheme.colorScheme.surfaceVariant,
-            disabledContentColor = MaterialTheme.colorScheme.surface,
-            disabledContainerColor = MaterialTheme.colorScheme.onSurface
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp,
-            pressedElevation = 2.dp,
-            focusedElevation = 4.dp
-        )
+    AnimatedVisibility(
+        visible = true,
+        modifier = modifier,
+        enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+        exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
     ) {
-        val imageUrl = photo.urls.full
-        val painter = loadImagePainter(
-            data = imageUrl,
-            size = Size(photo.width.div(8), photo.height.div(8))
-        )
-        val transition by animateFloatAsState(
-            targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f
-        )
+        Card(
+            modifier = modifier.padding(0.dp, verticalPadding),
+            colors = CardDefaults.cardColors(
+                contentColor = MaterialTheme.colorScheme.primary,
+                containerColor =
+                if (isClicked)
+                    MaterialTheme.colorScheme.primaryContainer
+                else
+                    MaterialTheme.colorScheme.surfaceVariant,
+                disabledContentColor = MaterialTheme.colorScheme.surface,
+                disabledContainerColor = MaterialTheme.colorScheme.onSurface
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 8.dp,
+                pressedElevation = 2.dp,
+                focusedElevation = 4.dp
+            )
+        ) {
+            val imageUrl = photo.urls.full
+            val painter = loadImagePainter(
+                data = imageUrl,
+                size = Size(photo.width.div(8), photo.height.div(8))
+            )
+            val transition by animateFloatAsState(
+                targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f
+            )
 
-        if (painter.state is AsyncImagePainter.State.Loading) {
-            val holderModifier = Modifier
-                .fillMaxWidth()
-                .height(256.dp)
-                .align(Alignment.CenterHorizontally)
-                .background(ColorSystemGray2)
-                .placeholder(
-                    visible = true,
-                    highlight = PlaceholderHighlight.shimmer(),
+            if (painter.state is AsyncImagePainter.State.Loading) {
+                val holderModifier = Modifier
+                    .fillMaxWidth()
+                    .height(256.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .background(ColorSystemGray2)
+                    .placeholder(
+                        visible = true,
+                        highlight = PlaceholderHighlight.shimmer(),
+                    )
+
+                Text(
+                    modifier = holderModifier,
+                    text = "",
+                    textAlign = TextAlign.Center
                 )
+            } else {
+                val imageModifier = Modifier
+                    .then(
+                        ((painter.state as? AsyncImagePainter.State.Success)
+                            ?.painter
+                            ?.intrinsicSize
+                            ?.let { intrinsicSize ->
+                                Modifier.aspectRatio(intrinsicSize.width / intrinsicSize.height)
+                            } ?: Modifier)
+                    )
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable {
+                        isClicked = true
+                        onItemClicked.invoke(photo, index)
+                    }
+                    .scale(.8f + (.2f * transition))
+                    .graphicsLayer { rotationX = (1f - transition) * 5f }
+                    .alpha(transition / .2f)
 
-            Text(
-                modifier = holderModifier,
-                text = "",
-                textAlign = TextAlign.Center
-            )
-        } else {
-            val imageModifier = Modifier
-                .then(
-                    ((painter.state as? AsyncImagePainter.State.Success)
-                        ?.painter
-                        ?.intrinsicSize
-                        ?.let { intrinsicSize ->
-                            Modifier.aspectRatio(intrinsicSize.width / intrinsicSize.height)
-                        } ?: Modifier)
+                Image(
+                    painter = painter,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = imageModifier,
+                    colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(transition) })
                 )
-                .clip(RoundedCornerShape(4.dp))
-                .clickable {
-                    isClicked = true
-                    onItemClicked.invoke(photo, index)
-                }
-                .scale(.8f + (.2f * transition))
-                .graphicsLayer { rotationX = (1f - transition) * 5f }
-                .alpha(min(1f, transition / .2f))
-
-            Image(
-                painter = painter,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = imageModifier,
-                colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(transition) })
-            )
-            UserContainer(
-                modifier = Modifier,
-                user = photo.user,
-                state = rememberUserContainerState(
-                    profileSize = rememberSaveable { mutableDoubleStateOf(36.0) },
-                    colors = rememberSaveable { listOf(Color.White, Color.White, DarkGreen60) },
-                    visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) }
-                ),
-                onViewPhotos = onViewPhotos,
-                onShowSnackBar = onShowSnackBar
-            )
+                UserContainer(
+                    modifier = Modifier,
+                    user = photo.user,
+                    state = rememberUserContainerState(
+                        profileSize = rememberSaveable { mutableDoubleStateOf(36.0) },
+                        colors = rememberSaveable { listOf(Color.White, Color.White, DarkGreen60) },
+                        visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) }
+                    ),
+                    onViewPhotos = onViewPhotos,
+                    onShowSnackBar = onShowSnackBar
+                )
+            }
         }
     }
 }
