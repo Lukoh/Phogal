@@ -73,7 +73,7 @@ fun SetProfileItem(
                 ImageCrossFade(painter = painter, durationMillis = null)
                 Image(
                     painter = painter,
-                    contentDescription = "ComposeTest",
+                    contentDescription = "Profile",
                     modifier = Modifier
                         .padding(4.dp)
                         .fillMaxSize()
@@ -133,9 +133,9 @@ fun SetProfileItem(
         Spacer(modifier = Modifier.weight(1F))
         Button(
             modifier = Modifier.padding(horizontal = 24.dp),
-            onClick = { /*TODO*/ }
+            onClick = {}
         ) {
-            Text(text = stringResource(id = R.string.setting_profile_edit),)
+            Text(text = stringResource(id = R.string.setting_profile_edit))
         }
     }
 }
@@ -149,9 +149,20 @@ fun SetProfileItem(
 )
 @Composable
 fun SetProfileItemPreview(modifier: Modifier = Modifier) {
-    val profile = Profile(0,"Lukoh", "남성", true,true, "lukoh.nam@gmail.com","https://avatars.githubusercontent.com/u/18302717?v=4", "sociable & gregarious", "+820101111-1111","", "Mar, 04, 1999","Lukoh is a tremendously capable and dedicated mobile SW professional. He has strong analytical and innovative skills which are further boosted by his solid technical background and his enthusiasm for technology. Lukoh works extremely well with colleagues, associates, and executives, adapting the analysis and communication techniques in order to accomplish the business objective. He is proficient in managing projects with consistent and successful results.\n" +
-            "I am confident that his leadership experience and expertise in SW development will make him a good SW engineer who works with many colleagues, and should come up with creative awesome ideas.\n" +
-            "He is an expert and architect in Android application development which has resulted in excellent reviews from all collegue. Lukoh is an honest and hardworking team lead, always willing to pitch in to help the team. He is efficient in planning projects, punctual in meeting deadlines, and conscientiously adheres to company standards and guidelines. On the other he understands the technical design and development, techniques and constraints. Lukoh has a true talent for communicating and negotiating where the outcome is beneficial for all involved. He is absolutely a valuable strength to any team as team lead!", false)
+    val profile = Profile(0,"Lukoh", "남성",
+        favor = true,
+        followed = true,
+        email = "lukoh.nam@gmail.com",
+        profileImage = "https://avatars.githubusercontent.com/u/18302717?v=4",
+        personality = "sociable & gregarious",
+        cellphone = "+820101111-1111",
+        address = "",
+        birthday = "Mar, 04, 1999",
+        reputation = "Lukoh is a tremendously capable and dedicated mobile SW professional. He has strong analytical and innovative skills which are further boosted by his solid technical background and his enthusiasm for technology. Lukoh works extremely well with colleagues, associates, and executives, adapting the analysis and communication techniques in order to accomplish the business objective. He is proficient in managing projects with consistent and successful results.\n" +
+                "I am confident that his leadership experience and expertise in SW development will make him a good SW engineer who works with many colleagues, and should come up with creative awesome ideas.\n" +
+                "He is an expert and architect in Android application development which has resulted in excellent reviews from all collegue. Lukoh is an honest and hardworking team lead, always willing to pitch in to help the team. He is efficient in planning projects, punctual in meeting deadlines, and conscientiously adheres to company standards and guidelines. On the other he understands the technical design and development, techniques and constraints. Lukoh has a true talent for communicating and negotiating where the outcome is beneficial for all involved. He is absolutely a valuable strength to any team as team lead!",
+        deleted = false
+    )
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -232,9 +243,9 @@ fun SetProfileItemPreview(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.weight(1F))
         Button(
             modifier = Modifier.padding(horizontal = 24.dp),
-            onClick = { /*TODO*/ }
+            onClick = {}
         ) {
-            Text(text = stringResource(id = R.string.setting_profile_edit),)
+            Text(text = stringResource(id = R.string.setting_profile_edit))
         }
     }
 }

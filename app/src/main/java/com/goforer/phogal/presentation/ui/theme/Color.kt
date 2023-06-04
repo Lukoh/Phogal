@@ -66,6 +66,7 @@ internal val Teal10 = Color(0xFF001F26)
 internal val Teal20 = Color(0xFF02363F)
 internal val Teal30 = Color(0xFF214D56)
 internal val Teal40 = Color(0xFF3A656F)
+internal val Teal60 = Color(0xFF5A899F)
 internal val Teal80 = Color(0xFFA2CED9)
 internal val Teal90 = Color(0xFFBEEAF6)
 

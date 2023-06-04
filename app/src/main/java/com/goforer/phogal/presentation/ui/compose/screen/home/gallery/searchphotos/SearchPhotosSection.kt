@@ -40,6 +40,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchph
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosSectionState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.PhotosItem
+import com.goforer.phogal.presentation.ui.theme.Blue80
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.StateFlow
@@ -223,10 +224,10 @@ fun ShowUpButton(modifier: Modifier, visible: Boolean, onClick: () -> Unit) {
             modifier = modifier
                 .navigationBarsPadding()
                 .padding(bottom = 4.dp, end = 8.dp),
-            backgroundColor = MaterialTheme.colorScheme.primary,
+            backgroundColor = Blue80,
             onClick = onClick
         ) {
-            Text("Up!")
+            Text("Up")
         }
     }
 }

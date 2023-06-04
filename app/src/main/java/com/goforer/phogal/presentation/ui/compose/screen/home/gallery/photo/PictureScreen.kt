@@ -13,7 +13,9 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +29,8 @@ import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.PhotoContentState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.rememberPhotoContentState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import kotlinx.coroutines.launch
 
@@ -38,6 +42,9 @@ fun PictureScreen(
     baseUiState: BaseUiState = rememberBaseUiState(),
     id: String,
     visibleViewPhotosButton: Boolean,
+    state: PhotoContentState = rememberPhotoContentState(
+        visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) }
+    ),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onBackPressed: () -> Unit
 ) {
@@ -66,7 +73,12 @@ fun PictureScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onBackPressed() }) {
+                    IconButton(
+                        onClick = {
+                            state.enabledLoadPhotos.value = false
+                            onBackPressed()
+                        }
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBackIos,
                             contentDescription = "Picture"
@@ -88,7 +100,7 @@ fun PictureScreen(
                 contentPadding = paddingValues,
                 pictureViewModel = pictureViewModel,
                 id = id,
-                visibleViewPhotosButton = visibleViewPhotosButton,
+                state = state,
                 onViewPhotos = onViewPhotos,
                 onShowSnackBar = {
                     baseUiState.scope.launch {

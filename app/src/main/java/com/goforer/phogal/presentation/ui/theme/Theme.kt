@@ -96,10 +96,10 @@ val DarkDefaultColorScheme = darkColorScheme(
  */
 @VisibleForTesting
 val LightAndroidColorScheme = lightColorScheme(
-    primary = Blue40,
+    primary = Blue90,
     onPrimary = Color.White,
     primaryContainer = Blue90,
-    onPrimaryContainer = Blue10,
+    onPrimaryContainer = Blue90,
     secondary = DarkGreen40,
     onSecondary = Color.White,
     secondaryContainer = DarkGreen90,

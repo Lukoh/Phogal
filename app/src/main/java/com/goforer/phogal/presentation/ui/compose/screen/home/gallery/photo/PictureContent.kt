@@ -72,6 +72,8 @@ import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.PhotoContentState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.rememberPhotoContentState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.UserContainer
 import com.goforer.phogal.presentation.ui.theme.Black
@@ -89,12 +91,15 @@ fun PictureContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     id : String,
-    visibleViewPhotosButton: Boolean,
+    state: PhotoContentState = rememberPhotoContentState(),
     pictureViewModel: PictureViewModel = hiltViewModel(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit
 ) {
-    pictureViewModel.trigger(2, Params(id))
+    if (state.enabledLoadPhotos.value) {
+        state.enabledLoadPhotos.value = false
+        pictureViewModel.trigger(2, Params(id))
+    }
 
     val pictureUiState = pictureViewModel.pictureUiState.collectAsStateWithLifecycle()
 
@@ -162,7 +167,7 @@ fun PictureContent(
                                     state = rememberUserContainerState(
                                         profileSize = rememberSaveable { mutableDoubleStateOf(48.0) },
                                         colors = rememberSaveable { listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite) },
-                                        visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) }
+                                        visibleViewPhotosButton = rememberSaveable { mutableStateOf(state.visibleViewPhotosButton.value) }
                                     ),
                                     onViewPhotos = onViewPhotos,
                                     onShowSnackBar = onShowSnackBar

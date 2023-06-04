@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Photo
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -62,10 +63,12 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.U
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserInfoState
 import com.goforer.phogal.presentation.ui.Caller
+import com.goforer.phogal.presentation.ui.theme.Blue80
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.goforer.phogal.presentation.ui.theme.DarkGreenGray10
 import com.goforer.phogal.presentation.ui.theme.DarkGreenGray99
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
+import com.goforer.phogal.presentation.ui.theme.Teal60
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -172,8 +175,12 @@ fun UserContainer(
 
         if (state.visibleViewPhotosButton.value) {
             IconButton(
-                32.dp,
                 modifier = Modifier.padding(start = 56.dp, top = 0.dp, bottom = 2.dp),
+                height = 32.dp,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Blue80,
+                    contentColor = Teal60
+                ),
                 onClick = { onViewPhotos(user.username, user.first_name,  lastName, user.username) },
                 icon = {
                     Icon(
@@ -185,7 +192,7 @@ fun UserContainer(
                     Text(
                         "${stringResource(id = R.string.picture_view_photos, user.name)}${" "}${user.total_photos}${" "}${stringResource(id = R.string.picture_photos, user.name)}",
                         fontFamily = FontFamily.SansSerif,
-                        fontSize = 11.sp,
+                        fontSize = 12.sp,
                         fontStyle = FontStyle.Italic
                     )
                 }
@@ -282,8 +289,8 @@ fun UserInfoBottomSheet(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 IconButton(
-                    32.dp,
                     modifier = Modifier.padding(horizontal = 2.dp),
+                    height = 32.dp,
                     onClick = {},
                     icon = {
                         Icon(
@@ -507,8 +514,12 @@ fun UserContainerPreview() {
             }
 
             IconButton(
-                32.dp,
                 modifier = Modifier.padding(start = 56.dp, top = 0.dp, bottom = 2.dp),
+                height = 32.dp,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Blue80,
+                    contentColor = Teal60
+                ),
                 onClick = {},
                 icon = {
                     Icon(
@@ -520,7 +531,7 @@ fun UserContainerPreview() {
                     Text(
                         stringResource(id = R.string.picture_view_photos, "Lukoh"),
                         fontFamily = FontFamily.SansSerif,
-                        fontSize = 10.sp,
+                        fontSize = 12.sp,
                         fontStyle = FontStyle.Italic
                     )
                 }

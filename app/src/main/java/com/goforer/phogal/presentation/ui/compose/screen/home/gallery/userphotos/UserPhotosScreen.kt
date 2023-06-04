@@ -44,7 +44,7 @@ fun UserPhotosScreen(
     userPhotosViewModel: UserPhotosViewModel,
     state: UserPhotosContentState = rememberUserPhotosContentState(
         photosUiState = userPhotosViewModel.photosUiState,
-        isRefreshing = userPhotosViewModel.isRefreshing,
+        isRefreshing = userPhotosViewModel.isRefreshing
     ),
     onItemClicked: (id: String) -> Unit,
     onBackPressed: () -> Unit
@@ -72,7 +72,12 @@ fun UserPhotosScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onBackPressed() }) {
+                    IconButton(
+                        onClick = {
+                            state.enabledLoadPhotos.value = false
+                            onBackPressed()
+                        }
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBackIos,
                             contentDescription = "Profile"

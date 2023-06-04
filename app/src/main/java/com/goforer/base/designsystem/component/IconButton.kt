@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,11 +37,12 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
 @Composable
 internal inline fun IconButton(
+    modifier: Modifier = Modifier,
     height: Dp,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
     noinline onClick: () -> Unit,
     crossinline icon: @Composable () -> Unit,
     crossinline text: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
     interactionSource: MutableInteractionSource =
         remember { MutableInteractionSource() },
 ) {
@@ -59,6 +61,7 @@ internal inline fun IconButton(
             .wrapContentWidth()
             .heightIn(height),
         shape = MaterialTheme.shapes.small,
+        colors = colors,
         interactionSource = interactionSource
     ) {
         AnimatedVisibility(visible = isPressed) {
