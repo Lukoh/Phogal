@@ -55,55 +55,54 @@ fun SearchPhotosContent(
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit
 ) {
-    BoxWithConstraints(modifier = modifier.clickable {
-        state.baseUiState.keyboardController?.hide()
-    }) {
-        Column(
-            modifier = modifier
-                .padding(
-                    0.dp,
-                    contentPadding.calculateTopPadding(),
-                    0.dp,
-                    0.dp
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            SearchSection(
-                modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
-                state = rememberSearchSectionState(searchEnabled = state.enabledSearch),
-                onSearched = { keyword ->
-                    if (keyword.isNotEmpty()) {
-                        with(state) {
-                            searchKeyword.value = keyword
-                            baseUiState.keyboardController?.hide()
-                            galleryViewModel.trigger(2, Params(keyword, ITEM_COUNT))
-                        }
+    Column(
+        modifier = modifier
+            .padding(
+                0.dp,
+                contentPadding.calculateTopPadding(),
+                0.dp,
+                0.dp
+            )
+            .clickable {
+                state.baseUiState.keyboardController?.hide()
+            },
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        SearchSection(
+            modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
+            state = rememberSearchSectionState(searchEnabled = state.enabledSearch),
+            onSearched = { keyword ->
+                if (keyword.isNotEmpty()) {
+                    with(state) {
+                        searchKeyword.value = keyword
+                        baseUiState.keyboardController?.hide()
+                        galleryViewModel.trigger(2, Params(keyword, ITEM_COUNT))
                     }
                 }
-            )
-
-            if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
-                SearchPhotosSection(
-                    modifier = Modifier
-                        .padding(4.dp, 4.dp)
-                        .weight(1f),
-                    state = rememberSearchPhotosSectionState(
-                        scope = state.baseUiState.scope,
-                        photosUiState = state.photosUiState,
-                        refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
-                    ),
-                    onItemClicked = { photo, _ ->
-                        onItemClicked(photo.id)
-                    },
-                    onRefresh = {
-                        galleryViewModel.trigger(2, Params(state.searchKeyword.value, FIRST_PAGE, ITEM_COUNT))
-                    },
-                    onViewPhotos = onViewPhotos,
-                    onShowSnackBar = onShowSnackBar
-                )
-            } else {
-                NoSearchResult(modifier = Modifier.weight(1f))
             }
+        )
+
+        if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
+            SearchPhotosSection(
+                modifier = Modifier
+                    .padding(2.dp, 4.dp)
+                    .weight(1f),
+                state = rememberSearchPhotosSectionState(
+                    scope = state.baseUiState.scope,
+                    photosUiState = state.photosUiState,
+                    refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
+                ),
+                onItemClicked = { photo, _ ->
+                    onItemClicked(photo.id)
+                },
+                onRefresh = {
+                    galleryViewModel.trigger(2, Params(state.searchKeyword.value, FIRST_PAGE, ITEM_COUNT))
+                },
+                onViewPhotos = onViewPhotos,
+                onShowSnackBar = onShowSnackBar
+            )
+        } else {
+            NoSearchResult(modifier = Modifier.weight(1f))
         }
     }
 

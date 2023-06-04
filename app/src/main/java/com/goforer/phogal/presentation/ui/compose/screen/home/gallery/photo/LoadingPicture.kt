@@ -17,10 +17,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goforer.base.designsystem.component.LoadingIndicator
-import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
+import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.DarkGreen10
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 
@@ -34,10 +35,10 @@ fun LoadingPicture(
             Card(
                 Modifier
                     .fillMaxSize()
-                    .background(ColorSystemGray2)
+                    .background(ColorSystemGray7)
                     .placeholder(
                         visible = true,
-                        highlight = PlaceholderHighlight.shimmer(),
+                        highlight = PlaceholderHighlight.fade(),
                     ),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
             ) {}
@@ -67,7 +68,7 @@ fun LoadingPicturePreview(modifier: Modifier = Modifier) {
                     Modifier
                         .fillMaxWidth()
                         .height(256.dp)
-                        .background(ColorSystemGray2)
+                        .background(ColorSystemGray7)
                         .placeholder(
                             visible = true,
                             highlight = PlaceholderHighlight.shimmer(),

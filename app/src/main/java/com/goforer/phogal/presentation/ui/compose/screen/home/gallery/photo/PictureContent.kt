@@ -13,6 +13,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -77,16 +78,16 @@ import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.ColorBlackLight
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray1
-import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
+import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.ColorText4
 import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
 
 @Composable
 fun PictureContent(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(4.dp),
+    contentPadding: PaddingValues,
     id : String,
     visibleViewPhotosButton: Boolean,
     pictureViewModel: PictureViewModel = hiltViewModel(),
@@ -103,17 +104,12 @@ fun PictureContent(
             Status.SUCCESS -> {
                 val picture = resource.data as Picture
 
-                BoxWithConstraints(
+                Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     Column(
                         modifier = Modifier
-                            .padding(
-                                0.dp,
-                                contentPadding.calculateTopPadding(),
-                                0.dp,
-                                0.dp
-                            )
+                            .padding(top = contentPadding.calculateTopPadding())
                             .verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -148,10 +144,10 @@ fun PictureContent(
                                     .fillMaxWidth()
                                     .height(LocalConfiguration.current.screenHeightDp.dp)
                                     .align(Alignment.CenterHorizontally)
-                                    .background(ColorSystemGray2)
+                                    .background(ColorSystemGray7)
                                     .placeholder(
                                         visible = true,
-                                        highlight = PlaceholderHighlight.shimmer(),
+                                        highlight = PlaceholderHighlight.fade(),
                                     )
 
                                 Text(
@@ -172,71 +168,68 @@ fun PictureContent(
                                     onShowSnackBar = onShowSnackBar
                                 )
 
-                                val imageModifier = Modifier
-                                    .then(
-                                        ((painter.state as? AsyncImagePainter.State.Success)
-                                            ?.painter
-                                            ?.intrinsicSize
-                                            ?.let { intrinsicSize ->
-                                                Modifier.aspectRatio(intrinsicSize.width / intrinsicSize.height)
-                                            } ?: Modifier)
+                                AnimatedVisibility(
+                                    visible = true,
+                                    modifier = modifier,
+                                    enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                                            fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+                                    exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                                            fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+                                ) {
+                                    Image(
+                                        painter = painter,
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .then(((painter.state as? AsyncImagePainter.State.Success)
+                                                ?.painter
+                                                ?.intrinsicSize
+                                                ?.let { intrinsicSize ->
+                                                    Modifier.aspectRatio(intrinsicSize.width / intrinsicSize.height)
+                                                } ?: Modifier)
+                                            )
+                                            .clip(RectangleShape)
+                                            .clickable {
+                                            }
+                                            .scale(.8f + (.2f * transition))
+                                            .graphicsLayer { rotationX = (1f - transition) * 5f }
+                                            .alpha(transition / .2f),
+                                        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
+                                            setToSaturation(
+                                                transition
+                                            )
+                                        })
                                     )
-                                    .clip(RectangleShape)
-                                    .clickable {
-                                    }
-                                    .scale(.8f + (.2f * transition))
-                                    .graphicsLayer { rotationX = (1f - transition) * 5f }
-                                    .alpha(transition / .2f)
+                                }
 
-                                    AnimatedVisibility(
-                                        visible = true,
-                                        modifier = modifier,
-                                        enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
-                                                fadeIn() + expandIn(expandFrom = Alignment.TopStart),
-                                        exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
-                                                fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
-                                    ) {
-                                        Image(
-                                            painter = painter,
-                                            contentDescription = null,
-                                            contentScale = ContentScale.Crop,
-                                            modifier = imageModifier,
-                                            colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
-                                                setToSaturation(
-                                                    transition
-                                                )
-                                            })
-                                        )
-                                    }
-
-                                    Spacer(modifier = Modifier.height(12.dp))
-                                    BehaviorItem(picture.likes, picture.downloads, picture.views)
+                                Spacer(modifier = Modifier.height(12.dp))
+                                BehaviorItem(picture.likes, picture.downloads, picture.views)
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(
+                                    text = picture.description ?: picture.alt_description
+                                    ?: stringResource(id = R.string.picture_no_description),
+                                    modifier = Modifier.padding(8.dp, 4.dp),
+                                    color = ColorText4,
+                                    fontFamily = FontFamily.SansSerif,
+                                    fontWeight = FontWeight.W400,
+                                    fontSize = 18.sp,
+                                    fontStyle = FontStyle.Normal,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Spacer(modifier = Modifier.height(24.dp))
+                                picture.location?.let {
+                                    LocationItem(it.name)
                                     Spacer(modifier = Modifier.height(16.dp))
-                                    Text(
-                                        text = picture.description ?: picture.alt_description
-                                        ?: stringResource(id = R.string.picture_no_description),
-                                        modifier = Modifier.padding(8.dp, 4.dp),
-                                        color = ColorText4,
-                                        fontFamily = FontFamily.SansSerif,
-                                        fontWeight = FontWeight.W400,
-                                        fontSize = 18.sp,
-                                        fontStyle = FontStyle.Normal,
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                    Spacer(modifier = Modifier.height(24.dp))
-                                    picture.location?.let {
-                                        LocationItem(it.name)
-                                        Spacer(modifier = Modifier.height(16.dp))
-                                    }
+                                }
 
-                                    DateItem(picture.created_at)
-                                    Spacer(modifier = Modifier.height(16.dp))
+                                DateItem(picture.created_at)
+                                Spacer(modifier = Modifier.height(16.dp))
 
-                                    picture.exif?.let { exif ->
-                                        ExifItem(exif)
-                                    }
+                                picture.exif?.let { exif ->
+                                    ExifItem(exif)
+                                }
 
-                                    Spacer(modifier = Modifier.height(30.dp))
+                                Spacer(modifier = Modifier.height(30.dp))
                                 }
                         }
 
@@ -247,22 +240,41 @@ fun PictureContent(
                 TrackScreenViewEvent(screenName = "PhotoContent")
             }
             Status.LOADING -> {
-                LoadingPicture(
-                    modifier = Modifier.padding(4.dp, 4.dp),
-                    enableLoadIndicator = true
-                )
+                AnimatedVisibility(
+                    visible = true,
+                    modifier = Modifier,
+                    enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                            fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+                    exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                            fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+                ) {
+                    LoadingPicture(
+                        modifier = Modifier.padding(4.dp, 4.dp),
+                        enableLoadIndicator = true
+                    )
+                }
             }
             Status.ERROR-> {
-                ErrorContent(
-                    title = if (resource.errorCode !in 200..299)
+                AnimatedVisibility(
+                    visible = true,
+                    modifier = Modifier,
+                    enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                            fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+                    exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                            fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+                ) {
+                    ErrorContent(
+                        modifier = Modifier,
+                        title = if (resource.errorCode !in 200..299)
                             stringResource(id = R.string.error_dialog_network_title)
                         else
                             stringResource(id = R.string.error_dialog_title),
-                    message = "${stringResource(id = R.string.error_get_picture)}${"\n\n"}${resource.message.toString()}",
-                    onRetry = {
-                        pictureViewModel.trigger(2, Params(id))
-                    }
-                )
+                        message = "${stringResource(id = R.string.error_get_picture)}${"\n\n"}${resource.message.toString()}",
+                        onRetry = {
+                            pictureViewModel.trigger(2, Params(id))
+                        }
+                    )
+                }
             }
         }
     }

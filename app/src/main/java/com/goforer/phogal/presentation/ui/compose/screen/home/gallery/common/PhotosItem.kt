@@ -47,11 +47,11 @@ import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
-import com.goforer.phogal.presentation.ui.theme.ColorSystemGray2
+import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
 
 @Composable
 fun PhotosItem(
@@ -79,7 +79,7 @@ fun PhotosItem(
                 fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
     ) {
         Card(
-            modifier = modifier.padding(0.dp, verticalPadding),
+            modifier = modifier.padding(vertical = verticalPadding),
             colors = CardDefaults.cardColors(
                 contentColor = MaterialTheme.colorScheme.primary,
                 containerColor =
@@ -110,10 +110,10 @@ fun PhotosItem(
                     .fillMaxWidth()
                     .height(256.dp)
                     .align(Alignment.CenterHorizontally)
-                    .background(ColorSystemGray2)
+                    .background(ColorSystemGray7)
                     .placeholder(
                         visible = true,
-                        highlight = PlaceholderHighlight.shimmer(),
+                        highlight = PlaceholderHighlight.fade(),
                     )
 
                 Text(
