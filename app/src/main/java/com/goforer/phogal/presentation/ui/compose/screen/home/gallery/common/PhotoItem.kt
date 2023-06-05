@@ -91,7 +91,7 @@ fun PhotoItem(
                 focusedElevation = 4.dp
             )
         ) {
-            val imageUrl = photo.urls.full
+            val imageUrl = photo.urls.raw
             val painter = loadImagePainter(
                 data = imageUrl,
                 size = Size(photo.width.div(8), photo.height.div(8))
