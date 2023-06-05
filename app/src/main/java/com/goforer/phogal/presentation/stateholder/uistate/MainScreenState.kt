@@ -21,7 +21,7 @@ import com.goforer.phogal.presentation.ui.compose.screen.home.BottomNavDestinati
 import com.goforer.phogal.presentation.ui.compose.screen.home.BottomNavDestination.Setting
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.communitiesStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.notificationsStartRoute
-import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosRoute
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingStartRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopToGraph
 import kotlinx.coroutines.CoroutineScope
@@ -41,7 +41,7 @@ class MainScreenState(
 
     val currentTopLevelDestination: BottomNavDestination?
         @Composable get() = when (currentDestination?.route) {
-            searchPhotosRoute -> Gallery
+            searchPhotosStartRoute -> Gallery
             communitiesStartRoute -> Community
             notificationsStartRoute -> Notification
             settingStartRoute -> Setting

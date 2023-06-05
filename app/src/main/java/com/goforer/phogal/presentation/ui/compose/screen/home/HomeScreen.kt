@@ -27,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -40,6 +41,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.uistate.MainScreenState
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.communitiesStartRoute
@@ -47,7 +49,7 @@ import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestinati
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.notificationHomeRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.notificationsStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.photosHomeRoute
-import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosRoute
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingHomeRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingStartRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopToGraph
@@ -71,7 +73,8 @@ sealed class BottomNavDestination(val route: String, @DrawableRes val icon: Int,
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    state: MainScreenState
+    state: MainScreenState,
+    storage: LocalStorage
 ) {
     var bottomBarVisible by remember { mutableStateOf(false) }
     val bottomBarOffset by animateDpAsState(targetValue = if (bottomBarVisible) 0.dp else 56.dp)
@@ -152,23 +155,27 @@ fun HomeScreen(
                 ) {
                     galleryGraph(
                         navController = state.navController,
-                        startDestination = searchPhotosRoute,
-                        route = photosHomeRoute
+                        startDestination = searchPhotosStartRoute,
+                        route = photosHomeRoute,
+                        storage = storage
                     )
                     communityGraph(
                         navController = state.navController,
                         startDestination = communitiesStartRoute,
-                        route = communityHomeRoute
+                        route = communityHomeRoute,
+                        storage = storage
                     )
                     notificationGraph(
                         navController = state.navController,
                         startDestination = notificationsStartRoute,
-                        route =  notificationHomeRoute
+                        route =  notificationHomeRoute,
+                        storage = storage
                     )
                     settingGraph(
                         navController = state.navController,
                         startDestination = settingStartRoute,
-                        route = settingHomeRoute
+                        route = settingHomeRoute,
+                        storage = storage
                     )
                 }
             }
@@ -177,7 +184,7 @@ fun HomeScreen(
 
     state.navController.addOnDestinationChangedListener { _, destination, _ ->
         bottomBarVisible = when(destination.route) {
-            searchPhotosRoute, communitiesStartRoute, notificationsStartRoute, settingStartRoute -> {
+            searchPhotosStartRoute, communitiesStartRoute, notificationsStartRoute, settingStartRoute -> {
                 true
             }
 
@@ -199,7 +206,8 @@ fun HomeScreen(
 @Composable
 fun ProfilerHomeScreenPreview(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    storage: LocalStorage = LocalStorage(LocalContext.current)
 ) {
     PhogalTheme {
         Scaffold(
@@ -257,23 +265,27 @@ fun ProfilerHomeScreenPreview(
                 ) {
                     galleryGraph(
                         navController = navController,
-                        startDestination =  searchPhotosRoute,
-                        route = photosHomeRoute
+                        startDestination =  searchPhotosStartRoute,
+                        route = photosHomeRoute,
+                        storage = storage
                     )
                     communityGraph(
                         navController = navController,
                         startDestination = communitiesStartRoute,
-                        route = communityHomeRoute
+                        route = communityHomeRoute,
+                        storage = storage
                     )
                     notificationGraph(
                         navController = navController,
                         startDestination = notificationsStartRoute,
-                        route = notificationHomeRoute
+                        route = notificationHomeRoute,
+                        storage = storage
                     )
                     settingGraph(
                         navController = navController,
                         startDestination = settingStartRoute,
-                        route = settingHomeRoute
+                        route = settingHomeRoute,
+                        storage = storage
                     )
                 }
             }

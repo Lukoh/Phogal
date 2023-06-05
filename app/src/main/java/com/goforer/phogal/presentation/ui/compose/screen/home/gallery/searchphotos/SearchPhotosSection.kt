@@ -3,6 +3,12 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -22,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -35,11 +42,12 @@ import com.goforer.base.extension.composable.rememberLazyListState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
+import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.SearchPhotosSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosSectionState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
-import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.PhotosItem
+import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.PhotoItem
 import com.goforer.phogal.presentation.ui.theme.Blue80
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.google.gson.Gson
@@ -128,7 +136,7 @@ fun SearchPhotosSection(
                                     // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
                                     // If this bug will got fixed... then have to be removed below code
                                     state.visibleUpButtonState.value = visibleUpButton(index)
-                                    PhotosItem(
+                                    PhotoItem(
                                         modifier = modifier,
                                         index = index,
                                         photo = photos[index]!!,
@@ -137,6 +145,9 @@ fun SearchPhotosSection(
                                         onViewPhotos = onViewPhotos,
                                         onShowSnackBar = onShowSnackBar
                                     )
+                                    if (photos.itemCount < Repository.ITEM_COUNT && index == photos.itemCount - 1)
+                                        Spacer(modifier = Modifier.height(26.dp))
+                                        
                                     TrackScreenViewEvent(screenName = "SearchPhotosSection")
                                 }
                             }
@@ -146,20 +157,29 @@ fun SearchPhotosSection(
                                 val error = (refresh as LoadState.Error).error.message
                                 val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
 
-                                ErrorContent(
-                                    modifier = modifier,
-                                    title = if (errorThrowable.code !in 200..299)
-                                        stringResource(id = R.string.error_dialog_network_title)
-                                    else
-                                        stringResource(id = R.string.error_dialog_title),
-                                    message = if ((refresh as LoadState.Error).error.message == null)
-                                        stringResource(id = R.string.error_dialog_content)
-                                    else
-                                        errorThrowable.message,
-                                    onRetry = {
-                                        photos.retry()
-                                    }
-                                )
+                                AnimatedVisibility(
+                                    visible = true,
+                                    modifier = Modifier,
+                                    enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                                            fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+                                    exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                                            fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+                                ) {
+                                    ErrorContent(
+                                        modifier = modifier,
+                                        title = if (errorThrowable.code !in 200..299)
+                                            stringResource(id = R.string.error_dialog_network_title)
+                                        else
+                                            stringResource(id = R.string.error_dialog_title),
+                                        message = if ((refresh as LoadState.Error).error.message == null)
+                                            stringResource(id = R.string.error_dialog_content)
+                                        else
+                                            errorThrowable.message,
+                                        onRetry = {
+                                            photos.retry()
+                                        }
+                                    )
+                                }
                             }
                         }
                         append is LoadState.Loading -> {
@@ -171,19 +191,28 @@ fun SearchPhotosSection(
                                 val error = (append as LoadState.Error).error.message
                                 val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
 
-                                ErrorContent(
-                                    title = if (errorThrowable.code !in 200..299)
-                                        stringResource(id = R.string.error_dialog_network_title)
-                                    else
-                                        stringResource(id = R.string.error_dialog_title),
-                                    message = if ((append as LoadState.Error).error.message == null)
-                                        stringResource(id = R.string.error_dialog_content)
-                                    else
-                                        errorThrowable.message,
-                                    onRetry = {
-                                        photos.retry()
-                                    }
-                                )
+                                AnimatedVisibility(
+                                    visible = true,
+                                    modifier = Modifier,
+                                    enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                                            fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+                                    exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                                            fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+                                ) {
+                                    ErrorContent(
+                                        title = if (errorThrowable.code !in 200..299)
+                                            stringResource(id = R.string.error_dialog_network_title)
+                                        else
+                                            stringResource(id = R.string.error_dialog_title),
+                                        message = if ((append as LoadState.Error).error.message == null)
+                                            stringResource(id = R.string.error_dialog_content)
+                                        else
+                                            errorThrowable.message,
+                                        onRetry = {
+                                            photos.retry()
+                                        }
+                                    )
+                                }
                             }
                         }
                     }

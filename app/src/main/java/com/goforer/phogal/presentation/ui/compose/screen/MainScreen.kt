@@ -9,6 +9,7 @@ import com.goforer.base.designsystem.component.Background
 import com.goforer.base.designsystem.component.GradientBackground
 import com.goforer.base.designsystem.theme.GradientColors
 import com.goforer.base.designsystem.theme.LocalGradientColors
+import com.goforer.base.storage.LocalStorage
 import com.goforer.base.utils.connect.NetworkMonitor
 import com.goforer.phogal.presentation.stateholder.uistate.MainScreenState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberMainScreenState
@@ -23,7 +24,8 @@ fun MainScreen(
     state: MainScreenState = rememberMainScreenState(
         windowSizeClass = windowSizeClass,
         networkMonitor = networkMonitor
-    )
+    ),
+    storage: LocalStorage
 ) {
     /*
     Surface(color = MaterialTheme.colorScheme.primary) {
@@ -66,7 +68,7 @@ fun MainScreen(
             if (isOffline)
                 OfflineScreen(modifier = Modifier)
             else
-                HomeScreen(modifier = Modifier, state = state)
+                HomeScreen(modifier = Modifier, state = state, storage)
         }
     }
 }

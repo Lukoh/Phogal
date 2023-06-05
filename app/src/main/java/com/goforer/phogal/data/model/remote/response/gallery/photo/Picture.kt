@@ -36,5 +36,6 @@ data class Picture(
     val urls: Urls,
     val user: User,
     val views: Int,
-    val width: Int
+    val width: Int,
+    var bookmarked: Boolean
 ) : BaseModel(), Parcelable

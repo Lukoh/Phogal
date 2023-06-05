@@ -33,9 +33,9 @@
     <string name="setting_send_feedback">Send Feedback</string>
     <string name="setting_give_start">Rating Start</string>
     <string name="setting_homepage">Homepage</string>
-
     <string name="setting_terms_and_conditions">Terms and Conditions</string>
     <string name="setting_view_contact">View Contact</string>
+    <string name="setting_bookmarked_photos">Bookmark</string>
 
     <string name="picture_title">Phogal Picture +</string>
     <string name="picture_no_location">No Location Information</string>

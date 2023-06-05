@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.presentation.ui.navigation.destination.Community
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.communitiesStartRoute
 
@@ -13,7 +14,8 @@ import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestinati
 fun NavGraphBuilder.communityGraph(
     navController: NavHostController,
     startDestination: String,
-    route: String
+    route: String,
+    storage: LocalStorage
 ) {
     navigation(startDestination = startDestination, route = route) {
         composable(route = communitiesStartRoute) { backStackEntry ->
@@ -21,7 +23,7 @@ fun NavGraphBuilder.communityGraph(
                 navController.getBackStackEntry(route)
             }
 
-            Community.screen(navController, navBackStackEntry, route)
+            Community.screen(navController, navBackStackEntry, route, storage)
         }
     }
 }

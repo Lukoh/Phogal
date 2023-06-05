@@ -1,11 +1,10 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.userphotos
+package com.goforer.phogal.presentation.ui.compose.screen.home.setting.bookmark
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,26 +26,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.goforer.base.designsystem.component.CardSnackBar
+import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.R
-import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
-import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.UserPhotosContentState
-import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosContentState
+import com.goforer.phogal.data.model.remote.response.gallery.photo.Picture
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserPhotosScreen(
+fun BookmarkedPhotosScreen(
     modifier: Modifier = Modifier,
-    name: String,
-    firstName: String,
-    userPhotosViewModel: UserPhotosViewModel,
-    state: UserPhotosContentState = rememberUserPhotosContentState(
-        photosUiState = userPhotosViewModel.photosUiState,
-        isRefreshing = userPhotosViewModel.isRefreshing
-    ),
-    onItemClicked: (id: String) -> Unit,
+    storage: LocalStorage,
+    onItemClicked: (item: Picture, index: Int) -> Unit,
     onBackPressed: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -62,7 +53,7 @@ fun UserPhotosScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "${firstName}${" "}${stringResource(id = R.string.picture_photos)}",
+                        text = stringResource(id = R.string.setting_bookmarked_photos),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontFamily = FontFamily.SansSerif,
@@ -74,38 +65,23 @@ fun UserPhotosScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            state.enabledLoadPhotos.value = false
+                            //state.enabledLoadPhotos.value = false
                             onBackPressed()
                         }
                     ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBackIos,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { /* doSomething() */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            contentDescription = "Favorite"
+                            contentDescription = "Profile"
                         )
                     }
                 }
             )
         }, content = { paddingValues ->
-            UserPhotosContent(
+            BookmarkedPhotosContent(
                 modifier = modifier,
+                storage = storage,
                 contentPadding = paddingValues,
-                name = name,
-                userPhotosViewModel = userPhotosViewModel,
-                state = state,
-                onItemClicked = onItemClicked,
-                onShowSnackBar = {
-                    state.baseUiState.scope.launch {
-                        snackbarHostState.showSnackbar(it)
-                    }
-                }
+                onItemClicked = onItemClicked
             )
         }
     )
@@ -121,7 +97,7 @@ fun UserPhotosScreen(
 )
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PhotosScreenPreview() {
+fun  BookmarkedPhotosScreenPreview() {
     PhogalTheme {
         Scaffold(
             contentColor = Color.White,
@@ -129,7 +105,7 @@ fun PhotosScreenPreview() {
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            stringResource(id = R.string.app_name),
+                            stringResource(id = R.string.setting_bookmarked_photos),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             fontFamily = FontFamily.SansSerif,
@@ -141,16 +117,16 @@ fun PhotosScreenPreview() {
                     navigationIcon = {
                         IconButton(onClick = { /* doSomething() */ }) {
                             Icon(
-                                imageVector = Icons.Filled.Menu,
-                                contentDescription = "Profile"
+                                imageVector = Icons.Filled.ArrowBackIos,
+                                contentDescription = "Back"
                             )
                         }
                     },
                     actions = {
                         IconButton(onClick = { /* doSomething() */ }) {
                             Icon(
-                                imageVector = Icons.Filled.Favorite,
-                                contentDescription = "Localized description"
+                                imageVector = Icons.Filled.Bookmark,
+                                contentDescription = "Bookmark"
                             )
                         }
                     }

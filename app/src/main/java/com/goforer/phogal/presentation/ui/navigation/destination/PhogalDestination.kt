@@ -4,16 +4,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import com.goforer.base.storage.LocalStorage
 
 interface PhogalDestination {
     val icon: ImageVector
     val route: String
-    val screen: @Composable (NavHostController, NavBackStackEntry, String) -> Unit
+    val screen: @Composable (NavHostController, NavBackStackEntry, String, LocalStorage) -> Unit
 
     companion object {
         // Photo Bottom Navigation
         internal const val photosHomeRoute = "photoHome"
-        internal const val searchPhotosRoute = "photoHome/searchPhotos"
+        internal const val searchPhotosStartRoute = "photoHome/searchPhotos"
         internal const val pictureRoute = "photoHome/picture"
         internal const val userPhotosRoute = "photoHome/userPhotos"
 
@@ -28,5 +29,6 @@ interface PhogalDestination {
         // Setting Bottom Navigation
         internal const val settingHomeRoute = "settingHome"
         internal const val settingStartRoute = "settingHome/setting"
+        internal const val settingBookmarkedPhotosRoute = "settingHome/bookmarkedPhotos"
     }
 }

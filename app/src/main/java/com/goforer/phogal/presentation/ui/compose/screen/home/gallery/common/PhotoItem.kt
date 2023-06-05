@@ -54,7 +54,7 @@ import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
 
 @Composable
-fun PhotosItem(
+fun PhotoItem(
     modifier: Modifier = Modifier,
     index: Int,
     photo: Photo,
@@ -64,10 +64,6 @@ fun PhotosItem(
     onShowSnackBar: (text: String) -> Unit
 ) {
     var isClicked by rememberSaveable { mutableStateOf(false) }
-    val verticalPadding = if (index == 0)
-        2.dp
-    else
-        4.dp
 
     photo.alreadySearched = true
     AnimatedVisibility(
@@ -79,7 +75,6 @@ fun PhotosItem(
                 fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
     ) {
         Card(
-            modifier = modifier.padding(vertical = verticalPadding),
             colors = CardDefaults.cardColors(
                 contentColor = MaterialTheme.colorScheme.primary,
                 containerColor =

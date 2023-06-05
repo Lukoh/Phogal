@@ -12,6 +12,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.data.model.local.home.gallery.NameArgument
 import com.goforer.phogal.data.model.local.home.gallery.PictureArgument
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.PictureViewModel
@@ -21,30 +22,31 @@ import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photo.Pict
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos.SearchPhotosScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.userphotos.UserPhotosScreen
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.pictureRoute
-import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosRoute
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.userPhotosRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopTo
 import com.google.gson.Gson
 
 object SearchPhotos : PhogalDestination {
     override val icon = Icons.Sharp.ViewList
-    override val route = searchPhotosRoute
+    override val route = searchPhotosStartRoute
     override val screen: @Composable (
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
-        route: String
-    ) -> Unit = { navController, backStackEntry, _ ->
+        route: String,
+        storage: LocalStorage
+    ) -> Unit = { navController, backStackEntry, _, _ ->
         val galleryViewModel = hiltViewModel<GalleryViewModel>(backStackEntry)
 
         SearchPhotosScreen(
             galleryViewModel = galleryViewModel,
             onItemClicked = { id ->
-                val pictureRoute = PictureArgument(
+                val pictureArgument = PictureArgument(
                     id = id,
                     visibleViewPhotosButton = true
                 )
                 val gson = Gson()
-                val json = Uri.encode(gson.toJson(pictureRoute))
+                val json = Uri.encode(gson.toJson(pictureArgument))
 
                 navController.navigateSingleTopTo("${Picture.route}/$json")
             },
@@ -77,8 +79,9 @@ object Picture : PhogalDestination {
     override val screen: @Composable (
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
-        route: String
-    ) -> Unit = { navController, backStackEntry, _ ->
+        route: String,
+        storage: LocalStorage
+    ) -> Unit = { navController, backStackEntry, _, storage ->
         val argument = backStackEntry.arguments?.getString(argumentTypeArg)
         val pictureArgument = Gson().fromJson(argument, PictureArgument::class.java)
         val pictureViewModel = hiltViewModel<PictureViewModel>(backStackEntry)
@@ -86,6 +89,7 @@ object Picture : PhogalDestination {
         pictureArgument?.let {
             PictureScreen(
                 pictureViewModel = pictureViewModel,
+                storage = storage,
                 id = pictureArgument.id,
                 visibleViewPhotosButton = pictureArgument.visibleViewPhotosButton,
                 onViewPhotos = { name, firstName, lastName, username ->
@@ -122,8 +126,9 @@ object UserPhotos : PhogalDestination {
     override val screen: @Composable (
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
-        route: String
-    ) -> Unit = { navController, backStackEntry, _ ->
+        route: String,
+        storage: LocalStorage
+    ) -> Unit = { navController, backStackEntry, _, _ ->
         val argument = backStackEntry.arguments?.getString(argumentTypeArg)
         val nameArgument = Gson().fromJson(argument, NameArgument::class.java)
         val userPhotosViewModel = hiltViewModel<UserPhotosViewModel>(backStackEntry)
@@ -134,12 +139,12 @@ object UserPhotos : PhogalDestination {
                 firstName = nameArgument.firstName,
                 userPhotosViewModel = userPhotosViewModel,
                 onItemClicked = { id ->
-                    val pictureRoute = PictureArgument(
+                    val pictureArgument = PictureArgument(
                         id = id,
                         visibleViewPhotosButton = false
                     )
                     val gson = Gson()
-                    val json = Uri.encode(gson.toJson(pictureRoute))
+                    val json = Uri.encode(gson.toJson(pictureArgument))
 
                     navController.navigateSingleTopTo(route = "${Picture.route}/$json")
                 },

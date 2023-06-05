@@ -94,7 +94,8 @@ fun PictureContent(
     state: PhotoContentState = rememberPhotoContentState(),
     pictureViewModel: PictureViewModel = hiltViewModel(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
-    onShowSnackBar: (text: String) -> Unit
+    onShowSnackBar: (text: String) -> Unit,
+    onShownPhoto: (picture: Picture) -> Unit
 ) {
     if (state.enabledLoadPhotos.value) {
         state.enabledLoadPhotos.value = false
@@ -235,7 +236,8 @@ fun PictureContent(
                                 }
 
                                 Spacer(modifier = Modifier.height(30.dp))
-                                }
+                                onShownPhoto(picture)
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))

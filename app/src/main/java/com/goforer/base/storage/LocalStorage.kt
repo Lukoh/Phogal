@@ -7,6 +7,9 @@ import android.security.keystore.KeyProperties
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
+import com.goforer.phogal.data.model.remote.response.gallery.photo.Picture
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -17,7 +20,7 @@ class LocalStorage
 @Inject
 constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
     companion object {
-        const val key_images = "images"
+        const val key_bookmark_photos = "key_bookmark_photos"
     }
 
     private val spec = KeyGenParameterSpec.Builder(
@@ -85,5 +88,57 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         editor.clear()
         editor.apply()
         editor.commit()
+    }
+
+    internal fun geBookmarkedPhotos(): MutableList<Picture>? {
+        val json = pref.getString(key_bookmark_photos, null)
+        val type = object : TypeToken<ArrayList<Picture>>() {}.type
+
+        return Gson().fromJson(json, type)
+    }
+
+    internal fun isPhotoBookmarked(photo: Picture): Boolean {
+        val photos = geBookmarkedPhotos()
+
+        return if (photos.isNullOrEmpty()) {
+            false
+        } else {
+            val foundPhoto = photos.find { it.created_at == photo.created_at && it.urls.raw == photo.urls.raw }
+
+            foundPhoto != null
+        }
+
+    }
+
+    internal fun setBookmarkPhoto(bookmarkedPhoto: Picture): MutableList<Picture>? {
+        val editor = pref.edit()
+        var photos = geBookmarkedPhotos()
+        val json: String
+        val type = object : TypeToken<ArrayList<Picture>>() {}.type
+
+        if (photos.isNullOrEmpty()) {
+            photos = mutableListOf<Picture>()
+            photos.add(bookmarkedPhoto)
+            json = Gson().toJson(photos)
+            editor.apply()
+            editor.putString(key_bookmark_photos, json)
+            editor.apply()
+        } else {
+            val photo = photos.find { it.created_at == bookmarkedPhoto.created_at && it.urls.raw == bookmarkedPhoto.urls.raw }
+
+            if (photo == null) {
+                photos.add(bookmarkedPhoto)
+
+            } else {
+                if (!bookmarkedPhoto.bookmarked)
+                    photos.remove(photo)
+            }
+
+            json = Gson().toJson(photos)
+            editor.putString(key_bookmark_photos, json)
+            editor.apply()
+        }
+
+        return Gson().fromJson(json, type)
     }
 }
