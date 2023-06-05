@@ -126,13 +126,10 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         } else {
             val photo = photos.find { it.id == bookmarkedPhoto.id && it.urls.raw == bookmarkedPhoto.urls.raw }
 
-            if (photo == null) {
+            if (photo == null)
                 photos.add(bookmarkedPhoto)
-
-            } else {
-                if (!bookmarkedPhoto.bookmarked)
-                    photos.remove(photo)
-            }
+            else
+                photos.remove(photo)
 
             json = Gson().toJson(photos)
             editor.putString(key_bookmark_photos, json)

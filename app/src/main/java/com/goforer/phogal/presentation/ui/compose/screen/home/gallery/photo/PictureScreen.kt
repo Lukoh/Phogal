@@ -101,8 +101,7 @@ fun PictureScreen(
                             ),
                             onClick = {
                                 state.picture?.let {
-                                    if (!storage.isPhotoBookmarked(it))
-                                        storage.setBookmarkPhoto(it)
+                                    storage.setBookmarkPhoto(it)
                                 }
 
                                 state.enabledBookmark.value = !state.enabledBookmark.value
