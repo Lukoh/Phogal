@@ -80,8 +80,10 @@ import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.ColorBlackLight
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray1
+import com.goforer.phogal.presentation.ui.theme.ColorSystemGray5
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.ColorText4
+import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
@@ -167,7 +169,7 @@ fun PictureContent(
                                     user = picture.user,
                                     state = rememberUserContainerState(
                                         profileSize = rememberSaveable { mutableDoubleStateOf(48.0) },
-                                        colors = rememberSaveable { listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite) },
+                                        colors = rememberSaveable { listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite, ColorSystemGray5, DarkGreen60) },
                                         visibleViewPhotosButton = rememberSaveable { mutableStateOf(state.visibleViewPhotosButton.value) }
                                     ),
                                     onViewPhotos = onViewPhotos,

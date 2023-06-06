@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.graphics.Color
 
 @Stable
@@ -17,11 +16,10 @@ class UserContainerState(
     val visibleViewPhotosButton: MutableState<Boolean>,
 )
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun rememberUserContainerState(
     profileSize: MutableState<Double> = rememberSaveable { mutableDoubleStateOf(0.0) },
-    colors: List<Color> = rememberSaveable { listOf(Color.Transparent, Color.Transparent, Color.Transparent) },
+    colors: List<Color> = rememberSaveable { listOf(Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent) },
     visibleViewPhotosButton: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): UserContainerState = remember(
     profileSize, colors, visibleViewPhotosButton) {

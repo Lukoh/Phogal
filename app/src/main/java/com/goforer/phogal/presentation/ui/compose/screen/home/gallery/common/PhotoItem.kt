@@ -47,8 +47,10 @@ import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
+import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
+import com.goforer.phogal.presentation.ui.theme.DarkGreen70
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
@@ -147,7 +149,7 @@ fun PhotoItem(
                     user = photo.user,
                     state = rememberUserContainerState(
                         profileSize = rememberSaveable { mutableDoubleStateOf(36.0) },
-                        colors = rememberSaveable { listOf(Color.White, Color.White, DarkGreen60) },
+                        colors = rememberSaveable { listOf(Color.White, Color.White, DarkGreen60, DarkGreen70, ColorSnowWhite) },
                         visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) }
                     ),
                     onViewPhotos = onViewPhotos,

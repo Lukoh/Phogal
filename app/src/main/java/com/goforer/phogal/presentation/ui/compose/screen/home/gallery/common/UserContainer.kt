@@ -178,8 +178,8 @@ fun UserContainer(
                 modifier = Modifier.padding(start = 56.dp, top = 0.dp, bottom = 2.dp),
                 height = 32.dp,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Blue80,
-                    contentColor = Teal60
+                    containerColor = state.colors[3],
+                    contentColor = state.colors[4]
                 ),
                 onClick = { onViewPhotos(user.username, user.first_name,  lastName, user.username) },
                 icon = {

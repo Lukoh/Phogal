@@ -29,6 +29,8 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -36,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.goforer.base.designsystem.component.IconButton
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.uistate.EditableInputState
@@ -44,6 +47,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchph
 import com.goforer.phogal.presentation.stateholder.uistate.rememberEditableInputState
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray9
+import com.goforer.phogal.presentation.ui.theme.Orange97
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
 @Composable
@@ -59,7 +63,9 @@ fun SearchSection(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .height(IntrinsicSize.Min)
-            .background(Color.Transparent)
+            .background(Orange97)
+            .semantics { isTraversalGroup = true }
+            .zIndex(1f)
             .wrapContentHeight(Alignment.Top)
             .border(
                 width = 1.dp,
