@@ -3,7 +3,6 @@ package com.goforer.phogal.presentation.ui.compose.screen.home
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.WindowInsets
@@ -57,6 +56,7 @@ import com.goforer.phogal.presentation.ui.navigation.graph.communityGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.galleryGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.notificationGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.settingGraph
+import com.goforer.phogal.presentation.ui.theme.Blue80
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.ColorBottomBar
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
@@ -95,7 +95,7 @@ fun HomeScreen(
 
                 BottomNavigation(
                     backgroundColor = ColorBottomBar,
-                    contentColor = Color(0xFF3F414E),
+                    contentColor = Blue80,
                     elevation = 5.dp,
                     modifier = if (bottomBarVisible)
                         modifier.navigationBarsPadding()
@@ -118,7 +118,7 @@ fun HomeScreen(
                                     fontSize = 13.sp
                                 )
                             },
-                            selectedContentColor = MaterialTheme.colorScheme.primary,
+                            selectedContentColor = Blue80,
                             unselectedContentColor = Color.Gray,
                             selected = state.currentDestination?.hierarchy?.any { it.route == item.route } == true,
                             alwaysShowLabel = false,
@@ -202,7 +202,6 @@ fun HomeScreen(
     name = "Dark Mode",
     showSystemUi = true
 )
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ProfilerHomeScreenPreview(
     modifier: Modifier = Modifier,
@@ -221,7 +220,7 @@ fun ProfilerHomeScreenPreview(
 
                 BottomNavigation(
                     backgroundColor = ColorBottomBar,
-                    contentColor = Color(0xFF3F414E),
+                    contentColor = Blue80,
                     elevation = 5.dp,
                     modifier = Modifier
                         .offset(y = 0.dp)
@@ -246,7 +245,7 @@ fun ProfilerHomeScreenPreview(
                                     fontSize = 8.sp
                                 )
                             },
-                            selectedContentColor = MaterialTheme.colorScheme.primary,
+                            selectedContentColor = Blue80,
                             unselectedContentColor = Color.Gray,
                             selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                             alwaysShowLabel = true,
