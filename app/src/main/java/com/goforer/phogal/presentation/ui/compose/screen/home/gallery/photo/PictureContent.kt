@@ -110,8 +110,6 @@ fun PictureContent(
         val resource = pictureUiState.value as Resource
         when(resource.status) {
             Status.SUCCESS -> {
-                val picture = resource.data as Picture
-
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
@@ -121,127 +119,14 @@ fun PictureContent(
                             .verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        val verticalPadding = 2.dp
-
-                        Card(
-                            modifier = modifier.padding(0.dp, verticalPadding),
-                            colors = CardDefaults.cardColors(
-                                contentColor = MaterialTheme.colorScheme.onPrimary,
-                                containerColor =  MaterialTheme.colorScheme.onPrimary,
-                                disabledContentColor = MaterialTheme.colorScheme.surface,
-                                disabledContainerColor = MaterialTheme.colorScheme.onSurface
-                            ),
-                            elevation = CardDefaults.cardElevation(
-                                defaultElevation = 8.dp,
-                                pressedElevation = 2.dp,
-                                focusedElevation = 4.dp
-                            ),
-                            shape = RectangleShape
-                        ) {
-                            val imageUrl = picture.urls.raw
-                            val painter = loadImagePainter(
-                                data = imageUrl,
-                                size = Size(picture.width.div(8), picture.height.div(8))
-                            )
-                            val transition by animateFloatAsState(
-                                targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f
-                            )
-
-                            if (painter.state is AsyncImagePainter.State.Loading) {
-                                val holderModifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(LocalConfiguration.current.screenHeightDp.dp)
-                                    .align(Alignment.CenterHorizontally)
-                                    .background(ColorSystemGray7)
-                                    .placeholder(
-                                        visible = true,
-                                        highlight = PlaceholderHighlight.fade(),
-                                    )
-
-                                Text(
-                                    modifier = holderModifier,
-                                    text = "",
-                                    textAlign = TextAlign.Center
-                                )
-                            } else {
-                                UserContainer(
-                                    modifier = Modifier,
-                                    user = picture.user,
-                                    state = rememberUserContainerState(
-                                        profileSize = rememberSaveable { mutableDoubleStateOf(48.0) },
-                                        colors = rememberSaveable { listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite, ColorSystemGray5, DarkGreen60) },
-                                        visibleViewPhotosButton = rememberSaveable { mutableStateOf(state.visibleViewPhotosButton.value) }
-                                    ),
-                                    onViewPhotos = onViewPhotos,
-                                    onShowSnackBar = onShowSnackBar
-                                )
-
-                                AnimatedVisibility(
-                                    visible = true,
-                                    modifier = modifier,
-                                    enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
-                                            fadeIn() + expandIn(expandFrom = Alignment.TopStart),
-                                    exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
-                                            fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
-                                ) {
-                                    Image(
-                                        painter = painter,
-                                        contentDescription = null,
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier
-                                            .then(((painter.state as? AsyncImagePainter.State.Success)
-                                                ?.painter
-                                                ?.intrinsicSize
-                                                ?.let { intrinsicSize ->
-                                                    Modifier.aspectRatio(intrinsicSize.width / intrinsicSize.height)
-                                                } ?: Modifier)
-                                            )
-                                            .clip(RectangleShape)
-                                            .clickable {
-                                            }
-                                            .scale(.8f + (.2f * transition))
-                                            .graphicsLayer { rotationX = (1f - transition) * 5f }
-                                            .alpha(transition / .2f),
-                                        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
-                                            setToSaturation(
-                                                transition
-                                            )
-                                        })
-                                    )
-                                }
-
-                                Spacer(modifier = Modifier.height(12.dp))
-                                BehaviorItem(picture.likes, picture.downloads, picture.views)
-                                Spacer(modifier = Modifier.height(16.dp))
-                                Text(
-                                    text = picture.description ?: picture.alt_description
-                                    ?: stringResource(id = R.string.picture_no_description),
-                                    modifier = Modifier.padding(8.dp, 4.dp),
-                                    color = ColorText4,
-                                    fontFamily = FontFamily.SansSerif,
-                                    fontWeight = FontWeight.W400,
-                                    fontSize = 18.sp,
-                                    fontStyle = FontStyle.Normal,
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                                Spacer(modifier = Modifier.height(24.dp))
-                                picture.location?.let {
-                                    LocationItem(it.name)
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                }
-
-                                DateItem(picture.created_at)
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                                picture.exif?.let { exif ->
-                                    ExifItem(exif)
-                                }
-
-                                Spacer(modifier = Modifier.height(30.dp))
-                                onShownPhoto(picture)
-                            }
-                        }
-
+                        BodyContent(
+                            modifier = modifier,
+                            picture = resource.data as Picture,
+                            visibleViewPhotosButton = state.visibleViewPhotosButton.value,
+                            onViewPhotos = onViewPhotos,
+                            onShowSnackBar = onShowSnackBar,
+                            onShownPhoto = onShownPhoto
+                        )
                         Spacer(modifier = Modifier.height(30.dp))
                     }
                 }
@@ -287,6 +172,144 @@ fun PictureContent(
             }
         }
     }
+}
+
+@Composable
+fun BodyContent(
+    modifier: Modifier = Modifier,
+    picture: Picture,
+    visibleViewPhotosButton: Boolean,
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
+    onShowSnackBar: (text: String) -> Unit,
+    onShownPhoto: (picture: Picture) -> Unit
+) {
+    Card(
+        modifier = modifier.padding(0.dp, 2.dp),
+        colors = CardDefaults.cardColors(
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+            containerColor =  MaterialTheme.colorScheme.onPrimary,
+            disabledContentColor = MaterialTheme.colorScheme.surface,
+            disabledContainerColor = MaterialTheme.colorScheme.onSurface
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8.dp,
+            pressedElevation = 2.dp,
+            focusedElevation = 4.dp
+        ),
+        shape = RectangleShape
+    ) {
+        val imageUrl = picture.urls.raw
+        val painter = loadImagePainter(
+            data = imageUrl,
+            size = Size(picture.width.div(8), picture.height.div(8))
+        )
+
+        if (painter.state is AsyncImagePainter.State.Loading) {
+            val holderModifier = Modifier
+                .fillMaxWidth()
+                .height(LocalConfiguration.current.screenHeightDp.dp)
+                .align(Alignment.CenterHorizontally)
+                .background(ColorSystemGray7)
+                .placeholder(
+                    visible = true,
+                    highlight = PlaceholderHighlight.fade(),
+                )
+
+            Text(
+                modifier = holderModifier,
+                text = "",
+                textAlign = TextAlign.Center
+            )
+        } else {
+            UserContainer(
+                modifier = Modifier,
+                user = picture.user,
+                state = rememberUserContainerState(
+                    profileSize = rememberSaveable { mutableDoubleStateOf(48.0) },
+                    colors = rememberSaveable { listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite, ColorSystemGray5, DarkGreen60) },
+                    visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) }
+                ),
+                onViewPhotos = onViewPhotos,
+                onShowSnackBar = onShowSnackBar
+            )
+
+            AnimatedVisibility(
+                visible = true,
+                modifier = modifier,
+                enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                        fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+                exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                        fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+            ) {
+                ImageContent(painter = painter)
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+            BehaviorItem(picture.likes, picture.downloads, picture.views)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = picture.description ?: picture.alt_description
+                ?: stringResource(id = R.string.picture_no_description),
+                modifier = Modifier.padding(8.dp, 4.dp),
+                color = ColorText4,
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.W400,
+                fontSize = 18.sp,
+                fontStyle = FontStyle.Normal,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            picture.location?.let {
+                LocationItem(it.name)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            DateItem(picture.created_at)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            picture.exif?.let { exif ->
+                ExifItem(exif)
+            }
+
+            Spacer(modifier = Modifier.height(30.dp))
+            onShownPhoto(picture)
+        }
+    }
+}
+
+@Composable
+fun ImageContent(
+    modifier: Modifier = Modifier,
+    painter: AsyncImagePainter
+) {
+    val transition by animateFloatAsState(
+        targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f
+    )
+
+    Image(
+        painter = painter,
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = modifier
+            .then(((painter.state as? AsyncImagePainter.State.Success)
+                ?.painter
+                ?.intrinsicSize
+                ?.let { intrinsicSize ->
+                    Modifier.aspectRatio(intrinsicSize.width / intrinsicSize.height)
+                } ?: Modifier)
+            )
+            .clip(RectangleShape)
+            .clickable {
+            }
+            .scale(.8f + (.2f * transition))
+            .graphicsLayer { rotationX = (1f - transition) * 5f }
+            .alpha(transition / .2f),
+        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
+            setToSaturation(
+                transition
+            )
+        })
+    )
 }
 
 @Composable
