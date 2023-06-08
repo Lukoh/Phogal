@@ -6,7 +6,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import com.goforer.phogal.data.model.remote.response.gallery.photo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 
 @Stable
 class PhotoContentState(

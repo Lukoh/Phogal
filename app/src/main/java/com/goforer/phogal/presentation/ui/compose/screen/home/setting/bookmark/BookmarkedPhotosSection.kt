@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.goforer.phogal.data.model.remote.response.gallery.photo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

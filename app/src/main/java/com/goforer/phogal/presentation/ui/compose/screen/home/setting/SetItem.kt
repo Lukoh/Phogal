@@ -1,6 +1,13 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.setting
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -39,43 +47,52 @@ fun SetItem(
     drawable: Any,
     onItemClicked: (index: Int) -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 4.dp)
-            .background(ColorBgSecondary)
-            .wrapContentHeight(Alignment.CenterVertically)
-            .fillMaxWidth()
-            .heightIn(68.dp)
-            .clickable {
-                onItemClicked(index)
-            }
+    AnimatedVisibility(
+        visible = true,
+        modifier = modifier,
+        enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+        exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
     ) {
-        IconContainer(36.dp) {
-            Image(
-                painter = loadImagePainter(
-                    data = drawable,
-                    factory = SvgDecoder.Factory(),
-                    size = Size.ORIGINAL
-                ),
-                contentDescription = "item",
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .wrapContentSize()
-                    .clickable { },
-                Alignment.Center
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+                .background(ColorBgSecondary)
+                .wrapContentHeight(Alignment.CenterVertically)
+                .fillMaxWidth()
+                .heightIn(68.dp)
+                .clickable {
+                    onItemClicked(index)
+                }
+        ) {
+            IconContainer(36.dp) {
+                Image(
+                    painter = loadImagePainter(
+                        data = drawable,
+                        factory = SvgDecoder.Factory(),
+                        size = Size.ORIGINAL
+                    ),
+                    contentDescription = "item",
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .wrapContentSize()
+                        .clickable { },
+                    Alignment.Center
+                )
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = text,
+                modifier = Modifier.align(Alignment.CenterVertically),
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.Medium,
+                fontSize = 15.sp,
+                color = DarkGreen10,
+                fontStyle = FontStyle.Normal
             )
         }
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = text,
-            modifier = Modifier.align(Alignment.CenterVertically),
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Medium,
-            fontSize = 15.sp,
-            color = DarkGreen10,
-            fontStyle = FontStyle.Normal
-        )
     }
 }
 

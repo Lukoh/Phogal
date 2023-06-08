@@ -1,9 +1,9 @@
-package com.goforer.phogal.presentation.stateholder.business.home.gallery.photo
+package com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like
 
 import androidx.lifecycle.viewModelScope
-import com.goforer.phogal.data.model.remote.response.gallery.photo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponse
 import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.repository.gallery.photo.GetPictureRepository
+import com.goforer.phogal.data.repository.gallery.photo.like.PostPictureLikeRepository
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,24 +14,24 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PictureViewModel
+class PictureLikeViewModel
 @Inject constructor(
-    private val getPictureRepository: GetPictureRepository
-) : BaseViewModel<Picture>() {
-    private val _pictureUiState = MutableStateFlow(Any())
-    val pictureUiState: StateFlow<Any> = _pictureUiState
+    private val postPictureLikeRepository: PostPictureLikeRepository
+) : BaseViewModel<LikeResponse>() {
+    private val _likeUiState = MutableStateFlow(Any())
+    val likeUiState: StateFlow<Any> = _likeUiState
 
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {
-            getPictureRepository.trigger(
+            postPictureLikeRepository.trigger(
                 replyCount = replyCount,
                 params = params
             ).stateIn(viewModelScope)
-             .collectLatest {
-                 val response = handleResponse(it)
+                .collectLatest {
+                    val response = handleResponse(it)
 
-                _pictureUiState.value = response
-             }
+                    _likeUiState.value = response
+                }
         }
     }
 }

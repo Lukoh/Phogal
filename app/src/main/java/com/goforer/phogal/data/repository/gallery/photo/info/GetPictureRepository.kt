@@ -1,7 +1,7 @@
-package com.goforer.phogal.data.repository.gallery.photo
+package com.goforer.phogal.data.repository.gallery.photo.info
 
 import com.goforer.phogal.BuildConfig
-import com.goforer.phogal.data.model.remote.response.gallery.photo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.ApiResponse
 import com.goforer.phogal.data.repository.Repository

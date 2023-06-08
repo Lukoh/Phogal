@@ -46,7 +46,7 @@ fun SettingContent(
     val middleItems = listOf(
         SettingItem(stringResource(id = R.string.setting_send_feedback), R.drawable.ic_bookmark),
         SettingItem(stringResource(id = R.string.setting_give_start), R.drawable.ic_rating_start),
-        SettingItem(stringResource(id = R.string.setting_give_start), R.drawable.ic_homepage)
+        SettingItem(stringResource(id = R.string.setting_homepage), R.drawable.ic_homepage)
     )
     val profile = Profile(0,"Lukoh", "남성", true,true, "lukoh.nam@gmail.com","https://avatars.githubusercontent.com/u/18302717?v=4", "sociable & gregarious", "+820101111-1111","", "Mar, 04, 1999","Lukoh is a tremendously capable and dedicated mobile SW professional. He has strong analytical and innovative skills which are further boosted by his solid technical background and his enthusiasm for technology. Lukoh works extremely well with colleagues, associates, and executives, adapting the analysis and communication techniques in order to accomplish the business objective. He is proficient in managing projects with consistent and successful results.\n" +
             "I am confident that his leadership experience and expertise in SW development will make him a good SW engineer who works with many colleagues, and should come up with creative awesome ideas.\n" +

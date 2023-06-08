@@ -35,7 +35,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.R
-import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.PictureViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.PhotoContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.rememberPhotoContentState

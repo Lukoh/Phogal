@@ -11,7 +11,7 @@ data class LinksX(
     val html: String,
     val likes: String,
     val photos: String,
-    val portfolio: String,
+    val portfolio: String?,
     val related: String? = null,
     val self: String
 ) : BaseModel(), Parcelable

@@ -64,13 +64,13 @@ import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.gallery.photo.Exif
-import com.goforer.phogal.data.model.remote.response.gallery.photo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Exif
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
-import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.PictureViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.PhotoContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.rememberPhotoContentState

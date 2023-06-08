@@ -15,7 +15,7 @@ import androidx.navigation.navArgument
 import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.data.model.local.home.gallery.NameArgument
 import com.goforer.phogal.data.model.local.home.gallery.PictureArgument
-import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.PictureViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photo.PictureScreen
