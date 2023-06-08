@@ -77,6 +77,7 @@ fun PhotoItem(
                 fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
     ) {
         Card(
+            modifier = modifier,
             colors = CardDefaults.cardColors(
                 contentColor = MaterialTheme.colorScheme.primary,
                 containerColor =

@@ -1,5 +1,7 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.setting.bookmark
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.goforer.phogal.data.model.remote.response.gallery.photo.Picture
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BookmarkedPhotosSection(
     modifier: Modifier = Modifier,
@@ -41,7 +44,9 @@ fun BookmarkedPhotosSection(
         ) {
             itemsIndexed(items = photos) {index, item ->
                 PictureItem(
-                    modifier = modifier,
+                    modifier = modifier.animateItemPlacement(
+                        tween(durationMillis = 250)
+                    ),
                     index = index,
                     picture = item,
                     visibleViewPhotosButton = false,

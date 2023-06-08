@@ -3,12 +3,14 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkOut
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -54,7 +56,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun SearchPhotosSection(
     modifier: Modifier = Modifier,
@@ -137,7 +139,9 @@ fun SearchPhotosSection(
                                     // If this bug will got fixed... then have to be removed below code
                                     state.visibleUpButtonState.value = visibleUpButton(index)
                                     PhotoItem(
-                                        modifier = modifier,
+                                        modifier = modifier.animateItemPlacement(
+                                            tween(durationMillis = 250)
+                                        ),
                                         index = index,
                                         photo = photos[index]!!,
                                         visibleViewPhotosButton = true,
