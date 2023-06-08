@@ -103,7 +103,7 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         return if (photos.isNullOrEmpty()) {
             false
         } else {
-            val foundPhoto = photos.find { it.created_at == photo.created_at && it.urls.raw == photo.urls.raw }
+            val foundPhoto = photos.find { it.id == photo.id || it.urls.raw == photo.urls.raw }
 
             foundPhoto != null
         }
@@ -124,7 +124,7 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
             editor.putString(key_bookmark_photos, json)
             editor.apply()
         } else {
-            val photo = photos.find { it.id == bookmarkedPhoto.id && it.urls.raw == bookmarkedPhoto.urls.raw }
+            val photo = photos.find { it.id == bookmarkedPhoto.id || it.urls.raw == bookmarkedPhoto.urls.raw }
 
             if (photo == null)
                 photos.add(bookmarkedPhoto)
