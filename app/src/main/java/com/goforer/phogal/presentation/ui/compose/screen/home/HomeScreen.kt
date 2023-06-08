@@ -120,7 +120,7 @@ fun HomeScreen(
                             },
                             selectedContentColor = Blue80,
                             unselectedContentColor = Color.Gray,
-                            selected = state.currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                            selected = state.currentDestination?.hierarchy?.any { it.route.equals(item.route) } == true,
                             alwaysShowLabel = false,
                             onClick = {
                                 if (item.route == photosHomeRoute && item.route == currentRoute) {
