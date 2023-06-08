@@ -130,7 +130,9 @@ fun SearchPhotosSection(
                                 }
                             } else {
                                 items(count = photos.itemCount,
-                                    key = photos.itemKey(),
+                                    key = photos.itemKey(
+                                        key = { photo -> photo.id }
+                                    ),
                                     contentType = photos.itemContentType()
                                 ) { index ->
                                     // After recreation, LazyPagingItems first return 0 items, then the cached items.

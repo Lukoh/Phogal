@@ -42,7 +42,10 @@ fun BookmarkedPhotosSection(
                 .fillMaxHeight(),
             contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
         ) {
-            itemsIndexed(items = photos) {index, item ->
+            itemsIndexed(
+                items = photos,
+                key = { _, item -> item.id }
+            ) {index, item ->
                 PictureItem(
                     modifier = modifier.animateItemPlacement(
                         tween(durationMillis = 250)
