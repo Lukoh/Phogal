@@ -15,7 +15,7 @@ import com.goforer.phogal.presentation.ui.compose.screen.home.setting.bookmark.B
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingBookmarkedPhotosRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.pictureRoute
-import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopTo
+import com.goforer.phogal.presentation.ui.navigation.ext.navigateTo
 import com.google.gson.Gson
 
 object Setting : PhogalDestination {
@@ -30,7 +30,7 @@ object Setting : PhogalDestination {
         SettingScreen(
             onItemClicked = { index ->
                 when(index) {
-                    0 ->  navController.navigateSingleTopTo(BookmarkedPhotos.route)
+                    0 ->  navController.navigateTo(BookmarkedPhotos.route)
                     else -> {}
                 }
             }
@@ -59,7 +59,7 @@ object BookmarkedPhotos : PhogalDestination {
                 val gson = Gson()
                 val json = Uri.encode(gson.toJson(pictureArgument))
 
-                navController.navigateSingleTopTo("${pictureRoute}/$json")
+                navController.navigate("${pictureRoute}/$json")
             },
             onBackPressed = {
                 navController.navigateUp()

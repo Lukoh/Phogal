@@ -17,7 +17,7 @@ fun NavHostController.navigateSingleTopToGraph(route: String) =
         restoreState = true
     }
 
-fun NavHostController.navigateSingleTopTo(
+fun NavHostController.navigateTo(
     route: String,
     saveState: Boolean = true,
     launchSingleTop: Boolean = true,

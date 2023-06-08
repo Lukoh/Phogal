@@ -24,7 +24,7 @@ import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.userphotos
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.pictureRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.userPhotosRoute
-import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopTo
+import com.goforer.phogal.presentation.ui.navigation.ext.navigateTo
 import com.google.gson.Gson
 
 object SearchPhotos : PhogalDestination {
@@ -48,7 +48,7 @@ object SearchPhotos : PhogalDestination {
                 val gson = Gson()
                 val json = Uri.encode(gson.toJson(pictureArgument))
 
-                navController.navigateSingleTopTo("${Picture.route}/$json")
+                navController.navigateTo("${Picture.route}/$json")
             },
             onViewPhotos = { name, firstName, lastName, username ->
                 val nameArgument = NameArgument(
@@ -60,7 +60,7 @@ object SearchPhotos : PhogalDestination {
                 val gson = Gson()
                 val json = Uri.encode(gson.toJson(nameArgument))
 
-                navController.navigateSingleTopTo(route = "${UserPhotos.route}/$json")
+                navController.navigateTo(route = "${UserPhotos.route}/$json")
             }
         )
     }
@@ -102,7 +102,7 @@ object Picture : PhogalDestination {
                     val gson = Gson()
                     val json = Uri.encode(gson.toJson(nameArgument))
 
-                    navController.navigateSingleTopTo(route = "${UserPhotos.route}/$json")
+                    navController.navigateTo(route = "${UserPhotos.route}/$json")
                 },
                 onBackPressed = {
                     navController.navigateUp()
@@ -146,7 +146,7 @@ object UserPhotos : PhogalDestination {
                     val gson = Gson()
                     val json = Uri.encode(gson.toJson(pictureArgument))
 
-                    navController.navigateSingleTopTo(route = "${Picture.route}/$json")
+                    navController.navigateTo(route = "${Picture.route}/$json")
                 },
                 onBackPressed = {
                     navController.navigateUp()
