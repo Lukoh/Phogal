@@ -16,6 +16,8 @@ import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.data.model.local.home.gallery.NameArgument
 import com.goforer.phogal.data.model.local.home.gallery.PictureArgument
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.info.PictureViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureLikeViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureUnlikeViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photo.PictureScreen
@@ -85,10 +87,14 @@ object Picture : PhogalDestination {
         val argument = backStackEntry.arguments?.getString(argumentTypeArg)
         val pictureArgument = Gson().fromJson(argument, PictureArgument::class.java)
         val pictureViewModel = hiltViewModel<PictureViewModel>(backStackEntry)
+        val likeViewModel =  hiltViewModel<PictureLikeViewModel>(backStackEntry)
+        val unLikeViewModel =  hiltViewModel<PictureUnlikeViewModel>(backStackEntry)
 
         pictureArgument?.let {
             PictureScreen(
                 pictureViewModel = pictureViewModel,
+                likeViewModel = likeViewModel,
+                unLikeViewModel = unLikeViewModel,
                 storage = storage,
                 id = pictureArgument.id,
                 visibleViewPhotosButton = pictureArgument.visibleViewPhotosButton,

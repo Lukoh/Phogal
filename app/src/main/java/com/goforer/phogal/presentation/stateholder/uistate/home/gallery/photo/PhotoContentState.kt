@@ -13,7 +13,8 @@ class PhotoContentState(
     val visibleViewPhotosButton: MutableState<Boolean>,
     var enabledLoadPhotos: MutableState<Boolean>,
     var enabledBookmark: MutableState<Boolean>,
-    var visibleBookmark: MutableState<Boolean>
+    var enabledLike: MutableState<Boolean>,
+    var visibleActions: MutableState<Boolean>
 ) {
     var picture: Picture? = null
 }
@@ -23,7 +24,8 @@ fun rememberPhotoContentState(
     visibleViewPhotosButton: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     enabledLoadPhotos: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },
     enabledBookmark: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    visibleBookmark: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
+    enabledLike: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    visibleActions: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): PhotoContentState = remember(
     visibleViewPhotosButton,
     enabledLoadPhotos
@@ -32,6 +34,7 @@ fun rememberPhotoContentState(
         visibleViewPhotosButton = visibleViewPhotosButton,
         enabledLoadPhotos = enabledLoadPhotos,
         enabledBookmark = enabledBookmark,
-        visibleBookmark = visibleBookmark
+        enabledLike = enabledLike,
+        visibleActions = visibleActions
     )
 }
