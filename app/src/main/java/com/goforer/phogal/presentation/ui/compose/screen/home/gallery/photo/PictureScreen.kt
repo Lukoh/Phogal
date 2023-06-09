@@ -168,7 +168,7 @@ fun PictureScreen(
                             }
                         ) {
                             Icon(
-                                imageVector = if (state.enabledLike.value)
+                                imageVector = if (state.picture?.liked_by_user!!)
                                     ImageVector.vectorResource(id = R.drawable.ic_like_on)
                                 else
                                     ImageVector.vectorResource(id = R.drawable.ic_like_off),

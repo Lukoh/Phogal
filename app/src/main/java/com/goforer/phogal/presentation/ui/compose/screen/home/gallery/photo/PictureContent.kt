@@ -104,6 +104,29 @@ fun PictureContent(
         pictureViewModel.trigger(2, Params(id))
     }
 
+    PictureResponseHandle(
+        modifier = modifier,
+        contentPadding = contentPadding,
+        id = id,
+        state = state,
+        pictureViewModel = pictureViewModel,
+        onViewPhotos = onViewPhotos,
+        onShowSnackBar = onShowSnackBar,
+        onShownPhoto = onShownPhoto
+    )
+}
+
+@Composable
+fun PictureResponseHandle(
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues,
+    id : String,
+    pictureViewModel: PictureViewModel = hiltViewModel(),
+    state: PhotoContentState = rememberPhotoContentState(),
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
+    onShowSnackBar: (text: String) -> Unit,
+    onShownPhoto: (picture: Picture) -> Unit
+) {
     val pictureUiState = pictureViewModel.pictureUiState.collectAsStateWithLifecycle()
 
     if (pictureUiState.value is Resource) {
