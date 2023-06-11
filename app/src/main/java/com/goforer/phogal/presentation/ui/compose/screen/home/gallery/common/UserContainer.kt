@@ -207,6 +207,7 @@ fun UserContainer(
         UserInfoBottomSheet(
             userInfoState = rememberUserInfoState(),
             user = user,
+            showUserInfoBottomSheet = showUserInfoBottomSheet,
             onDismissedRequest = {
                 showUserInfoBottomSheet = false
             },
@@ -220,10 +221,14 @@ fun UserContainer(
 fun UserInfoBottomSheet(
     userInfoState: UserInfoState = rememberUserInfoState(),
     user: User,
+    showUserInfoBottomSheet: Boolean,
     onDismissedRequest: () -> Unit,
     onShowSnackBar: (text: String) -> Unit
 ) {
-    GenericCubicAnimationShape(400) { animatedShape ->
+    GenericCubicAnimationShape(
+        visible = showUserInfoBottomSheet,
+        duration = 400
+    ) { animatedShape ->
         ModalBottomSheet(
             onDismissRequest = {
                 userInfoState.scope.launch {

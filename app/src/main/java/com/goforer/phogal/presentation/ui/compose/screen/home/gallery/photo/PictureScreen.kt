@@ -1,6 +1,6 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photo
 
-import com.goforer.base.designsystem.component.ErrorDialog
+import com.goforer.base.designsystem.component.dialog.ErrorDialog
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn

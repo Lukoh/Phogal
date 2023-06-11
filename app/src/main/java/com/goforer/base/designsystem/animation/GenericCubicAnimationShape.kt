@@ -13,11 +13,12 @@ import androidx.compose.runtime.getValue
 
 @Composable
 fun GenericCubicAnimationShape(
-    duration: Int,
+    visible: Boolean = false,
+    duration: Int = 100,
     content: @Composable (animatedShape: GenericShape) -> Unit,
 ) {
     val animationProgress by animateFloatAsState(
-        targetValue = 1f,
+        targetValue = if (visible) 1f else 0f,
         animationSpec = tween(durationMillis = duration, easing = LinearEasing)
     )
     val transition = updateTransition(targetState = animationProgress, label = "")

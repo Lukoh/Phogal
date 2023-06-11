@@ -51,6 +51,7 @@
     <string name="user_updated_at">Updated at</string>
     <string name="picture_no_description">No the picture"'"s description</string>
     <string name="picture_no_last_name">No last name</string>
+    <string name="picture_camera_info">Camera Info</string>
 
     <string name="user_info_no_sex_info">No information</string>
     <string name="user_info_no_location_info">No user"'"s location information</string>

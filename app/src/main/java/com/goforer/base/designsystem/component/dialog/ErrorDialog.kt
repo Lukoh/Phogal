@@ -1,4 +1,4 @@
-package com.goforer.base.designsystem.component
+package com.goforer.base.designsystem.component.dialog
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.goforer.phogal.R
+import com.goforer.phogal.presentation.ui.theme.Blue60
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
 @Composable
@@ -56,7 +57,7 @@ fun ErrorDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(100.dp)
-                        .background(color = Color(0xFF35898f)),
+                        .background(color = Blue60),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(

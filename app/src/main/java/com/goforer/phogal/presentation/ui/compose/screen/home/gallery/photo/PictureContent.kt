@@ -28,20 +28,27 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.RectangleShape
@@ -62,6 +69,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImagePainter
 import coil.size.Size
+import com.goforer.base.designsystem.animation.GenericCubicAnimationShape
+import com.goforer.base.designsystem.component.IconButton
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Exif
@@ -77,6 +86,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.re
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.UserContainer
 import com.goforer.phogal.presentation.ui.theme.Black
+import com.goforer.phogal.presentation.ui.theme.Blue60
 import com.goforer.phogal.presentation.ui.theme.ColorBlackLight
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray1
@@ -206,6 +216,8 @@ fun BodyContent(
     onShowSnackBar: (text: String) -> Unit,
     onShownPhoto: (picture: Picture) -> Unit
 ) {
+    var visiebleCameraInfo by remember { mutableStateOf(false) }
+
     Card(
         modifier = modifier.padding(0.dp, 2.dp),
         colors = CardDefaults.cardColors(
@@ -289,12 +301,50 @@ fun BodyContent(
 
             DateItem(picture.created_at)
             Spacer(modifier = Modifier.height(16.dp))
-
             picture.exif?.let { exif ->
-                ExifItem(exif)
+                GenericCubicAnimationShape(
+                    visible = visiebleCameraInfo,
+                    duration = 550
+                ) { animatedShape ->
+                    ExifItem(
+                        modifier = modifier
+                            .graphicsLayer {
+                                clip = true
+                                shape = animatedShape
+                            },
+                        exif = exif
+                    )
+                }
+            }
+            if (!visiebleCameraInfo) {
+                IconButton(
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                    height = 32.dp,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Blue60,
+                        contentColor = Color.White
+                    ),
+                    onClick = {
+                        visiebleCameraInfo = true
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Camera,
+                            contentDescription = null,
+                        )
+                    },
+                    text = {
+                        Text(
+                            stringResource(id = R.string.picture_camera_info, "Camera Info"),
+                            fontFamily = FontFamily.SansSerif,
+                            fontSize = 13.sp,
+                            fontStyle = FontStyle.Italic
+                        )
+                    }
+                )
             }
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(70.dp))
             onShownPhoto(picture)
         }
     }
@@ -429,42 +479,49 @@ fun DateItem(createdAt: String) {
 }
 
 @Composable
-fun ExifItem(exif: Exif) {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_camera),
-            contentDescription = "Exif",
-            modifier = Modifier
-                .size(22.dp)
-                .padding(horizontal = 4.dp)
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            text = exif.name ?: stringResource(id = R.string.picture_no_camera_name),
-            color = ColorBlackLight,
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp,
-            fontStyle = FontStyle.Normal,
-            style = MaterialTheme.typography.titleMedium
-        )
-    }
+fun ExifItem(
+    modifier: Modifier = Modifier,
+    exif: Exif
+) {
+    Box(modifier) {
+        Column {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_camera),
+                    contentDescription = "Exif",
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(horizontal = 4.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = exif.name ?: stringResource(id = R.string.picture_no_camera_name),
+                    color = ColorBlackLight,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 14.sp,
+                    fontStyle = FontStyle.Normal,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
 
-    exif.name?.let {
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "${"Lens\n"}${"f/"}${exif.aperture}${"  "}${exif.focal_length}${"mm  "}${exif.exposure_time}${"s  iso "}${exif.iso}",
-            modifier = Modifier.padding(horizontal = 28.dp),
-            color = ColorBlackLight,
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp,
-            fontStyle = FontStyle.Normal,
-            style = MaterialTheme.typography.titleMedium
-        )
+            exif.name?.let {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "${"Lens\n"}${"f/"}${exif.aperture}${"  "}${exif.focal_length}${"mm  "}${exif.exposure_time}${"s  iso "}${exif.iso}",
+                    modifier = Modifier.padding(horizontal = 28.dp),
+                    color = ColorBlackLight,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 14.sp,
+                    fontStyle = FontStyle.Normal,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+        }
     }
 }
 
