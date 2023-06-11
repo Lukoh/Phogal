@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -54,6 +55,8 @@ import coil.size.Size
 import com.goforer.base.designsystem.component.IconButton
 import com.goforer.base.designsystem.component.IconContainer
 import com.goforer.base.designsystem.component.ImageCrossFade
+import com.goforer.base.designsystem.animation.GenericCubicAnimationShape
+import com.goforer.base.designsystem.animation.animateIconScale
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.base.extension.isNull
 import com.goforer.phogal.R
@@ -220,122 +223,143 @@ fun UserInfoBottomSheet(
     onDismissedRequest: () -> Unit,
     onShowSnackBar: (text: String) -> Unit
 ) {
-    ModalBottomSheet(
-        onDismissRequest = {
-            userInfoState.scope.launch {
-                userInfoState.bottomSheetState.hide()
-            }.invokeOnCompletion {
-                if (!userInfoState.bottomSheetState.isVisible) {
-                    userInfoState.openBottomSheetState.value = false
-                }
-            }
-
-            onDismissedRequest()
-        },
-        sheetState = userInfoState.bottomSheetState,
-    ) {
-        Column(
-            modifier = Modifier.wrapContentHeight(),
-            horizontalAlignment = Alignment.Start,
-        ) {
-            ProfileItem(user.profile_image.medium, user.name)
-            Spacer(modifier = Modifier.height(8.dp))
-            UserInfoItem(
-                text = user.bio ?: stringResource(id = R.string.user_info_no_sex_info),
-                painter = painterResource(id = R.drawable.ic_bio)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            UserInfoItem(
-                text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
-                painter = painterResource(id = R.drawable.ic_location)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            UserInfoItem(
-                text = "${stringResource(id = R.string.user_info_instagram_name)}${" "}${user.instagram_username ?: stringResource(id = R.string.user_info_no_instagram_name)}",
-                painter = painterResource(id = R.drawable.ic_instagram)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            UserInfoItem(
-                text = "${stringResource(id = R.string.user_info_twitter_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_twitter_name)}",
-                painter = painterResource(id = R.drawable.ic_twitter)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            UserInfoItem(
-                text = user.links.followers ?: "",
-                painter = painterResource(id = R.drawable.ic_follower)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            UserInfoItem(
-                text = user.links.following ?: "",
-                painter = painterResource(id = R.drawable.ic_following)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            UserInfoItem(
-                text = "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
-                painter = painterResource(id = R.drawable.ic_date)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_portfolio),
-                    contentDescription = "Following",
-                    modifier = Modifier
-                        .size(22.dp)
-                        .padding(horizontal = 4.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                IconButton(
-                    modifier = Modifier.padding(horizontal = 2.dp),
-                    height = 32.dp,
-                    onClick = {},
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.OpenInBrowser,
-                            contentDescription = null,
-                        )
-                    },
-                    text = {
-                        val phrase = stringResource(id = R.string.user_info_has_no_portfolio)
-
-                        Text(
-                            text = stringResource(id = R.string.user_info_portfolio, user.first_name),
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .clickable {
-                                    user.portfolio_url.isNull({
-                                        userInfoState.baseUiState.scope.launch {
-                                            onShowSnackBar("${user.first_name}${" "}${phrase}")
-                                        }
-                                    }, { url ->
-                                        userInfoState.baseUiState.context?.let { context ->
-                                            Caller.openBrowser(
-                                                context, url
-                                            )
-                                        }
-                                    })
-                                },
-                            color = DarkGreenGray99,
-                            fontFamily = FontFamily.SansSerif,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp,
-                            fontStyle = FontStyle.Normal,
-                            style = MaterialTheme.typography.titleMedium
-                        )
+    GenericCubicAnimationShape(400) { animatedShape ->
+        ModalBottomSheet(
+            onDismissRequest = {
+                userInfoState.scope.launch {
+                    userInfoState.bottomSheetState.hide()
+                }.invokeOnCompletion {
+                    if (!userInfoState.bottomSheetState.isVisible) {
+                        userInfoState.openBottomSheetState.value = false
                     }
-                )
-            }
+                }
 
-            Spacer(modifier = Modifier.height(36.dp))
+                onDismissedRequest()
+            },
+            sheetState = userInfoState.bottomSheetState,
+            shape = animatedShape,
+            tonalElevation = 8.dp
+        ) {
+            Column(
+                modifier = Modifier.wrapContentHeight(),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                ProfileItem(
+                    image = user.profile_image.medium,
+                    name = user.name,
+                    position = 9
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                UserInfoItem(
+                    text = user.bio ?: stringResource(id = R.string.user_info_no_sex_info),
+                    painter = painterResource(id = R.drawable.ic_bio),
+                    position = 8
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                UserInfoItem(
+                    text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
+                    painter = painterResource(id = R.drawable.ic_location),
+                    position = 7
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                UserInfoItem(
+                    text = "${stringResource(id = R.string.user_info_instagram_name)}${" "}${user.instagram_username ?: stringResource(id = R.string.user_info_no_instagram_name)}",
+                    painter = painterResource(id = R.drawable.ic_instagram),
+                    position = 6
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                UserInfoItem(
+                    text = "${stringResource(id = R.string.user_info_twitter_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_twitter_name)}",
+                    painter = painterResource(id = R.drawable.ic_twitter),
+                    position = 5
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                UserInfoItem(
+                    text = user.links.followers ?: "",
+                    painter = painterResource(id = R.drawable.ic_follower),
+                    position = 4
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                UserInfoItem(
+                    text = user.links.following ?: "",
+                    painter = painterResource(id = R.drawable.ic_following),
+                    position = 3
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                UserInfoItem(
+                    text = "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
+                    painter = painterResource(id = R.drawable.ic_date),
+                    position = 2
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val animationIconScale = animateIconScale(inputScale = 0.6F, position = 1, delay = 150L)
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_portfolio),
+                        contentDescription = "Following",
+                        modifier = Modifier
+                            .size(22.dp)
+                            .padding(horizontal = 4.dp)
+                            .graphicsLayer {
+                                scaleX = animationIconScale
+                                scaleY = animationIconScale
+                            }
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    IconButton(
+                        modifier = Modifier.padding(horizontal = 2.dp),
+                        height = 32.dp,
+                        onClick = {},
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.OpenInBrowser,
+                                contentDescription = null,
+                            )
+                        },
+                        text = {
+                            val phrase = stringResource(id = R.string.user_info_has_no_portfolio)
+
+                            Text(
+                                text = stringResource(id = R.string.user_info_portfolio, user.first_name),
+                                modifier = Modifier
+                                    .padding(horizontal = 8.dp)
+                                    .clickable {
+                                        user.portfolio_url.isNull({
+                                            userInfoState.baseUiState.scope.launch {
+                                                onShowSnackBar("${user.first_name}${" "}${phrase}")
+                                            }
+                                        }, { url ->
+                                            userInfoState.baseUiState.context?.let { context ->
+                                                Caller.openBrowser(
+                                                    context, url
+                                                )
+                                            }
+                                        })
+                                    },
+                                color = DarkGreenGray99,
+                                fontFamily = FontFamily.SansSerif,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp,
+                                fontStyle = FontStyle.Normal,
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(36.dp))
+            }
         }
     }
 }
 
 @Composable
-fun ProfileItem(image: String, name: String) {
+fun ProfileItem(image: String, name: String, position: Int) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -354,6 +378,7 @@ fun ProfileItem(image: String, name: String) {
                     data = image,
                     size = Size.ORIGINAL
                 )
+                val animationIconScale = animateIconScale(inputScale = 0.6F, position = position, delay = 150L)
 
                 ImageCrossFade(painter = painter, durationMillis = null)
                 Image(
@@ -364,7 +389,11 @@ fun ProfileItem(image: String, name: String) {
                         .fillMaxSize()
                         .clip(CircleShape)
                         .border(0.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
-                        .clickable {},
+                        .clickable {}
+                        .graphicsLayer {
+                            scaleX = animationIconScale
+                            scaleY = animationIconScale
+                        },
                     Alignment.CenterStart,
                     contentScale = ContentScale.Crop
                 )
@@ -399,18 +428,24 @@ fun ProfileItem(image: String, name: String) {
 }
 
 @Composable
-fun UserInfoItem(text: String, painter: Painter) {
+fun UserInfoItem(text: String, painter: Painter, position: Int) {
     Row(
         modifier = Modifier.padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        val animationIconScale = animateIconScale(inputScale = 0.6F, position = position, delay = 150L)
+
         Image(
             painter = painter,
             contentDescription = "UserInfoItem",
             modifier = Modifier
                 .size(22.dp)
                 .padding(horizontal = 4.dp)
+                .graphicsLayer {
+                    scaleX = animationIconScale
+                    scaleY = animationIconScale
+                }
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
