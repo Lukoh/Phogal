@@ -167,13 +167,15 @@ fun PictureScreen(
                                     unLikeViewModel.trigger(2, Params(id))
                             }
                         ) {
-                            Icon(
-                                imageVector = if (state.picture?.liked_by_user!!)
-                                    ImageVector.vectorResource(id = R.drawable.ic_like_on)
-                                else
-                                    ImageVector.vectorResource(id = R.drawable.ic_like_off),
-                                contentDescription = "Like"
-                            )
+                            state.picture?.liked_by_user?.let { liked ->
+                                Icon(
+                                    imageVector = if (liked)
+                                        ImageVector.vectorResource(id = R.drawable.ic_like_on)
+                                    else
+                                        ImageVector.vectorResource(id = R.drawable.ic_like_off),
+                                    contentDescription = "Like"
+                                )
+                            }
                         }
 
                         IconButton(
