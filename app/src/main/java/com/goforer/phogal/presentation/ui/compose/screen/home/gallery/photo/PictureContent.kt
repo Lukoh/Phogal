@@ -308,6 +308,7 @@ fun BodyContent(
                 ) { animatedShape ->
                     ExifItem(
                         modifier = modifier
+                            .padding(horizontal = 4.dp, vertical = 8.dp)
                             .graphicsLayer {
                                 clip = true
                                 shape = animatedShape
@@ -316,33 +317,34 @@ fun BodyContent(
                     )
                 }
             }
-            if (!visiebleCameraInfo) {
-                IconButton(
-                    modifier = Modifier.padding(horizontal = 4.dp),
-                    height = 32.dp,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Blue60,
-                        contentColor = Color.White
-                    ),
-                    onClick = {
-                        visiebleCameraInfo = true
-                    },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.Camera,
-                            contentDescription = null,
-                        )
-                    },
-                    text = {
-                        Text(
-                            stringResource(id = R.string.picture_camera_info, "Camera Info"),
-                            fontFamily = FontFamily.SansSerif,
-                            fontSize = 13.sp,
-                            fontStyle = FontStyle.Italic
-                        )
-                    }
-                )
-            }
+            IconButton(
+                modifier = Modifier.padding(horizontal = 4.dp),
+                height = 32.dp,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Blue60,
+                    contentColor = Color.White
+                ),
+                onClick = {
+                    visiebleCameraInfo = !visiebleCameraInfo
+                },
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Camera,
+                        contentDescription = null,
+                    )
+                },
+                text = {
+                    Text(
+                        text = if (visiebleCameraInfo)
+                            stringResource(id = R.string.picture_close_camera_info)
+                        else
+                            stringResource(id = R.string.picture_view_camera_info),
+                        fontFamily = FontFamily.SansSerif,
+                        fontSize = 13.sp,
+                        fontStyle = FontStyle.Italic
+                    )
+                }
+            )
 
             Spacer(modifier = Modifier.height(70.dp))
             onShownPhoto(picture)
@@ -430,7 +432,8 @@ fun BehaviorItem(likes: Int, downloads: Int, views: Int) {
 fun LocationItem(location: String?) {
     Row(
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_location),
@@ -456,7 +459,8 @@ fun LocationItem(location: String?) {
 fun DateItem(createdAt: String) {
     Row(
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_date),
