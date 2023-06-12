@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.stateholder.business.home.common.bookmark
+package com.goforer.phogal.presentation.stateholder.business.home.common.gallery.bookmark
 
 import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture

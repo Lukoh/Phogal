@@ -52,7 +52,7 @@ import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResp
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.network.response.Status
-import com.goforer.phogal.presentation.stateholder.business.home.common.bookmark.BookmarkViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.bookmark.BookmarkViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureLikeViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureUnlikeViewModel

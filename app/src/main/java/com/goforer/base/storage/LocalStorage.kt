@@ -21,6 +21,7 @@ class LocalStorage
 constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
     companion object {
         const val key_bookmark_photos = "key_bookmark_photos"
+        const val key_search_keyword_list = "search_keyword_list"
     }
 
     private val spec = KeyGenParameterSpec.Builder(
@@ -117,7 +118,7 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         val type = object : TypeToken<ArrayList<Picture>>() {}.type
 
         if (photos.isNullOrEmpty()) {
-            photos = mutableListOf<Picture>()
+            photos = mutableListOf()
             photos.add(bookmarkedPhoto)
             json = Gson().toJson(photos)
             editor.apply()
@@ -137,5 +138,20 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         }
 
         return Gson().fromJson(json, type)
+    }
+
+    internal fun getSearchKeywordList(): List<String>? {
+        val json = pref.getString(key_search_keyword_list, null)
+        val type = object : TypeToken<ArrayList<String>>() {}.type
+
+        return Gson().fromJson(json, type)
+    }
+
+    internal fun setSearchKeywordList(presses: List<String>? = null) {
+        val editor = pref.edit()
+        val json = Gson().toJson(presses)
+
+        editor.putString(key_search_keyword_list, json)
+        editor.apply()
     }
 }
