@@ -4,12 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
-import com.goforer.base.storage.LocalStorage
 
 interface PhogalDestination {
     val icon: ImageVector
     val route: String
-    val screen: @Composable (NavHostController, NavBackStackEntry, String, LocalStorage) -> Unit
+    val screen: @Composable (NavHostController, NavBackStackEntry, String) -> Unit
 
     companion object {
         // Photo Bottom Navigation

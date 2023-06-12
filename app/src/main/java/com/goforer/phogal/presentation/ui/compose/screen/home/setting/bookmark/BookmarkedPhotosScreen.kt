@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
-import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
@@ -45,7 +44,6 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 fun BookmarkedPhotosScreen(
     modifier: Modifier = Modifier,
     baseUiState: BaseUiState = rememberBaseUiState(),
-    storage: LocalStorage,
     onItemClicked: (item: Picture, index: Int) -> Unit,
     onBackPressed: () -> Unit,
     onStart: () -> Unit = {
@@ -116,7 +114,6 @@ fun BookmarkedPhotosScreen(
         }, content = { paddingValues ->
             BookmarkedPhotosContent(
                 modifier = modifier,
-                storage = storage,
                 contentPadding = paddingValues,
                 onItemClicked = onItemClicked
             )

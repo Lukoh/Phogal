@@ -12,7 +12,6 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.data.model.local.home.gallery.NameArgument
 import com.goforer.phogal.data.model.local.home.gallery.PictureArgument
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.info.PictureViewModel
@@ -35,9 +34,8 @@ object SearchPhotos : PhogalDestination {
     override val screen: @Composable (
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
-        route: String,
-        storage: LocalStorage
-    ) -> Unit = { navController, backStackEntry, _, _ ->
+        route: String
+    ) -> Unit = { navController, backStackEntry, _ ->
         val galleryViewModel = hiltViewModel<GalleryViewModel>(backStackEntry)
 
         SearchPhotosScreen(
@@ -81,9 +79,8 @@ object Picture : PhogalDestination {
     override val screen: @Composable (
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
-        route: String,
-        storage: LocalStorage
-    ) -> Unit = { navController, backStackEntry, _, storage ->
+        route: String
+    ) -> Unit = { navController, backStackEntry, _ ->
         val argument = backStackEntry.arguments?.getString(argumentTypeArg)
         val pictureArgument = Gson().fromJson(argument, PictureArgument::class.java)
         val pictureViewModel = hiltViewModel<PictureViewModel>(backStackEntry)
@@ -95,7 +92,6 @@ object Picture : PhogalDestination {
                 pictureViewModel = pictureViewModel,
                 likeViewModel = likeViewModel,
                 unLikeViewModel = unLikeViewModel,
-                storage = storage,
                 id = pictureArgument.id,
                 visibleViewPhotosButton = pictureArgument.visibleViewPhotosButton,
                 onViewPhotos = { name, firstName, lastName, username ->
@@ -132,9 +128,8 @@ object UserPhotos : PhogalDestination {
     override val screen: @Composable (
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
-        route: String,
-        storage: LocalStorage
-    ) -> Unit = { navController, backStackEntry, _, _ ->
+        route: String
+    ) -> Unit = { navController, backStackEntry, _ ->
         val argument = backStackEntry.arguments?.getString(argumentTypeArg)
         val nameArgument = Gson().fromJson(argument, NameArgument::class.java)
         val userPhotosViewModel = hiltViewModel<UserPhotosViewModel>(backStackEntry)

@@ -20,7 +20,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.goforer.base.analytics.AnalyticsHelper
 import com.goforer.base.analytics.LocalAnalyticsHelper
-import com.goforer.base.storage.LocalStorage
 import com.goforer.base.utils.connect.ConnectivityManagerNetworkMonitor
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.goforer.phogal.presentation.ui.compose.screen.MainScreen
@@ -38,9 +37,6 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
-
-    @Inject
-    lateinit var storage: LocalStorage
 
     companion object {
         internal const val SplashWaitTime = 2000L
@@ -91,8 +87,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         MainScreen(
                             networkMonitor = connectivityManagerNetworkMonitor,
-                            windowSizeClass = calculateWindowSizeClass(this),
-                            storage = storage
+                            windowSizeClass = calculateWindowSizeClass(this)
                         )
                     }
                 }

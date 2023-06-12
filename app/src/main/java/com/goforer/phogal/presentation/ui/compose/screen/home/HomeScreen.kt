@@ -26,7 +26,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -40,7 +39,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.uistate.MainScreenState
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.communitiesStartRoute
@@ -73,8 +71,7 @@ sealed class BottomNavDestination(val route: String, @DrawableRes val icon: Int,
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    state: MainScreenState,
-    storage: LocalStorage
+    state: MainScreenState
 ) {
     var bottomBarVisible by remember { mutableStateOf(false) }
     val bottomBarOffset by animateDpAsState(targetValue = if (bottomBarVisible) 0.dp else 56.dp)
@@ -156,26 +153,22 @@ fun HomeScreen(
                     galleryGraph(
                         navController = state.navController,
                         startDestination = searchPhotosStartRoute,
-                        route = photosHomeRoute,
-                        storage = storage
+                        route = photosHomeRoute
                     )
                     communityGraph(
                         navController = state.navController,
                         startDestination = communitiesStartRoute,
-                        route = communityHomeRoute,
-                        storage = storage
+                        route = communityHomeRoute
                     )
                     notificationGraph(
                         navController = state.navController,
                         startDestination = notificationsStartRoute,
-                        route =  notificationHomeRoute,
-                        storage = storage
+                        route =  notificationHomeRoute
                     )
                     settingGraph(
                         navController = state.navController,
                         startDestination = settingStartRoute,
-                        route = settingHomeRoute,
-                        storage = storage
+                        route = settingHomeRoute
                     )
                 }
             }
@@ -205,8 +198,7 @@ fun HomeScreen(
 @Composable
 fun ProfilerHomeScreenPreview(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
-    storage: LocalStorage = LocalStorage(LocalContext.current)
+    navController: NavHostController = rememberNavController()
 ) {
     PhogalTheme {
         Scaffold(
@@ -265,26 +257,22 @@ fun ProfilerHomeScreenPreview(
                     galleryGraph(
                         navController = navController,
                         startDestination =  searchPhotosStartRoute,
-                        route = photosHomeRoute,
-                        storage = storage
+                        route = photosHomeRoute
                     )
                     communityGraph(
                         navController = navController,
                         startDestination = communitiesStartRoute,
-                        route = communityHomeRoute,
-                        storage = storage
+                        route = communityHomeRoute
                     )
                     notificationGraph(
                         navController = navController,
                         startDestination = notificationsStartRoute,
-                        route = notificationHomeRoute,
-                        storage = storage
+                        route = notificationHomeRoute
                     )
                     settingGraph(
                         navController = navController,
                         startDestination = settingStartRoute,
-                        route = settingHomeRoute,
-                        storage = storage
+                        route = settingHomeRoute
                     )
                 }
             }

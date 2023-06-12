@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
-import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.data.model.local.home.gallery.PictureArgument
 import com.goforer.phogal.presentation.ui.compose.screen.home.setting.SettingScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.setting.bookmark.BookmarkedPhotosScreen
@@ -24,9 +23,8 @@ object Setting : PhogalDestination {
     override val screen: @Composable (
         navController: NavHostController,
         navBackStackEntry: NavBackStackEntry,
-        route: String,
-        storage: LocalStorage
-    ) -> Unit = { navController, _, _, _ ->
+        route: String
+    ) -> Unit = { navController, _, _ ->
         SettingScreen(
             onItemClicked = { index ->
                 when(index) {
@@ -46,11 +44,9 @@ object BookmarkedPhotos : PhogalDestination {
     override val screen: @Composable (
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
-        route: String,
-        storage: LocalStorage
-    ) -> Unit = { navController, _, _, storage ->
+        route: String
+    ) -> Unit = { navController, _, _ ->
         BookmarkedPhotosScreen(
-            storage = storage,
             onItemClicked = { picture, _ ->
                 val pictureArgument = PictureArgument(
                     id = picture.id,

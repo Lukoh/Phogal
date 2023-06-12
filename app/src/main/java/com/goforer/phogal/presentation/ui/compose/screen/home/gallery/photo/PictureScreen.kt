@@ -41,17 +41,18 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goforer.base.designsystem.component.CardSnackBar
-import com.goforer.base.storage.LocalStorage
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.Errors
 import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponse
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.network.response.Status
+import com.goforer.phogal.presentation.stateholder.business.home.common.bookmark.BookmarkViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureLikeViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureUnlikeViewModel
@@ -71,7 +72,7 @@ fun PictureScreen(
     pictureViewModel: PictureViewModel,
     likeViewModel: PictureLikeViewModel,
     unLikeViewModel: PictureUnlikeViewModel,
-    storage: LocalStorage,
+    bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
     baseUiState: BaseUiState = rememberBaseUiState(),
     id: String,
     visibleViewPhotosButton: Boolean,
@@ -187,7 +188,7 @@ fun PictureScreen(
                             ),
                             onClick = {
                                 state.picture?.let {
-                                    storage.setBookmarkPhoto(it)
+                                    bookmarkViewModel.setBookmarkPicture(it)
                                 }
 
                                 state.enabledBookmark.value = !state.enabledBookmark.value
@@ -219,7 +220,7 @@ fun PictureScreen(
                 onShownPhoto = {
                     state.picture = it
                     state.visibleActions.value = true
-                    state.enabledBookmark.value = storage.isPhotoBookmarked(it)
+                    state.enabledBookmark.value =  bookmarkViewModel.isPhotoBookmarked(it)
                 }
             )
         }
