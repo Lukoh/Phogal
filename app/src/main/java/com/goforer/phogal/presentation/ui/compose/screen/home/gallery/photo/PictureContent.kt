@@ -107,7 +107,8 @@ fun PictureContent(
     pictureViewModel: PictureViewModel = hiltViewModel(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onShownPhoto: (picture: Picture) -> Unit
+    onShownPhoto: (picture: Picture) -> Unit,
+    onOpenCustomTab: (url: String) -> Unit
 ) {
     if (state.enabledLoadPhotos.value) {
         state.enabledLoadPhotos.value = false
@@ -122,7 +123,8 @@ fun PictureContent(
         pictureViewModel = pictureViewModel,
         onViewPhotos = onViewPhotos,
         onShowSnackBar = onShowSnackBar,
-        onShownPhoto = onShownPhoto
+        onShownPhoto = onShownPhoto,
+        onOpenCustomTab = onOpenCustomTab
     )
 }
 
@@ -135,7 +137,8 @@ fun PictureResponseHandle(
     state: PhotoContentState = rememberPhotoContentState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onShownPhoto: (picture: Picture) -> Unit
+    onShownPhoto: (picture: Picture) -> Unit,
+    onOpenCustomTab: (url: String) -> Unit
 ) {
     val pictureUiState = pictureViewModel.pictureUiState.collectAsStateWithLifecycle()
 
@@ -158,7 +161,8 @@ fun PictureResponseHandle(
                             visibleViewPhotosButton = state.visibleViewPhotosButton.value,
                             onViewPhotos = onViewPhotos,
                             onShowSnackBar = onShowSnackBar,
-                            onShownPhoto = onShownPhoto
+                            onShownPhoto = onShownPhoto,
+                            onOpenCustomTab = onOpenCustomTab
                         )
                         Spacer(modifier = Modifier.height(30.dp))
                     }
@@ -214,7 +218,8 @@ fun BodyContent(
     visibleViewPhotosButton: Boolean,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onShownPhoto: (picture: Picture) -> Unit
+    onShownPhoto: (picture: Picture) -> Unit,
+    onOpenCustomTab: (url: String) -> Unit
 ) {
     var visiebleCameraInfo by remember { mutableStateOf(false) }
 
@@ -265,7 +270,8 @@ fun BodyContent(
                     visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) }
                 ),
                 onViewPhotos = onViewPhotos,
-                onShowSnackBar = onShowSnackBar
+                onShowSnackBar = onShowSnackBar,
+                onOpenCustomTab = onOpenCustomTab
             )
 
             AnimatedVisibility(

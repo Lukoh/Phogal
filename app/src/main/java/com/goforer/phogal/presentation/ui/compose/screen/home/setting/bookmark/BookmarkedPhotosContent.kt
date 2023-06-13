@@ -21,7 +21,8 @@ fun BookmarkedPhotosContent(
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
     contentPadding: PaddingValues = PaddingValues(4.dp),
     enabledLoadPhotosState: MutableState<Boolean>,
-    onItemClicked: (item: Picture, index: Int) -> Unit
+    onItemClicked: (item: Picture, index: Int) -> Unit,
+    onOpenCustomTab: (url: String) -> Unit
 ) {
     val bookmarkedPictures = bookmarkViewModel.getBookmarkPictures()
 
@@ -30,7 +31,8 @@ fun BookmarkedPhotosContent(
             modifier = modifier,
             contentPadding = contentPadding,
             photos = bookmarkedPictures,
-            onItemClicked = onItemClicked
+            onItemClicked = onItemClicked,
+            onOpenCustomTab = onOpenCustomTab
         )
     } else {
         if (enabledLoadPhotosState.value) {

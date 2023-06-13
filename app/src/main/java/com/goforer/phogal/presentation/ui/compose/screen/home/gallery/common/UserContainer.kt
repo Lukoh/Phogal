@@ -52,20 +52,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
 import coil.size.Size
+import com.goforer.base.designsystem.animation.GenericCubicAnimationShape
+import com.goforer.base.designsystem.animation.animateIconScale
 import com.goforer.base.designsystem.component.IconButton
 import com.goforer.base.designsystem.component.IconContainer
 import com.goforer.base.designsystem.component.ImageCrossFade
-import com.goforer.base.designsystem.animation.GenericCubicAnimationShape
-import com.goforer.base.designsystem.animation.animateIconScale
 import com.goforer.base.designsystem.component.loadImagePainter
-import com.goforer.base.extension.isNull
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserInfoState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserInfoState
-import com.goforer.phogal.presentation.ui.Caller
 import com.goforer.phogal.presentation.ui.theme.Blue80
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.goforer.phogal.presentation.ui.theme.DarkGreenGray10
@@ -74,6 +72,7 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.goforer.phogal.presentation.ui.theme.Teal60
 import kotlinx.coroutines.launch
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserContainer(
@@ -81,7 +80,8 @@ fun UserContainer(
     user: User,
     state: UserContainerState = rememberUserContainerState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
-    onShowSnackBar: (text: String) -> Unit
+    onShowSnackBar: (text: String) -> Unit,
+    onOpenCustomTab: (url: String) -> Unit
 ) {
     val lastName = user.last_name ?: stringResource(id = R.string.picture_no_last_name)
     var showUserInfoBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -210,8 +210,16 @@ fun UserContainer(
             showUserInfoBottomSheet = showUserInfoBottomSheet,
             onDismissedRequest = {
                 showUserInfoBottomSheet = false
-            },
-            onShowSnackBar = onShowSnackBar
+                if (it) {
+                    if (user.portfolio_url.isNullOrEmpty()) {
+                        state.baseUiState.scope.launch {
+                            onShowSnackBar("${user.first_name}${" "}stringResource(id = R.string.user_info_has_no_portfolio)}")
+                        }
+                    } else {
+                        onOpenCustomTab(user.portfolio_url)
+                    }
+                }
+            }
         )
     }
 }
@@ -222,8 +230,7 @@ fun UserInfoBottomSheet(
     userInfoState: UserInfoState = rememberUserInfoState(),
     user: User,
     showUserInfoBottomSheet: Boolean,
-    onDismissedRequest: () -> Unit,
-    onShowSnackBar: (text: String) -> Unit
+    onDismissedRequest: (Boolean) -> Unit
 ) {
     GenericCubicAnimationShape(
         visible = showUserInfoBottomSheet,
@@ -239,7 +246,7 @@ fun UserInfoBottomSheet(
                     }
                 }
 
-                onDismissedRequest()
+                onDismissedRequest(false)
             },
             sheetState = userInfoState.bottomSheetState,
             shape = animatedShape,
@@ -319,7 +326,17 @@ fun UserInfoBottomSheet(
                     IconButton(
                         modifier = Modifier.padding(horizontal = 2.dp),
                         height = 32.dp,
-                        onClick = {},
+                        onClick = {
+                            userInfoState.scope.launch {
+                                userInfoState.bottomSheetState.hide()
+                            }.invokeOnCompletion {
+                                if (!userInfoState.bottomSheetState.isVisible) {
+                                    userInfoState.openBottomSheetState.value = false
+                                }
+                            }
+
+                            onDismissedRequest(true)
+                        },
                         icon = {
                             Icon(
                                 imageVector = Icons.Default.OpenInBrowser,
@@ -327,25 +344,11 @@ fun UserInfoBottomSheet(
                             )
                         },
                         text = {
-                            val phrase = stringResource(id = R.string.user_info_has_no_portfolio)
-
                             Text(
                                 text = stringResource(id = R.string.user_info_portfolio, user.first_name),
                                 modifier = Modifier
                                     .padding(horizontal = 8.dp)
-                                    .clickable {
-                                        user.portfolio_url.isNull({
-                                            userInfoState.baseUiState.scope.launch {
-                                                onShowSnackBar("${user.first_name}${" "}${phrase}")
-                                            }
-                                        }, { url ->
-                                            userInfoState.baseUiState.context?.let { context ->
-                                                Caller.openBrowser(
-                                                    context, url
-                                                )
-                                            }
-                                        })
-                                    },
+                                    .clickable {},
                                 color = DarkGreenGray99,
                                 fontFamily = FontFamily.SansSerif,
                                 fontWeight = FontWeight.Medium,

@@ -20,6 +20,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -29,25 +30,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
+import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.chromecustomtab.OpenCustomTabViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.UserPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun UserPhotosScreen(
     modifier: Modifier = Modifier,
     name: String,
     firstName: String,
     userPhotosViewModel: UserPhotosViewModel,
+    openCustomTabViewModel: OpenCustomTabViewModel = hiltViewModel(),
     state: UserPhotosContentState = rememberUserPhotosContentState(
+        baseUiState = rememberBaseUiState(),
         photosUiState = userPhotosViewModel.photosUiState,
         isRefreshing = userPhotosViewModel.isRefreshing
     ),
@@ -137,6 +143,11 @@ fun UserPhotosScreen(
                 onShowSnackBar = {
                     state.baseUiState.scope.launch {
                         snackbarHostState.showSnackbar(it)
+                    }
+                },
+                onOpenCustomTab = { url ->
+                    state.baseUiState.context?.let { context ->
+                        openCustomTabViewModel.runCustomTab(context, url)
                     }
                 }
             )

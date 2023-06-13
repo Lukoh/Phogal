@@ -9,7 +9,7 @@ import com.goforer.base.designsystem.component.Background
 import com.goforer.base.designsystem.component.GradientBackground
 import com.goforer.base.designsystem.theme.GradientColors
 import com.goforer.base.designsystem.theme.LocalGradientColors
-import com.goforer.base.utils.connect.NetworkMonitor
+import com.goforer.base.utils.connect.ConnectivityManagerNetworkMonitor
 import com.goforer.phogal.presentation.stateholder.uistate.MainScreenState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberMainScreenState
 import com.goforer.phogal.presentation.ui.compose.screen.home.BottomNavDestination.Gallery
@@ -18,7 +18,7 @@ import com.goforer.phogal.presentation.ui.compose.screen.home.OfflineScreen
 
 @Composable
 fun MainScreen(
-    networkMonitor: NetworkMonitor,
+    networkMonitor: ConnectivityManagerNetworkMonitor,
     windowSizeClass: WindowSizeClass,
     state: MainScreenState = rememberMainScreenState(
         windowSizeClass = windowSizeClass,

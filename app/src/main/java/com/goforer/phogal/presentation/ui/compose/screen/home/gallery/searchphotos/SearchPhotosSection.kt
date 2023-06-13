@@ -64,7 +64,9 @@ fun SearchPhotosSection(
     onItemClicked: (item: Photo, index: Int) -> Unit,
     onRefresh: () -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
-    onShowSnackBar: (text: String) -> Unit
+    onShowSnackBar: (text: String) -> Unit,
+    onLoadSuccess: () -> Unit,
+    onOpenCustomTab: (url: String) -> Unit
 ) {
     val photos = (state.photosUiState as StateFlow<PagingData<Photo>>).collectAsLazyPagingItems()
     // After recreation, LazyPagingItems first return 0 items, then the cached items.
@@ -129,6 +131,7 @@ fun SearchPhotosSection(
                                     )
                                 }
                             } else {
+                                onLoadSuccess()
                                 items(count = photos.itemCount,
                                     key = photos.itemKey(
                                         key = { photo -> photo.id }
@@ -149,7 +152,8 @@ fun SearchPhotosSection(
                                         visibleViewPhotosButton = true,
                                         onItemClicked = onItemClicked,
                                         onViewPhotos = onViewPhotos,
-                                        onShowSnackBar = onShowSnackBar
+                                        onShowSnackBar = onShowSnackBar,
+                                        onOpenCustomTab = onOpenCustomTab
                                     )
                                     if (photos.itemCount < Repository.ITEM_COUNT && index == photos.itemCount - 1)
                                         Spacer(modifier = Modifier.height(26.dp))

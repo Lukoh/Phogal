@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
@@ -53,6 +54,7 @@ import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.bookmark.BookmarkViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.chromecustomtab.OpenCustomTabViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureLikeViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureUnlikeViewModel
@@ -73,7 +75,8 @@ fun PictureScreen(
     likeViewModel: PictureLikeViewModel,
     unLikeViewModel: PictureUnlikeViewModel,
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
-    baseUiState: BaseUiState = rememberBaseUiState(),
+    openCustomTabViewModel: OpenCustomTabViewModel = hiltViewModel(),
+    baseUiState: BaseUiState = rememberBaseUiState(LocalContext.current),
     id: String,
     visibleViewPhotosButton: Boolean,
     state: PhotoContentState = rememberPhotoContentState(
@@ -221,6 +224,11 @@ fun PictureScreen(
                     state.picture = it
                     state.visibleActions.value = true
                     state.enabledBookmark.value =  bookmarkViewModel.isPhotoBookmarked(it)
+                },
+                onOpenCustomTab = { url ->
+                    baseUiState.context?.let { context ->
+                        openCustomTabViewModel.runCustomTab(context, url)
+                    }
                 }
             )
         }

@@ -41,7 +41,8 @@ fun UserPhotosContent(
         isRefreshing = userPhotosViewModel.isRefreshing,
     ),
     onItemClicked: (id: String) -> Unit,
-    onShowSnackBar: (text: String) -> Unit
+    onShowSnackBar: (text: String) -> Unit,
+    onOpenCustomTab: (url: String) -> Unit
 ) {
     if (state.enabledLoadPhotos.value) {
         state.enabledLoadPhotos.value = false
@@ -65,7 +66,8 @@ fun UserPhotosContent(
                 userPhotosViewModel.trigger(2, Params(name, Repository.ITEM_COUNT))
             },
             onViewPhotos = { _, _, _, _ -> },
-            onShowSnackBar = onShowSnackBar
+            onShowSnackBar = onShowSnackBar,
+            onOpenCustomTab = onOpenCustomTab
         )
     } else {
         InitScreen(

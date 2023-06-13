@@ -61,7 +61,8 @@ fun SearchPhotosContent(
     searchState: SearchSectionState = rememberSearchSectionState(searchEnabled = photosContentState.enabledSearch),
     onItemClicked: (id: String) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
-    onShowSnackBar: (text: String) -> Unit
+    onShowSnackBar: (text: String) -> Unit,
+    onOpenCustomTab: (url: String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -88,9 +89,6 @@ fun SearchPhotosContent(
         )
 
         if (photosContentState.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
-           if (photosContentState.searchWord.value.isNotEmpty())
-                keywordViewModel.setWord(photosContentState.searchWord.value)
-
             SearchPhotosSection(
                 modifier = Modifier
                     .padding(2.dp, 4.dp)
@@ -107,7 +105,12 @@ fun SearchPhotosContent(
                     galleryViewModel.trigger(2, Params(photosContentState.searchWord.value, FIRST_PAGE, ITEM_COUNT))
                 },
                 onViewPhotos = onViewPhotos,
-                onShowSnackBar = onShowSnackBar
+                onShowSnackBar = onShowSnackBar,
+                onLoadSuccess = {
+                    if (photosContentState.searchWord.value.isNotEmpty())
+                        keywordViewModel.setWord(photosContentState.searchWord.value)
+                },
+                onOpenCustomTab = onOpenCustomTab
             )
         } else {
             keywordViewModel.getWords()?.let { words ->

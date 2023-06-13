@@ -1,8 +1,15 @@
 package com.goforer.phogal.presentation.ui
 
+import android.content.ComponentName
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.browser.customtabs.CustomTabsClient
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.browser.customtabs.CustomTabsServiceConnection
+import androidx.browser.customtabs.CustomTabsSession
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -20,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.goforer.base.analytics.AnalyticsHelper
 import com.goforer.base.analytics.LocalAnalyticsHelper
+import com.goforer.base.extension.findActivity
 import com.goforer.base.utils.connect.ConnectivityManagerNetworkMonitor
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.goforer.phogal.presentation.ui.compose.screen.MainScreen
@@ -94,4 +102,29 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+fun openCustomTab(context: Context, url: String) {
+    val mCustomTabsServiceConnection: CustomTabsServiceConnection?
+    var mClient: CustomTabsClient?
+    var mCustomTabsSession: CustomTabsSession? = null
+
+    mCustomTabsServiceConnection = object : CustomTabsServiceConnection() {
+        override fun onCustomTabsServiceConnected(componentName: ComponentName, customTabsClient: CustomTabsClient) {
+            mClient = customTabsClient
+            mClient?.warmup(0L)
+            mCustomTabsSession = mClient?.newSession(null)
+        }
+        override fun onServiceDisconnected(name: ComponentName) {
+            mClient = null
+        }
+    }
+
+    CustomTabsClient.bindCustomTabsService(context.findActivity(), "com.android.chrome", mCustomTabsServiceConnection)
+
+    val customTabsIntent = CustomTabsIntent.Builder(mCustomTabsSession)
+        .setShowTitle(true)
+        .build()
+
+    customTabsIntent.launchUrl(context.findActivity(), Uri.parse(url))
 }

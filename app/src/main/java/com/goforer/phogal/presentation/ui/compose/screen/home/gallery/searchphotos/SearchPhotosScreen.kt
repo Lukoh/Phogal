@@ -29,10 +29,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
+import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.chromecustomtab.OpenCustomTabViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.SearchPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosContentState
@@ -46,6 +48,7 @@ import kotlinx.coroutines.launch
 fun SearchPhotosScreen(
     modifier: Modifier = Modifier,
     galleryViewModel: GalleryViewModel,
+    openCustomTabViewModel: OpenCustomTabViewModel = hiltViewModel(),
     state: SearchPhotosContentState = rememberSearchPhotosContentState(
         baseUiState = rememberBaseUiState(),
         photosUiState = galleryViewModel.photosUiState,
@@ -132,6 +135,11 @@ fun SearchPhotosScreen(
                 onShowSnackBar = {
                     state.baseUiState.scope.launch {
                         snackbarHostState.showSnackbar(it)
+                    }
+                },
+                onOpenCustomTab = { url ->
+                    state.baseUiState.context?.let { context ->
+                        openCustomTabViewModel.runCustomTab(context, url)
                     }
                 }
             )
