@@ -3,6 +3,7 @@ package com.goforer.base.designsystem.component
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -59,7 +61,11 @@ internal inline fun IconButton(
         onClick = onClick,
         modifier = modifier
             .wrapContentWidth()
-            .heightIn(height),
+            .heightIn(height)
+            .indication(
+                interactionSource = interactionSource,
+                indication  = rememberRipple(bounded = false)
+            ),
         shape = MaterialTheme.shapes.small,
         colors = colors,
         interactionSource = interactionSource
