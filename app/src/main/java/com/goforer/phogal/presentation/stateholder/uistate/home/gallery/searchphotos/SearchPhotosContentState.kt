@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Stable
 class SearchPhotosContentState(
     val baseUiState: BaseUiState,
-    val searchKeyword: MutableState<String>,
+    val searchWord: MutableState<String>,
     val enabledSearch: MutableState<Boolean>,
     val showPermissionBottomSheet: MutableState<Boolean>,
     val rationaleTextState: MutableState<String>,
@@ -31,7 +31,7 @@ class SearchPhotosContentState(
 @Composable
 fun rememberSearchPhotosContentState(
     baseUiState: BaseUiState,
-    searchKeyword: MutableState<String> = rememberSaveable { mutableStateOf("") },
+    searchWord: MutableState<String> = rememberSaveable { mutableStateOf("") },
     enabledSearch: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     showPermissionBottomSheet: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     rationaleTextState: MutableState<String> = rememberSaveable { mutableStateOf("") },
@@ -44,7 +44,7 @@ fun rememberSearchPhotosContentState(
 ) {
     SearchPhotosContentState(
         baseUiState = baseUiState,
-        searchKeyword = searchKeyword,
+        searchWord = searchWord,
         enabledSearch = enabledSearch,
         showPermissionBottomSheet = showPermissionBottomSheet,
         rationaleTextState = rationaleTextState,

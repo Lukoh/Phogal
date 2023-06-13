@@ -14,7 +14,7 @@ constructor() : BaseViewModel<Picture>() {
     @Inject
     lateinit var localStorage: LocalStorage
 
-    fun setKeyword(keyword: String) {
+    fun setWord(keyword: String) {
         localStorage.getSearchWords().isNull({
             localStorage.setSearchWords(listOf(keyword.trim()))
         }, {
@@ -33,7 +33,7 @@ constructor() : BaseViewModel<Picture>() {
         })
     }
 
-    fun getKeywords(): MutableList<String>? {
+    fun getWords(): MutableList<String>? {
         val keywordList = localStorage.getSearchWords()
 
         return if (keywordList.isNullOrEmpty()) {

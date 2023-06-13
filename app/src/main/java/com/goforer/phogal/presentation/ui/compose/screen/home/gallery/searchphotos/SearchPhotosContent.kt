@@ -80,7 +80,7 @@ fun SearchPhotosContent(
             state = searchState,
             onSearched = { keyword ->
                 if (keyword.isNotEmpty()) {
-                    photosContentState.searchKeyword.value = keyword
+                    photosContentState.searchWord.value = keyword
                     photosContentState.baseUiState.keyboardController?.hide()
                     galleryViewModel.trigger(2, Params(keyword, ITEM_COUNT))
                 }
@@ -88,8 +88,8 @@ fun SearchPhotosContent(
         )
 
         if (photosContentState.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
-           if (photosContentState.searchKeyword.value.isNotEmpty())
-                keywordViewModel.setKeyword(photosContentState.searchKeyword.value)
+           if (photosContentState.searchWord.value.isNotEmpty())
+                keywordViewModel.setWord(photosContentState.searchWord.value)
 
             SearchPhotosSection(
                 modifier = Modifier
@@ -104,13 +104,13 @@ fun SearchPhotosContent(
                     onItemClicked(photo.id)
                 },
                 onRefresh = {
-                    galleryViewModel.trigger(2, Params(photosContentState.searchKeyword.value, FIRST_PAGE, ITEM_COUNT))
+                    galleryViewModel.trigger(2, Params(photosContentState.searchWord.value, FIRST_PAGE, ITEM_COUNT))
                 },
                 onViewPhotos = onViewPhotos,
                 onShowSnackBar = onShowSnackBar
             )
         } else {
-            keywordViewModel.getKeywords()?.let { words ->
+            keywordViewModel.getWords()?.let { words ->
                 Text(
                     text = stringResource(id = R.string.search_word),
                     modifier = Modifier.padding(start = 8.dp, top = 16.dp, end = 8.dp, bottom = 8.dp)
@@ -122,6 +122,7 @@ fun SearchPhotosContent(
                     leadingIconTint = Purple40
                 ) { keyword ->
                     searchState.editableInputState.textState = keyword
+                    photosContentState.searchWord.value = keyword
                     photosContentState.baseUiState.keyboardController?.hide()
                     galleryViewModel.trigger(2, Params(keyword, ITEM_COUNT))
                 }
