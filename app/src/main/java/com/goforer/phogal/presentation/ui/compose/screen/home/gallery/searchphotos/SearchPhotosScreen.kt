@@ -125,7 +125,7 @@ fun SearchPhotosScreen(
             SearchPhotosContent(
                 modifier = modifier,
                 galleryViewModel = galleryViewModel,
-                state = state,
+                photosContentState = state,
                 contentPadding = paddingValues,
                 onItemClicked = onItemClicked,
                 onViewPhotos = onViewPhotos,

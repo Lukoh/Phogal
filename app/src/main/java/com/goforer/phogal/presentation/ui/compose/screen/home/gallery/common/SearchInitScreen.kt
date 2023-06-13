@@ -21,7 +21,7 @@ import com.goforer.phogal.R
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 
 @Composable
-fun NoSearchResult(modifier: Modifier) {
+fun SearchInitScreen(modifier: Modifier = Modifier) {
     BoxWithConstraints(
         modifier = modifier,
         contentAlignment = Alignment.Center

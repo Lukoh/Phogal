@@ -8,33 +8,33 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class KeywordViewModel
+class SearchWordViewModel
 @Inject
 constructor() : BaseViewModel<Picture>() {
     @Inject
     lateinit var localStorage: LocalStorage
 
     fun setKeyword(keyword: String) {
-        localStorage.getSearchKeywordList().isNull({
-            localStorage.setSearchKeywordList(listOf(keyword))
+        localStorage.getSearchWords().isNull({
+            localStorage.setSearchWords(listOf(keyword.trim()))
         }, {
             val keywords = it.toMutableList()
 
             if (keywords.binarySearch(keyword.trim()) < 0) {
-                if (it.size >= 5) {
+                if (it.size >= 7) {
                     keywords.removeFirst()
                     keywords.add(keyword)
                 } else {
                     keywords.add(keyword)
                 }
 
-                localStorage.setSearchKeywordList(keywords.toList())
+                localStorage.setSearchWords(keywords.toList())
             }
         })
     }
 
     fun getKeywords(): MutableList<String>? {
-        val keywordList = localStorage.getSearchKeywordList()
+        val keywordList = localStorage.getSearchWords()
 
         return if (keywordList.isNullOrEmpty()) {
             null

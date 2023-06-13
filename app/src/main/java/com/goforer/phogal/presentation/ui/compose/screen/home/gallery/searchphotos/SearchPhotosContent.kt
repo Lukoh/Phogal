@@ -18,23 +18,29 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
+import com.goforer.base.designsystem.component.Chips
 import com.goforer.phogal.R
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.repository.Repository.Companion.FIRST_PAGE
 import com.goforer.phogal.data.repository.Repository.Companion.ITEM_COUNT
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.search.SearchWordViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.SearchPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.SearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberPermissionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
-import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.NoSearchResult
+import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.SearchInitScreen
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
+import com.goforer.phogal.presentation.ui.theme.DarkGreen20
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
+import com.goforer.phogal.presentation.ui.theme.Purple40
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
@@ -46,11 +52,13 @@ fun SearchPhotosContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     galleryViewModel: GalleryViewModel = hiltViewModel(),
-    state: SearchPhotosContentState = rememberSearchPhotosContentState(
+    keywordViewModel: SearchWordViewModel = hiltViewModel(),
+    photosContentState: SearchPhotosContentState = rememberSearchPhotosContentState(
         baseUiState = rememberBaseUiState(),
         photosUiState = galleryViewModel.photosUiState,
         isRefreshing = galleryViewModel.isRefreshing
     ),
+    searchState: SearchSectionState = rememberSearchSectionState(searchEnabled = photosContentState.enabledSearch),
     onItemClicked: (id: String) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit
@@ -64,51 +72,70 @@ fun SearchPhotosContent(
                 0.dp
             )
             .clickable {
-                state.baseUiState.keyboardController?.hide()
-            },
-        horizontalAlignment = Alignment.CenterHorizontally
+                photosContentState.baseUiState.keyboardController?.hide()
+            }
     ) {
         SearchSection(
             modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
-            state = rememberSearchSectionState(searchEnabled = state.enabledSearch),
+            state = searchState,
             onSearched = { keyword ->
                 if (keyword.isNotEmpty()) {
-                    with(state) {
-                        searchKeyword.value = keyword
-                        baseUiState.keyboardController?.hide()
-                        galleryViewModel.trigger(2, Params(keyword, ITEM_COUNT))
-                    }
+                    photosContentState.searchKeyword.value = keyword
+                    photosContentState.baseUiState.keyboardController?.hide()
+                    galleryViewModel.trigger(2, Params(keyword, ITEM_COUNT))
                 }
             }
         )
 
-        if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
+        if (photosContentState.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
+           if (photosContentState.searchKeyword.value.isNotEmpty())
+                keywordViewModel.setKeyword(photosContentState.searchKeyword.value)
+
             SearchPhotosSection(
                 modifier = Modifier
                     .padding(2.dp, 4.dp)
                     .weight(1f),
                 state = rememberSearchPhotosSectionState(
-                    scope = state.baseUiState.scope,
-                    photosUiState = state.photosUiState,
-                    refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
+                    scope = photosContentState.baseUiState.scope,
+                    photosUiState = photosContentState.photosUiState,
+                    refreshingState = photosContentState.isRefreshing.collectAsStateWithLifecycle()
                 ),
                 onItemClicked = { photo, _ ->
                     onItemClicked(photo.id)
                 },
                 onRefresh = {
-                    galleryViewModel.trigger(2, Params(state.searchKeyword.value, FIRST_PAGE, ITEM_COUNT))
+                    galleryViewModel.trigger(2, Params(photosContentState.searchKeyword.value, FIRST_PAGE, ITEM_COUNT))
                 },
                 onViewPhotos = onViewPhotos,
                 onShowSnackBar = onShowSnackBar
             )
         } else {
-            NoSearchResult(modifier = Modifier.weight(1f))
+            keywordViewModel.getKeywords()?.let { words ->
+                Text(
+                    text = stringResource(id = R.string.search_word),
+                    modifier = Modifier.padding(start = 8.dp, top = 16.dp, end = 8.dp, bottom = 8.dp)
+                )
+                Chips(
+                    items = words,
+                    textColor = DarkGreen20,
+                    textFontSize = 15.sp,
+                    leadingIconTint = Purple40
+                ) { keyword ->
+                    searchState.editableInputState.textState = keyword
+                    photosContentState.baseUiState.keyboardController?.hide()
+                    galleryViewModel.trigger(2, Params(keyword, ITEM_COUNT))
+                }
+            }
+
+            SearchInitScreen(modifier = Modifier
+                .weight(1f)
+                .align(Alignment.CenterHorizontally))
         }
     }
 
-    val multiplePermissionsState = rememberMultiplePermissionsState(state.permissions)
+    val multiplePermissionsState = rememberMultiplePermissionsState(photosContentState.permissions)
 
-    with(state) {
+    with(photosContentState) {
         CheckPermission(
             multiplePermissionsState = multiplePermissionsState,
             onPermissionGranted = {
