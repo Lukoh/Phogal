@@ -17,7 +17,7 @@
     <string name="error_get_picture">Failed to get the picture</string>
 
     <string name="search_photos">Search your pictures</string>
-    <string name="search_word">Search word : </string>
+    <string name="search_word">Search word chips : </string>
     <string name="permission_rationale"> important.\n⚠️⚠️⚠️ Please grant all of them for the app to function properly.</string>
     <string name="permission_denied"> denied. The app cannot function without them..</string>
     <string name="permission_request">Request permissions</string>
