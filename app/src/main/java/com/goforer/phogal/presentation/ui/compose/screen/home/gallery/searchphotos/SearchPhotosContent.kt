@@ -36,7 +36,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchph
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
-import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.SearchInitScreen
+import com.goforer.phogal.presentation.ui.compose.screen.home.common.InitScreen
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.DarkGreen20
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
@@ -127,9 +127,12 @@ fun SearchPhotosContent(
                 }
             }
 
-            SearchInitScreen(modifier = Modifier
-                .weight(1f)
-                .align(Alignment.CenterHorizontally))
+            InitScreen(
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterHorizontally),
+                text = stringResource(id = R.string.search_photos)
+            )
         }
     }
 

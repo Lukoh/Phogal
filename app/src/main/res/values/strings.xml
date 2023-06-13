@@ -37,6 +37,7 @@
     <string name="setting_terms_and_conditions">Terms and Conditions</string>
     <string name="setting_view_contact">View Contact</string>
     <string name="setting_bookmarked_photos">Bookmark</string>
+    <string name="setting_no_bookmarked_photos">No Bookmark Photo</string>
 
     <string name="picture_title">Phogal Picture +</string>
     <string name="picture_no_location">No Location Information</string>

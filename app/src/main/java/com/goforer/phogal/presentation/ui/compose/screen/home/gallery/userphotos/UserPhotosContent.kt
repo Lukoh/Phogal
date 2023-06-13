@@ -25,7 +25,7 @@ import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.Us
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.UserPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosSectionState
-import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.SearchInitScreen
+import com.goforer.phogal.presentation.ui.compose.screen.home.common.InitScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos.SearchSection
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
@@ -68,7 +68,10 @@ fun UserPhotosContent(
             onShowSnackBar = onShowSnackBar
         )
     } else {
-        SearchInitScreen(modifier = modifier)
+        InitScreen(
+            modifier = modifier,
+            text = stringResource(id = R.string.search_photos)
+        )
     }
 }
 

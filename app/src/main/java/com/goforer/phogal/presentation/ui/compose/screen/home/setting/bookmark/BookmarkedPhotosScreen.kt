@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -56,6 +57,7 @@ fun BookmarkedPhotosScreen(
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
+    val enabledLoadPhotosState = remember { mutableStateOf(true) }
 
     DisposableEffect(baseUiState.lifecycle) {
         // Create an observer that triggers our remembered callbacks
@@ -100,7 +102,7 @@ fun BookmarkedPhotosScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            //state.enabledLoadPhotos.value = false
+                            enabledLoadPhotosState.value = false
                             onBackPressed()
                         }
                     ) {
@@ -115,6 +117,7 @@ fun BookmarkedPhotosScreen(
             BookmarkedPhotosContent(
                 modifier = modifier,
                 contentPadding = paddingValues,
+                enabledLoadPhotosState = enabledLoadPhotosState,
                 onItemClicked = onItemClicked
             )
         }
