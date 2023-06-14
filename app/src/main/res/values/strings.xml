@@ -49,7 +49,7 @@
     <string name="picture_posted">posted</string>
     <string name="picture_view_photos">View %s"'"s</string>
     <string name="picture_photos">Photos</string>
-    <string name="picture_user_portfolio">%s"'"s Portfolio. </string>
+    <string name="picture_user_portfolio">"'"s Portfolio. </string>
     <string name="user_updated_at">Updated at</string>
     <string name="picture_no_description">No the picture"'"s description</string>
     <string name="picture_no_last_name">No last name</string>

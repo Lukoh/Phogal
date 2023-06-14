@@ -2,6 +2,7 @@ package com.goforer.phogal.presentation.ui.navigation.destination
 
 import android.net.Uri
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material.icons.sharp.ViewList
@@ -14,17 +15,20 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.goforer.phogal.data.model.local.home.gallery.NameArgument
 import com.goforer.phogal.data.model.local.home.gallery.PictureArgument
+import com.goforer.phogal.data.model.local.home.gallery.WebViewArgument
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureLikeViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureUnlikeViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
+import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.webview.WebViewScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photo.PictureScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos.SearchPhotosScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.userphotos.UserPhotosScreen
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.pictureRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.userPhotosRoute
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.webViewRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateTo
 import com.google.gson.Gson
 
@@ -61,6 +65,16 @@ object SearchPhotos : PhogalDestination {
                 val json = Uri.encode(gson.toJson(nameArgument))
 
                 navController.navigateTo(route = "${UserPhotos.route}/$json")
+            },
+            onOpenWebView = { firstName, url ->
+                val webViewArgument = WebViewArgument(
+                    firstName = firstName,
+                    url = url
+                )
+                val gson = Gson()
+                val json = Uri.encode(gson.toJson(webViewArgument))
+
+                navController.navigateTo(route = "${WbeView.route}/$json")
             }
         )
     }
@@ -108,6 +122,16 @@ object Picture : PhogalDestination {
                 },
                 onBackPressed = {
                     navController.navigateUp()
+                },
+                onOpenWebView = { firstName, url ->
+                    val webViewArgument = WebViewArgument(
+                        firstName = firstName,
+                        url = url
+                    )
+                    val gson = Gson()
+                    val json = Uri.encode(gson.toJson(webViewArgument))
+
+                    navController.navigateTo(route = "${WbeView.route}/$json")
                 }
             )
         }
@@ -149,6 +173,47 @@ object UserPhotos : PhogalDestination {
 
                     navController.navigateTo(route = "${Picture.route}/$json")
                 },
+                onBackPressed = {
+                    navController.navigateUp()
+                },
+                onOpenWebView = { firstName, url ->
+                    val webViewArgument = WebViewArgument(
+                        firstName = firstName,
+                        url = url
+                    )
+                    val gson = Gson()
+                    val json = Uri.encode(gson.toJson(webViewArgument))
+
+                    navController.navigateTo(route = "${WbeView.route}/$json")
+                }
+            )
+        }
+    }
+}
+
+object WbeView : PhogalDestination {
+    override val icon = Icons.Filled.OpenInBrowser
+    override val route = webViewRoute
+    private const val argumentTypeArg = "argument"
+    val webViewRouteArgs = "$route/{$argumentTypeArg}"
+
+    val arguments = listOf(
+        navArgument(argumentTypeArg) { type = NavType.StringType }
+    )
+
+    @Stable
+    override val screen: @Composable (
+        navController: NavHostController,
+        backStackEntry: NavBackStackEntry,
+        route: String
+    ) -> Unit = { navController, backStackEntry, _ ->
+        val argument = backStackEntry.arguments?.getString(argumentTypeArg)
+        val webViewArgument = Gson().fromJson(argument,WebViewArgument::class.java)
+
+        webViewArgument?.let {
+            WebViewScreen(
+                firstName = webViewArgument.firstName,
+                url = webViewArgument.url,
                 onBackPressed = {
                     navController.navigateUp()
                 }

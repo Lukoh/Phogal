@@ -11,6 +11,8 @@ import com.goforer.phogal.presentation.ui.navigation.destination.Picture.picture
 import com.goforer.phogal.presentation.ui.navigation.destination.SearchPhotos
 import com.goforer.phogal.presentation.ui.navigation.destination.UserPhotos
 import com.goforer.phogal.presentation.ui.navigation.destination.UserPhotos.userPhotosRouteArgs
+import com.goforer.phogal.presentation.ui.navigation.destination.WbeView
+import com.goforer.phogal.presentation.ui.navigation.destination.WbeView.webViewRouteArgs
 
 @Stable
 fun NavGraphBuilder.galleryGraph(
@@ -37,6 +39,13 @@ fun NavGraphBuilder.galleryGraph(
             arguments = UserPhotos.arguments
         ) { backStackEntry ->
             UserPhotos.screen(navController, backStackEntry, route)
+        }
+
+        composable(
+            route = webViewRouteArgs,
+            arguments = WbeView.arguments
+        ) { backStackEntry ->
+            WbeView.screen(navController, backStackEntry, route)
         }
     }
 }

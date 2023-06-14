@@ -108,11 +108,11 @@ fun PictureContent(
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onShownPhoto: (picture: Picture) -> Unit,
-    onOpenCustomTab: (url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     if (state.enabledLoadPhotos.value) {
         state.enabledLoadPhotos.value = false
-        pictureViewModel.trigger(2, Params(id))
+        pictureViewModel.trigger(1, Params(id))
     }
 
     PictureResponseHandle(
@@ -124,7 +124,7 @@ fun PictureContent(
         onViewPhotos = onViewPhotos,
         onShowSnackBar = onShowSnackBar,
         onShownPhoto = onShownPhoto,
-        onOpenCustomTab = onOpenCustomTab
+        onOpenWebView = onOpenWebView
     )
 }
 
@@ -138,7 +138,7 @@ fun PictureResponseHandle(
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onShownPhoto: (picture: Picture) -> Unit,
-    onOpenCustomTab: (url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     val pictureUiState = pictureViewModel.pictureUiState.collectAsStateWithLifecycle()
 
@@ -162,7 +162,7 @@ fun PictureResponseHandle(
                             onViewPhotos = onViewPhotos,
                             onShowSnackBar = onShowSnackBar,
                             onShownPhoto = onShownPhoto,
-                            onOpenCustomTab = onOpenCustomTab
+                            onOpenWebView = onOpenWebView
                         )
                         Spacer(modifier = Modifier.height(30.dp))
                     }
@@ -202,7 +202,7 @@ fun PictureResponseHandle(
                             stringResource(id = R.string.error_dialog_title),
                         message = "${stringResource(id = R.string.error_get_picture)}${"\n\n"}${resource.message.toString()}",
                         onRetry = {
-                            pictureViewModel.trigger(2, Params(id))
+                            pictureViewModel.trigger(1, Params(id))
                         }
                     )
                 }
@@ -219,7 +219,7 @@ fun BodyContent(
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onShownPhoto: (picture: Picture) -> Unit,
-    onOpenCustomTab: (url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     var visiebleCameraInfo by remember { mutableStateOf(false) }
 
@@ -271,7 +271,7 @@ fun BodyContent(
                 ),
                 onViewPhotos = onViewPhotos,
                 onShowSnackBar = onShowSnackBar,
-                onOpenCustomTab = onOpenCustomTab
+                onOpenWebView = onOpenWebView
             )
 
             AnimatedVisibility(

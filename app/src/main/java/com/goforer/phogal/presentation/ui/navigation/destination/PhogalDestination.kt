@@ -16,6 +16,7 @@ interface PhogalDestination {
         internal const val searchPhotosStartRoute = "photoHome/searchPhotos"
         internal const val pictureRoute = "photoHome/picture"
         internal const val userPhotosRoute = "photoHome/userPhotos"
+        internal const val webViewRoute = "photoHome/webView"
 
         // Community Bottom Navigation
         internal const val communityHomeRoute = "communityHome"

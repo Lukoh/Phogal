@@ -30,13 +30,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
-import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.chromecustomtab.OpenCustomTabViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
@@ -46,10 +44,10 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun BookmarkedPhotosScreen(
     modifier: Modifier = Modifier,
-    openCustomTabViewModel: OpenCustomTabViewModel = hiltViewModel(),
     baseUiState: BaseUiState = rememberBaseUiState(),
     onItemClicked: (item: Picture, index: Int) -> Unit,
     onBackPressed: () -> Unit,
+    onOpenWebView: (firstName: String, url: String) -> Unit,
     onStart: () -> Unit = {
         //To Do:: Implement the code what you want to do....
     },
@@ -122,11 +120,7 @@ fun BookmarkedPhotosScreen(
                 contentPadding = paddingValues,
                 enabledLoadPhotosState = enabledLoadPhotosState,
                 onItemClicked = onItemClicked,
-                onOpenCustomTab = { url ->
-                    baseUiState.context?.let { context ->
-                        openCustomTabViewModel.runCustomTab(context, url)
-                    }
-                }
+                onOpenWebView = onOpenWebView
             )
         }
     )

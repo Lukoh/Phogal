@@ -64,7 +64,7 @@ fun PhotoItem(
     onItemClicked: (item: Photo, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onOpenCustomTab: (url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     var isClicked by rememberSaveable { mutableStateOf(false) }
 
@@ -156,7 +156,7 @@ fun PhotoItem(
                     ),
                     onViewPhotos = onViewPhotos,
                     onShowSnackBar = onShowSnackBar,
-                    onOpenCustomTab = onOpenCustomTab
+                    onOpenWebView = onOpenWebView
                 )
             }
         }

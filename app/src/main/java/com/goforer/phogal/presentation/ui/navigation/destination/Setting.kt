@@ -9,11 +9,13 @@ import androidx.compose.runtime.Stable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import com.goforer.phogal.data.model.local.home.gallery.PictureArgument
+import com.goforer.phogal.data.model.local.home.gallery.WebViewArgument
 import com.goforer.phogal.presentation.ui.compose.screen.home.setting.SettingScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.setting.bookmark.BookmarkedPhotosScreen
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingBookmarkedPhotosRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.pictureRoute
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.webViewRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateTo
 import com.google.gson.Gson
 
@@ -59,6 +61,16 @@ object BookmarkedPhotos : PhogalDestination {
             },
             onBackPressed = {
                 navController.navigateUp()
+            },
+            onOpenWebView = { firstName, url ->
+                val webViewArgument = WebViewArgument(
+                    firstName = firstName,
+                    url = url
+                )
+                val gson = Gson()
+                val json = Uri.encode(gson.toJson(webViewArgument))
+
+                navController.navigate("${webViewRoute}/$json")
             }
         )
     }

@@ -1,8 +1,9 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos
+package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.webview
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -22,6 +23,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -33,27 +35,21 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
-import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel
-import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.SearchPhotosContentState
-import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun SearchPhotosScreen(
+fun WebViewScreen(
     modifier: Modifier = Modifier,
-    galleryViewModel: GalleryViewModel,
-    state: SearchPhotosContentState = rememberSearchPhotosContentState(
-        baseUiState = rememberBaseUiState(),
-        photosUiState = galleryViewModel.photosUiState,
-        isRefreshing = galleryViewModel.isRefreshing
+    firstName: String,
+    url: String,
+    baseUiState: BaseUiState = rememberBaseUiState(
+        context = LocalContext.current
     ),
-    onItemClicked: (id: String) -> Unit,
-    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
-    onOpenWebView: (firstName: String, url: String) -> Unit,
+    onBackPressed: () -> Unit,
     onStart: () -> Unit = {
         //To Do:: Implement the code what you want to do....
     },
@@ -65,7 +61,7 @@ fun SearchPhotosScreen(
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
 
-    DisposableEffect(state.baseUiState.lifecycle) {
+    DisposableEffect(baseUiState.lifecycle) {
         // Create an observer that triggers our remembered callbacks
         // for doing anything
         val observer = LifecycleEventObserver { _, event ->
@@ -77,11 +73,11 @@ fun SearchPhotosScreen(
         }
 
         // Add the observer to the lifecycle
-        state.baseUiState.lifecycle.addObserver(observer)
+        baseUiState.lifecycle.addObserver(observer)
 
         // When the effect leaves the Composition, remove the observer
         onDispose {
-            state.baseUiState.lifecycle.removeObserver(observer)
+            baseUiState.lifecycle.removeObserver(observer)
         }
     }
 
@@ -96,7 +92,7 @@ fun SearchPhotosScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        stringResource(id = R.string.app_name),
+                        text = "${firstName}${stringResource(id = R.string.picture_user_portfolio)}",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontFamily = FontFamily.SansSerif,
@@ -106,10 +102,14 @@ fun SearchPhotosScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(
+                        onClick = {
+                            onBackPressed()
+                        }
+                    ) {
                         Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = "Profile"
+                            imageVector = Icons.Filled.ArrowBackIos,
+                            contentDescription = "Back"
                         )
                     }
                 },
@@ -117,25 +117,17 @@ fun SearchPhotosScreen(
                     IconButton(onClick = { /* doSomething() */ }) {
                         Icon(
                             imageVector = Icons.Filled.Favorite,
-                            contentDescription = "Localized description"
+                            contentDescription = "Favorite"
                         )
                     }
                 }
             )
         }, content = { paddingValues ->
-            SearchPhotosContent(
+            OpenWebView(
                 modifier = modifier,
-                galleryViewModel = galleryViewModel,
-                photosContentState = state,
                 contentPadding = paddingValues,
-                onItemClicked = onItemClicked,
-                onViewPhotos = onViewPhotos,
-                onShowSnackBar = {
-                    state.baseUiState.scope.launch {
-                        snackbarHostState.showSnackbar(it)
-                    }
-                },
-                onOpenWebView = onOpenWebView
+                url = url,
+                onBackPressed = onBackPressed
             )
         }
     )
@@ -151,7 +143,7 @@ fun SearchPhotosScreen(
 )
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchPhotosScreenPreview() {
+fun WebViewScreenPreview() {
     PhogalTheme {
         Scaffold(
             contentColor = Color.White,

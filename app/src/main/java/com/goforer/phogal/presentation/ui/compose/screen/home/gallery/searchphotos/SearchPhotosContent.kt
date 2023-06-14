@@ -43,6 +43,7 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.goforer.phogal.presentation.ui.theme.Purple40
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import timber.log.Timber
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class,
     ExperimentalMaterial3Api::class
@@ -62,7 +63,7 @@ fun SearchPhotosContent(
     onItemClicked: (id: String) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onOpenCustomTab: (url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -80,10 +81,11 @@ fun SearchPhotosContent(
             modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
             state = searchState,
             onSearched = { keyword ->
-                if (keyword.isNotEmpty()) {
+                if (keyword.isNotEmpty() && keyword != photosContentState.searchWord.value) {
                     photosContentState.searchWord.value = keyword
                     photosContentState.baseUiState.keyboardController?.hide()
-                    galleryViewModel.trigger(2, Params(keyword, ITEM_COUNT))
+                    galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
+                    keywordViewModel.setWord(photosContentState.searchWord.value)
                 }
             }
         )
@@ -102,15 +104,14 @@ fun SearchPhotosContent(
                     onItemClicked(photo.id)
                 },
                 onRefresh = {
-                    galleryViewModel.trigger(2, Params(photosContentState.searchWord.value, FIRST_PAGE, ITEM_COUNT))
+                    galleryViewModel.trigger(1, Params(photosContentState.searchWord.value, FIRST_PAGE, ITEM_COUNT))
                 },
                 onViewPhotos = onViewPhotos,
                 onShowSnackBar = onShowSnackBar,
                 onLoadSuccess = {
-                    if (photosContentState.searchWord.value.isNotEmpty())
-                        keywordViewModel.setWord(photosContentState.searchWord.value)
+                    Timber.d("Search is successful")
                 },
-                onOpenCustomTab = onOpenCustomTab
+                onOpenWebView = onOpenWebView
             )
         } else {
             keywordViewModel.getWords()?.let { words ->
@@ -127,7 +128,7 @@ fun SearchPhotosContent(
                     searchState.editableInputState.textState = keyword
                     photosContentState.searchWord.value = keyword
                     photosContentState.baseUiState.keyboardController?.hide()
-                    galleryViewModel.trigger(2, Params(keyword, ITEM_COUNT))
+                    galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
                 }
             }
 

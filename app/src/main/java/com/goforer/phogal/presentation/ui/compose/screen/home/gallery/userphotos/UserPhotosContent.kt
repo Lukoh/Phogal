@@ -42,11 +42,11 @@ fun UserPhotosContent(
     ),
     onItemClicked: (id: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onOpenCustomTab: (url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     if (state.enabledLoadPhotos.value) {
         state.enabledLoadPhotos.value = false
-        userPhotosViewModel.trigger(2, Params(name, Repository.ITEM_COUNT))
+        userPhotosViewModel.trigger(1, Params(name, Repository.ITEM_COUNT))
     }
 
     if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
@@ -63,11 +63,11 @@ fun UserPhotosContent(
                 onItemClicked(photo.id)
             },
             onRefresh = {
-                userPhotosViewModel.trigger(2, Params(name, Repository.ITEM_COUNT))
+                userPhotosViewModel.trigger(1, Params(name, Repository.ITEM_COUNT))
             },
             onViewPhotos = { _, _, _, _ -> },
             onShowSnackBar = onShowSnackBar,
-            onOpenCustomTab = onOpenCustomTab
+            onOpenWebView = onOpenWebView
         )
     } else {
         InitScreen(

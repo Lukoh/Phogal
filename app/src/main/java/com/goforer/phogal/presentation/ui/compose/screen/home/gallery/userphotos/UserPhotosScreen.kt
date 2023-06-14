@@ -30,12 +30,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
-import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.chromecustomtab.OpenCustomTabViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.UserPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosContentState
@@ -51,7 +49,6 @@ fun UserPhotosScreen(
     name: String,
     firstName: String,
     userPhotosViewModel: UserPhotosViewModel,
-    openCustomTabViewModel: OpenCustomTabViewModel = hiltViewModel(),
     state: UserPhotosContentState = rememberUserPhotosContentState(
         baseUiState = rememberBaseUiState(),
         photosUiState = userPhotosViewModel.photosUiState,
@@ -59,6 +56,7 @@ fun UserPhotosScreen(
     ),
     onItemClicked: (id: String) -> Unit,
     onBackPressed: () -> Unit,
+    onOpenWebView: (firstName: String, url: String) -> Unit,
     onStart: () -> Unit = {
         //To Do:: Implement the code what you want to do....
     },
@@ -145,11 +143,7 @@ fun UserPhotosScreen(
                         snackbarHostState.showSnackbar(it)
                     }
                 },
-                onOpenCustomTab = { url ->
-                    state.baseUiState.context?.let { context ->
-                        openCustomTabViewModel.runCustomTab(context, url)
-                    }
-                }
+                onOpenWebView = onOpenWebView
             )
         }
     )

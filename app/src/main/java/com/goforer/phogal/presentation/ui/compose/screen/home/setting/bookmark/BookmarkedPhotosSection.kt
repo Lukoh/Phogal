@@ -25,7 +25,7 @@ fun BookmarkedPhotosSection(
     contentPadding: PaddingValues,
     photos: MutableList<Picture>,
     onItemClicked: (item: Picture, index: Int) -> Unit,
-    onOpenCustomTab: (url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -57,7 +57,7 @@ fun BookmarkedPhotosSection(
                     onItemClicked = onItemClicked,
                     onViewPhotos = { _, _, _, _ -> },
                     onShowSnackBar = {},
-                    onOpenCustomTab = onOpenCustomTab
+                    onOpenWebView = onOpenWebView
                 )
                 
                 if (index == photos.size - 1)

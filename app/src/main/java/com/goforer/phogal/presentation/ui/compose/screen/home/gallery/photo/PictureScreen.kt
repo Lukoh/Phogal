@@ -54,7 +54,6 @@ import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.response.Resource
 import com.goforer.phogal.data.network.response.Status
 import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.bookmark.BookmarkViewModel
-import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.chromecustomtab.OpenCustomTabViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureLikeViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureUnlikeViewModel
@@ -75,7 +74,6 @@ fun PictureScreen(
     likeViewModel: PictureLikeViewModel,
     unLikeViewModel: PictureUnlikeViewModel,
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
-    openCustomTabViewModel: OpenCustomTabViewModel = hiltViewModel(),
     baseUiState: BaseUiState = rememberBaseUiState(LocalContext.current),
     id: String,
     visibleViewPhotosButton: Boolean,
@@ -84,6 +82,7 @@ fun PictureScreen(
     ),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onBackPressed: () -> Unit,
+    onOpenWebView: (firstName: String, url: String) -> Unit,
     onStart: () -> Unit = {
         //To Do:: Implement the code what you want to do....
     },
@@ -166,9 +165,9 @@ fun PictureScreen(
                             onClick = {
                                 showDialogState.value = true
                                 if (!state.picture?.liked_by_user!!)
-                                    likeViewModel.trigger(2, Params(id))
+                                    likeViewModel.trigger(1, Params(id))
                                 else
-                                    unLikeViewModel.trigger(2, Params(id))
+                                    unLikeViewModel.trigger(1, Params(id))
                             }
                         ) {
                             state.picture?.liked_by_user?.let { liked ->
@@ -225,11 +224,7 @@ fun PictureScreen(
                     state.visibleActions.value = true
                     state.enabledBookmark.value =  bookmarkViewModel.isPhotoBookmarked(it)
                 },
-                onOpenCustomTab = { url ->
-                    baseUiState.context?.let { context ->
-                        openCustomTabViewModel.runCustomTab(context, url)
-                    }
-                }
+                onOpenWebView = onOpenWebView
             )
         }
     )

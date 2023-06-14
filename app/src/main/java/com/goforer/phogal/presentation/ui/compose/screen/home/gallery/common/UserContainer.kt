@@ -81,7 +81,7 @@ fun UserContainer(
     state: UserContainerState = rememberUserContainerState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onOpenCustomTab: (url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     val lastName = user.last_name ?: stringResource(id = R.string.picture_no_last_name)
     var showUserInfoBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -204,6 +204,8 @@ fun UserContainer(
     }
 
     if (showUserInfoBottomSheet) {
+        val text = stringResource(id = R.string.user_info_has_no_portfolio)
+
         UserInfoBottomSheet(
             userInfoState = rememberUserInfoState(),
             user = user,
@@ -213,10 +215,10 @@ fun UserContainer(
                 if (it) {
                     if (user.portfolio_url.isNullOrEmpty()) {
                         state.baseUiState.scope.launch {
-                            onShowSnackBar("${user.first_name}${" "}stringResource(id = R.string.user_info_has_no_portfolio)}")
+                            onShowSnackBar("${user.first_name}${" "}${text}")
                         }
                     } else {
-                        onOpenCustomTab(user.portfolio_url)
+                        onOpenWebView(user.first_name, user.portfolio_url)
                     }
                 }
             }

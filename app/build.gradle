@@ -250,6 +250,7 @@ dependencies {
 
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
     implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-webview:0.31.3-beta"
 
     implementation "com.jakewharton.timber:timber:$timber_version"
 
