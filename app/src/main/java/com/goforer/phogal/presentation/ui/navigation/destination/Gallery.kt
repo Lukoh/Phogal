@@ -21,7 +21,7 @@ import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.l
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureUnlikeViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
-import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.webview.WebViewScreen
+import com.goforer.phogal.presentation.ui.compose.screen.home.common.webview.WebViewScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photo.PictureScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos.SearchPhotosScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.userphotos.UserPhotosScreen

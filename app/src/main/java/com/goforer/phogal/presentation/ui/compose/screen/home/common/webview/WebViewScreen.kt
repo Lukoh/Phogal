@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.webview
+package com.goforer.phogal.presentation.ui.compose.screen.home.common.webview
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration

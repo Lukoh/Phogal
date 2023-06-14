@@ -1,6 +1,7 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.webview
+package com.goforer.phogal.presentation.ui.compose.screen.home.common.webview
 
 import android.annotation.SuppressLint
+import android.webkit.WebSettings
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -40,6 +41,13 @@ fun OpenWebView(
                     javaScriptEnabled = true
                     domStorageEnabled = true
                     javaScriptCanOpenWindowsAutomatically = false
+                    loadWithOverviewMode = true
+                    useWideViewPort = true
+                    builtInZoomControls = true
+                    displayZoomControls = false
+                    setSupportZoom(true)
+                    defaultTextEncodingName = "utf-8"
+                    pluginState = WebSettings.PluginState.ON
                 }
             }
         }
