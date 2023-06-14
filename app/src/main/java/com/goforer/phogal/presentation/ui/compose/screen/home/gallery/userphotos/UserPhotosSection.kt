@@ -43,7 +43,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.goforer.base.extension.composable.rememberLazyListState
+import com.goforer.base.designsystem.component.state.rememberLazyListState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo

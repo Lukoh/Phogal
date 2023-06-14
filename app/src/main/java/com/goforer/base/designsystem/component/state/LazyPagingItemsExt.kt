@@ -1,4 +1,4 @@
-package com.goforer.base.extension.composable
+package com.goforer.base.designsystem.component.state
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable

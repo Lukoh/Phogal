@@ -34,7 +34,7 @@ constructor() : BaseViewModel<Picture>() {
     }
 
     fun getWords(): MutableList<String>? {
-        val keywordList = localStorage.getSearchWords()
+        val keywordList = localStorage.getSearchWords()?.asReversed()
 
         return if (keywordList.isNullOrEmpty()) {
             null

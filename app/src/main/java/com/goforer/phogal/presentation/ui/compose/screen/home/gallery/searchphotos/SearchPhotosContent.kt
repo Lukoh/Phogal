@@ -89,11 +89,27 @@ fun SearchPhotosContent(
                 }
             }
         )
+        if (!photosContentState.isScrolling.value) {
+            keywordViewModel.getWords()?.let { words ->
+                Chips(
+                    modifier = Modifier.padding(top = 8.dp),
+                    items = words,
+                    textColor = DarkGreen20,
+                    textFontSize = 15.sp,
+                    leadingIconTint = Purple40
+                ) { keyword ->
+                    searchState.editableInputState.textState = keyword
+                    photosContentState.searchWord.value = keyword
+                    photosContentState.baseUiState.keyboardController?.hide()
+                    galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
+                }
+            }
+        }
 
         if (photosContentState.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
             SearchPhotosSection(
                 modifier = Modifier
-                    .padding(2.dp, 4.dp)
+                    .padding(start = 2.dp, top = 2.dp, end = 2.dp)
                     .weight(1f),
                 state = rememberSearchPhotosSectionState(
                     scope = photosContentState.baseUiState.scope,
@@ -111,27 +127,12 @@ fun SearchPhotosContent(
                 onLoadSuccess = {
                     Timber.d("Search is successful")
                 },
+                onScroll = {
+                    photosContentState.isScrolling.value = it
+                },
                 onOpenWebView = onOpenWebView
             )
         } else {
-            keywordViewModel.getWords()?.let { words ->
-                Text(
-                    text = stringResource(id = R.string.search_word),
-                    modifier = Modifier.padding(start = 8.dp, top = 16.dp, end = 8.dp, bottom = 8.dp)
-                )
-                Chips(
-                    items = words,
-                    textColor = DarkGreen20,
-                    textFontSize = 15.sp,
-                    leadingIconTint = Purple40
-                ) { keyword ->
-                    searchState.editableInputState.textState = keyword
-                    photosContentState.searchWord.value = keyword
-                    photosContentState.baseUiState.keyboardController?.hide()
-                    galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
-                }
-            }
-
             InitScreen(
                 modifier = Modifier
                     .weight(1f)

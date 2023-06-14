@@ -40,7 +40,8 @@ import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.goforer.base.extension.composable.rememberLazyListState
+import com.goforer.base.designsystem.component.state.rememberCurrentScrollOffset
+import com.goforer.base.designsystem.component.state.rememberLazyListState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
@@ -66,6 +67,7 @@ fun SearchPhotosSection(
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onLoadSuccess: () -> Unit,
+    onScroll: (isScrolling: Boolean) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     val photos = (state.photosUiState as StateFlow<PagingData<Photo>>).collectAsLazyPagingItems()
@@ -239,6 +241,12 @@ fun SearchPhotosSection(
                     state.clickedState.value = true
                 }
             )
+            onScroll(false)
+        } else {
+            val offset = lazyListState.rememberCurrentScrollOffset()
+
+            if (offset.value > 35)
+                onScroll(true)
         }
     }
 
