@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.web.AccompanistWebChromeClient
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
@@ -23,7 +22,6 @@ fun OpenWebView(
 ) {
     val webViewState = rememberWebViewState(url = url)
     val webViewNavigator = rememberWebViewNavigator()
-    val chromeClient = object : AccompanistWebChromeClient() {}
 
     WebView(
         modifier = modifier.padding(
@@ -33,7 +31,6 @@ fun OpenWebView(
             0.dp
         ),
         state = webViewState,
-        chromeClient = chromeClient,
         navigator = webViewNavigator,
         onCreated = {
             with(it) {
