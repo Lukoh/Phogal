@@ -8,6 +8,9 @@ import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material.icons.sharp.ViewList
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -21,6 +24,10 @@ import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.l
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureUnlikeViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.rememberPhotoContentState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.webview.WebViewScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.photo.PictureScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos.SearchPhotosScreen
@@ -35,6 +42,7 @@ import com.google.gson.Gson
 object SearchPhotos : PhogalDestination {
     override val icon = Icons.Sharp.ViewList
     override val route = searchPhotosStartRoute
+    @OptIn(ExperimentalComposeUiApi::class)
     override val screen: @Composable (
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
@@ -44,6 +52,11 @@ object SearchPhotos : PhogalDestination {
 
         SearchPhotosScreen(
             galleryViewModel = galleryViewModel,
+            state = rememberSearchPhotosContentState(
+                baseUiState = rememberBaseUiState(),
+                photosUiState = galleryViewModel.photosUiState,
+                isRefreshing = galleryViewModel.isRefreshing
+            ),
             onItemClicked = { id ->
                 val pictureArgument = PictureArgument(
                     id = id,
@@ -106,8 +119,10 @@ object Picture : PhogalDestination {
                 pictureViewModel = pictureViewModel,
                 likeViewModel = likeViewModel,
                 unLikeViewModel = unLikeViewModel,
-                id = pictureArgument.id,
-                visibleViewPhotosButton = pictureArgument.visibleViewPhotosButton,
+                state = rememberPhotoContentState(
+                    id = rememberSaveable { mutableStateOf(pictureArgument.id) },
+                    visibleViewPhotosButton = rememberSaveable { mutableStateOf(pictureArgument.visibleViewPhotosButton) }
+                ),
                 onViewPhotos = { name, firstName, lastName, username ->
                     val nameArgument = NameArgument(
                         name = name,
@@ -148,6 +163,7 @@ object UserPhotos : PhogalDestination {
         navArgument(argumentTypeArg) { type = NavType.StringType }
     )
 
+    @OptIn(ExperimentalComposeUiApi::class)
     @Stable
     override val screen: @Composable (
         navController: NavHostController,
@@ -160,9 +176,14 @@ object UserPhotos : PhogalDestination {
 
         nameArgument?.let {
             UserPhotosScreen(
-                name = nameArgument.name,
-                firstName = nameArgument.firstName,
                 userPhotosViewModel = userPhotosViewModel,
+                state = rememberUserPhotosContentState(
+                    baseUiState = rememberBaseUiState(),
+                    name = rememberSaveable { mutableStateOf(nameArgument.name) },
+                    firstName = rememberSaveable { mutableStateOf(nameArgument.firstName) },
+                    photosUiState = userPhotosViewModel.photosUiState,
+                    isRefreshing = userPhotosViewModel.isRefreshing
+                ),
                 onItemClicked = { id ->
                     val pictureArgument = PictureArgument(
                         id = id,

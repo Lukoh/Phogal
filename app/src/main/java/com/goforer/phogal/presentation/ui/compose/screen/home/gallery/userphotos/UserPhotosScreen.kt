@@ -20,7 +20,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -37,23 +36,16 @@ import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.UserPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosContentState
-import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserPhotosScreen(
     modifier: Modifier = Modifier,
-    name: String,
-    firstName: String,
     userPhotosViewModel: UserPhotosViewModel,
-    state: UserPhotosContentState = rememberUserPhotosContentState(
-        baseUiState = rememberBaseUiState(),
-        photosUiState = userPhotosViewModel.photosUiState,
-        isRefreshing = userPhotosViewModel.isRefreshing
-    ),
+    state: UserPhotosContentState = rememberUserPhotosContentState(),
     onItemClicked: (id: String) -> Unit,
     onBackPressed: () -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
@@ -99,7 +91,7 @@ fun UserPhotosScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "${firstName}${" "}${stringResource(id = R.string.picture_photos)}",
+                        text = "${state.firstName.value}${" "}${stringResource(id = R.string.picture_photos)}",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontFamily = FontFamily.SansSerif,
@@ -134,7 +126,7 @@ fun UserPhotosScreen(
             UserPhotosContent(
                 modifier = modifier,
                 contentPadding = paddingValues,
-                name = name,
+                name = state.name.value,
                 userPhotosViewModel = userPhotosViewModel,
                 state = state,
                 onItemClicked = onItemClicked,

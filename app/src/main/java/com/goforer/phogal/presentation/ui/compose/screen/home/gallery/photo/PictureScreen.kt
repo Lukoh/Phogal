@@ -29,12 +29,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
@@ -57,16 +55,14 @@ import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureLikeViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureUnlikeViewModel
-import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.PhotoContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.rememberPhotoContentState
-import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.Red60
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PictureScreen(
     modifier: Modifier = Modifier,
@@ -74,12 +70,7 @@ fun PictureScreen(
     likeViewModel: PictureLikeViewModel,
     unLikeViewModel: PictureUnlikeViewModel,
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
-    baseUiState: BaseUiState = rememberBaseUiState(LocalContext.current),
-    id: String,
-    visibleViewPhotosButton: Boolean,
-    state: PhotoContentState = rememberPhotoContentState(
-        visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) }
-    ),
+    state: PhotoContentState = rememberPhotoContentState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onBackPressed: () -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
@@ -94,7 +85,7 @@ fun PictureScreen(
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
 
-    DisposableEffect(baseUiState.lifecycle) {
+    DisposableEffect(state.baseUiState.lifecycle) {
         // Create an observer that triggers our remembered callbacks
         // for doing anything
         val observer = LifecycleEventObserver { _, event ->
@@ -106,11 +97,11 @@ fun PictureScreen(
         }
 
         // Add the observer to the lifecycle
-        baseUiState.lifecycle.addObserver(observer)
+        state.baseUiState.lifecycle.addObserver(observer)
 
         // When the effect leaves the Composition, remove the observer
         onDispose {
-            baseUiState.lifecycle.removeObserver(observer)
+            state.baseUiState.lifecycle.removeObserver(observer)
         }
     }
 
@@ -165,9 +156,9 @@ fun PictureScreen(
                             onClick = {
                                 showDialogState.value = true
                                 if (!state.picture?.liked_by_user!!)
-                                    likeViewModel.trigger(1, Params(id))
+                                    likeViewModel.trigger(1, Params(state.id.value))
                                 else
-                                    unLikeViewModel.trigger(1, Params(id))
+                                    unLikeViewModel.trigger(1, Params(state.id.value))
                             }
                         ) {
                             state.picture?.liked_by_user?.let { liked ->
@@ -211,11 +202,11 @@ fun PictureScreen(
                 modifier = modifier,
                 contentPadding = paddingValues,
                 pictureViewModel = pictureViewModel,
-                id = id,
+                id = state.id.value,
                 state = state,
                 onViewPhotos = onViewPhotos,
                 onShowSnackBar = {
-                    baseUiState.scope.launch {
+                    state.baseUiState.scope.launch {
                         snackbarHostState.showSnackbar(it)
                     }
                 },
