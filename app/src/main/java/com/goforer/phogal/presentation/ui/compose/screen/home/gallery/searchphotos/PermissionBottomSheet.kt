@@ -33,23 +33,23 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PermissionBottomSheet(
-    permissionState: PermissionState = rememberPermissionState(),
+    state: PermissionState = rememberPermissionState(),
     onDismissedRequest: () -> Unit,
     onClicked: () -> Unit
 ) {
     ModalBottomSheet(
         onDismissRequest = {
-            permissionState.scope.launch {
-                permissionState.bottomSheetState.hide()
+            state.scope.launch {
+                state.bottomSheetState.hide()
             }.invokeOnCompletion {
-                if (!permissionState.bottomSheetState.isVisible) {
-                    permissionState.openBottomSheetState.value = false
+                if (!state.bottomSheetState.isVisible) {
+                    state.openBottomSheetState.value = false
                 }
             }
 
             onDismissedRequest()
         },
-        sheetState = permissionState.bottomSheetState,
+        sheetState = state.bottomSheetState,
     ) {
         Column(
             modifier = Modifier.wrapContentHeight(),
@@ -72,8 +72,8 @@ fun PermissionBottomSheet(
                             )
                         ) {
                             append(
-                                permissionState.rationaleTextState.value.substring(
-                                    0, permissionState.rationaleTextState.value.indexOf("Setting")
+                                state.rationaleTextState.value.substring(
+                                    0, state.rationaleTextState.value.indexOf("Setting")
                                 )
                             )
                         }
@@ -86,9 +86,9 @@ fun PermissionBottomSheet(
                             )
                         ) {
                             append(
-                                permissionState.rationaleTextState.value.substring(
-                                    permissionState.rationaleTextState.value.indexOf("Setting"),
-                                    permissionState.rationaleTextState.value.length
+                                state.rationaleTextState.value.substring(
+                                    state.rationaleTextState.value.indexOf("Setting"),
+                                    state.rationaleTextState.value.length
                                 )
                             )
                         }
@@ -102,9 +102,9 @@ fun PermissionBottomSheet(
                 // Note: If you provide logic outside of onDismissRequest to remove the sheet,
                 // you must additionally handle intended state cleanup, if any.
                 onClick = {
-                    permissionState.scope.launch { permissionState.bottomSheetState.hide() }.invokeOnCompletion {
-                        if (!permissionState.bottomSheetState.isVisible) {
-                            permissionState.openBottomSheetState.value = false
+                    state.scope.launch { state.bottomSheetState.hide() }.invokeOnCompletion {
+                        if (!state.bottomSheetState.isVisible) {
+                            state.openBottomSheetState.value = false
                         }
                     }
 

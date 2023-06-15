@@ -157,7 +157,7 @@ fun SearchPhotosContent(
         )
         if (showPermissionBottomSheet.value) {
             PermissionBottomSheet(
-                permissionState = rememberPermissionState(rationaleTextState = rationaleTextState),
+                state = rememberPermissionState(rationaleTextState = rationaleTextState),
                 onDismissedRequest = {
                     enabledSearch.value = false
                     showPermissionBottomSheet.value = false

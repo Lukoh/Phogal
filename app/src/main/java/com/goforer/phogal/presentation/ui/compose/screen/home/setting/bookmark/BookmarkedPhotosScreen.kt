@@ -44,7 +44,7 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun BookmarkedPhotosScreen(
     modifier: Modifier = Modifier,
-    baseUiState: BaseUiState = rememberBaseUiState(),
+    state: BaseUiState = rememberBaseUiState(),
     onItemClicked: (item: Picture, index: Int) -> Unit,
     onBackPressed: () -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
@@ -60,7 +60,7 @@ fun BookmarkedPhotosScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val enabledLoadPhotosState = remember { mutableStateOf(true) }
 
-    DisposableEffect(baseUiState.lifecycle) {
+    DisposableEffect(state.lifecycle) {
         // Create an observer that triggers our remembered callbacks
         // for doing anything
         val observer = LifecycleEventObserver { _, event ->
@@ -72,11 +72,11 @@ fun BookmarkedPhotosScreen(
         }
 
         // Add the observer to the lifecycle
-        baseUiState.lifecycle.addObserver(observer)
+        state.lifecycle.addObserver(observer)
 
         // When the effect leaves the Composition, remove the observer
         onDispose {
-            baseUiState.lifecycle.removeObserver(observer)
+            state.lifecycle.removeObserver(observer)
         }
     }
 
