@@ -425,6 +425,45 @@ fun ProfileItem(image: String, name: String, position: Int) {
 }
 
 @Composable
+fun getProfileInfoItems(user: User) = listOf(
+    ProfileInfoItem(
+        text = user.bio ?: stringResource(id = R.string.user_info_no_sex_info),
+        painter = painterResource(id = R.drawable.ic_bio),
+        position = 8
+    ),
+    ProfileInfoItem(
+        text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
+        painter = painterResource(id = R.drawable.ic_location),
+        position = 7
+    ),
+    ProfileInfoItem(
+        text = "${stringResource(id = R.string.user_info_instagram_name)}${" "}${user.instagram_username ?: stringResource(id = R.string.user_info_no_instagram_name)}",
+        painter = painterResource(id = R.drawable.ic_instagram),
+        position = 6
+    ),
+    ProfileInfoItem(
+        text = "${stringResource(id = R.string.user_info_twitter_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_twitter_name)}",
+        painter = painterResource(id = R.drawable.ic_twitter),
+        position = 5
+    ),
+    ProfileInfoItem(
+        text = user.links.followers ?: "",
+        painter = painterResource(id = R.drawable.ic_follower),
+        position = 4
+    ),
+    ProfileInfoItem(
+        text = user.links.following ?: "",
+        painter = painterResource(id = R.drawable.ic_following),
+        position = 3
+    ),
+    ProfileInfoItem(
+        text = "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
+        painter = painterResource(id = R.drawable.ic_date),
+        position = 2
+    )
+)
+
+@Composable
 fun UserInfoItem(text: String, painter: Painter, position: Int) {
     Row(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -457,45 +496,6 @@ fun UserInfoItem(text: String, painter: Painter, position: Int) {
         )
     }
 }
-
-@Composable
-fun getProfileInfoItems(user: User) = listOf(
-        ProfileInfoItem(
-            text = user.bio ?: stringResource(id = R.string.user_info_no_sex_info),
-            painter = painterResource(id = R.drawable.ic_bio),
-            position = 8
-        ),
-        ProfileInfoItem(
-            text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
-            painter = painterResource(id = R.drawable.ic_location),
-            position = 7
-        ),
-        ProfileInfoItem(
-            text = "${stringResource(id = R.string.user_info_instagram_name)}${" "}${user.instagram_username ?: stringResource(id = R.string.user_info_no_instagram_name)}",
-            painter = painterResource(id = R.drawable.ic_instagram),
-            position = 6
-        ),
-        ProfileInfoItem(
-            text = "${stringResource(id = R.string.user_info_twitter_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_twitter_name)}",
-            painter = painterResource(id = R.drawable.ic_twitter),
-            position = 5
-        ),
-        ProfileInfoItem(
-            text = user.links.followers ?: "",
-            painter = painterResource(id = R.drawable.ic_follower),
-            position = 4
-        ),
-        ProfileInfoItem(
-            text = user.links.following ?: "",
-            painter = painterResource(id = R.drawable.ic_following),
-            position = 3
-        ),
-        ProfileInfoItem(
-            text = "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
-            painter = painterResource(id = R.drawable.ic_date),
-            position = 2
-        )
-    )
 
 @Preview(name = "Light Mode")
 @Preview(
