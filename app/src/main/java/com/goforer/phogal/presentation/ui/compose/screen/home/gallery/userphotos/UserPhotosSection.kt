@@ -48,6 +48,7 @@ import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.data.repository.Repository
+import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.UserPhotosSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosSectionState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
@@ -256,6 +257,9 @@ fun UserPhotosSection(
             state.clickedState.value = false
         }
     }
+
+    if (photos.itemCount > 0 )
+        TrackScreenViewEvent(screenName = "View_User_Photos")
 }
 
 @Composable

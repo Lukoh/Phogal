@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.local.SettingItem
+import com.goforer.phogal.data.model.local.home.setting.SettingItem
 import com.goforer.phogal.data.model.remote.response.setting.Profile
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray1

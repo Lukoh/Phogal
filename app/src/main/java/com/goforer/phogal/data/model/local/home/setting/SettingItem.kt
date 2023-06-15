@@ -1,4 +1,4 @@
-package com.goforer.phogal.data.model.local
+package com.goforer.phogal.data.model.local.home.setting
 
 import android.os.Parcelable
 import com.goforer.phogal.data.model.BaseModel

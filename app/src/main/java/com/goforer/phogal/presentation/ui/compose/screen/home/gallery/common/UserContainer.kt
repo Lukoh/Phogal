@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
@@ -59,7 +60,9 @@ import com.goforer.base.designsystem.component.IconContainer
 import com.goforer.base.designsystem.component.ImageCrossFade
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
+import com.goforer.phogal.data.model.local.home.common.ProfileInfoItem
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
+import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserInfoState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
@@ -71,7 +74,6 @@ import com.goforer.phogal.presentation.ui.theme.DarkGreenGray99
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.goforer.phogal.presentation.ui.theme.Teal60
 import kotlinx.coroutines.launch
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,51 +104,13 @@ fun UserContainer(
                     showUserInfoBottomSheet = true
                 },
         ) {
-            IconContainer(state.profileSize.value.dp) {
-                Box {
-                    val painter = loadImagePainter(
-                        data = user.profile_image.small,
-                        size = Size.ORIGINAL
-                    )
-
-                    ImageCrossFade(painter = painter, durationMillis = null)
-                    Image(
-                        painter = painter,
-                        contentDescription = "Profile",
-                        modifier = Modifier
-                            .padding(1.dp)
-                            .fillMaxSize()
-                            .clip(CircleShape)
-                            .border(0.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
-                            .clickable {
-                                if (state.visibleViewPhotosButton.value)
-                                    onViewPhotos(
-                                        user.username,
-                                        user.first_name,
-                                        lastName,
-                                        user.username
-                                    )
-                            },
-                        Alignment.CenterStart,
-                        contentScale = ContentScale.Crop
-                    )
-
-                    if (painter.state is AsyncImagePainter.State.Loading) {
-                        val preloadPainter = loadImagePainter(
-                            data = R.drawable.ic_profile_logo,
-                            size = Size.ORIGINAL
-                        )
-
-                        Image(
-                            painter = preloadPainter,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(36.dp)
-                                .align(Alignment.Center),
-                        )
-                    }
-                }
-            }
+            ShowProfileImage(
+                profileImageSize = state.profileSize.value.dp,
+                user = user,
+                lastName = lastName,
+                visibleViewPhotosButton = state.visibleViewPhotosButton.value,
+                onViewPhotos = onViewPhotos
+            )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier
                 .height(IntrinsicSize.Min)
@@ -226,6 +190,61 @@ fun UserContainer(
     }
 }
 
+@Composable
+fun ShowProfileImage(
+    profileImageSize: Dp,
+    user: User,
+    lastName: String,
+    visibleViewPhotosButton: Boolean,
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
+) {
+    IconContainer(profileImageSize) {
+        Box {
+            val painter = loadImagePainter(
+                data = user.profile_image.small,
+                size = Size.ORIGINAL
+            )
+
+            ImageCrossFade(painter = painter, durationMillis = null)
+            Image(
+                painter = painter,
+                contentDescription = "Profile",
+                modifier = Modifier
+                    .padding(1.dp)
+                    .fillMaxSize()
+                    .clip(CircleShape)
+                    .border(0.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
+                    .clickable {
+                        if (visibleViewPhotosButton)
+                            onViewPhotos(
+                                user.username,
+                                user.first_name,
+                                lastName,
+                                user.username
+                            )
+                    },
+                Alignment.CenterStart,
+                contentScale = ContentScale.Crop
+            )
+
+            if (painter.state is AsyncImagePainter.State.Loading) {
+                val preloadPainter = loadImagePainter(
+                    data = R.drawable.ic_profile_logo,
+                    size = Size.ORIGINAL
+                )
+
+                Image(
+                    painter = preloadPainter,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(36.dp)
+                        .align(Alignment.Center),
+                )
+            }
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserInfoBottomSheet(
@@ -234,6 +253,7 @@ fun UserInfoBottomSheet(
     showUserInfoBottomSheet: Boolean,
     onDismissedRequest: (Boolean) -> Unit
 ) {
+    TrackScreenViewEvent(screenName = "View_User_Profile_BottomSheet")
     GenericCubicAnimationShape(
         visible = showUserInfoBottomSheet,
         duration = 400
@@ -264,48 +284,15 @@ fun UserInfoBottomSheet(
                     position = 9
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                UserInfoItem(
-                    text = user.bio ?: stringResource(id = R.string.user_info_no_sex_info),
-                    painter = painterResource(id = R.drawable.ic_bio),
-                    position = 8
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                UserInfoItem(
-                    text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
-                    painter = painterResource(id = R.drawable.ic_location),
-                    position = 7
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                UserInfoItem(
-                    text = "${stringResource(id = R.string.user_info_instagram_name)}${" "}${user.instagram_username ?: stringResource(id = R.string.user_info_no_instagram_name)}",
-                    painter = painterResource(id = R.drawable.ic_instagram),
-                    position = 6
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                UserInfoItem(
-                    text = "${stringResource(id = R.string.user_info_twitter_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_twitter_name)}",
-                    painter = painterResource(id = R.drawable.ic_twitter),
-                    position = 5
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                UserInfoItem(
-                    text = user.links.followers ?: "",
-                    painter = painterResource(id = R.drawable.ic_follower),
-                    position = 4
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                UserInfoItem(
-                    text = user.links.following ?: "",
-                    painter = painterResource(id = R.drawable.ic_following),
-                    position = 3
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                UserInfoItem(
-                    text = "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
-                    painter = painterResource(id = R.drawable.ic_date),
-                    position = 2
-                )
-                Spacer(modifier = Modifier.height(8.dp))
+                getProfileInfoItems(user).forEachIndexed { _, item ->
+                    UserInfoItem(
+                        text = item.text,
+                        painter = item.painter,
+                        position = item.position
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
                 Row(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.Center,
@@ -469,8 +456,46 @@ fun UserInfoItem(text: String, painter: Painter, position: Int) {
             style = MaterialTheme.typography.titleMedium
         )
     }
-
 }
+
+@Composable
+fun getProfileInfoItems(user: User) = listOf(
+        ProfileInfoItem(
+            text = user.bio ?: stringResource(id = R.string.user_info_no_sex_info),
+            painter = painterResource(id = R.drawable.ic_bio),
+            position = 8
+        ),
+        ProfileInfoItem(
+            text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
+            painter = painterResource(id = R.drawable.ic_location),
+            position = 7
+        ),
+        ProfileInfoItem(
+            text = "${stringResource(id = R.string.user_info_instagram_name)}${" "}${user.instagram_username ?: stringResource(id = R.string.user_info_no_instagram_name)}",
+            painter = painterResource(id = R.drawable.ic_instagram),
+            position = 6
+        ),
+        ProfileInfoItem(
+            text = "${stringResource(id = R.string.user_info_twitter_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_twitter_name)}",
+            painter = painterResource(id = R.drawable.ic_twitter),
+            position = 5
+        ),
+        ProfileInfoItem(
+            text = user.links.followers ?: "",
+            painter = painterResource(id = R.drawable.ic_follower),
+            position = 4
+        ),
+        ProfileInfoItem(
+            text = user.links.following ?: "",
+            painter = painterResource(id = R.drawable.ic_following),
+            position = 3
+        ),
+        ProfileInfoItem(
+            text = "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
+            painter = painterResource(id = R.drawable.ic_date),
+            position = 2
+        )
+    )
 
 @Preview(name = "Light Mode")
 @Preview(
