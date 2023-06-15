@@ -47,6 +47,8 @@ import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.PhotoItemState
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.rememberPhotoItemState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.UserContainer
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
@@ -59,16 +61,14 @@ import com.google.accompanist.placeholder.material.placeholder
 @Composable
 fun PictureItem(
     modifier: Modifier = Modifier,
-    index: Int,
-    picture: Picture,
-    visibleViewPhotosButton: Boolean,
+    state: PhotoItemState = rememberPhotoItemState(),
     onItemClicked: (item: Picture, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
-    var isClicked by rememberSaveable { mutableStateOf(false) }
-    val verticalPadding = if (index == 0)
+    val picture = state.photo.value as Picture
+    val verticalPadding = if (state.index.value == 0)
         2.dp
     else
         4.dp
@@ -86,7 +86,7 @@ fun PictureItem(
             colors = CardDefaults.cardColors(
                 contentColor = MaterialTheme.colorScheme.primary,
                 containerColor =
-                if (isClicked)
+                if (state.isClicked.value)
                     MaterialTheme.colorScheme.primaryContainer
                 else
                     MaterialTheme.colorScheme.surfaceVariant,
@@ -136,8 +136,8 @@ fun PictureItem(
                     )
                     .clip(RoundedCornerShape(4.dp))
                     .clickable {
-                        isClicked = true
-                        onItemClicked.invoke(picture, index)
+                        state.isClicked.value = true
+                        onItemClicked.invoke(picture, state.index.value)
                     }
                     .scale(.8f + (.2f * transition))
                     .graphicsLayer { rotationX = (1f - transition) * 5f }
@@ -156,7 +156,7 @@ fun PictureItem(
                     state = rememberUserContainerState(
                         profileSize = rememberSaveable { mutableDoubleStateOf(36.0) },
                         colors = rememberSaveable { listOf(Color.White, Color.White, DarkGreen60, DarkGreen70, Teal60) },
-                        visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) }
+                        visibleViewPhotosButton = state.visibleViewPhotosButton
                     ),
                     onViewPhotos = onViewPhotos,
                     onShowSnackBar = onShowSnackBar,

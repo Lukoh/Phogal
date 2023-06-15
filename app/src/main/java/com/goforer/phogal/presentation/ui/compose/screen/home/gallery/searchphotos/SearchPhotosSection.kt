@@ -28,6 +28,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
@@ -47,6 +50,7 @@ import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
+import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.rememberPhotoItemState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.SearchPhotosSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosSectionState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
@@ -149,9 +153,11 @@ fun SearchPhotosSection(
                                         modifier = modifier.animateItemPlacement(
                                             tween(durationMillis = 250)
                                         ),
-                                        index = index,
-                                        photo = photos[index]!!,
-                                        visibleViewPhotosButton = true,
+                                        state = rememberPhotoItemState(
+                                            index = rememberSaveable { mutableIntStateOf(index) },
+                                            photo = rememberSaveable { mutableStateOf(photos[index]!!) },
+                                            visibleViewPhotosButton = rememberSaveable { mutableStateOf(true) }
+                                        ),
                                         onItemClicked = onItemClicked,
                                         onViewPhotos = onViewPhotos,
                                         onShowSnackBar = onShowSnackBar,
