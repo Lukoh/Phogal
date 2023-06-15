@@ -18,7 +18,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
@@ -37,10 +36,10 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchph
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.InitScreen
+import com.goforer.phogal.presentation.ui.theme.Black
+import com.goforer.phogal.presentation.ui.theme.Blue70
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
-import com.goforer.phogal.presentation.ui.theme.DarkGreen20
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
-import com.goforer.phogal.presentation.ui.theme.Purple40
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import timber.log.Timber
@@ -94,9 +93,8 @@ fun SearchPhotosContent(
                 Chips(
                     modifier = Modifier.padding(top = 8.dp),
                     items = words,
-                    textColor = DarkGreen20,
-                    textFontSize = 15.sp,
-                    leadingIconTint = Purple40
+                    textColor = Black,
+                    leadingIconTint = Blue70
                 ) { keyword ->
                     searchState.editableInputState.textState = keyword
                     photosContentState.searchWord.value = keyword
