@@ -1,10 +1,13 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,8 +25,11 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Photo
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,6 +39,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -63,10 +70,13 @@ import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.home.common.ProfileInfoItem
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
+import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserInfoState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserInfoState
+import com.goforer.phogal.presentation.ui.theme.Black
+import com.goforer.phogal.presentation.ui.theme.Blue50
 import com.goforer.phogal.presentation.ui.theme.Blue80
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
@@ -100,7 +110,7 @@ fun UserContainer(
                 .background(Color.Transparent)
                 .wrapContentHeight(Alignment.CenterVertically)
                 .fillMaxWidth()
-                .heightIn(68.dp, 114.dp)
+                .heightIn(88.dp, 114.dp)
                 .clickable {
                     showUserInfoBottomSheet = true
                 },
@@ -130,8 +140,16 @@ fun UserContainer(
                 Text(
                     "${user.total_likes}${" "}" +
                             "${stringResource(id = R.string.picture_likes)}${" "}${user.total_collections}${" "}" +
-                            "${stringResource(id = R.string.picture_collections)}${" "}" +
-                            "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
+                            "${stringResource(id = R.string.picture_collections)}${" "}",
+                    fontFamily = FontFamily.SansSerif,
+                    fontSize = 12.sp,
+                    fontStyle = FontStyle.Normal,
+                    color = state.colors[1],
+                    style = MaterialTheme.typography.titleSmall
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 12.sp,
                     fontStyle = FontStyle.Normal,
@@ -139,6 +157,12 @@ fun UserContainer(
                     style = MaterialTheme.typography.titleSmall
                 )
             }
+
+            Spacer(modifier = Modifier.width(12.dp))
+            ShowFollowButton(
+                modifier = modifier,
+                state = state.baseUiState
+            )
         }
 
         if (state.visibleViewPhotosButton.value) {
@@ -159,7 +183,10 @@ fun UserContainer(
                 text = {
                     Text(
                         "${stringResource(id = R.string.picture_view_photos, user.name)}${" "}${user.total_photos}${" "}${stringResource(id = R.string.picture_photos, user.name)}",
-                        color = ColorSnowWhite,
+                        color = if (state.isFromItem.value)
+                            ColorSnowWhite
+                        else
+                            DarkGreen60,
                         fontFamily = FontFamily.SansSerif,
                         fontSize = 12.sp,
                         fontStyle = FontStyle.Italic
@@ -499,6 +526,51 @@ fun UserInfoItem(text: String, painter: Painter, position: Int) {
     }
 }
 
+@Composable
+fun ShowFollowButton(
+    modifier: Modifier = Modifier,
+    state: BaseUiState
+) {
+    Button(
+        onClick = {
+            state.scope.launch {
+                Toast.makeText(state.context, "The following module is under implementing...", Toast.LENGTH_SHORT).show()
+            }
+        },
+        modifier = modifier
+            .widthIn(88.dp)
+            .heightIn(42.dp)
+            .indication(
+                interactionSource = remember { MutableInteractionSource() },
+                indication  = rememberRipple(bounded = false)
+            ),
+        shape = MaterialTheme.shapes.small,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+            contentColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
+            disabledContentColor = Color.Transparent
+        ),
+        interactionSource = remember { MutableInteractionSource() }
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                modifier = Modifier.size(width = 28.dp, height = 28.dp),
+                imageVector = Icons.Filled.Add,
+                contentDescription = "Follow",
+                tint = Blue50
+            )
+            Spacer(modifier = Modifier.width(width = 4.dp))
+            Text(
+                text = "Follow",
+                color = Blue50,
+                fontStyle = FontStyle.Normal,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+    }
+}
+
 @Preview(name = "Light Mode")
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
@@ -520,7 +592,7 @@ fun UserContainerPreview() {
                     .background(Color.Transparent)
                     .wrapContentHeight(Alignment.CenterVertically)
                     .fillMaxWidth()
-                    .heightIn(68.dp, 114.dp)
+                    .heightIn(88.dp, 114.dp)
                     .clickable {},
             ) {
                 IconContainer(36.dp) {
@@ -561,12 +633,12 @@ fun UserContainerPreview() {
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Column(modifier = Modifier
-                    .wrapContentHeight()
-                    .widthIn(178.dp)
+                    .height(IntrinsicSize.Min)
+                    .widthIn(186.dp)
                 ) {
                     Text(
-                        "Lukoh",
-                        color = Color.White,
+                        text = "Lukoh",
+                        color = Black,
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp,
@@ -575,13 +647,60 @@ fun UserContainerPreview() {
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        "https://api.unsplash.com/users/jimmyexample/portfolio",
+                        "${39}${" "}" +
+                                "${stringResource(id = R.string.picture_likes)}${" "}${30}${" "}" +
+                                "${stringResource(id = R.string.picture_collections)}${" "}",
                         fontFamily = FontFamily.SansSerif,
-                        fontSize = 13.sp,
+                        fontSize = 12.sp,
                         fontStyle = FontStyle.Normal,
-                        color = Color.White,
+                        color = Black,
                         style = MaterialTheme.typography.titleSmall
                     )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        "${stringResource(id = R.string.user_updated_at)}${" "}${"2023-06-12"}",
+                        fontFamily = FontFamily.SansSerif,
+                        fontSize = 12.sp,
+                        fontStyle = FontStyle.Normal,
+                        color = Black,
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(12.dp))
+                Button(
+                    onClick = {},
+                    modifier = Modifier
+                        .widthIn(88.dp)
+                        .heightIn(42.dp)
+                        .indication(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication  = rememberRipple(bounded = false)
+                        ),
+                    shape = MaterialTheme.shapes.small,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        disabledContentColor = Color.Transparent
+                    ),
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            modifier = Modifier.size(width = 28.dp, height = 28.dp),
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = "Follow",
+                            tint = Blue50
+                        )
+                        Spacer(modifier = Modifier.width(width = 4.dp))
+                        Text(
+                            text = "Follow",
+                            color = Blue50,
+                            fontStyle = FontStyle.Normal,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
                 }
             }
 

@@ -156,7 +156,8 @@ fun PictureItem(
                     state = rememberUserContainerState(
                         profileSize = rememberSaveable { mutableDoubleStateOf(36.0) },
                         colors = rememberSaveable { listOf(Color.White, Color.White, DarkGreen60, DarkGreen70, Teal60) },
-                        visibleViewPhotosButton = state.visibleViewPhotosButton
+                        visibleViewPhotosButton = state.visibleViewPhotosButton,
+                        isFromItem = rememberSaveable { mutableStateOf(true) }
                     ),
                     onViewPhotos = onViewPhotos,
                     onShowSnackBar = onShowSnackBar,

@@ -18,6 +18,7 @@ class UserContainerState(
     val profileSize: MutableState<Double>,
     val colors: List<Color>,
     val visibleViewPhotosButton: MutableState<Boolean>,
+    val isFromItem: MutableState<Boolean>,
 )
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -26,13 +27,15 @@ fun rememberUserContainerState(
     baseUiState: BaseUiState = rememberBaseUiState(),
     profileSize: MutableState<Double> = rememberSaveable { mutableDoubleStateOf(0.0) },
     colors: List<Color> = rememberSaveable { listOf(Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent) },
-    visibleViewPhotosButton: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
+    visibleViewPhotosButton: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    isFromItem: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): UserContainerState = remember(
     profileSize, colors, visibleViewPhotosButton) {
     UserContainerState(
         baseUiState = baseUiState,
         profileSize = profileSize,
         colors = colors,
-        visibleViewPhotosButton = visibleViewPhotosButton
+        visibleViewPhotosButton = visibleViewPhotosButton,
+        isFromItem = isFromItem
     )
 }

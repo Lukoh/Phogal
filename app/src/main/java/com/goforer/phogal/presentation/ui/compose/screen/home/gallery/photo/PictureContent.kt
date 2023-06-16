@@ -267,7 +267,8 @@ fun BodyContent(
                 state = rememberUserContainerState(
                     profileSize = rememberSaveable { mutableDoubleStateOf(48.0) },
                     colors = rememberSaveable { listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite, ColorSystemGray5, DarkGreen60) },
-                    visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) }
+                    visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) },
+                    isFromItem = rememberSaveable { mutableStateOf(false) }
                 ),
                 onViewPhotos = onViewPhotos,
                 onShowSnackBar = onShowSnackBar,
