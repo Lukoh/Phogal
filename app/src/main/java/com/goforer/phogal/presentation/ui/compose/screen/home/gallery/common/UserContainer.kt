@@ -68,6 +68,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.U
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserInfoState
 import com.goforer.phogal.presentation.ui.theme.Blue80
+import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.goforer.phogal.presentation.ui.theme.DarkGreenGray10
 import com.goforer.phogal.presentation.ui.theme.DarkGreenGray99
@@ -158,6 +159,7 @@ fun UserContainer(
                 text = {
                     Text(
                         "${stringResource(id = R.string.picture_view_photos, user.name)}${" "}${user.total_photos}${" "}${stringResource(id = R.string.picture_photos, user.name)}",
+                        color = ColorSnowWhite,
                         fontFamily = FontFamily.SansSerif,
                         fontSize = 12.sp,
                         fontStyle = FontStyle.Italic

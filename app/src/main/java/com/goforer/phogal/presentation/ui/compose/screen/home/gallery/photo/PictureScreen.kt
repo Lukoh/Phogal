@@ -238,9 +238,7 @@ fun LikeResponseHandle(
                 state.enabledLike.value = likeResponse.photo.liked_by_user
                 Timber.d("Like Success : %s", state.enabledLike.value.toString())
             }
-            Status.LOADING -> {
-
-            }
+            Status.LOADING -> {}
             Status.ERROR-> {
                 state.enabledLike.value = false
                 Timber.d("Like Failed : %s", state.enabledLike.value.toString())

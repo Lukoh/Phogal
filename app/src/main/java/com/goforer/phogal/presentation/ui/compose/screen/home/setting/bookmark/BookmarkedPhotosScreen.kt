@@ -47,6 +47,7 @@ fun BookmarkedPhotosScreen(
     state: BaseUiState = rememberBaseUiState(),
     onItemClicked: (item: Picture, index: Int) -> Unit,
     onBackPressed: () -> Unit,
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
     onStart: () -> Unit = {
         //To Do:: Implement the code what you want to do....
@@ -120,6 +121,7 @@ fun BookmarkedPhotosScreen(
                 contentPadding = paddingValues,
                 enabledLoadPhotosState = enabledLoadPhotosState,
                 onItemClicked = onItemClicked,
+                onViewPhotos = onViewPhotos,
                 onOpenWebView = onOpenWebView
             )
         }

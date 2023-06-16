@@ -22,6 +22,7 @@ fun BookmarkedPhotosContent(
     contentPadding: PaddingValues = PaddingValues(4.dp),
     enabledLoadPhotosState: MutableState<Boolean>,
     onItemClicked: (item: Picture, index: Int) -> Unit,
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     val bookmarkedPictures = bookmarkViewModel.getBookmarkPictures()
@@ -32,6 +33,7 @@ fun BookmarkedPhotosContent(
             contentPadding = contentPadding,
             photos = bookmarkedPictures,
             onItemClicked = onItemClicked,
+            onViewPhotos = onViewPhotos,
             onOpenWebView = onOpenWebView
         )
     } else {

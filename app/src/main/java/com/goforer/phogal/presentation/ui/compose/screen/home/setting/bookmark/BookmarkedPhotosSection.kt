@@ -30,6 +30,7 @@ fun BookmarkedPhotosSection(
     contentPadding: PaddingValues,
     photos: MutableList<Picture>,
     onItemClicked: (item: Picture, index: Int) -> Unit,
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     Box(
@@ -62,7 +63,7 @@ fun BookmarkedPhotosSection(
                         visibleViewPhotosButton = rememberSaveable { mutableStateOf(true) }
                     ),
                     onItemClicked = onItemClicked,
-                    onViewPhotos = { _, _, _, _ -> },
+                    onViewPhotos = onViewPhotos,
                     onShowSnackBar = {},
                     onOpenWebView = onOpenWebView
                 )
