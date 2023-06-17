@@ -35,8 +35,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -84,6 +86,7 @@ import com.goforer.phogal.presentation.ui.theme.DarkGreenGray10
 import com.goforer.phogal.presentation.ui.theme.DarkGreenGray99
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.goforer.phogal.presentation.ui.theme.Teal60
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -341,40 +344,12 @@ fun UserInfoBottomSheet(
                             }
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    IconButton(
-                        modifier = Modifier.padding(horizontal = 2.dp),
-                        height = 32.dp,
-                        onClick = {
-                            userInfoState.scope.launch {
-                                userInfoState.bottomSheetState.hide()
-                            }.invokeOnCompletion {
-                                if (!userInfoState.bottomSheetState.isVisible) {
-                                    userInfoState.openBottomSheetState.value = false
-                                }
-                            }
-
-                            onDismissedRequest(true)
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Default.OpenInBrowser,
-                                contentDescription = null,
-                            )
-                        },
-                        text = {
-                            Text(
-                                text = stringResource(id = R.string.user_info_portfolio, user.first_name),
-                                modifier = Modifier
-                                    .padding(horizontal = 8.dp)
-                                    .clickable {},
-                                color = DarkGreenGray99,
-                                fontFamily = FontFamily.SansSerif,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 14.sp,
-                                fontStyle = FontStyle.Normal,
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                        }
+                    ShowPortfolioButton(
+                        scope = userInfoState.scope,
+                        bottomSheetState = userInfoState.bottomSheetState,
+                        openBottomSheetState = userInfoState.openBottomSheetState,
+                        firstName = user.first_name,
+                        onDismissedRequest = onDismissedRequest
                     )
                 }
 
@@ -569,6 +544,52 @@ fun ShowFollowButton(
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ShowPortfolioButton(
+    scope: CoroutineScope,
+    bottomSheetState: SheetState,
+    openBottomSheetState: MutableState<Boolean>,
+    firstName: String,
+    onDismissedRequest: (Boolean) -> Unit
+) {
+    IconButton(
+        modifier = Modifier.padding(horizontal = 2.dp),
+        height = 32.dp,
+        onClick = {
+            scope.launch {
+                bottomSheetState.hide()
+            }.invokeOnCompletion {
+                if (!bottomSheetState.isVisible) {
+                    openBottomSheetState.value = false
+                }
+            }
+
+            onDismissedRequest(true)
+        },
+        icon = {
+            Icon(
+                imageVector = Icons.Default.OpenInBrowser,
+                contentDescription = null,
+            )
+        },
+        text = {
+            Text(
+                text = stringResource(id = R.string.user_info_portfolio, firstName),
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .clickable {},
+                color = DarkGreenGray99,
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.Medium,
+                fontSize = 14.sp,
+                fontStyle = FontStyle.Normal,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+    )
 }
 
 @Preview(name = "Light Mode")
