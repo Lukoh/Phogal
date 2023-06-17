@@ -7,6 +7,7 @@ import android.security.keystore.KeyProperties
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
+import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -22,6 +23,7 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
     companion object {
         const val key_bookmark_photos = "key_bookmark_photos"
         const val key_search_word_list = "search_word_list"
+        const val key_following_user = "key_following_user"
     }
 
     private val spec = KeyGenParameterSpec.Builder(
@@ -108,7 +110,6 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
 
             foundPhoto != null
         }
-
     }
 
     internal fun setBookmarkPhoto(bookmarkedPhoto: Picture): MutableList<Picture>? {
@@ -153,5 +154,53 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
 
         editor.putString(key_search_word_list, json)
         editor.apply()
+    }
+
+    internal fun getFollowedUsers(): MutableList<User>? {
+        val json = pref.getString(key_following_user, null)
+        val type = object : TypeToken<ArrayList<User>>() {}.type
+
+        return Gson().fromJson(json, type)
+    }
+
+    internal fun isUserFollowed(user: User): Boolean {
+        val users = getFollowedUsers()
+
+        return if (users.isNullOrEmpty()) {
+            false
+        } else {
+            val foundUser = users.find { it.id == user.id && it.username == user.username }
+
+            foundUser != null
+        }
+    }
+
+    internal fun setFollowingUser(user: User): MutableList<User>? {
+        val editor = pref.edit()
+        var users = getFollowedUsers()
+        val json: String
+        val type = object : TypeToken<ArrayList<User>>() {}.type
+
+        if (users.isNullOrEmpty()) {
+            users = mutableListOf()
+            users.add(user)
+            json = Gson().toJson(users)
+            editor.apply()
+            editor.putString(key_following_user, json)
+            editor.apply()
+        } else {
+            val followingUser = users.find { it.id == user.id && it.username == user.username }
+
+            if (followingUser == null)
+                users.add(user)
+            else
+                users.remove(followingUser)
+
+            json = Gson().toJson(users)
+            editor.putString(key_following_user, json)
+            editor.apply()
+        }
+
+        return Gson().fromJson(json, type)
     }
 }
