@@ -17,7 +17,7 @@ constructor() : BaseViewModel<User>() {
         localStorage.setFollowingUser(user)
     }
 
-    fun getFollowedUsers(): MutableList<User>? = localStorage.getFollowedUsers()
+    fun getFollowingUsers(): MutableList<User>? = localStorage.getFollowingUsers()
 
     fun isUserFollowed(user: User) = localStorage.isUserFollowed(user)
 }

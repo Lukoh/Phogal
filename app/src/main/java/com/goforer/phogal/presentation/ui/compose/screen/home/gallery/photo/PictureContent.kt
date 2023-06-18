@@ -86,7 +86,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.re
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.UserContainer
 import com.goforer.phogal.presentation.ui.theme.Black
-import com.goforer.phogal.presentation.ui.theme.Blue60
+import com.goforer.phogal.presentation.ui.theme.Blue75
 import com.goforer.phogal.presentation.ui.theme.ColorBlackLight
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray1
@@ -115,7 +115,7 @@ fun PictureContent(
         pictureViewModel.trigger(1, Params(id))
     }
 
-    PictureResponseHandle(
+    HandlePictureResponse(
         modifier = modifier,
         contentPadding = contentPadding,
         id = id,
@@ -129,7 +129,7 @@ fun PictureContent(
 }
 
 @Composable
-fun PictureResponseHandle(
+fun HandlePictureResponse(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     id : String,
@@ -266,7 +266,7 @@ fun BodyContent(
                 user = picture.user,
                 state = rememberUserContainerState(
                     profileSize = rememberSaveable { mutableDoubleStateOf(48.0) },
-                    colors = rememberSaveable { listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite, ColorSystemGray5, DarkGreen60) },
+                    colors = rememberSaveable { listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite, ColorSystemGray5, Blue75, DarkGreen60) },
                     visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) },
                     isFromItem = rememberSaveable { mutableStateOf(false) }
                 ),
@@ -328,7 +328,7 @@ fun BodyContent(
                 modifier = Modifier.padding(horizontal = 4.dp),
                 height = 32.dp,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Blue60,
+                    containerColor = Blue75,
                     contentColor = Color.White
                 ),
                 onClick = {

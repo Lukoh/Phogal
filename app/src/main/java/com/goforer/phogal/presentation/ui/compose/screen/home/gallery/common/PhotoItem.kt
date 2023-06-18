@@ -49,10 +49,11 @@ import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.PhotoItemState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.rememberPhotoItemState
+import com.goforer.phogal.presentation.ui.theme.Blue50
+import com.goforer.phogal.presentation.ui.theme.Blue70
+import com.goforer.phogal.presentation.ui.theme.Blue75
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
-import com.goforer.phogal.presentation.ui.theme.DarkGreen60
-import com.goforer.phogal.presentation.ui.theme.DarkGreen70
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
@@ -151,7 +152,7 @@ fun PhotoItem(
                     user = photo.user,
                     state = rememberUserContainerState(
                         profileSize = rememberSaveable { mutableDoubleStateOf(36.0) },
-                        colors = rememberSaveable { listOf(Color.White, Color.White, DarkGreen60, DarkGreen70, ColorSnowWhite) },
+                        colors = rememberSaveable { listOf(Color.White, Color.White, Blue70, Blue75, Blue50, ColorSnowWhite) },
                         visibleViewPhotosButton = state.visibleViewPhotosButton,
                         isFromItem = rememberSaveable { mutableStateOf(true) }
                     ),

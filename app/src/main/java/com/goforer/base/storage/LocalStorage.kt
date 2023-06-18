@@ -156,7 +156,7 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         editor.apply()
     }
 
-    internal fun getFollowedUsers(): MutableList<User>? {
+    internal fun getFollowingUsers(): MutableList<User>? {
         val json = pref.getString(key_following_user, null)
         val type = object : TypeToken<ArrayList<User>>() {}.type
 
@@ -164,7 +164,7 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
     }
 
     internal fun isUserFollowed(user: User): Boolean {
-        val users = getFollowedUsers()
+        val users = getFollowingUsers()
 
         return if (users.isNullOrEmpty()) {
             false
@@ -177,7 +177,7 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
 
     internal fun setFollowingUser(user: User): MutableList<User>? {
         val editor = pref.edit()
-        var users = getFollowedUsers()
+        var users = getFollowingUsers()
         val json: String
         val type = object : TypeToken<ArrayList<User>>() {}.type
 

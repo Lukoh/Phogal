@@ -52,7 +52,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -73,7 +72,6 @@ import com.goforer.base.designsystem.component.IconContainer
 import com.goforer.base.designsystem.component.ImageCrossFade
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.local.home.common.ProfileInfoItem
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.follow.FollowViewModel
@@ -81,6 +79,9 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.U
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserInfoState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserInfoState
+import com.goforer.phogal.presentation.ui.compose.screen.home.common.user.ProfileItem
+import com.goforer.phogal.presentation.ui.compose.screen.home.common.user.UserInfoItem
+import com.goforer.phogal.presentation.ui.compose.screen.home.common.user.getProfileInfoItems
 import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.Blue50
 import com.goforer.phogal.presentation.ui.theme.Blue80
@@ -170,6 +171,7 @@ fun UserContainer(
             Spacer(modifier = Modifier.width(12.dp))
             ShowFollowButton(
                 modifier = modifier,
+                followColor = state.colors[4],
                 followViewModel.isUserFollowed(user)
             ) {
                 followViewModel.setUserFollow(user)
@@ -321,12 +323,15 @@ fun UserInfoBottomSheet(
                 ProfileItem(
                     image = user.profile_image.medium,
                     name = user.name,
-                    position = 9
+                    nameColor = DarkGreenGray10,
+                    position = 9,
+                    onClicked = {}
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 getProfileInfoItems(user).forEachIndexed { _, item ->
                     UserInfoItem(
                         text = item.text,
+                        textColor = DarkGreenGray10,
                         painter = item.painter,
                         position = item.position
                     )
@@ -368,150 +373,9 @@ fun UserInfoBottomSheet(
 }
 
 @Composable
-fun ProfileItem(image: String, name: String, position: Int) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .padding(start = 8.dp, end = 8.dp)
-            .background(Color.Transparent)
-            .wrapContentHeight(Alignment.CenterVertically)
-            .fillMaxWidth()
-            .heightIn(68.dp, 114.dp)
-            .clickable {
-
-            },
-    ) {
-        IconContainer(64.dp) {
-            Box {
-                val painter = loadImagePainter(
-                    data = image,
-                    size = Size.ORIGINAL
-                )
-                val animationIconScale = animateIconScale(inputScale = 0.6F, position = position, delay = 150L)
-
-                ImageCrossFade(painter = painter, durationMillis = null)
-                Image(
-                    painter = painter,
-                    contentDescription = "Profile",
-                    modifier = Modifier
-                        .padding(1.dp)
-                        .fillMaxSize()
-                        .clip(CircleShape)
-                        .border(0.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
-                        .clickable {}
-                        .graphicsLayer {
-                            scaleX = animationIconScale
-                            scaleY = animationIconScale
-                        },
-                    Alignment.CenterStart,
-                    contentScale = ContentScale.Crop
-                )
-
-                if (painter.state is AsyncImagePainter.State.Loading) {
-                    val preloadPainter = loadImagePainter(
-                        data = R.drawable.ic_profile_logo,
-                        size = Size.ORIGINAL
-                    )
-
-                    Image(
-                        painter = preloadPainter,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(36.dp)
-                            .align(Alignment.Center),
-                    )
-                }
-            }
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = name,
-            color = DarkGreenGray10,
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Bold,
-            fontSize = 17.sp,
-            fontStyle = FontStyle.Normal,
-            style = MaterialTheme.typography.titleMedium
-        )
-    }
-}
-
-@Composable
-fun getProfileInfoItems(user: User) = listOf(
-    ProfileInfoItem(
-        text = user.bio ?: stringResource(id = R.string.user_info_no_sex_info),
-        painter = painterResource(id = R.drawable.ic_bio),
-        position = 8
-    ),
-    ProfileInfoItem(
-        text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
-        painter = painterResource(id = R.drawable.ic_location),
-        position = 7
-    ),
-    ProfileInfoItem(
-        text = "${stringResource(id = R.string.user_info_instagram_name)}${" "}${user.instagram_username ?: stringResource(id = R.string.user_info_no_instagram_name)}",
-        painter = painterResource(id = R.drawable.ic_instagram),
-        position = 6
-    ),
-    ProfileInfoItem(
-        text = "${stringResource(id = R.string.user_info_twitter_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_twitter_name)}",
-        painter = painterResource(id = R.drawable.ic_twitter),
-        position = 5
-    ),
-    ProfileInfoItem(
-        text = user.links.followers ?: "",
-        painter = painterResource(id = R.drawable.ic_follower),
-        position = 4
-    ),
-    ProfileInfoItem(
-        text = user.links.following ?: "",
-        painter = painterResource(id = R.drawable.ic_following),
-        position = 3
-    ),
-    ProfileInfoItem(
-        text = "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
-        painter = painterResource(id = R.drawable.ic_date),
-        position = 2
-    )
-)
-
-@Composable
-fun UserInfoItem(text: String, painter: Painter, position: Int) {
-    Row(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        val animationIconScale = animateIconScale(inputScale = 0.6F, position = position, delay = 150L)
-
-        Image(
-            painter = painter,
-            contentDescription = "UserInfoItem",
-            modifier = Modifier
-                .size(22.dp)
-                .padding(horizontal = 4.dp)
-                .graphicsLayer {
-                    scaleX = animationIconScale
-                    scaleY = animationIconScale
-                }
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            text = text,
-            modifier = Modifier.padding(horizontal = 8.dp),
-            color = DarkGreenGray10,
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Medium,
-            fontSize = 14.sp,
-            fontStyle = FontStyle.Normal,
-            style = MaterialTheme.typography.titleMedium
-        )
-    }
-}
-
-@Composable
 fun ShowFollowButton(
     modifier: Modifier = Modifier,
+    followColor: Color,
     isUserFollowed: Boolean,
     onFollow: () -> Unit
 ) {
@@ -565,7 +429,7 @@ fun ShowFollowButton(
                 tint = if (isFollowed)
                     ColorText1
                 else
-                    Blue50
+                    followColor
             )
             Spacer(modifier = Modifier.width(width = 4.dp))
             Text(
@@ -576,7 +440,7 @@ fun ShowFollowButton(
                 color = if (isFollowed)
                     ColorText1
                 else
-                    Blue50,
+                    followColor,
                 fontStyle = FontStyle.Normal,
                 style = MaterialTheme.typography.titleMedium
             )

@@ -25,7 +25,7 @@
     <string name="permission_camera_request">Camera Permission</string>
 
     <string name="setting_bookmark">My Bookmark Photos</string>
-    <string name="setting_follower">My Followers</string>
+    <string name="setting_follower">My Following</string>
     <string name="setting_alarm">Notification</string>
     <string name="setting_privacy_policy">Privacy Policy</string>
     <string name="setting_app_info">Phogal Information</string>
@@ -38,6 +38,7 @@
     <string name="setting_view_contact">View Contact</string>
     <string name="setting_bookmarked_photos">Bookmark</string>
     <string name="setting_no_bookmarked_photos">No Bookmark Photo</string>
+    <string name="setting_no_following">No Following</string>
 
     <string name="picture_title">Phogal Picture +</string>
     <string name="picture_no_location">No Location Information</string>
@@ -64,4 +65,6 @@
     <string name="user_info_instagram_name">Instagram - Name :</string>
     <string name="user_info_portfolio">%s Portfolio</string>
     <string name="user_info_has_no_portfolio">has no portfolio</string>
+    <string name="user_info_follow">Follow</string>
+    <string name="user_info_following">Following</string>
 </resources>
