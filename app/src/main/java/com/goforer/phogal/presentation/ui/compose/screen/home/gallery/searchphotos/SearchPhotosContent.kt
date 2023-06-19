@@ -85,14 +85,20 @@ fun SearchPhotosContent(
                     photosContentState.baseUiState.keyboardController?.hide()
                     galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
                     keywordViewModel.setWord(photosContentState.searchWord.value)
+                    photosContentState.triggeredSearch.value = true
                 }
             }
         )
         if (!photosContentState.isScrolling.value) {
             keywordViewModel.getWords()?.let { words ->
+                val items = if (photosContentState.triggeredSearch.value) {
+                    listOf(words[0])
+                } else
+                    words
+
                 Chips(
                     modifier = Modifier.padding(top = 8.dp),
-                    items = words,
+                    items = items,
                     textColor = Black,
                     leadingIconTint = Blue70
                 ) { keyword ->
@@ -101,6 +107,8 @@ fun SearchPhotosContent(
                     photosContentState.baseUiState.keyboardController?.hide()
                     galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
                 }
+
+                photosContentState.triggeredSearch.value = false
             }
         }
 
