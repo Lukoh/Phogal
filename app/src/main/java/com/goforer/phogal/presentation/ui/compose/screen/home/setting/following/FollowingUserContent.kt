@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.follow.FollowViewModel
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.InitScreen
@@ -23,9 +24,10 @@ fun FollowingUsersContent(
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String?) -> Unit
 ) {
-    val users = followViewModel.getFollowingUsers()
+    val users = followViewModel.followingUsersState.collectAsStateWithLifecycle().value
 
-    if (!users.isNullOrEmpty()) {
+    followViewModel.trigger(1)
+    if (users.isNotEmpty()) {
         FollowingUsersSection(
             modifier = modifier,
             contentPadding = contentPadding,
