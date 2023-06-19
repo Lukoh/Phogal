@@ -1,7 +1,7 @@
 package com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.search
 
 import com.goforer.base.extension.isNull
-import com.goforer.base.storage.LocalStorage
+import com.goforer.phogal.data.storage.LocalStorage
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,7 +1,7 @@
 package com.goforer.phogal.presentation.stateholder.business.home.common.gallery.bookmark
 
 import androidx.lifecycle.viewModelScope
-import com.goforer.base.storage.LocalStorage
+import com.goforer.phogal.data.storage.LocalStorage
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
@@ -17,10 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class BookmarkViewModel
 @Inject
-constructor() : BaseViewModel<Picture>() {
-    @Inject
-    lateinit var localStorage: LocalStorage
-
+constructor(
+    private val localStorage: LocalStorage
+) : BaseViewModel<Picture>() {
     private val _bookmarkPhotosUiState = MutableStateFlow(mutableListOf<Picture>())
     val bookmarkPhotosUiState: StateFlow<MutableList<Picture>> = _bookmarkPhotosUiState
 

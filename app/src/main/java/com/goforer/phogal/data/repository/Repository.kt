@@ -1,6 +1,6 @@
 package com.goforer.phogal.data.repository
 
-import com.goforer.base.storage.LocalStorage
+import com.goforer.phogal.data.storage.LocalStorage
 import com.goforer.phogal.data.network.NetworkErrorHandler
 import com.goforer.phogal.data.network.api.Params
 import com.goforer.phogal.data.network.api.RestAPI

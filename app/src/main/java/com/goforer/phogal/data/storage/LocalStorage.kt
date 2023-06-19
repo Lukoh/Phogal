@@ -1,4 +1,4 @@
-package com.goforer.base.storage
+package com.goforer.phogal.data.storage
 
 import android.annotation.SuppressLint
 import android.content.Context
