@@ -60,7 +60,7 @@ fun ProfileItem(
             .fillMaxWidth()
             .heightIn(68.dp, 114.dp)
             .clickable {
-
+                onClicked()
             },
     ) {
         IconContainer(64.dp) {
