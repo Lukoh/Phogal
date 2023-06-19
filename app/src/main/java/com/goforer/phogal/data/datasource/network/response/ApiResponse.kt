@@ -1,4 +1,4 @@
-package com.goforer.phogal.data.network.response
+package com.goforer.phogal.data.datasource.network.response
 
 import retrofit2.Response
 import timber.log.Timber

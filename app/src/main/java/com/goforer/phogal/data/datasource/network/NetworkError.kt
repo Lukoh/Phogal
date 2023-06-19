@@ -1,4 +1,4 @@
-package com.goforer.phogal.data.network
+package com.goforer.phogal.data.datasource.network
 
 data class NetworkError(val detail: List<ErrorBody>) {
     data class ErrorBody(

@@ -1,4 +1,4 @@
-package com.goforer.phogal.data.network.adapter.factory
+package com.goforer.phogal.data.datasource.network.adapter.factory
 
 import okhttp3.ResponseBody
 import retrofit2.Converter

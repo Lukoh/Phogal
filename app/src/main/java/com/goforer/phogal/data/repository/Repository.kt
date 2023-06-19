@@ -1,10 +1,10 @@
 package com.goforer.phogal.data.repository
 
-import com.goforer.phogal.data.storage.LocalStorage
-import com.goforer.phogal.data.network.NetworkErrorHandler
-import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.network.api.RestAPI
-import com.goforer.phogal.data.network.response.Resource
+import com.goforer.phogal.data.datasource.local.LocalDataSource
+import com.goforer.phogal.data.datasource.network.NetworkErrorHandler
+import com.goforer.phogal.data.datasource.network.api.Params
+import com.goforer.phogal.data.datasource.network.api.RestAPI
+import com.goforer.phogal.data.datasource.network.response.Resource
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,7 +19,7 @@ abstract class Repository<T> {
     lateinit var networkErrorHandler: NetworkErrorHandler
 
     @Inject
-    lateinit var localStorage: LocalStorage
+    lateinit var localDataSource: LocalDataSource
 
     @Inject
     lateinit var resource: Resource

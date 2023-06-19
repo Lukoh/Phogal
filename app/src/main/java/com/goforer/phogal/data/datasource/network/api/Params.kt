@@ -1,4 +1,4 @@
-package com.goforer.phogal.data.network.api
+package com.goforer.phogal.data.datasource.network.api
 
 import javax.inject.Singleton
 

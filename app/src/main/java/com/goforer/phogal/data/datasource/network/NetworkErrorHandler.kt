@@ -1,4 +1,4 @@
-package com.goforer.phogal.data.network
+package com.goforer.phogal.data.datasource.network
 
 import android.content.Context
 import com.google.gson.Gson

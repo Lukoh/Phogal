@@ -1,7 +1,7 @@
-package com.goforer.phogal.data.network.adapter.factory
+package com.goforer.phogal.data.datasource.network.adapter.factory
 
-import com.goforer.phogal.data.network.adapter.FlowCallAdapter
-import com.goforer.phogal.data.network.response.ApiResponse
+import com.goforer.phogal.data.datasource.network.adapter.FlowCallAdapter
+import com.goforer.phogal.data.datasource.network.response.ApiResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.CallAdapter
 import retrofit2.Retrofit

@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
-import com.goforer.phogal.data.network.api.Params
+import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.data.repository.paging.source.BasePagingSource
 import com.goforer.phogal.data.repository.paging.source.gallery.GetPhotosPagingSource

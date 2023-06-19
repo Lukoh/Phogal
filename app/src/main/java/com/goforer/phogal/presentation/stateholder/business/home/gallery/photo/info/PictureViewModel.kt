@@ -2,7 +2,7 @@ package com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.
 
 import androidx.lifecycle.viewModelScope
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
-import com.goforer.phogal.data.network.api.Params
+import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.repository.gallery.photo.info.GetPictureRepository
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

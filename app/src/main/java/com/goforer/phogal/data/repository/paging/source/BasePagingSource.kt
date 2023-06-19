@@ -1,13 +1,13 @@
 package com.goforer.phogal.data.repository.paging.source
 
 import androidx.paging.PagingSource
-import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.network.api.RestAPI
-import com.goforer.phogal.data.network.response.ApiEmptyResponse
-import com.goforer.phogal.data.network.response.ApiErrorResponse
-import com.goforer.phogal.data.network.response.ApiResponse
-import com.goforer.phogal.data.network.response.ApiSuccessResponse
-import com.goforer.phogal.data.network.response.Resource
+import com.goforer.phogal.data.datasource.network.api.Params
+import com.goforer.phogal.data.datasource.network.api.RestAPI
+import com.goforer.phogal.data.datasource.network.response.ApiEmptyResponse
+import com.goforer.phogal.data.datasource.network.response.ApiErrorResponse
+import com.goforer.phogal.data.datasource.network.response.ApiResponse
+import com.goforer.phogal.data.datasource.network.response.ApiSuccessResponse
+import com.goforer.phogal.data.datasource.network.response.Resource
 import timber.log.Timber
 import javax.inject.Inject
 

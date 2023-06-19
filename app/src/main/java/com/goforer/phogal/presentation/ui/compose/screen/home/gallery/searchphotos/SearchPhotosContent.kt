@@ -23,7 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import com.goforer.base.designsystem.component.Chips
 import com.goforer.phogal.R
-import com.goforer.phogal.data.network.api.Params
+import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.repository.Repository.Companion.FIRST_PAGE
 import com.goforer.phogal.data.repository.Repository.Companion.ITEM_COUNT
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel

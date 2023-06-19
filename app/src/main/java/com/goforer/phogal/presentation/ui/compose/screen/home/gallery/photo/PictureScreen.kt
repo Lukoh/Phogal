@@ -48,9 +48,9 @@ import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.Errors
 import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponse
-import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.network.response.Resource
-import com.goforer.phogal.data.network.response.Status
+import com.goforer.phogal.data.datasource.network.api.Params
+import com.goforer.phogal.data.datasource.network.response.Resource
+import com.goforer.phogal.data.datasource.network.response.Status
 import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.bookmark.BookmarkViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photo.like.PictureLikeViewModel

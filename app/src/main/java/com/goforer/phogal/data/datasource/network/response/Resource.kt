@@ -1,4 +1,4 @@
-package com.goforer.phogal.data.network.response
+package com.goforer.phogal.data.datasource.network.response
 
 class Resource {
     internal lateinit var status: Status

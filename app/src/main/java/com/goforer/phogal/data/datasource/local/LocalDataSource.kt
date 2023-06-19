@@ -1,4 +1,4 @@
-package com.goforer.phogal.data.storage
+package com.goforer.phogal.data.datasource.local
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,7 +17,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LocalStorage
+class LocalDataSource
 @Inject
 constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
     companion object {
@@ -48,7 +48,7 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
     )
 
     internal fun logOut() {
-        Timber.e("LocalStorage - Log out")
+        Timber.e("LocalDataSource - Log out")
 
         clearPreference()
         deleteCache(context)
@@ -83,9 +83,9 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
 
     @SuppressLint("ApplySharedPref")
     internal fun clearPreference() {
-        Timber.e("LocalStorage - Clear session cookie")
+        Timber.e("LocalDataSource - Clear session cookie")
 
-        Timber.d("LocalStorage - Clear preference")
+        Timber.d("LocalDataSource - Clear preference")
         val editor = pref.edit()
 
         editor.clear()

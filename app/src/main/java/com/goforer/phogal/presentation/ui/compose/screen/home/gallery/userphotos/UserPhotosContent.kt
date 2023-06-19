@@ -19,7 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import com.goforer.phogal.R
-import com.goforer.phogal.data.network.api.Params
+import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.UserPhotosContentState

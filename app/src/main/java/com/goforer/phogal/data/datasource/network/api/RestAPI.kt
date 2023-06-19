@@ -1,11 +1,11 @@
-package com.goforer.phogal.data.network.api
+package com.goforer.phogal.data.datasource.network.api
 
 import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponse
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponse
-import com.goforer.phogal.data.network.response.ApiResponse
+import com.goforer.phogal.data.datasource.network.response.ApiResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.DELETE
 import retrofit2.http.GET

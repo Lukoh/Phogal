@@ -5,8 +5,8 @@ import com.goforer.phogal.BuildConfig
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponse
-import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.network.response.Status
+import com.goforer.phogal.data.datasource.network.api.Params
+import com.goforer.phogal.data.datasource.network.response.Status
 import com.goforer.phogal.data.repository.paging.source.BasePagingSource
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest

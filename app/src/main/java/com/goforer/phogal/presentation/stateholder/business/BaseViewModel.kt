@@ -1,12 +1,12 @@
 package com.goforer.phogal.presentation.stateholder.business
 
 import androidx.lifecycle.ViewModel
-import com.goforer.phogal.data.network.api.Params
-import com.goforer.phogal.data.network.response.ApiEmptyResponse
-import com.goforer.phogal.data.network.response.ApiErrorResponse
-import com.goforer.phogal.data.network.response.ApiResponse
-import com.goforer.phogal.data.network.response.ApiSuccessResponse
-import com.goforer.phogal.data.network.response.Resource
+import com.goforer.phogal.data.datasource.network.api.Params
+import com.goforer.phogal.data.datasource.network.response.ApiEmptyResponse
+import com.goforer.phogal.data.datasource.network.response.ApiErrorResponse
+import com.goforer.phogal.data.datasource.network.response.ApiResponse
+import com.goforer.phogal.data.datasource.network.response.ApiSuccessResponse
+import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.repository.paging.PagingErrorMessage
 import timber.log.Timber
 import javax.inject.Singleton

@@ -1,6 +1,6 @@
-package com.goforer.phogal.data.network.adapter
+package com.goforer.phogal.data.datasource.network.adapter
 
-import com.goforer.phogal.data.network.response.ApiResponse
+import com.goforer.phogal.data.datasource.network.response.ApiResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
