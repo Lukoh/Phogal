@@ -24,10 +24,6 @@ constructor() : BaseViewModel<Picture>() {
     private val _bookmarkPhotosUiState = MutableStateFlow(mutableListOf<Picture>())
     val bookmarkPhotosUiState: StateFlow<MutableList<Picture>> = _bookmarkPhotosUiState
 
-    fun setBookmarkPicture(picture: Picture) {
-        localStorage.setBookmarkPhoto(picture)
-    }
-
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {
             flowOf(
@@ -37,6 +33,10 @@ constructor() : BaseViewModel<Picture>() {
                  _bookmarkPhotosUiState.value = users ?: mutableListOf()
              }
         }
+    }
+
+    fun setBookmarkPicture(picture: Picture) {
+        localStorage.setBookmarkPhoto(picture)
     }
 
     fun isPhotoBookmarked(picture: Picture) = localStorage.isPhotoBookmarked(picture)

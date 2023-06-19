@@ -24,10 +24,6 @@ constructor() : BaseViewModel<User>() {
     private val _followingUsersUiState = MutableStateFlow(mutableListOf<User>())
     val followingUsersState: StateFlow<MutableList<User>> = _followingUsersUiState
 
-    fun setUserFollow(user: User) {
-        localStorage.setFollowingUser(user)
-    }
-
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {
             flowOf(
@@ -37,6 +33,10 @@ constructor() : BaseViewModel<User>() {
                  _followingUsersUiState.value = users ?: mutableListOf()
              }
         }
+    }
+
+    fun setUserFollow(user: User) {
+        localStorage.setFollowingUser(user)
     }
 
     fun isUserFollowed(user: User) = localStorage.isUserFollowed(user)
