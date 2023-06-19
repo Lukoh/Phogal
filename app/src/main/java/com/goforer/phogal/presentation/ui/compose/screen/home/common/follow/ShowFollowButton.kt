@@ -1,5 +1,6 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.common.follow
 
+import android.content.res.Configuration
 import androidx.compose.animation.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.indication
@@ -30,8 +31,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.goforer.phogal.presentation.ui.theme.Blue50
 import com.goforer.phogal.presentation.ui.theme.ColorText1
+import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
 @Composable
 fun ShowFollowButton(
@@ -105,6 +109,85 @@ fun ShowFollowButton(
                 fontStyle = FontStyle.Normal,
                 style = MaterialTheme.typography.titleMedium
             )
+        }
+    }
+}
+
+@Preview(name = "Light Mode")
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    name = "Dark Mode",
+    showSystemUi = true
+)
+@Composable
+fun ShowFollowButtonPreview(modifier: Modifier = Modifier) {
+    PhogalTheme {
+        var isFollowed = false
+        val color = remember { Animatable(Color.Transparent) }
+
+        LaunchedEffect(isFollowed) {
+            color.animateTo(if (isFollowed) Color.Transparent else Color.Transparent)
+        }
+        Button(
+            onClick = {
+                isFollowed = !isFollowed
+            },
+            modifier = modifier
+                .widthIn(132.dp)
+                .indication(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication  = rememberRipple(bounded = false)
+                )
+                .background(
+                    color = color.value,
+                    shape = MaterialTheme.shapes.small
+                ),
+            shape = MaterialTheme.shapes.small,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Transparent,
+                contentColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent
+            ),
+            interactionSource = remember { MutableInteractionSource() },
+            contentPadding = PaddingValues(
+                start = 10.dp,
+                top = 6.dp,
+                end = 10.dp,
+                bottom = 6.dp
+            )
+        ) {
+            Row(
+                modifier = modifier,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.size(width = 28.dp, height = 28.dp),
+                    imageVector = if (isFollowed)
+                        Icons.Filled.Check
+                    else
+                        Icons.Filled.Add,
+                    contentDescription = "Follow",
+                    tint = if (isFollowed)
+                        ColorText1
+                    else
+                        Blue50
+                )
+                Spacer(modifier = Modifier.width(width = 4.dp))
+                Text(
+                    text = if (isFollowed)
+                        "Following"
+                    else
+                        "Follow",
+                    color = if (isFollowed)
+                        ColorText1
+                    else
+                        Blue50,
+                    fontStyle = FontStyle.Normal,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.common.user
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
@@ -41,6 +43,7 @@ import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.home.common.ProfileInfoItem
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
+import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
 @Composable
 fun ProfileItem(
@@ -188,5 +191,84 @@ fun UserInfoItem(text: String, textColor: Color, painter: Painter, position: Int
             fontStyle = FontStyle.Normal,
             style = MaterialTheme.typography.titleMedium
         )
+    }
+}
+
+@Preview(name = "Light Mode")
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    name = "Dark Mode",
+    showSystemUi = true
+)
+@Composable
+fun ProfileItemPreview(modifier: Modifier = Modifier) {
+    PhogalTheme {
+        val image = "https://avatars.githubusercontent.com/u/18302717?v=4"
+        val name = "Lukoh"
+        val position = 0
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp)
+                .background(Color.Transparent)
+                .wrapContentHeight(Alignment.CenterVertically)
+                .heightIn(68.dp, 114.dp)
+                .clickable {},
+        ) {
+            IconContainer(64.dp) {
+                Box {
+                    val painter = loadImagePainter(
+                        data = image,
+                        size = Size.ORIGINAL
+                    )
+                    val animationIconScale = animateIconScale(inputScale = 0.6F, position = position, delay = 150L)
+
+                    ImageCrossFade(painter = painter, durationMillis = null)
+                    Image(
+                        painter = painter,
+                        contentDescription = "Profile",
+                        modifier = Modifier
+                            .padding(1.dp)
+                            .fillMaxSize()
+                            .clip(CircleShape)
+                            .border(0.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
+                            .clickable {}
+                            .graphicsLayer {
+                                scaleX = animationIconScale
+                                scaleY = animationIconScale
+                            },
+                        Alignment.CenterStart,
+                        contentScale = ContentScale.Crop
+                    )
+
+                    if (painter.state is AsyncImagePainter.State.Loading) {
+                        val preloadPainter = loadImagePainter(
+                            data = R.drawable.ic_profile_logo,
+                            size = Size.ORIGINAL
+                        )
+
+                        Image(
+                            painter = preloadPainter,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(36.dp)
+                                .align(Alignment.Center),
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = name,
+                color = Color.White,
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.Bold,
+                fontSize = 17.sp,
+                fontStyle = FontStyle.Normal,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
     }
 }
