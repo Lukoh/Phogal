@@ -37,10 +37,10 @@ fun CardSnackBar(modifier: Modifier = Modifier, snackbarData: SnackbarData) {
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White,
-            contentColor = Blue60
+            containerColor = Blue60,
+            contentColor = Color.White
         ),
-        border = BorderStroke(1.dp, Color.Black),
+        border = BorderStroke(0.5.dp, Color.Black),
         elevation = CardDefaults.cardElevation(defaultElevation =  2.dp),
         modifier = modifier
             .height(IntrinsicSize.Min)
@@ -85,7 +85,7 @@ fun CardSnackBarPreview(modifier: Modifier = Modifier) {
                 containerColor = Blue60,
                 contentColor = Color.White
             ),
-            border = BorderStroke(1.dp, Color.Black),
+            border = BorderStroke(0.5.dp, Color.Black),
             elevation = CardDefaults.cardElevation(defaultElevation =  2.dp),
             modifier = modifier
                 .height(IntrinsicSize.Min)

@@ -97,7 +97,7 @@ fun SearchPhotosContent(
                     words
 
                 Chips(
-                    modifier = Modifier.padding(top = 8.dp),
+                    modifier = Modifier.padding(top = 4.dp),
                     items = items,
                     textColor = Black,
                     leadingIconTint = Blue70

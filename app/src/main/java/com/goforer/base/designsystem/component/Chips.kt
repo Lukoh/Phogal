@@ -18,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -40,9 +39,7 @@ fun Chips(
     onClicked: (String) -> Unit
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .shadow(3.dp)
+        modifier = modifier.fillMaxWidth()
     ) {
         LazyRow(
             modifier = modifier

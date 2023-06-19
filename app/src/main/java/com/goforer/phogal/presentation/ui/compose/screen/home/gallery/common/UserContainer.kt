@@ -128,7 +128,7 @@ fun UserContainer(
                 visibleViewPhotosButton = state.visibleViewPhotosButton.value,
                 onViewPhotos = onViewPhotos
             )
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(14.dp))
             Column(modifier = Modifier
                 .height(IntrinsicSize.Min)
                 .widthIn(186.dp)
@@ -164,7 +164,7 @@ fun UserContainer(
                 )
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(10.dp))
             ShowFollowButton(
                 modifier = modifier,
                 followColor = state.colors[4],

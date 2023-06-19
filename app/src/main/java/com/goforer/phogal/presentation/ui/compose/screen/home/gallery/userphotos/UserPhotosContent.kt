@@ -52,7 +52,7 @@ fun UserPhotosContent(
     if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
         UserPhotosSection(
             modifier = Modifier
-                .padding(4.dp, 4.dp),
+                .padding(start = 2.dp, top = 2.dp, end = 2.dp),
             contentPadding = contentPadding,
             state = rememberUserPhotosSectionState(
                 photosUiState = state.photosUiState,
