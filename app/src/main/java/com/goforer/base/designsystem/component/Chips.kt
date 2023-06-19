@@ -3,6 +3,7 @@ package com.goforer.base.designsystem.component
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -37,9 +39,14 @@ fun Chips(
     leadingIconTint: Color,
     onClicked: (String) -> Unit
 ) {
-    Column {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .shadow(3.dp)
+    ) {
         LazyRow(
-            modifier = modifier.padding(horizontal = 8.dp)
+            modifier = modifier
+                .padding(start = 8.dp, end = 8.dp, bottom = 4.dp)
         ) {
             items(items) {
                 InputChip(
