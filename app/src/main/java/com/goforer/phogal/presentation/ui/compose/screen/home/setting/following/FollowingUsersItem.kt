@@ -9,11 +9,13 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -50,9 +52,11 @@ import com.goforer.phogal.data.model.remote.response.gallery.common.Social
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.presentation.stateholder.uistate.home.setting.following.FollowingUserItemState
 import com.goforer.phogal.presentation.stateholder.uistate.home.setting.following.rememberFollowingUserItemState
+import com.goforer.phogal.presentation.ui.compose.screen.home.common.follow.ShowFollowButton
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.user.ProfileItem
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.user.UserInfoItem
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.user.getProfileInfoItems
+import com.goforer.phogal.presentation.ui.theme.Blue50
 import com.goforer.phogal.presentation.ui.theme.Blue70
 import com.goforer.phogal.presentation.ui.theme.Blue75
 import com.goforer.phogal.presentation.ui.theme.DarkGreenGray99
@@ -62,7 +66,8 @@ fun FollowingUsersItem(
     modifier: Modifier = Modifier,
     state: FollowingUserItemState = rememberFollowingUserItemState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
-    onOpenWebView: (firstName: String, url: String?) -> Unit
+    onOpenWebView: (firstName: String, url: String?) -> Unit,
+    onFollow: (user: User) -> Unit
 ) {
     val user = state.user.value as User
     val verticalPadding = if (state.index.value == 0)
@@ -100,20 +105,35 @@ fun FollowingUsersItem(
                 horizontalAlignment = Alignment.Start,
             ) {
                 Spacer(modifier = Modifier.height(8.dp))
-                ProfileItem(
-                    image = user.profile_image.medium,
-                    name = user.name,
-                    nameColor = Color.White,
-                    position = 9,
-                    onClicked = {
-                        onViewPhotos(
-                            user.username,
-                            user.first_name,
-                            user.last_name!!,
-                            user.username
-                        )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .background(Color.Transparent)
+                        .fillMaxWidth()
+                ) {
+                    ProfileItem(
+                        image = user.profile_image.medium,
+                        name = user.name,
+                        nameColor = Color.White,
+                        position = 9,
+                        onClicked = {
+                            onViewPhotos(
+                                user.username,
+                                user.first_name,
+                                user.last_name!!,
+                                user.username
+                            )
+                        }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    ShowFollowButton(
+                        modifier = modifier,
+                        followColor = Blue50,
+                        isUserFollowed = state.isUserFollowed.value
+                    ) {
+                       onFollow(user)
                     }
-                )
+                }
                 Spacer(modifier = Modifier.height(8.dp))
                 getProfileInfoItems(user).forEachIndexed { _, item ->
                     UserInfoItem(

@@ -1,7 +1,6 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common
 
 import android.content.res.Configuration
-import androidx.compose.animation.Animatable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +25,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.ripple.rememberRipple
@@ -40,7 +37,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -79,6 +75,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.U
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserInfoState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserInfoState
+import com.goforer.phogal.presentation.ui.compose.screen.home.common.follow.ShowFollowButton
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.user.ProfileItem
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.user.UserInfoItem
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.user.getProfileInfoItems
@@ -86,7 +83,6 @@ import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.Blue50
 import com.goforer.phogal.presentation.ui.theme.Blue80
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
-import com.goforer.phogal.presentation.ui.theme.ColorText1
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.goforer.phogal.presentation.ui.theme.DarkGreenGray10
 import com.goforer.phogal.presentation.ui.theme.DarkGreenGray99
@@ -368,82 +364,6 @@ fun UserInfoBottomSheet(
 
                 Spacer(modifier = Modifier.height(36.dp))
             }
-        }
-    }
-}
-
-@Composable
-fun ShowFollowButton(
-    modifier: Modifier = Modifier,
-    followColor: Color,
-    isUserFollowed: Boolean,
-    onFollow: () -> Unit
-) {
-    var isFollowed by rememberSaveable { mutableStateOf(isUserFollowed) }
-    val color = remember { Animatable(Color.Transparent) }
-
-    LaunchedEffect(isFollowed) {
-        color.animateTo(if (isFollowed) Color.Transparent else Color.Transparent)
-    }
-    Button(
-        onClick = {
-            isFollowed = !isFollowed
-            onFollow()
-        },
-        modifier = modifier
-            .widthIn(132.dp)
-            .indication(
-                interactionSource = remember { MutableInteractionSource() },
-                indication  = rememberRipple(bounded = false)
-            )
-            .background(
-                color = color.value,
-                shape = MaterialTheme.shapes.small
-            ),
-        shape = MaterialTheme.shapes.small,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Transparent,
-            contentColor = Color.Transparent,
-            disabledContainerColor = Color.Transparent,
-            disabledContentColor = Color.Transparent
-        ),
-        interactionSource = remember { MutableInteractionSource() },
-        contentPadding = PaddingValues(
-            start = 10.dp,
-            top = 6.dp,
-            end = 10.dp,
-            bottom = 6.dp
-        )
-    ) {
-        Row(
-            modifier = modifier,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                modifier = Modifier.size(width = 28.dp, height = 28.dp),
-                imageVector = if (isFollowed)
-                    Icons.Filled.Check
-                else
-                    Icons.Filled.Add,
-                contentDescription = "Follow",
-                tint = if (isFollowed)
-                    ColorText1
-                else
-                    followColor
-            )
-            Spacer(modifier = Modifier.width(width = 4.dp))
-            Text(
-                text = if (isFollowed)
-                    "Following"
-                else
-                    "Follow",
-                color = if (isFollowed)
-                    ColorText1
-                else
-                    followColor,
-                fontStyle = FontStyle.Normal,
-                style = MaterialTheme.typography.titleMedium
-            )
         }
     }
 }

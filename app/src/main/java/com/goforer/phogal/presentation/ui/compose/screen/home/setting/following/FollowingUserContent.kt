@@ -33,7 +33,13 @@ fun FollowingUsersContent(
             contentPadding = contentPadding,
             users = users,
             onViewPhotos = onViewPhotos,
-            onOpenWebView = onOpenWebView
+            onOpenWebView = onOpenWebView,
+            onFollow = {
+                with(followViewModel) {
+                    setUserFollow(it)
+                    trigger(1)
+                }
+            }
         )
     } else {
         if (enabledLoadPhotosState.value) {

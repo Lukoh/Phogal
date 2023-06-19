@@ -14,7 +14,8 @@ class FollowingUserItemState(
     val index: MutableState<Int>,
     val user: State<Any>,
     val visibleViewPhotosButton: MutableState<Boolean>,
-    val isClicked: MutableState<Boolean>
+    val isClicked: MutableState<Boolean>,
+    val isUserFollowed: MutableState<Boolean>
 )
 
 @Composable
@@ -22,12 +23,14 @@ fun rememberFollowingUserItemState(
     index: MutableState<Int> = rememberSaveable { mutableIntStateOf(0) },
     user: State<Any> = remember { mutableStateOf(Any()) },
     visibleViewPhotosButton: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    isClicked: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
+    isClicked: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    isUserFollowed: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): FollowingUserItemState = remember(index, user, visibleViewPhotosButton, isClicked) {
     FollowingUserItemState(
         index = index,
         visibleViewPhotosButton = visibleViewPhotosButton,
         user = user,
-        isClicked = isClicked
+        isClicked = isClicked,
+        isUserFollowed = isUserFollowed
     )
 }

@@ -19,8 +19,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
+import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.follow.FollowViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.setting.following.rememberFollowingUserItemState
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -28,9 +30,11 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.setting.followin
 fun FollowingUsersSection(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
+    followViewModel: FollowViewModel = hiltViewModel(),
     users: MutableList<User>,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
-    onOpenWebView: (firstName: String, url: String?) -> Unit
+    onOpenWebView: (firstName: String, url: String?) -> Unit,
+    onFollow: (user: User) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -59,10 +63,12 @@ fun FollowingUsersSection(
                     state = rememberFollowingUserItemState(
                         index = rememberSaveable { mutableIntStateOf(index) },
                         user = rememberSaveable { mutableStateOf(item) },
-                        visibleViewPhotosButton = rememberSaveable { mutableStateOf(true) }
+                        visibleViewPhotosButton = rememberSaveable { mutableStateOf(true) },
+                        isUserFollowed = rememberSaveable { mutableStateOf(followViewModel.isUserFollowed(item)) }
                     ),
                     onViewPhotos = onViewPhotos,
-                    onOpenWebView = onOpenWebView
+                    onOpenWebView = onOpenWebView,
+                    onFollow = onFollow
                 )
 
                 if (index == users.size - 1)
