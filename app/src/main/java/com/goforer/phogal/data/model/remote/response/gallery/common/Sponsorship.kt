@@ -9,5 +9,5 @@ data class Sponsorship(
     val impression_urls: List<String>? = null,
     val sponsor: Sponsor,
     val tagline: String,
-    val tagline_url: String
+    val tagline_url: String? = null
 ) : BaseModel(), Parcelable

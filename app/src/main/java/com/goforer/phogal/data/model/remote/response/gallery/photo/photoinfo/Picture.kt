@@ -29,7 +29,7 @@ data class Picture(
     val public_domain: Boolean,
     val related_collections: RelatedCollections,
     val slug: String,
-    val sponsorship: Sponsorship,
+    val sponsorship: Sponsorship?,
     val tags: List<Tag>,
     val tags_preview: List<TagsPreview>,
     val updated_at: String,

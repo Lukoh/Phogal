@@ -19,7 +19,7 @@ data class Photo(
     val meta_description: String? = null,
     val promoted_at: String,
     val slug: String,
-    val sponsorship: Sponsorship,
+    val sponsorship: Sponsorship?,
     val tags: List<Tag>,
     val updated_at: String,
     val urls: Urls,
