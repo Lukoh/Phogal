@@ -1,6 +1,13 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos
 
 import android.content.res.Configuration
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.StartOffset
+import androidx.compose.animation.core.StartOffsetType
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -11,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,7 +31,6 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
 
 @Composable
 fun LoadingPhotos(
@@ -41,7 +48,24 @@ fun LoadingPhotos(
                     .background(ColorSystemGray7)
                     .placeholder(
                         visible = true,
-                        highlight = PlaceholderHighlight.fade(),
+                        color = MaterialTheme.colorScheme.surface,
+                        placeholderFadeTransitionSpec = { tween(durationMillis = 200) },
+                        contentFadeTransitionSpec = { tween(durationMillis = 200) },
+                        highlight = PlaceholderHighlight.fade(
+                            animationSpec = infiniteRepeatable(
+                                animation = keyframes {
+                                    durationMillis = 800
+                                    0f at 0
+                                    0f at 200
+                                    1f at 800 with FastOutSlowInEasing
+                                },
+                                repeatMode = RepeatMode.Reverse,
+                                initialStartOffset = StartOffset(
+                                    offsetType = StartOffsetType.FastForward,
+                                    offsetMillis = 200
+                                )
+                            )
+                        )
                     ),
                     elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
                 ) {}
@@ -77,7 +101,24 @@ fun LoadingPhotosPreview(modifier: Modifier = Modifier) {
                             .background(ColorSystemGray7)
                             .placeholder(
                                 visible = true,
-                                highlight = PlaceholderHighlight.shimmer(),
+                                color = MaterialTheme.colorScheme.surface,
+                                placeholderFadeTransitionSpec = { tween(durationMillis = 200) },
+                                contentFadeTransitionSpec = { tween(durationMillis = 200) },
+                                highlight = PlaceholderHighlight.fade(
+                                    animationSpec = infiniteRepeatable(
+                                        animation = keyframes {
+                                            durationMillis = 800
+                                            0f at 0
+                                            0f at 200
+                                            1f at 800 with FastOutSlowInEasing
+                                        },
+                                        repeatMode = RepeatMode.Reverse,
+                                        initialStartOffset = StartOffset(
+                                            offsetType = StartOffsetType.FastForward,
+                                            offsetMillis = 200
+                                        )
+                                    )
+                                )
                             ),
                         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
                     ) {}

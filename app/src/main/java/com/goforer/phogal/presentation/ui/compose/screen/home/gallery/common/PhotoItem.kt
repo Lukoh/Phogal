@@ -2,7 +2,14 @@ package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.StartOffset
+import androidx.compose.animation.core.StartOffsetType
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -113,7 +120,24 @@ fun PhotoItem(
                     .background(ColorSystemGray7)
                     .placeholder(
                         visible = true,
-                        highlight = PlaceholderHighlight.fade(),
+                        color = MaterialTheme.colorScheme.surface,
+                        placeholderFadeTransitionSpec = { tween(durationMillis = 200) },
+                        contentFadeTransitionSpec = { tween(durationMillis = 200) },
+                        highlight = PlaceholderHighlight.fade(
+                            animationSpec = infiniteRepeatable(
+                                animation = keyframes {
+                                    durationMillis = 800
+                                    0f at 0
+                                    0f at 200
+                                    1f at 800 with FastOutSlowInEasing
+                                },
+                                repeatMode = RepeatMode.Reverse,
+                                initialStartOffset = StartOffset(
+                                    offsetType = StartOffsetType.FastForward,
+                                    offsetMillis = 200
+                                )
+                            )
+                        )
                     )
 
                 Text(
