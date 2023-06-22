@@ -336,7 +336,7 @@ fun BodyContent(
                 GenericCubicAnimationShape(
                     visible = visiebleCameraInfo,
                     duration = 550
-                ) { animatedShape ->
+                ) { animatedShape, _ ->
                     ExifItem(
                         modifier = modifier
                             .padding(horizontal = 4.dp, vertical = 8.dp)

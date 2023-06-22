@@ -15,7 +15,7 @@ import androidx.compose.runtime.getValue
 fun GenericCubicAnimationShape(
     visible: Boolean = false,
     duration: Int = 100,
-    content: @Composable (animatedShape: GenericShape) -> Unit,
+    content: @Composable (animatedShape: GenericShape, visible: Boolean) -> Unit,
 ) {
     val animationProgress by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
@@ -50,6 +50,6 @@ fun GenericCubicAnimationShape(
     }
 
     if (animationProgress != 0F) {
-        content(animatedShape)
+        content(animatedShape, visible)
     }
 }

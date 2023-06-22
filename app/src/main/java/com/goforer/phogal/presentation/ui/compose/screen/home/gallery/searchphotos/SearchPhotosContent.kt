@@ -93,32 +93,34 @@ fun SearchPhotosContent(
         )
         GenericCubicAnimationShape(
             visible = !photosContentState.isScrolling.value,
-            duration = 200
-        ) { animatedShape ->
-            keywordViewModel.getWords()?.let { words ->
-                val items = if (photosContentState.triggeredSearch.value) {
-                    listOf(words[0])
-                } else
-                    words
+            duration = 250
+        ) { animatedShape, visible ->
+            if (visible) {
+                keywordViewModel.getWords()?.let { words ->
+                    val items = if (photosContentState.triggeredSearch.value) {
+                        listOf(words[0])
+                    } else
+                        words
 
-                Chips(
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .graphicsLayer {
-                            clip = true
-                            shape = animatedShape
-                        },
-                    items = items,
-                    textColor = Black,
-                    leadingIconTint = Blue70
-                ) { keyword ->
-                    searchState.editableInputState.textState = keyword
-                    photosContentState.searchWord.value = keyword
-                    photosContentState.baseUiState.keyboardController?.hide()
-                    galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
+                    Chips(
+                        modifier = Modifier
+                            .padding(top = 4.dp)
+                            .graphicsLayer {
+                                clip = true
+                                shape = animatedShape
+                            },
+                        items = items,
+                        textColor = Black,
+                        leadingIconTint = Blue70
+                    ) { keyword ->
+                        searchState.editableInputState.textState = keyword
+                        photosContentState.searchWord.value = keyword
+                        photosContentState.baseUiState.keyboardController?.hide()
+                        galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
+                    }
+
+                    photosContentState.triggeredSearch.value = false
                 }
-
-                photosContentState.triggeredSearch.value = false
             }
         }
 
