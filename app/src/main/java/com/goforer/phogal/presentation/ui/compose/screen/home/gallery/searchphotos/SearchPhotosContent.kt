@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
+import com.goforer.base.designsystem.animation.GenericCubicAnimationShape
 import com.goforer.base.designsystem.component.Chips
 import com.goforer.phogal.R
 import com.goforer.phogal.data.datasource.network.api.Params
@@ -89,7 +91,10 @@ fun SearchPhotosContent(
                 }
             }
         )
-        if (!photosContentState.isScrolling.value) {
+        GenericCubicAnimationShape(
+            visible = !photosContentState.isScrolling.value,
+            duration = 200
+        ) { animatedShape ->
             keywordViewModel.getWords()?.let { words ->
                 val items = if (photosContentState.triggeredSearch.value) {
                     listOf(words[0])
@@ -97,7 +102,12 @@ fun SearchPhotosContent(
                     words
 
                 Chips(
-                    modifier = Modifier.padding(top = 4.dp),
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                        .graphicsLayer {
+                            clip = true
+                            shape = animatedShape
+                        },
                     items = items,
                     textColor = Black,
                     leadingIconTint = Blue70

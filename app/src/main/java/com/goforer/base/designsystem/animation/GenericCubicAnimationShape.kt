@@ -1,7 +1,7 @@
 package com.goforer.base.designsystem.animation
 
 import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TwoWayConverter
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateValue
@@ -19,7 +19,7 @@ fun GenericCubicAnimationShape(
 ) {
     val animationProgress by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(durationMillis = duration, easing = LinearEasing)
+        animationSpec = tween(durationMillis = duration, easing = FastOutSlowInEasing)
     )
     val transition = updateTransition(targetState = animationProgress, label = "")
     val animatedShape by transition.animateValue(

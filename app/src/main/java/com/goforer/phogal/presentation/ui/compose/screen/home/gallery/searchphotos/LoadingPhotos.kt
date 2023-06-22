@@ -49,8 +49,8 @@ fun LoadingPhotos(
                     .placeholder(
                         visible = true,
                         color = MaterialTheme.colorScheme.surface,
-                        placeholderFadeTransitionSpec = { tween(durationMillis = 200) },
-                        contentFadeTransitionSpec = { tween(durationMillis = 200) },
+                        placeholderFadeTransitionSpec = { tween(durationMillis = 800) },
+                        contentFadeTransitionSpec = { tween(durationMillis = 800) },
                         highlight = PlaceholderHighlight.fade(
                             animationSpec = infiniteRepeatable(
                                 animation = keyframes {
@@ -102,8 +102,8 @@ fun LoadingPhotosPreview(modifier: Modifier = Modifier) {
                             .placeholder(
                                 visible = true,
                                 color = MaterialTheme.colorScheme.surface,
-                                placeholderFadeTransitionSpec = { tween(durationMillis = 200) },
-                                contentFadeTransitionSpec = { tween(durationMillis = 200) },
+                                placeholderFadeTransitionSpec = { tween(durationMillis = 800) },
+                                contentFadeTransitionSpec = { tween(durationMillis = 800) },
                                 highlight = PlaceholderHighlight.fade(
                                     animationSpec = infiniteRepeatable(
                                         animation = keyframes {
