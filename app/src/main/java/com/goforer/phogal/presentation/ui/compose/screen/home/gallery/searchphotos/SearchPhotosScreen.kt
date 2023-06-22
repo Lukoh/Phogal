@@ -108,11 +108,13 @@ fun SearchPhotosScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* doSomething() */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            contentDescription = "Localized description"
-                        )
+                    if (state.visibleActions.value) {
+                        IconButton(onClick = { /* doSomething() */ }) {
+                            Icon(
+                                imageVector = Icons.Filled.Favorite,
+                                contentDescription = "Localized description"
+                            )
+                        }
                     }
                 }
             )
@@ -129,7 +131,10 @@ fun SearchPhotosScreen(
                         snackbarHostState.showSnackbar(it)
                     }
                 },
-                onOpenWebView = onOpenWebView
+                onOpenWebView = onOpenWebView,
+                onSuccess = {
+                    state.visibleActions.value = it
+                }
             )
         }
     )

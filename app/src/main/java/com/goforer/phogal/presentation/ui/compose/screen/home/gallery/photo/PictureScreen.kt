@@ -145,7 +145,7 @@ fun PictureScreen(
                     }
                 },
                 actions = {
-                    if (state.visibleActions.value)
+                    if (state.visibleActions.value) {
                         IconButton(
                             colors = IconButtonDefaults.iconButtonColors(
                                 contentColor = if (state.enabledLike.value)
@@ -195,6 +195,7 @@ fun PictureScreen(
                                 contentDescription = "Bookmark"
                             )
                         }
+                    }
                 }
             )
         }, content = { paddingValues ->
@@ -215,7 +216,11 @@ fun PictureScreen(
                     state.visibleActions.value = true
                     state.enabledBookmark.value =  bookmarkViewModel.isPhotoBookmarked(it)
                 },
-                onOpenWebView = onOpenWebView
+                onOpenWebView = onOpenWebView,
+                onSuccess = { isSuccessful ->
+                    if (!isSuccessful)
+                        state.visibleActions.value = false
+                }
             )
         }
     )

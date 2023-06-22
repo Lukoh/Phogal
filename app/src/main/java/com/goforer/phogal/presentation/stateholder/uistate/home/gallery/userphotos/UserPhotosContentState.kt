@@ -20,7 +20,8 @@ class UserPhotosContentState(
     val firstName: State<String>,
     val photosUiState: StateFlow<Any>,
     val isRefreshing: StateFlow<Boolean>,
-    var enabledLoadPhotos: MutableState<Boolean>
+    var enabledLoadPhotos: MutableState<Boolean>,
+    var visibleActions: MutableState<Boolean>
 )
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -31,7 +32,8 @@ fun rememberUserPhotosContentState(
     firstName: State<String> = rememberSaveable { mutableStateOf("") },
     photosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
     isRefreshing: StateFlow<Boolean> = remember { MutableStateFlow(false) },
-    enabledLoadPhotos :  MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
+    enabledLoadPhotos :  MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },
+    visibleActions: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
 ): UserPhotosContentState = remember(
     baseUiState,
     name,
@@ -46,6 +48,7 @@ fun rememberUserPhotosContentState(
         firstName = firstName,
         photosUiState = photosUiState,
         isRefreshing = isRefreshing,
-        enabledLoadPhotos = enabledLoadPhotos
+        enabledLoadPhotos = enabledLoadPhotos,
+        visibleActions = visibleActions
     )
 }

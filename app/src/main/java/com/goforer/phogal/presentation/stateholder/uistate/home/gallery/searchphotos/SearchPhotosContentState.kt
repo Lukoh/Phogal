@@ -23,7 +23,8 @@ class SearchPhotosContentState(
     val rationaleTextState: MutableState<String>,
     val photosUiState: StateFlow<Any>,
     val isRefreshing: StateFlow<Boolean>,
-    var isScrolling: MutableState<Boolean>
+    var isScrolling: MutableState<Boolean>,
+    var visibleActions: MutableState<Boolean>
 ) {
     val permissions = listOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -43,7 +44,8 @@ fun rememberSearchPhotosContentState(
     rationaleTextState: MutableState<String> = rememberSaveable { mutableStateOf("") },
     photosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
     isRefreshing: StateFlow<Boolean> = remember { MutableStateFlow(false) },
-    isScrolling: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
+    isScrolling: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    visibleActions: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
 ): SearchPhotosContentState = remember(
     baseUiState,
     photosUiState,
@@ -58,7 +60,8 @@ fun rememberSearchPhotosContentState(
         rationaleTextState = rationaleTextState,
         photosUiState = photosUiState,
         isRefreshing = isRefreshing,
-        isScrolling = isScrolling
+        isScrolling = isScrolling,
+        visibleActions = visibleActions
     )
 }
 

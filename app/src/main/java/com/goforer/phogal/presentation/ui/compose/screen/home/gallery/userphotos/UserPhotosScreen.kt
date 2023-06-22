@@ -114,11 +114,13 @@ fun UserPhotosScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* doSomething() */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            contentDescription = "Favorite"
-                        )
+                    if (state.visibleActions.value) {
+                        IconButton(onClick = { /* doSomething() */ }) {
+                            Icon(
+                                imageVector = Icons.Filled.Favorite,
+                                contentDescription = "Favorite"
+                            )
+                        }
                     }
                 }
             )
@@ -135,7 +137,10 @@ fun UserPhotosScreen(
                         snackbarHostState.showSnackbar(it)
                     }
                 },
-                onOpenWebView = onOpenWebView
+                onOpenWebView = onOpenWebView,
+                onSuccess = { isSuccessful ->
+                    state.visibleActions.value = isSuccessful
+                }
             )
         }
     )

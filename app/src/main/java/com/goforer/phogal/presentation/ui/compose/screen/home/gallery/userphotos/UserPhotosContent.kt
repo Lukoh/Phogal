@@ -42,7 +42,8 @@ fun UserPhotosContent(
     ),
     onItemClicked: (id: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onOpenWebView: (firstName: String, url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit,
+    onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
     if (state.enabledLoadPhotos.value) {
         state.enabledLoadPhotos.value = false
@@ -67,7 +68,8 @@ fun UserPhotosContent(
             },
             onViewPhotos = { _, _, _, _ -> },
             onShowSnackBar = onShowSnackBar,
-            onOpenWebView = onOpenWebView
+            onOpenWebView = onOpenWebView,
+            onSuccess = onSuccess
         )
     } else {
         InitScreen(

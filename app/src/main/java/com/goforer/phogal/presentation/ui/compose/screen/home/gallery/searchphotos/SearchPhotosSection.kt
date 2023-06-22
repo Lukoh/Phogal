@@ -16,11 +16,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -55,7 +53,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchph
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.rememberSearchPhotosSectionState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.PhotoItem
-import com.goforer.phogal.presentation.ui.theme.Blue80
+import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ShowUpButton
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.StateFlow
@@ -70,7 +68,7 @@ fun SearchPhotosSection(
     onRefresh: () -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onLoadSuccess: () -> Unit,
+    onLoadSuccess: (isSuccessful: Boolean) -> Unit,
     onScroll: (isScrolling: Boolean) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
@@ -125,6 +123,7 @@ fun SearchPhotosSection(
                         }
                         refresh is LoadState.NotLoading -> {
                             if (photos.itemCount == 0 ) {
+                                onLoadSuccess(false)
                                 state.visibleUpButtonState.value = false
                                 item {
                                     Spacer(modifier = Modifier.height(320.dp))
@@ -137,7 +136,7 @@ fun SearchPhotosSection(
                                     )
                                 }
                             } else {
-                                onLoadSuccess()
+                                onLoadSuccess(true)
                                 items(count = photos.itemCount,
                                     key = photos.itemKey(
                                         key = { photo -> photo.id }
@@ -171,6 +170,7 @@ fun SearchPhotosSection(
                             }
                         }
                         refresh is LoadState.Error -> {
+                            onLoadSuccess(false)
                             item {
                                 val error = (refresh as LoadState.Error).error.message
                                 val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
@@ -205,6 +205,7 @@ fun SearchPhotosSection(
                         }
                         append is LoadState.Error -> {
                             Timber.d("Pagination broken Error")
+                            onLoadSuccess(false)
                             item {
                                 val error = (append as LoadState.Error).error.message
                                 val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
@@ -264,24 +265,6 @@ fun SearchPhotosSection(
         }
 
         state.clickedState.value = false
-    }
-}
-
-@Composable
-fun ShowUpButton(modifier: Modifier, visible: Boolean, onClick: () -> Unit) {
-    AnimatedVisibility(
-        visible = visible,
-        modifier = modifier
-    ) {
-        FloatingActionButton(
-            modifier = modifier
-                .navigationBarsPadding()
-                .padding(bottom = 4.dp, end = 8.dp),
-            backgroundColor = Blue80,
-            onClick = onClick
-        ) {
-            Text("Up")
-        }
     }
 }
 

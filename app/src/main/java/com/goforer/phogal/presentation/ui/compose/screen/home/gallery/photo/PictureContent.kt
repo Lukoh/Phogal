@@ -115,7 +115,8 @@ fun PictureContent(
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onShownPhoto: (picture: Picture) -> Unit,
-    onOpenWebView: (firstName: String, url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit,
+    onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
     if (state.enabledLoadPhotos.value) {
         state.enabledLoadPhotos.value = false
@@ -131,7 +132,8 @@ fun PictureContent(
         onViewPhotos = onViewPhotos,
         onShowSnackBar = onShowSnackBar,
         onShownPhoto = onShownPhoto,
-        onOpenWebView = onOpenWebView
+        onOpenWebView = onOpenWebView,
+        onSuccess = onSuccess
     )
 }
 
@@ -145,7 +147,8 @@ fun HandlePictureResponse(
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onShownPhoto: (picture: Picture) -> Unit,
-    onOpenWebView: (firstName: String, url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit,
+    onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
     val pictureUiState = pictureViewModel.pictureUiState.collectAsStateWithLifecycle()
 
@@ -153,6 +156,7 @@ fun HandlePictureResponse(
         val resource = pictureUiState.value as Resource
         when(resource.status) {
             Status.SUCCESS -> {
+                onSuccess(true)
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
@@ -193,6 +197,7 @@ fun HandlePictureResponse(
                 }
             }
             Status.ERROR-> {
+                onSuccess(false)
                 AnimatedVisibility(
                     visible = true,
                     modifier = Modifier,

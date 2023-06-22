@@ -44,7 +44,6 @@ import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import timber.log.Timber
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class,
     ExperimentalMaterial3Api::class
@@ -64,7 +63,8 @@ fun SearchPhotosContent(
     onItemClicked: (id: String) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onOpenWebView: (firstName: String, url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit,
+    onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -143,7 +143,7 @@ fun SearchPhotosContent(
                 onViewPhotos = onViewPhotos,
                 onShowSnackBar = onShowSnackBar,
                 onLoadSuccess = {
-                    Timber.d("Search is successful")
+                    onSuccess(it)
                 },
                 onScroll = {
                     photosContentState.isScrolling.value = it

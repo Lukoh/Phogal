@@ -17,12 +17,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -57,6 +55,7 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphot
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosSectionState
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ErrorContent
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.PhotoItem
+import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ShowUpButton
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchphotos.LoadingPhotos
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.google.gson.Gson
@@ -73,7 +72,8 @@ fun UserPhotosSection(
     onRefresh: () -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onOpenWebView: (firstName: String, url: String) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit,
+    onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
     val photos = (state.photosUiState as StateFlow<PagingData<Photo>>).collectAsLazyPagingItems()
     // After recreation, LazyPagingItems first return 0 items, then the cached items.
@@ -134,6 +134,7 @@ fun UserPhotosSection(
                         refresh is LoadState.NotLoading -> {
                             if (photos.itemCount == 0 ) {
                                 state.visibleUpButtonState.value = false
+                                onSuccess(false)
                                 item {
                                     Spacer(modifier = Modifier.height(320.dp))
                                     Text(
@@ -145,6 +146,7 @@ fun UserPhotosSection(
                                     )
                                 }
                             } else {
+                                onSuccess(true)
                                 items(count = photos.itemCount,
                                     key = photos.itemKey(
                                         key = { photo -> photo.id }
@@ -176,6 +178,7 @@ fun UserPhotosSection(
                             }
                         }
                         refresh is LoadState.Error -> {
+                            onSuccess(false)
                             item {
                                 val error = (refresh as LoadState.Error).error.message
                                 val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
@@ -210,6 +213,7 @@ fun UserPhotosSection(
                         }
                         append is LoadState.Error -> {
                             Timber.d("Pagination broken Error")
+                            onSuccess(false)
                             item {
                                 val error = (append as LoadState.Error).error.message
                                 val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
@@ -266,24 +270,6 @@ fun UserPhotosSection(
 
     if (photos.itemCount > 0 )
         TrackScreenViewEvent(screenName = "View_User_Photos")
-}
-
-@Composable
-fun ShowUpButton(modifier: Modifier, visible: Boolean, onClick: () -> Unit) {
-    AnimatedVisibility(
-        visible = visible,
-        modifier = modifier
-    ) {
-        FloatingActionButton(
-            modifier = modifier
-                .navigationBarsPadding()
-                .padding(bottom = 4.dp, end = 8.dp),
-            backgroundColor = MaterialTheme.colorScheme.primary,
-            onClick = onClick
-        ) {
-            Text("Up!")
-        }
-    }
 }
 
 private fun visibleUpButton(index: Int): Boolean {
