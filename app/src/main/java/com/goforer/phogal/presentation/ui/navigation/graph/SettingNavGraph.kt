@@ -8,8 +8,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.goforer.phogal.presentation.ui.navigation.destination.BookmarkedPhotos
 import com.goforer.phogal.presentation.ui.navigation.destination.FollowingUsers
+import com.goforer.phogal.presentation.ui.navigation.destination.NotificationSetting
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingBookmarkedPhotosRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingFollowingUsersRoute
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingNotificationRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.Picture
 import com.goforer.phogal.presentation.ui.navigation.destination.Picture.pictureRouteArgs
@@ -47,6 +49,12 @@ fun NavGraphBuilder.settingGraph(
             arguments = Picture.arguments
         ) { backStackEntry ->
             Picture.screen(navController, backStackEntry, route)
+        }
+
+        composable(
+            route = settingNotificationRoute
+        ) { backStackEntry ->
+            NotificationSetting.screen(navController, backStackEntry, route)
         }
     }
 }

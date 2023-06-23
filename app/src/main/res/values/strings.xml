@@ -30,6 +30,7 @@
     <string name="setting_privacy_policy">Privacy Policy</string>
     <string name="setting_app_info">Phogal Information</string>
     <string name="setting_profile_edit">Edit</string>
+    <string name="setting_alarm_setting">Notification Setting</string>
 
     <string name="setting_send_feedback">Send Feedback</string>
     <string name="setting_give_start">Rating Start</string>

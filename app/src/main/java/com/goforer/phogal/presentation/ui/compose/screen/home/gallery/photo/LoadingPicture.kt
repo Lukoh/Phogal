@@ -29,8 +29,8 @@ import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.DarkGreen10
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 
 @Composable
 fun LoadingPicture(
@@ -46,9 +46,9 @@ fun LoadingPicture(
                     .placeholder(
                         visible = true,
                         color = MaterialTheme.colorScheme.surface,
-                        placeholderFadeTransitionSpec = { tween(durationMillis = 800) },
-                        contentFadeTransitionSpec = { tween(durationMillis = 800) },
-                        highlight = PlaceholderHighlight.fade(
+                        placeholderFadeTransitionSpec = { tween(durationMillis = 400) },
+                        contentFadeTransitionSpec = { tween(durationMillis = 400) },
+                        highlight = PlaceholderHighlight.shimmer(
                             animationSpec = infiniteRepeatable(
                                 animation = keyframes {
                                     durationMillis = 800
@@ -96,9 +96,9 @@ fun LoadingPicturePreview(modifier: Modifier = Modifier) {
                         .placeholder(
                             visible = true,
                             color = MaterialTheme.colorScheme.surface,
-                            placeholderFadeTransitionSpec = { tween(durationMillis = 800) },
-                            contentFadeTransitionSpec = { tween(durationMillis = 800) },
-                            highlight = PlaceholderHighlight.fade(
+                            placeholderFadeTransitionSpec = { tween(durationMillis = 400) },
+                            contentFadeTransitionSpec = { tween(durationMillis = 400) },
+                            highlight = PlaceholderHighlight.shimmer(
                                 animationSpec = infiniteRepeatable(
                                     animation = keyframes {
                                         durationMillis = 800

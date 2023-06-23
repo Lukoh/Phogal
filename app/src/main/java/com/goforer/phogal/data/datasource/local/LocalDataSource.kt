@@ -24,6 +24,9 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         const val key_bookmark_photos = "key_bookmark_photos"
         const val key_search_word_list = "search_word_list"
         const val key_following_user = "key_following_user"
+        const val key_notification_following_enabled = "key_notification_following_enabled"
+        const val key_notification_latest_enabled = "key_notification_latest_enabled"
+        const val key_notification_community_enabled = "key_notification_community_enabled"
     }
 
     private val spec = KeyGenParameterSpec.Builder(
@@ -203,4 +206,28 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
 
         return Gson().fromJson(json, type)
     }
+
+    var enabledFollowingNotification: Boolean
+        get() = pref.getBoolean(key_notification_following_enabled, true)
+        set(value) {
+            pref.edit()
+                .putBoolean(key_notification_following_enabled, value)
+                .apply()
+        }
+
+    var enabledLatestNotification: Boolean
+        get() = pref.getBoolean(key_notification_latest_enabled, true)
+        set(value) {
+            pref.edit()
+                .putBoolean(key_notification_latest_enabled, value)
+                .apply()
+        }
+
+    var enableCommunityNotification: Boolean
+        get() = pref.getBoolean(key_notification_community_enabled, true)
+        set(value) {
+            pref.edit()
+                .putBoolean(key_notification_community_enabled, value)
+                .apply()
+        }
 }

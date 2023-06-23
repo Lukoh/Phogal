@@ -3,6 +3,7 @@ package com.goforer.phogal.presentation.ui.navigation.destination
 import android.net.Uri
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FollowTheSigns
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.sharp.Settings
 import androidx.compose.runtime.Composable
@@ -15,6 +16,7 @@ import com.goforer.phogal.data.model.local.home.gallery.WebViewArgument
 import com.goforer.phogal.presentation.ui.compose.screen.home.setting.SettingScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.setting.bookmark.BookmarkedPhotosScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.setting.following.FollowingUsersScreen
+import com.goforer.phogal.presentation.ui.compose.screen.home.setting.notification.NotificationSettingScreen
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingBookmarkedPhotosRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.pictureRoute
@@ -35,6 +37,7 @@ object Setting : PhogalDestination {
                 when(index) {
                     0 ->  navController.navigateTo(BookmarkedPhotos.route)
                     1 -> navController.navigateTo(FollowingUsers.route)
+                    2 -> navController.navigateTo(NotificationSetting.route)
                     else -> {}
                 }
             }
@@ -127,6 +130,24 @@ object FollowingUsers : PhogalDestination {
                 val json = Uri.encode(gson.toJson(webViewArgument))
 
                 navController.navigateTo(route = "${WbeView.route}/$json")
+            }
+        )
+    }
+}
+
+object NotificationSetting : PhogalDestination {
+    override val icon = Icons.Filled.Notifications
+    override val route = PhogalDestination.settingNotificationRoute
+
+    @Stable
+    override val screen: @Composable (
+        navController: NavHostController,
+        backStackEntry: NavBackStackEntry,
+        route: String
+    ) -> Unit = { navController, _, _ ->
+        NotificationSettingScreen(
+            onBackPressed = {
+                navController.navigateUp()
             }
         )
     }

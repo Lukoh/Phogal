@@ -53,7 +53,7 @@ fun SearchPhotosContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     galleryViewModel: GalleryViewModel = hiltViewModel(),
-    keywordViewModel: SearchWordViewModel = hiltViewModel(),
+    searchWordViewModel: SearchWordViewModel = hiltViewModel(),
     photosContentState: SearchPhotosContentState = rememberSearchPhotosContentState(
         baseUiState = rememberBaseUiState(),
         photosUiState = galleryViewModel.photosUiState,
@@ -85,9 +85,9 @@ fun SearchPhotosContent(
                 if (keyword.isNotEmpty() && keyword != photosContentState.searchWord.value) {
                     photosContentState.searchWord.value = keyword
                     photosContentState.baseUiState.keyboardController?.hide()
-                    galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
-                    keywordViewModel.setWord(photosContentState.searchWord.value)
+                    searchWordViewModel.setWord(keyword)
                     photosContentState.triggeredSearch.value = true
+                    galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
                 }
             }
         )
@@ -96,7 +96,7 @@ fun SearchPhotosContent(
             duration = 250
         ) { animatedShape, visible ->
             if (visible) {
-                keywordViewModel.getWords()?.let { words ->
+                searchWordViewModel.getWords()?.let { words ->
                     val items = if (photosContentState.triggeredSearch.value) {
                         listOf(words[0])
                     } else

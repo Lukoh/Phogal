@@ -31,5 +31,6 @@ interface PhogalDestination {
         internal const val settingStartRoute = "settingHome/setting"
         internal const val settingBookmarkedPhotosRoute = "settingHome/bookmarkedPhotos"
         internal const val settingFollowingUsersRoute = "settingHome/followingUsers"
+        internal const val settingNotificationRoute = "settingHome/notificationSetting"
     }
 }

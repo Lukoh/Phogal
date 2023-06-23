@@ -102,8 +102,8 @@ import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.ColorText4
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 
 @Composable
 fun PictureContent(
@@ -265,9 +265,9 @@ fun BodyContent(
                 .placeholder(
                     visible = true,
                     color = MaterialTheme.colorScheme.surface,
-                    placeholderFadeTransitionSpec = { tween(durationMillis = 800) },
-                    contentFadeTransitionSpec = { tween(durationMillis = 800) },
-                    highlight = PlaceholderHighlight.fade(
+                    placeholderFadeTransitionSpec = { tween(durationMillis = 400) },
+                    contentFadeTransitionSpec = { tween(durationMillis = 400) },
+                    highlight = PlaceholderHighlight.shimmer(
                         animationSpec = infiniteRepeatable(
                             animation = keyframes {
                                 durationMillis = 800
