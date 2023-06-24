@@ -39,4 +39,6 @@ constructor(
     }
 
     fun isPhotoBookmarked(picture: Picture) = localDataSource.isPhotoBookmarked(picture)
+
+    fun isPhotoBookmarked(id: String) = localDataSource.isPhotoBookmarked(id)
 }

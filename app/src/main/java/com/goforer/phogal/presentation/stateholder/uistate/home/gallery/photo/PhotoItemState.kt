@@ -14,7 +14,8 @@ class PhotoItemState(
     val index:  MutableState<Int>,
     val photo: State<Any>,
     val visibleViewPhotosButton: MutableState<Boolean>,
-    val isClicked: MutableState<Boolean>
+    val isClicked: MutableState<Boolean>,
+    val bookmarked: MutableState<Boolean>
 )
 
 @Composable
@@ -22,12 +23,14 @@ fun rememberPhotoItemState(
     index: MutableState<Int> = rememberSaveable { mutableIntStateOf(0) },
     photo: State<Any> = remember { mutableStateOf(Any()) },
     visibleViewPhotosButton: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    isClicked: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
+    isClicked: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    bookmarked: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): PhotoItemState = remember(index, photo, visibleViewPhotosButton, isClicked) {
     PhotoItemState(
         index = index,
         visibleViewPhotosButton = visibleViewPhotosButton,
         photo = photo,
-        isClicked = isClicked
+        isClicked = isClicked,
+        bookmarked = bookmarked
     )
 }

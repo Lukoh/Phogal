@@ -115,6 +115,18 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         }
     }
 
+    internal fun isPhotoBookmarked(id: String): Boolean {
+        val photos = geBookmarkedPhotos()
+
+        return if (photos.isNullOrEmpty()) {
+            false
+        } else {
+            val foundPhoto = photos.find { it.id == id }
+
+            foundPhoto != null
+        }
+    }
+
     internal fun setBookmarkPhoto(bookmarkedPhoto: Picture): MutableList<Picture>? {
         val editor = pref.edit()
         var photos = geBookmarkedPhotos()

@@ -76,6 +76,7 @@ internal val Teal40 = Color(0xFF3A656F)
 internal val Teal60 = Color(0xFF5A899F)
 internal val Teal80 = Color(0xFFA2CED9)
 internal val Teal90 = Color(0xFFBEEAF6)
+internal val Red60Transparent = Color(0xAFFF006E)
 
 val Black = Color(0xFF000000)
 val ColorBlackLight = Color(0xFF242224)

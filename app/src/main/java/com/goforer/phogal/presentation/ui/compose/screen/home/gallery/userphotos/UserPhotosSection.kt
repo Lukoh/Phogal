@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -50,6 +51,7 @@ import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
+import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.bookmark.BookmarkViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.rememberPhotoItemState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.UserPhotosSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.rememberUserPhotosSectionState
@@ -68,6 +70,7 @@ fun UserPhotosSection(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     state: UserPhotosSectionState = rememberUserPhotosSectionState(),
+    bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
     onItemClicked: (item: Photo, index: Int) -> Unit,
     onRefresh: () -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
@@ -165,7 +168,8 @@ fun UserPhotosSection(
                                         state = rememberPhotoItemState(
                                             index = rememberSaveable { mutableIntStateOf(index) },
                                             photo = rememberSaveable { mutableStateOf(photos[index]!!) },
-                                            visibleViewPhotosButton = rememberSaveable { mutableStateOf(true) }
+                                            visibleViewPhotosButton = rememberSaveable { mutableStateOf(true) },
+                                            bookmarked = rememberSaveable { mutableStateOf(bookmarkViewModel.isPhotoBookmarked(photos[index]!!.id)) }
                                         ),
                                         onItemClicked = onItemClicked,
                                         onViewPhotos = onViewPhotos,
