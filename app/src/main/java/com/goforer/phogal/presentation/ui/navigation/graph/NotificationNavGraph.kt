@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.goforer.phogal.presentation.ui.navigation.destination.Community
+import com.goforer.phogal.presentation.ui.navigation.destination.Notification
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.notificationsStartRoute
 
 @Stable
@@ -21,7 +21,7 @@ fun NavGraphBuilder.notificationGraph(
                 navController.getBackStackEntry(route)
             }
 
-            Community.screen(navController, navBackStackEntry, route)
+            Notification.screen(navController, navBackStackEntry, route)
         }
     }
 }

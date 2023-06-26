@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -51,7 +50,6 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 @Composable
 fun SearchPhotosContent(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(4.dp),
     galleryViewModel: GalleryViewModel = hiltViewModel(),
     searchWordViewModel: SearchWordViewModel = hiltViewModel(),
     photosContentState: SearchPhotosContentState = rememberSearchPhotosContentState(
@@ -68,12 +66,6 @@ fun SearchPhotosContent(
 ) {
     Column(
         modifier = modifier
-            .padding(
-                0.dp,
-                contentPadding.calculateTopPadding(),
-                0.dp,
-                0.dp
-            )
             .clickable {
                 photosContentState.baseUiState.keyboardController?.hide()
             }

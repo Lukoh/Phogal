@@ -76,19 +76,19 @@ fun SettingContent(
                 onItemClicked = onItemClicked
             )
             if (index < topItems.size - 1)
-                Divider()
+                Divider(thickness = 0.5.dp)
         }
         Divider(thickness = 4.dp, color = ColorSystemGray9)
         middleItems.forEachIndexed { index, item ->
             SetItem(
                 modifier = Modifier,
-                index = index,
+                index = index.plus(4),
                 text = item.text,
                 drawable = item.drawable,
                 onItemClicked = onItemClicked
             )
             if (index < middleItems.size - 1)
-                Divider()
+                Divider(thickness = 0.5.dp)
         }
         Divider(thickness = 4.dp, color = ColorSystemGray9)
         Spacer(modifier = Modifier.height(28.dp))

@@ -1,6 +1,5 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.setting
 
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -11,7 +10,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
+import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 
@@ -24,7 +26,7 @@ fun SettingScreen(
     Scaffold(
         contentColor = ColorBgSecondary,
         topBar = {
-            CenterAlignedTopAppBar(
+            CustomCenterAlignedTopAppBar(
                 title = {
                     Text(
                         stringResource(id = R.string.bottom_navigation_setting),
@@ -38,11 +40,13 @@ fun SettingScreen(
                 }
             )
         }, content = { paddingValues ->
-            SettingContent(
-                modifier = modifier,
-                contentPadding = paddingValues,
-                onItemClicked = onItemClicked
-            )
+            ScaffoldContent(topInterval = 16.dp) {
+                SettingContent(
+                    modifier = modifier,
+                    contentPadding = paddingValues,
+                    onItemClicked = onItemClicked
+                )
+            }
         }
     )
 }

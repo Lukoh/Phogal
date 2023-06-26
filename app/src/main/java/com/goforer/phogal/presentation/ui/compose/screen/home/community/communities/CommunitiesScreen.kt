@@ -1,10 +1,6 @@
-package com.goforer.phogal.presentation.ui.compose.screen.home.setting.following
+package com.goforer.phogal.presentation.ui.compose.screen.home.community.communities
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
@@ -13,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -23,28 +18,23 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
 import com.goforer.base.designsystem.component.ScaffoldContent
-import com.goforer.base.extension.isNull
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun FollowingUsersScreen(
+fun CommunitiesScreen(
     modifier: Modifier = Modifier,
     state: BaseUiState = rememberBaseUiState(),
-    onBackPressed: () -> Unit,
-    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
-    onOpenWebView: (firstName: String, url: String) -> Unit,
+    onItemClicked: (id: String) -> Unit,
     onStart: () -> Unit = {
         //To Do:: Implement the code what you want to do....
     },
@@ -55,7 +45,6 @@ fun FollowingUsersScreen(
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
-    val enabledLoadPhotosState = remember { mutableStateOf(true) }
 
     DisposableEffect(state.lifecycle) {
         // Create an observer that triggers our remembered callbacks
@@ -88,7 +77,7 @@ fun FollowingUsersScreen(
             CustomCenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = stringResource(id = R.string.setting_follower),
+                        stringResource(id = R.string.bottom_navigation_community),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontFamily = FontFamily.SansSerif,
@@ -97,38 +86,11 @@ fun FollowingUsersScreen(
                         fontWeight = FontWeight.Bold,
                     )
                 },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            onBackPressed()
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBackIos,
-                            contentDescription = "Profile"
-                        )
-                    }
-                }
+                navigationIcon = {},
+                actions = {}
             )
         }, content = { paddingValues ->
-            val text = stringResource(id = R.string.user_info_has_no_portfolio)
-
-            ScaffoldContent(topInterval = 8.dp) {
-                FollowingUsersContent(
-                    modifier = modifier,
-                    contentPadding = paddingValues,
-                    enabledLoadPhotosState = enabledLoadPhotosState,
-                    onViewPhotos = onViewPhotos,
-                    onOpenWebView = { firstName, url ->
-                        url.isNull({
-                            state.scope.launch {
-                                snackbarHostState.showSnackbar("${firstName}${" "}${text}")
-                            }
-                        }, {
-                            onOpenWebView(firstName, it)
-                        })
-                    }
-                )
+            ScaffoldContent(topInterval = paddingValues.calculateTopPadding()) {
             }
         }
     )

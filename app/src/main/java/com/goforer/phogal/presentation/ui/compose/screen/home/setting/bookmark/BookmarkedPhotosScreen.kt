@@ -29,10 +29,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
+import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
+import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
@@ -89,7 +92,7 @@ fun BookmarkedPhotosScreen(
             }
         )
         }, topBar = {
-            CenterAlignedTopAppBar(
+            CustomCenterAlignedTopAppBar(
                 title = {
                     Text(
                         text = stringResource(id = R.string.setting_bookmarked_photos),
@@ -116,14 +119,16 @@ fun BookmarkedPhotosScreen(
                 }
             )
         }, content = { paddingValues ->
-            BookmarkedPhotosContent(
-                modifier = modifier,
-                contentPadding = paddingValues,
-                enabledLoadPhotosState = enabledLoadPhotosState,
-                onItemClicked = onItemClicked,
-                onViewPhotos = onViewPhotos,
-                onOpenWebView = onOpenWebView
-            )
+            ScaffoldContent(topInterval = 8.dp) {
+                BookmarkedPhotosContent(
+                    modifier = modifier,
+                    contentPadding = paddingValues,
+                    enabledLoadPhotosState = enabledLoadPhotosState,
+                    onItemClicked = onItemClicked,
+                    onViewPhotos = onViewPhotos,
+                    onOpenWebView = onOpenWebView
+                )
+            }
         }
     )
 }

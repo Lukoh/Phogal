@@ -10,7 +10,6 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkOut
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,12 +38,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goforer.base.designsystem.component.CardSnackBar
+import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
+import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.Errors
 import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponse
@@ -119,7 +121,7 @@ fun PictureScreen(
             )
         },
         topBar = {
-            CenterAlignedTopAppBar(
+            CustomCenterAlignedTopAppBar(
                 title = {
                     Text(
                         stringResource(id = R.string.picture_title),
@@ -199,29 +201,31 @@ fun PictureScreen(
                 }
             )
         }, content = { paddingValues ->
-            PictureContent(
-                modifier = modifier,
-                contentPadding = paddingValues,
-                pictureViewModel = pictureViewModel,
-                id = state.id.value,
-                state = state,
-                onViewPhotos = onViewPhotos,
-                onShowSnackBar = {
-                    state.baseUiState.scope.launch {
-                        snackbarHostState.showSnackbar(it)
+            ScaffoldContent(topInterval = 0.dp) {
+                PictureContent(
+                    modifier = modifier,
+                    contentPadding = paddingValues,
+                    pictureViewModel = pictureViewModel,
+                    id = state.id.value,
+                    state = state,
+                    onViewPhotos = onViewPhotos,
+                    onShowSnackBar = {
+                        state.baseUiState.scope.launch {
+                            snackbarHostState.showSnackbar(it)
+                        }
+                    },
+                    onShownPhoto = {
+                        state.picture = it
+                        state.visibleActions.value = true
+                        state.enabledBookmark.value =  bookmarkViewModel.isPhotoBookmarked(it)
+                    },
+                    onOpenWebView = onOpenWebView,
+                    onSuccess = { isSuccessful ->
+                        if (!isSuccessful)
+                            state.visibleActions.value = false
                     }
-                },
-                onShownPhoto = {
-                    state.picture = it
-                    state.visibleActions.value = true
-                    state.enabledBookmark.value =  bookmarkViewModel.isPhotoBookmarked(it)
-                },
-                onOpenWebView = onOpenWebView,
-                onSuccess = { isSuccessful ->
-                    if (!isSuccessful)
-                        state.visibleActions.value = false
-                }
-            )
+                )
+            }
         }
     )
 }

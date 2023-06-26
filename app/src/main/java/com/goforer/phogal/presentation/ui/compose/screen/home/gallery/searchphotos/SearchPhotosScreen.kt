@@ -2,10 +2,10 @@ package com.goforer.phogal.presentation.ui.compose.screen.home.gallery.searchpho
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,10 +27,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
+import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
+import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.photos.GalleryViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.searchphotos.SearchPhotosContentState
@@ -87,7 +90,7 @@ fun SearchPhotosScreen(
             }
         )
         }, topBar = {
-            CenterAlignedTopAppBar(
+            CustomCenterAlignedTopAppBar(
                 title = {
                     Text(
                         stringResource(id = R.string.app_name),
@@ -119,23 +122,30 @@ fun SearchPhotosScreen(
                 }
             )
         }, content = { paddingValues ->
-            SearchPhotosContent(
-                modifier = modifier,
-                galleryViewModel = galleryViewModel,
-                photosContentState = state,
-                contentPadding = paddingValues,
-                onItemClicked = onItemClicked,
-                onViewPhotos = onViewPhotos,
-                onShowSnackBar = {
-                    state.baseUiState.scope.launch {
-                        snackbarHostState.showSnackbar(it)
+            ScaffoldContent(topInterval = 16.dp) {
+                SearchPhotosContent(
+                    modifier = modifier
+                        .padding(
+                            0.dp,
+                            paddingValues.calculateTopPadding(),
+                            0.dp,
+                            0.dp
+                        ),
+                    galleryViewModel = galleryViewModel,
+                    photosContentState = state,
+                    onItemClicked = onItemClicked,
+                    onViewPhotos = onViewPhotos,
+                    onShowSnackBar = {
+                        state.baseUiState.scope.launch {
+                            snackbarHostState.showSnackbar(it)
+                        }
+                    },
+                    onOpenWebView = onOpenWebView,
+                    onSuccess = {
+                        state.visibleActions.value = it
                     }
-                },
-                onOpenWebView = onOpenWebView,
-                onSuccess = {
-                    state.visibleActions.value = it
-                }
-            )
+                )
+            }
         }
     )
 }
@@ -155,7 +165,7 @@ fun SearchPhotosScreenPreview() {
         Scaffold(
             contentColor = Color.White,
             topBar = {
-                CenterAlignedTopAppBar(
+                CustomCenterAlignedTopAppBar(
                     title = {
                         Text(
                             stringResource(id = R.string.app_name),

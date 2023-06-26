@@ -30,7 +30,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.presentation.stateholder.business.home.setting.notification.NotificationSettingViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.setting.notification.NotificationSettingViewModel.Companion.COMMUNITY_NOTIFICATION_SETTING
+import com.goforer.phogal.presentation.stateholder.business.home.setting.notification.NotificationSettingViewModel.Companion.FOLLOWING_NOTIFICATION_SETTING
+import com.goforer.phogal.presentation.stateholder.business.home.setting.notification.NotificationSettingViewModel.Companion.LATEST_NOTIFICATION_SETTING
 import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
@@ -58,27 +62,27 @@ fun NotificationSettingContent(
         NotificationToggleItem(
             modifier = Modifier,
             name = names[0],
-            isToggled = notificationSettingViewModel.getFollowingNotification()
+            isToggled = notificationSettingViewModel.getNotificationSetting(FOLLOWING_NOTIFICATION_SETTING)
         ) { toggled ->
-            notificationSettingViewModel.setFollowingNotification(toggled)
+            notificationSettingViewModel.trigger(1, params = Params(FOLLOWING_NOTIFICATION_SETTING, toggled))
         }
 
         Divider(modifier = Modifier.height(0.5.dp))
         NotificationToggleItem(
             modifier = Modifier,
             name = names[1],
-            isToggled = notificationSettingViewModel.getLatestNotification()
+            isToggled = notificationSettingViewModel.getNotificationSetting(LATEST_NOTIFICATION_SETTING)
         ) { toggled ->
-            notificationSettingViewModel.setLatestNotification(toggled)
+            notificationSettingViewModel.trigger(1, params = Params(LATEST_NOTIFICATION_SETTING, toggled))
         }
 
         Divider(modifier = Modifier.height(0.5.dp))
         NotificationToggleItem(
             modifier = Modifier,
             name = names[2],
-            isToggled = notificationSettingViewModel.getCommunityNotification()
+            isToggled = notificationSettingViewModel.getNotificationSetting(COMMUNITY_NOTIFICATION_SETTING)
         ) { toggled ->
-            notificationSettingViewModel.setCommunityNotification(toggled)
+            notificationSettingViewModel.trigger(1, params = Params(COMMUNITY_NOTIFICATION_SETTING, toggled))
         }
 
         Divider(modifier = Modifier.height(0.5.dp))
@@ -134,6 +138,8 @@ fun NotificationToggleItem(
 )
 @Composable
 fun NotificationSettingContentPreview(modifier: Modifier = Modifier) = PhogalTheme {
+    val names = listOf("Following Notification", "Latest Notification", "Community Notification")
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -143,21 +149,21 @@ fun NotificationSettingContentPreview(modifier: Modifier = Modifier) = PhogalThe
     ) {
         NotificationToggleItem(
             modifier = Modifier,
-            name = "Following Notification",
+            name = names[0],
             isToggled = true
         ) {}
 
         Divider(modifier = Modifier.height(0.5.dp))
         NotificationToggleItem(
             modifier = Modifier,
-            name = "Latest Notification",
+            name = names[1],
             isToggled = false
         ) {}
 
         Divider(modifier = Modifier.height(0.5.dp))
         NotificationToggleItem(
             modifier = Modifier,
-            name = "Community Notification",
+            name = names[2],
             isToggled = true
         ) {}
 

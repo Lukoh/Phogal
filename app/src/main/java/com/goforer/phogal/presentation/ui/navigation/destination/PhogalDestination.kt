@@ -25,6 +25,7 @@ interface PhogalDestination {
         // Notification Bottom Navigation
         internal const val notificationHomeRoute = "notificationHome"
         internal const val notificationsStartRoute = "notificationHome/notifications"
+        internal const val notificationRoute = "notificationHome/notification"
 
         // Setting Bottom Navigation
         internal const val settingHomeRoute = "settingHome"

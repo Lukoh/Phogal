@@ -28,10 +28,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
+import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
+import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.user.UserPhotosViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.userphotos.UserPhotosContentState
@@ -88,7 +91,7 @@ fun UserPhotosScreen(
             }
         )
         }, topBar = {
-            CenterAlignedTopAppBar(
+            CustomCenterAlignedTopAppBar(
                 title = {
                     Text(
                         text = "${state.firstName.value}${" "}${stringResource(id = R.string.picture_photos)}",
@@ -125,23 +128,25 @@ fun UserPhotosScreen(
                 }
             )
         }, content = { paddingValues ->
-            UserPhotosContent(
-                modifier = modifier,
-                contentPadding = paddingValues,
-                name = state.name.value,
-                userPhotosViewModel = userPhotosViewModel,
-                state = state,
-                onItemClicked = onItemClicked,
-                onShowSnackBar = {
-                    state.baseUiState.scope.launch {
-                        snackbarHostState.showSnackbar(it)
+            ScaffoldContent(topInterval = 8.dp) {
+                UserPhotosContent(
+                    modifier = modifier,
+                    contentPadding = paddingValues,
+                    name = state.name.value,
+                    userPhotosViewModel = userPhotosViewModel,
+                    state = state,
+                    onItemClicked = onItemClicked,
+                    onShowSnackBar = {
+                        state.baseUiState.scope.launch {
+                            snackbarHostState.showSnackbar(it)
+                        }
+                    },
+                    onOpenWebView = onOpenWebView,
+                    onSuccess = { isSuccessful ->
+                        state.visibleActions.value = isSuccessful
                     }
-                },
-                onOpenWebView = onOpenWebView,
-                onSuccess = { isSuccessful ->
-                    state.visibleActions.value = isSuccessful
-                }
-            )
+                )
+            }
         }
     )
 }
