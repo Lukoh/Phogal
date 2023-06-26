@@ -30,7 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.presentation.stateholder.business.home.setting.notification.NotificationSettingViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.setting.notification.NotificationSettingViewModel.Companion.COMMUNITY_NOTIFICATION_SETTING
 import com.goforer.phogal.presentation.stateholder.business.home.setting.notification.NotificationSettingViewModel.Companion.FOLLOWING_NOTIFICATION_SETTING
@@ -64,7 +63,7 @@ fun NotificationSettingContent(
             name = names[0],
             isToggled = notificationSettingViewModel.getNotificationSetting(FOLLOWING_NOTIFICATION_SETTING)
         ) { toggled ->
-            notificationSettingViewModel.trigger(1, params = Params(FOLLOWING_NOTIFICATION_SETTING, toggled))
+            notificationSettingViewModel.setNotificationEnabled(FOLLOWING_NOTIFICATION_SETTING, toggled)
         }
 
         Divider(modifier = Modifier.height(0.5.dp))
@@ -73,7 +72,7 @@ fun NotificationSettingContent(
             name = names[1],
             isToggled = notificationSettingViewModel.getNotificationSetting(LATEST_NOTIFICATION_SETTING)
         ) { toggled ->
-            notificationSettingViewModel.trigger(1, params = Params(LATEST_NOTIFICATION_SETTING, toggled))
+            notificationSettingViewModel.setNotificationEnabled(LATEST_NOTIFICATION_SETTING, toggled)
         }
 
         Divider(modifier = Modifier.height(0.5.dp))
@@ -82,7 +81,7 @@ fun NotificationSettingContent(
             name = names[2],
             isToggled = notificationSettingViewModel.getNotificationSetting(COMMUNITY_NOTIFICATION_SETTING)
         ) { toggled ->
-            notificationSettingViewModel.trigger(1, params = Params(COMMUNITY_NOTIFICATION_SETTING, toggled))
+            notificationSettingViewModel.setNotificationEnabled(COMMUNITY_NOTIFICATION_SETTING, toggled)
         }
 
         Divider(modifier = Modifier.height(0.5.dp))

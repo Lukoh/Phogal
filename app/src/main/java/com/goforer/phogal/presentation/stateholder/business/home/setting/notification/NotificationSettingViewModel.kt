@@ -2,7 +2,6 @@ package com.goforer.phogal.presentation.stateholder.business.home.setting.notifi
 
 import androidx.lifecycle.viewModelScope
 import com.goforer.phogal.data.datasource.local.LocalDataSource
-import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,21 +21,21 @@ constructor(
         const val COMMUNITY_NOTIFICATION_SETTING = 2
     }
 
-    override fun trigger(replyCount: Int, params: Params) {
-        when(params.args[0]) {
+    fun setNotificationEnabled(type: Int, toggled: Boolean) {
+        when(type) {
             FOLLOWING_NOTIFICATION_SETTING -> {
                 viewModelScope.launch {
-                    localDataSource.enabledFollowingNotification = params.args[1] as Boolean
+                    localDataSource.enabledFollowingNotification = toggled
                 }
             }
             LATEST_NOTIFICATION_SETTING -> {
                 viewModelScope.let {
-                    localDataSource.enabledLatestNotification = params.args[1] as Boolean
+                    localDataSource.enabledLatestNotification = toggled
                 }
             }
             COMMUNITY_NOTIFICATION_SETTING -> {
                 viewModelScope.let {
-                    localDataSource.enableCommunityNotification = params.args[1] as Boolean
+                    localDataSource.enableCommunityNotification = toggled
                 }
             }
         }
