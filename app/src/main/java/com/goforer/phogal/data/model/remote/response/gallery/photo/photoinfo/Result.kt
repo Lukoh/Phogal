@@ -23,7 +23,7 @@ data class Result(
     val share_key: String,
     val tags: List<Tag>,
     val title: String,
-    val total_photos: Int,
+    val total_photos: Long,
     val updated_at: String,
     val user: User
 ) : BaseModel(), Parcelable

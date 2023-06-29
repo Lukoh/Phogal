@@ -21,7 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
-import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.rememberPhotoItemState
+import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.rememberPhotoItemState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

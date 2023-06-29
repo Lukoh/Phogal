@@ -28,6 +28,8 @@ abstract class Repository<T> {
         internal const val ITEM_COUNT = 10
         internal const val FIRST_PAGE = 1
 
+        internal const val POPULAR = "popular"
+
         internal var replyCount = 0
     }
 

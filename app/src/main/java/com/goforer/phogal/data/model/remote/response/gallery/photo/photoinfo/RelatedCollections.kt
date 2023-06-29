@@ -7,6 +7,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class RelatedCollections(
     val results: List<Result>,
-    val total: Int,
+    val total: Long,
     val type: String
 ) : BaseModel(), Parcelable

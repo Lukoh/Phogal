@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
-import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.follow.FollowViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.common.follow.FollowViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.setting.following.rememberFollowingUserItemState
 
 @OptIn(ExperimentalFoundationApi::class)

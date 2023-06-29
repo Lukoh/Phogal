@@ -2,7 +2,7 @@
     <string name="app_name">Phogal</string>
     <string name="confirm">Confirm</string>
     <string name="bottom_navigation_photo">Photo</string>
-    <string name="bottom_navigation_community">Community</string>
+    <string name="bottom_navigation_popular_photos">Popular</string>
     <string name="bottom_navigation_notification">Notification</string>
     <string name="bottom_navigation_setting">Setting</string>
 

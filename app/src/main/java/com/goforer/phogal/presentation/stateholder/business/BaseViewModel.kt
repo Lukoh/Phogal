@@ -7,7 +7,7 @@ import com.goforer.phogal.data.datasource.network.response.ApiErrorResponse
 import com.goforer.phogal.data.datasource.network.response.ApiResponse
 import com.goforer.phogal.data.datasource.network.response.ApiSuccessResponse
 import com.goforer.phogal.data.datasource.network.response.Resource
-import com.goforer.phogal.data.repository.paging.PagingErrorMessage
+import com.goforer.phogal.data.repository.PagingErrorMessage
 import timber.log.Timber
 import javax.inject.Singleton
 

@@ -19,8 +19,8 @@ interface PhogalDestination {
         internal const val webViewRoute = "photoHome/webView"
 
         // Community Bottom Navigation
-        internal const val communityHomeRoute = "communityHome"
-        internal const val communitiesStartRoute = "communityHome/communities"
+        internal const val popularPhotosHomeRoute = "popularPhotosHome"
+        internal const val popularPhotosStartRoute = "popularPhotosHome/popularPhotos"
 
         // Notification Bottom Navigation
         internal const val notificationHomeRoute = "notificationHome"

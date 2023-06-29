@@ -53,10 +53,10 @@ import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
-import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserContainerState
-import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.PhotoItemState
-import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.photo.rememberPhotoItemState
-import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.UserContainer
+import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserContainerState
+import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.PhotoItemState
+import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.rememberPhotoItemState
+import com.goforer.phogal.presentation.ui.compose.screen.home.common.user.UserContainer
 import com.goforer.phogal.presentation.ui.theme.Blue50
 import com.goforer.phogal.presentation.ui.theme.Blue70
 import com.goforer.phogal.presentation.ui.theme.Blue75

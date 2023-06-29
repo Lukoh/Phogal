@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goforer.phogal.R
-import com.goforer.phogal.presentation.stateholder.business.home.common.gallery.follow.FollowViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.common.follow.FollowViewModel
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.InitScreen
 
 @Composable

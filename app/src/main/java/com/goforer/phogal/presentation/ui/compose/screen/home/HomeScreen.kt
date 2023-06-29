@@ -41,18 +41,18 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.uistate.MainScreenState
-import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.communitiesStartRoute
-import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.communityHomeRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.notificationHomeRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.notificationsStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.photosHomeRoute
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.popularPhotosHomeRoute
+import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.popularPhotosStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.searchPhotosStartRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingHomeRoute
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.settingStartRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateSingleTopToGraph
-import com.goforer.phogal.presentation.ui.navigation.graph.communityGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.galleryGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.notificationGraph
+import com.goforer.phogal.presentation.ui.navigation.graph.popularPhotosGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.settingGraph
 import com.goforer.phogal.presentation.ui.theme.Blue80
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
@@ -63,7 +63,7 @@ import timber.log.Timber
 @Stable
 sealed class BottomNavDestination(val route: String, @DrawableRes val icon: Int, @StringRes val title: Int) {
     object Gallery : BottomNavDestination(photosHomeRoute, R.drawable.ic_photo, R.string.bottom_navigation_photo)
-    object Community :  BottomNavDestination(communityHomeRoute, R.drawable.ic_community, R.string.bottom_navigation_community)
+    object PopularPhotos :  BottomNavDestination(popularPhotosHomeRoute, R.drawable.ic_popphotos, R.string.bottom_navigation_popular_photos)
     object Notification :  BottomNavDestination(notificationHomeRoute, R.drawable.ic_notification, R.string.bottom_navigation_notification)
     object Setting : BottomNavDestination(settingHomeRoute, R.drawable.ic_setting, R.string.bottom_navigation_setting)
 }
@@ -85,7 +85,7 @@ fun HomeScreen(
             if (state.shouldShowBottomBar) {
                 val items = listOf(
                     BottomNavDestination.Gallery,
-                    BottomNavDestination.Community,
+                    BottomNavDestination.PopularPhotos,
                     BottomNavDestination.Notification,
                     BottomNavDestination.Setting,
                 )
@@ -155,10 +155,10 @@ fun HomeScreen(
                         startDestination = searchPhotosStartRoute,
                         route = photosHomeRoute
                     )
-                    communityGraph(
+                    popularPhotosGraph(
                         navController = state.navController,
-                        startDestination = communitiesStartRoute,
-                        route = communityHomeRoute
+                        startDestination = popularPhotosStartRoute,
+                        route = popularPhotosHomeRoute
                     )
                     notificationGraph(
                         navController = state.navController,
@@ -177,7 +177,7 @@ fun HomeScreen(
 
     state.navController.addOnDestinationChangedListener { _, destination, _ ->
         bottomBarVisible = when(destination.route) {
-            searchPhotosStartRoute, communitiesStartRoute, notificationsStartRoute, settingStartRoute -> {
+            searchPhotosStartRoute, popularPhotosStartRoute, notificationsStartRoute, settingStartRoute -> {
                 true
             }
 
@@ -205,7 +205,7 @@ fun ProfilerHomeScreenPreview(
             bottomBar = {
                 val items = listOf(
                     BottomNavDestination.Gallery,
-                    BottomNavDestination.Community,
+                    BottomNavDestination.PopularPhotos,
                     BottomNavDestination.Notification,
                     BottomNavDestination.Setting,
                 )
@@ -259,10 +259,10 @@ fun ProfilerHomeScreenPreview(
                         startDestination =  searchPhotosStartRoute,
                         route = photosHomeRoute
                     )
-                    communityGraph(
+                    popularPhotosGraph(
                         navController = navController,
-                        startDestination = communitiesStartRoute,
-                        route = communityHomeRoute
+                        startDestination = popularPhotosStartRoute,
+                        route = popularPhotosHomeRoute
                     )
                     notificationGraph(
                         navController = navController,

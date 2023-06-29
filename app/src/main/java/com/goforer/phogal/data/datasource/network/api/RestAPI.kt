@@ -52,4 +52,12 @@ interface RestAPI {
         @Path("id") id: String,
         @Query("client_id") clientId: String
     ): Flow<ApiResponse<LikeResponse>>
+
+    @GET("photos")
+    fun getPopularPhotos(
+        @Query("client_id") clientId: String,
+        @Query("order_by") orderBy: String,
+        @Query("page") page: Int?,
+        @Query("per_page") per_page: Int?
+    ): Flow<ApiResponse<MutableList<Photo>>>
 }

@@ -23,9 +23,8 @@ import com.goforer.base.designsystem.animation.animateIconScale
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
-import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.UserInfoState
-import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.common.rememberUserInfoState
-import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.common.ShowPortfolioButton
+import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.UserInfoState
+import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserInfoState
 import com.goforer.phogal.presentation.ui.theme.DarkGreenGray10
 import kotlinx.coroutines.launch
 

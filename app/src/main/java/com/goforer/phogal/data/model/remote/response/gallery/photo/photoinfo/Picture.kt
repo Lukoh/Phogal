@@ -16,12 +16,12 @@ data class Picture(
     val color: String,
     val created_at: String,
     val description: String? = null,
-    val downloads: Int,
+    val downloads: Long,
     val exif: Exif?,
     val height: Int,
     val id: String,
     val liked_by_user: Boolean,
-    val likes: Int,
+    val likes: Long,
     val links: Links,
     val location: Location?,
     val meta: Meta,
@@ -35,7 +35,7 @@ data class Picture(
     val updated_at: String,
     val urls: Urls,
     val user: User,
-    val views: Int,
+    val views: Long,
     val width: Int,
     var bookmarked: Boolean
 ) : BaseModel(), Parcelable
