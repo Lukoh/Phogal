@@ -96,7 +96,7 @@ val ColorBgSecondary = Color(0xFFFFFFFF)
 
 val ColorSnowWhite = Color(0xFFFFFAFA)
 
-val ColorBottomBar = Color(0xFFD4F2FF)
+val ColorBottomBar = Color(0xFF141814)
 
 val ColorSearchBarBorder = Color(0xFFAAE9E6)
 
