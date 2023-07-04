@@ -39,4 +39,8 @@ class PopularPhotosViewModel
                 }
         }
     }
+
+    override fun invalidate() {
+        getPopularPhotosRepository.invalidatePagingSource()
+    }
 }

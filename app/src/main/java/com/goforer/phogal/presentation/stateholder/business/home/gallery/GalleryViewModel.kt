@@ -39,4 +39,8 @@ class GalleryViewModel
              }
         }
     }
+
+    override fun invalidate() {
+        getPhotosRepository.invalidatePagingSource()
+    }
 }

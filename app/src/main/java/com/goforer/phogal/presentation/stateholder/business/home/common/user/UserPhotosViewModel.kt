@@ -39,4 +39,8 @@ class UserPhotosViewModel
                 }
         }
     }
+
+    override fun invalidate() {
+        getUserPhotosRepository.invalidatePagingSource()
+    }
 }

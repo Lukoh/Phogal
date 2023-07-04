@@ -16,9 +16,7 @@ import javax.inject.Singleton
 class GetPopularPhotosRepository
 @Inject
 constructor() : Repository<PagingData<Photo>>() {
-    @Inject
-    lateinit var pagingSource: GetPopularPhotosPagingSource
-
+    private lateinit var pagingSource: GetPopularPhotosPagingSource
     override fun trigger(replyCount: Int, params: Params): Flow<PagingData<Photo>> {
         Repository.replyCount = replyCount
         return Pager(
@@ -28,9 +26,14 @@ constructor() : Repository<PagingData<Photo>>() {
                 initialLoadSize = ITEM_COUNT
             )
         ) {
+            pagingSource =  GetPopularPhotosPagingSource()
             BasePagingSource.pageSize = params.args[2] as Int
-            pagingSource.setPagingParam(params)
+            pagingSource.setPagingParam(restAPI, params)
             pagingSource
         }.flow
+    }
+
+    override fun invalidatePagingSource() {
+        pagingSource.invalidate()
     }
 }

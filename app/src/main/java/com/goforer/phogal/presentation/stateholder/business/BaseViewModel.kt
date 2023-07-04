@@ -24,6 +24,10 @@ abstract class BaseViewModel<T> : ViewModel() {
         Timber.d("Triggered Params")
     }
 
+    open fun invalidate() {
+        Timber.d("Invalidate")
+    }
+
     protected fun handleResponse(response: ApiResponse<T>): Resource {
         return when (response) {
             is ApiSuccessResponse -> {

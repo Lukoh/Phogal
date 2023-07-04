@@ -13,9 +13,7 @@ import kotlinx.coroutines.flow.collectLatest
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class GetPhotosPagingSource
 @Inject
 constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {

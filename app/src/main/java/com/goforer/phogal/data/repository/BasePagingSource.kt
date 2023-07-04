@@ -9,7 +9,6 @@ import com.goforer.phogal.data.datasource.network.response.ApiResponse
 import com.goforer.phogal.data.datasource.network.response.ApiSuccessResponse
 import com.goforer.phogal.data.datasource.network.response.Resource
 import timber.log.Timber
-import javax.inject.Inject
 
 abstract class BasePagingSource<Key : Any, Response : Any, Value : Any> : PagingSource<Key, Value>() {
     protected lateinit var pagingList: MutableList<Value>
@@ -22,7 +21,6 @@ abstract class BasePagingSource<Key : Any, Response : Any, Value : Any> : Paging
 
     protected var next = 0
 
-    @Inject
     lateinit var restAPI: RestAPI
 
     companion object {
@@ -62,7 +60,8 @@ abstract class BasePagingSource<Key : Any, Response : Any, Value : Any> : Paging
         Timber.d("Called REST API")
     }
 
-    internal fun setPagingParam(params: Params) {
+    internal fun setPagingParam(restAPI: RestAPI, params: Params) {
+        this.restAPI = restAPI
         this.params = params
     }
 }

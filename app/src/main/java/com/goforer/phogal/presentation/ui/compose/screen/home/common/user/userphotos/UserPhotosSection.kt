@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
@@ -72,7 +73,7 @@ fun UserPhotosSection(
     state: UserPhotosSectionState = rememberUserPhotosSectionState(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
     onItemClicked: (item: Photo, index: Int) -> Unit,
-    onRefresh: () -> Unit,
+    onRefresh: (photos: LazyPagingItems<Photo>) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
@@ -90,7 +91,7 @@ fun UserPhotosSection(
     // If this bug will got fixed... then have to be unblocked below code
     //val lazyListState = rememberLazyListState()
     val refreshState = rememberPullRefreshState(state.refreshingState.value, onRefresh = {
-        onRefresh()
+        onRefresh(photos)
     })
     // After recreation, LazyPagingItems first return 0 items, then the cached items.
     // This behavior/issue is resetting the LazyListState scroll position.

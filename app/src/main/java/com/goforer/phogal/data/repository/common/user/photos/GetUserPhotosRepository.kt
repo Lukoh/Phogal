@@ -8,7 +8,6 @@ import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.data.repository.BasePagingSource
 import com.goforer.phogal.data.repository.common.user.photos.paging.GetUserPhotosPagingSource
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,10 +16,8 @@ import javax.inject.Singleton
 class GetUserPhotosRepository
 @Inject
 constructor() : Repository<PagingData<Photo>>() {
-    @Inject
-    lateinit var pagingSource: GetUserPhotosPagingSource
+    private lateinit var pagingSource: GetUserPhotosPagingSource
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun trigger(replyCount: Int, params: Params): Flow<PagingData<Photo>> {
         Repository.replyCount = replyCount
         return Pager(
@@ -30,8 +27,9 @@ constructor() : Repository<PagingData<Photo>>() {
                 initialLoadSize = ITEM_COUNT
             ),
         ) {
+            pagingSource = GetUserPhotosPagingSource()
             BasePagingSource.pageSize = params.args[1] as Int
-            pagingSource.setPagingParam(params)
+            pagingSource.setPagingParam(restAPI, params)
             pagingSource
         }.flow
     }
