@@ -68,7 +68,6 @@ fun SearchPhotosSection(
     state: SearchPhotosSectionState = rememberSearchPhotosSectionState(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
     onItemClicked: (item: Photo, index: Int) -> Unit,
-    onRefresh: () -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onLoadSuccess: (isSuccessful: Boolean) -> Unit,
@@ -87,7 +86,7 @@ fun SearchPhotosSection(
     // If this bug will got fixed... then have to be unblocked below code
     //val lazyListState = rememberLazyListState()
     val refreshState = rememberPullRefreshState(state.refreshingState.value, onRefresh = {
-        onRefresh()
+        photos.refresh()
     })
     // After recreation, LazyPagingItems first return 0 items, then the cached items.
     // This behavior/issue is resetting the LazyListState scroll position.
@@ -111,131 +110,129 @@ fun SearchPhotosSection(
                 .fillMaxHeight(),
             state = lazyListState
         ) {
-            if (!state.refreshingState.value) {
-                photos.loadState.apply {
-                    when {
-                        refresh is LoadState.Loading -> {
-                            state.clickedState.value = true
+            photos.loadState.apply {
+                when {
+                    refresh is LoadState.Loading -> {
+                        state.clickedState.value = true
+                        item {
+                            LoadingPhotos(
+                                modifier = Modifier.padding(4.dp, 4.dp),
+                                count = 3,
+                                enableLoadIndicator = true
+                            )
+                        }
+                    }
+                    refresh is LoadState.NotLoading -> {
+                        if (photos.itemCount == 0 ) {
+                            onLoadSuccess(false)
+                            state.visibleUpButtonState.value = false
                             item {
-                                LoadingPhotos(
-                                    modifier = Modifier.padding(4.dp, 4.dp),
-                                    count = 3,
-                                    enableLoadIndicator = true
+                                Spacer(modifier = Modifier.height(320.dp))
+                                Text(
+                                    text = stringResource(id = R.string.no_picture),
+                                    style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
+                                    modifier = Modifier.align(Alignment.Center),
+                                    fontFamily = FontFamily.SansSerif,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                        } else {
+                            onLoadSuccess(true)
+                            items(count = photos.itemCount,
+                                key = photos.itemKey(
+                                    key = { photo -> photo.id }
+                                ),
+                                contentType = photos.itemContentType()
+                            ) { index ->
+                                // After recreation, LazyPagingItems first return 0 items, then the cached items.
+                                // This behavior/issue is resetting the LazyListState scroll position.
+                                // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
+                                // If this bug will got fixed... then have to be removed below code
+                                state.visibleUpButtonState.value = visibleUpButton(index)
+                                PhotoItem(
+                                    modifier = modifier.animateItemPlacement(
+                                        tween(durationMillis = 250)
+                                    ),
+                                    state = rememberPhotoItemState(
+                                        index = rememberSaveable { mutableIntStateOf(index) },
+                                        photo = rememberSaveable { mutableStateOf(photos[index]!!) },
+                                        visibleViewPhotosButton = rememberSaveable { mutableStateOf(true) },
+                                        bookmarked = rememberSaveable { mutableStateOf(bookmarkViewModel.isPhotoBookmarked(photos[index]!!.id)) }
+                                    ),
+                                    onItemClicked = onItemClicked,
+                                    onViewPhotos = onViewPhotos,
+                                    onShowSnackBar = onShowSnackBar,
+                                    onOpenWebView = onOpenWebView
+                                )
+                                if (photos.itemCount < Repository.ITEM_COUNT && index == photos.itemCount - 1)
+                                    Spacer(modifier = Modifier.height(26.dp))
+
+                                TrackScreenViewEvent(screenName = "SearchPhotosSection")
+                            }
+                        }
+                    }
+                    refresh is LoadState.Error -> {
+                        onLoadSuccess(false)
+                        item {
+                            val error = (refresh as LoadState.Error).error.message
+                            val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
+
+                            AnimatedVisibility(
+                                visible = true,
+                                modifier = Modifier,
+                                enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                                        fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+                                exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                                        fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+                            ) {
+                                ErrorContent(
+                                    modifier = modifier,
+                                    title = if (errorThrowable.code !in 200..299)
+                                        stringResource(id = R.string.error_dialog_network_title)
+                                    else
+                                        stringResource(id = R.string.error_dialog_title),
+                                    message = if ((refresh as LoadState.Error).error.message == null)
+                                        stringResource(id = R.string.error_dialog_content)
+                                    else
+                                        errorThrowable.message,
+                                    onRetry = {
+                                        photos.retry()
+                                    }
                                 )
                             }
                         }
-                        refresh is LoadState.NotLoading -> {
-                            if (photos.itemCount == 0 ) {
-                                onLoadSuccess(false)
-                                state.visibleUpButtonState.value = false
-                                item {
-                                    Spacer(modifier = Modifier.height(320.dp))
-                                    Text(
-                                        text = stringResource(id = R.string.no_picture),
-                                        style = MaterialTheme.typography.titleMedium.copy(color = ColorSystemGray7),
-                                        modifier = Modifier.align(Alignment.Center),
-                                        fontFamily = FontFamily.SansSerif,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                }
-                            } else {
-                                onLoadSuccess(true)
-                                items(count = photos.itemCount,
-                                    key = photos.itemKey(
-                                        key = { photo -> photo.id }
-                                    ),
-                                    contentType = photos.itemContentType()
-                                ) { index ->
-                                    // After recreation, LazyPagingItems first return 0 items, then the cached items.
-                                    // This behavior/issue is resetting the LazyListState scroll position.
-                                    // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
-                                    // If this bug will got fixed... then have to be removed below code
-                                    state.visibleUpButtonState.value = visibleUpButton(index)
-                                    PhotoItem(
-                                        modifier = modifier.animateItemPlacement(
-                                            tween(durationMillis = 250)
-                                        ),
-                                        state = rememberPhotoItemState(
-                                            index = rememberSaveable { mutableIntStateOf(index) },
-                                            photo = rememberSaveable { mutableStateOf(photos[index]!!) },
-                                            visibleViewPhotosButton = rememberSaveable { mutableStateOf(true) },
-                                            bookmarked = rememberSaveable { mutableStateOf(bookmarkViewModel.isPhotoBookmarked(photos[index]!!.id)) }
-                                        ),
-                                        onItemClicked = onItemClicked,
-                                        onViewPhotos = onViewPhotos,
-                                        onShowSnackBar = onShowSnackBar,
-                                        onOpenWebView = onOpenWebView
-                                    )
-                                    if (photos.itemCount < Repository.ITEM_COUNT && index == photos.itemCount - 1)
-                                        Spacer(modifier = Modifier.height(26.dp))
-                                        
-                                    TrackScreenViewEvent(screenName = "SearchPhotosSection")
-                                }
-                            }
-                        }
-                        refresh is LoadState.Error -> {
-                            onLoadSuccess(false)
-                            item {
-                                val error = (refresh as LoadState.Error).error.message
-                                val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
+                    }
+                    append is LoadState.Loading -> {
+                        Timber.d("Pagination Loading")
+                    }
+                    append is LoadState.Error -> {
+                        Timber.d("Pagination broken Error")
+                        onLoadSuccess(false)
+                        item {
+                            val error = (append as LoadState.Error).error.message
+                            val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
 
-                                AnimatedVisibility(
-                                    visible = true,
-                                    modifier = Modifier,
-                                    enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
-                                            fadeIn() + expandIn(expandFrom = Alignment.TopStart),
-                                    exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
-                                            fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
-                                ) {
-                                    ErrorContent(
-                                        modifier = modifier,
-                                        title = if (errorThrowable.code !in 200..299)
-                                            stringResource(id = R.string.error_dialog_network_title)
-                                        else
-                                            stringResource(id = R.string.error_dialog_title),
-                                        message = if ((refresh as LoadState.Error).error.message == null)
-                                            stringResource(id = R.string.error_dialog_content)
-                                        else
-                                            errorThrowable.message,
-                                        onRetry = {
-                                            photos.retry()
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                        append is LoadState.Loading -> {
-                            Timber.d("Pagination Loading")
-                        }
-                        append is LoadState.Error -> {
-                            Timber.d("Pagination broken Error")
-                            onLoadSuccess(false)
-                            item {
-                                val error = (append as LoadState.Error).error.message
-                                val errorThrowable = Gson().fromJson(error, ErrorThrowable::class.java)
-
-                                AnimatedVisibility(
-                                    visible = true,
-                                    modifier = Modifier,
-                                    enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
-                                            fadeIn() + expandIn(expandFrom = Alignment.TopStart),
-                                    exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
-                                            fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
-                                ) {
-                                    ErrorContent(
-                                        title = if (errorThrowable.code !in 200..299)
-                                            stringResource(id = R.string.error_dialog_network_title)
-                                        else
-                                            stringResource(id = R.string.error_dialog_title),
-                                        message = if ((append as LoadState.Error).error.message == null)
-                                            stringResource(id = R.string.error_dialog_content)
-                                        else
-                                            errorThrowable.message,
-                                        onRetry = {
-                                            photos.retry()
-                                        }
-                                    )
-                                }
+                            AnimatedVisibility(
+                                visible = true,
+                                modifier = Modifier,
+                                enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                                        fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+                                exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                                        fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+                            ) {
+                                ErrorContent(
+                                    title = if (errorThrowable.code !in 200..299)
+                                        stringResource(id = R.string.error_dialog_network_title)
+                                    else
+                                        stringResource(id = R.string.error_dialog_title),
+                                    message = if ((append as LoadState.Error).error.message == null)
+                                        stringResource(id = R.string.error_dialog_content)
+                                    else
+                                        errorThrowable.message,
+                                    onRetry = {
+                                        photos.retry()
+                                    }
+                                )
                             }
                         }
                     }

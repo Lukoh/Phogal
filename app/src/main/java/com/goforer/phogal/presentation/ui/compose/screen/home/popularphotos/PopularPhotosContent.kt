@@ -60,9 +60,6 @@ fun PopularPhotosContent(
                 state.enabledLoadPhotos.value= false
                 onItemClicked(photo.id)
             },
-            onRefresh = { photos ->
-                photos.refresh()
-            },
             onViewPhotos = onViewPhotos,
             onShowSnackBar = onShowSnackBar,
             onOpenWebView = onOpenWebView,

@@ -25,7 +25,6 @@ import com.goforer.base.designsystem.animation.GenericCubicAnimationShape
 import com.goforer.base.designsystem.component.Chips
 import com.goforer.phogal.R
 import com.goforer.phogal.data.datasource.network.api.Params
-import com.goforer.phogal.data.repository.Repository.Companion.FIRST_PAGE
 import com.goforer.phogal.data.repository.Repository.Companion.ITEM_COUNT
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.GalleryViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.gallery.search.SearchWordViewModel
@@ -128,9 +127,6 @@ fun SearchPhotosContent(
                 ),
                 onItemClicked = { photo, _ ->
                     onItemClicked(photo.id)
-                },
-                onRefresh = {
-                    galleryViewModel.trigger(1, Params(photosContentState.searchWord.value, FIRST_PAGE, ITEM_COUNT))
                 },
                 onViewPhotos = onViewPhotos,
                 onShowSnackBar = onShowSnackBar,

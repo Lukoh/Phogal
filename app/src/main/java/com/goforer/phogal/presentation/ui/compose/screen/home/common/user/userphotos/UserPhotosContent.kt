@@ -63,9 +63,6 @@ fun UserPhotosContent(
                 state.enabledLoadPhotos.value = false
                 onItemClicked(photo.id)
             },
-            onRefresh = { photos ->
-                photos.refresh()
-            },
             onViewPhotos = { _, _, _, _ -> },
             onShowSnackBar = onShowSnackBar,
             onOpenWebView = onOpenWebView,
