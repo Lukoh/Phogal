@@ -17,6 +17,7 @@ class GetPopularPhotosRepository
 @Inject
 constructor() : Repository<PagingData<Photo>>() {
     private lateinit var pagingSource: GetPopularPhotosPagingSource
+
     override fun trigger(replyCount: Int, params: Params): Flow<PagingData<Photo>> {
         Repository.replyCount = replyCount
         return Pager(
@@ -34,6 +35,7 @@ constructor() : Repository<PagingData<Photo>>() {
     }
 
     override fun invalidatePagingSource() {
-        pagingSource.invalidate()
+        if (::pagingSource.isInitialized)
+            pagingSource.invalidate()
     }
 }

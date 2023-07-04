@@ -35,6 +35,7 @@ constructor() : Repository<PagingData<Photo>>() {
     }
 
     override fun invalidatePagingSource() {
-        pagingSource.invalidate()
+        if (::pagingSource.isInitialized)
+            pagingSource.invalidate()
     }
 }
