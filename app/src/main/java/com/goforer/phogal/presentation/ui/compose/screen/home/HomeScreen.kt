@@ -56,7 +56,6 @@ import com.goforer.phogal.presentation.ui.navigation.graph.popularPhotosGraph
 import com.goforer.phogal.presentation.ui.navigation.graph.settingGraph
 import com.goforer.phogal.presentation.ui.theme.Blue80
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
-import com.goforer.phogal.presentation.ui.theme.ColorBlackLight
 import com.goforer.phogal.presentation.ui.theme.ColorBottomBar
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
