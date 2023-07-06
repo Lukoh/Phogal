@@ -18,8 +18,8 @@ import com.goforer.phogal.presentation.ui.compose.screen.home.common.InitScreen
 @Composable
 fun FollowingUsersContent(
     modifier: Modifier = Modifier,
-    followViewModel: FollowViewModel = hiltViewModel(),
     contentPadding: PaddingValues = PaddingValues(4.dp),
+    followViewModel: FollowViewModel = hiltViewModel(),
     enabledLoadPhotosState: MutableState<Boolean>,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String?) -> Unit
