@@ -34,7 +34,6 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 fun UserPhotosContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(4.dp),
-    name: String,
     userPhotosViewModel: UserPhotosViewModel = hiltViewModel(),
     state: UserPhotosContentState = rememberUserPhotosContentState(
         photosUiState = userPhotosViewModel.photosUiState,
@@ -47,7 +46,7 @@ fun UserPhotosContent(
 ) {
     if (state.enabledLoadPhotos.value) {
         state.enabledLoadPhotos.value = false
-        userPhotosViewModel.trigger(1, Params(name, Repository.ITEM_COUNT))
+        userPhotosViewModel.trigger(1, Params(state.name.value, Repository.ITEM_COUNT))
     }
 
     if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {

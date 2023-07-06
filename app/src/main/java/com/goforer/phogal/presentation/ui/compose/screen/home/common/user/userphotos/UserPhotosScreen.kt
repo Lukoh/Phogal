@@ -132,7 +132,6 @@ fun UserPhotosScreen(
                 UserPhotosContent(
                     modifier = modifier,
                     contentPadding = paddingValues,
-                    name = state.name.value,
                     userPhotosViewModel = userPhotosViewModel,
                     state = state,
                     onItemClicked = onItemClicked,

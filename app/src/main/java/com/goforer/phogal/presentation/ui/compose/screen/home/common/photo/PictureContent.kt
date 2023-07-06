@@ -109,7 +109,6 @@ import com.google.accompanist.placeholder.material.shimmer
 fun PictureContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    id : String,
     state: PhotoContentState = rememberPhotoContentState(),
     pictureViewModel: PictureViewModel = hiltViewModel(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
@@ -120,13 +119,12 @@ fun PictureContent(
 ) {
     if (state.enabledLoadPhotos.value) {
         state.enabledLoadPhotos.value = false
-        pictureViewModel.trigger(1, Params(id))
+        pictureViewModel.trigger(1, Params(state.id.value))
     }
 
     HandlePictureResponse(
         modifier = modifier,
         contentPadding = contentPadding,
-        id = id,
         state = state,
         pictureViewModel = pictureViewModel,
         onViewPhotos = onViewPhotos,
@@ -141,7 +139,6 @@ fun PictureContent(
 fun HandlePictureResponse(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    id : String,
     pictureViewModel: PictureViewModel = hiltViewModel(),
     state: PhotoContentState = rememberPhotoContentState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
@@ -214,7 +211,7 @@ fun HandlePictureResponse(
                             stringResource(id = R.string.error_dialog_title),
                         message = "${stringResource(id = R.string.error_get_picture)}${"\n\n"}${resource.message.toString()}",
                         onRetry = {
-                            pictureViewModel.trigger(1, Params(id))
+                            pictureViewModel.trigger(1, Params(state.id.value))
                         }
                     )
                 }

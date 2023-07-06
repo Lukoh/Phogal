@@ -206,7 +206,6 @@ fun PictureScreen(
                     modifier = modifier,
                     contentPadding = paddingValues,
                     pictureViewModel = pictureViewModel,
-                    id = state.id.value,
                     state = state,
                     onViewPhotos = onViewPhotos,
                     onShowSnackBar = {
