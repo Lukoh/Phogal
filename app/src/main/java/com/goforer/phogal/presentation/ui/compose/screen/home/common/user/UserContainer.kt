@@ -96,7 +96,7 @@ fun UserContainer(
     var showUserInfoBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     Column(
-        modifier = modifier.background(state.colors[2]),
+        modifier = modifier.background(state.colorsState.value[2]),
         verticalArrangement = Arrangement.Top
     ) {
         Row(
@@ -125,7 +125,7 @@ fun UserContainer(
             ) {
                 Text(
                     text = user.name,
-                    color = state.colors[0],
+                    color = state.colorsState.value[0],
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,
@@ -140,7 +140,7 @@ fun UserContainer(
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 12.sp,
                     fontStyle = FontStyle.Normal,
-                    color = state.colors[1],
+                    color = state.colorsState.value[1],
                     style = MaterialTheme.typography.titleSmall
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -149,7 +149,7 @@ fun UserContainer(
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 12.sp,
                     fontStyle = FontStyle.Normal,
-                    color = state.colors[1],
+                    color = state.colorsState.value[1],
                     style = MaterialTheme.typography.titleSmall
                 )
             }
@@ -157,7 +157,7 @@ fun UserContainer(
             Spacer(modifier = Modifier.width(10.dp))
             ShowFollowButton(
                 modifier = modifier,
-                followColor = state.colors[4],
+                followColor = state.colorsState.value[4],
                 followViewModel.isUserFollowed(user)
             ) {
                 followViewModel.setUserFollow(user)
@@ -169,8 +169,8 @@ fun UserContainer(
                 modifier = Modifier.padding(start = 56.dp, top = 0.dp, bottom = 2.dp),
                 height = 32.dp,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = state.colors[3],
-                    contentColor = state.colors[4]
+                    containerColor = state.colorsState.value[3],
+                    contentColor = state.colorsState.value[4]
                 ),
                 onClick = { onViewPhotos(user.username, user.first_name,  lastName, user.username) },
                 icon = {

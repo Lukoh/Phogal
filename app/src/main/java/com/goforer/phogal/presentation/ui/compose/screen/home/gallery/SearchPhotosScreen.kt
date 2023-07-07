@@ -1,7 +1,9 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.gallery
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -17,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
@@ -61,6 +64,11 @@ fun SearchPhotosScreen(
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
+    val backHandlingEnabled by remember { mutableStateOf(true) }
+
+    BackHandler(backHandlingEnabled) {
+        (state.baseUiState.context as Activity).finish()
+    }
 
     DisposableEffect(state.baseUiState.lifecycle) {
         // Create an observer that triggers our remembered callbacks

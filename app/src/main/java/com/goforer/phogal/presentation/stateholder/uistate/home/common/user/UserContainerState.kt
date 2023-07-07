@@ -17,7 +17,7 @@ class UserContainerState(
     val baseUiState: BaseUiState,
     val userState: MutableState<String>,
     val profileSizeState: MutableState<Double>,
-    val colors: List<Color>,
+    val colorsState: MutableState<List<Color>>,
     val visibleViewButtonState: MutableState<Boolean>,
     val fromItemState: MutableState<Boolean>,
 )
@@ -28,16 +28,16 @@ fun rememberUserContainerState(
     baseUiState: BaseUiState = rememberBaseUiState(),
     userState: MutableState<String> = rememberSaveable { mutableStateOf("") },
     profileSizeState: MutableState<Double> = rememberSaveable { mutableDoubleStateOf(0.0) },
-    colors: List<Color> = rememberSaveable { listOf(Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent) },
+    colorsState: MutableState<List<Color>> = rememberSaveable { mutableStateOf(listOf(Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent)) },
     visibleViewButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     fromItemState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): UserContainerState = remember(
-    profileSizeState, colors, visibleViewButtonState) {
+    profileSizeState, colorsState, visibleViewButtonState) {
     UserContainerState(
         baseUiState = baseUiState,
         userState = userState,
         profileSizeState = profileSizeState,
-        colors = colors,
+        colorsState = colorsState,
         visibleViewButtonState = visibleViewButtonState,
         fromItemState = fromItemState
     )

@@ -1,5 +1,7 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.popularphotos
 
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarData
@@ -9,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
@@ -49,6 +52,11 @@ fun PopularPhotosScreen(
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
+    val backHandlingEnabled by remember { mutableStateOf(true) }
+
+    BackHandler(backHandlingEnabled) {
+        (state.baseUiState.context as Activity).finish()
+    }
 
     DisposableEffect(state.baseUiState.lifecycle) {
         // Create an observer that triggers our remembered callbacks

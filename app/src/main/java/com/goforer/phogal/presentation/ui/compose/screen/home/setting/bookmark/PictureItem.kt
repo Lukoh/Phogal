@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -180,7 +181,7 @@ fun PictureItem(
                     state = rememberUserContainerState(
                         userState = rememberSaveable { mutableStateOf(picture.user.toString()) },
                         profileSizeState = rememberSaveable { mutableDoubleStateOf(36.0) },
-                        colors = rememberSaveable { listOf(Color.White, Color.White, Blue70, Blue75, Blue50, ColorSnowWhite) },
+                        colorsState = remember { mutableStateOf(listOf(Color.White, Color.White, Blue70, Blue75, Blue50, ColorSnowWhite)) },
                         visibleViewButtonState = state.visibleViewButtonState,
                         fromItemState = rememberSaveable { mutableStateOf(true) }
                     ),

@@ -2,6 +2,7 @@ package com.goforer.phogal.presentation.ui.compose.screen.home.setting.bookmark
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.Bookmark
@@ -63,6 +64,11 @@ fun BookmarkedPhotosScreen(
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
     val enabledLoadPhotosState = remember { mutableStateOf(true) }
+    val backHandlingEnabled by remember { mutableStateOf(true) }
+
+    BackHandler(backHandlingEnabled) {
+        onBackPressed()
+    }
 
     DisposableEffect(state.lifecycle) {
         // Create an observer that triggers our remembered callbacks

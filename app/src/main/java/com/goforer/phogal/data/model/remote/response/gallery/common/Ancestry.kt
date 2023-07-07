@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Ancestry(
-    val category: Category,
+    val category: Category?,
     val subcategory: Subcategory? = null,
-    val type: Type
+    val type: Type?
 ) : BaseModel(), Parcelable

@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TopicSubmissions(
-    val wallpapers: Wallpapers
+    val wallpapers: Wallpapers?
 ) : BaseModel(), Parcelable

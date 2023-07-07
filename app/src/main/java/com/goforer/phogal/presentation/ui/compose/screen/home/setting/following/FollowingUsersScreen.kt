@@ -1,5 +1,6 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.setting.following
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,6 +57,11 @@ fun FollowingUsersScreen(
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
     val enabledLoadPhotosState = remember { mutableStateOf(true) }
+    val backHandlingEnabled by remember { mutableStateOf(true) }
+
+    BackHandler(backHandlingEnabled) {
+        onBackPressed()
+    }
 
     DisposableEffect(state.lifecycle) {
         // Create an observer that triggers our remembered callbacks

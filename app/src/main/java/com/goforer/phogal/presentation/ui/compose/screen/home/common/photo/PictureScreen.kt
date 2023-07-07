@@ -1,5 +1,6 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.common.photo
 
+import androidx.activity.compose.BackHandler
 import com.goforer.base.designsystem.component.dialog.ErrorDialog
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandIn
@@ -86,6 +87,11 @@ fun PictureScreen(
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
+    val backHandlingEnabled by remember { mutableStateOf(true) }
+
+    BackHandler(backHandlingEnabled) {
+       onBackPressed()
+    }
 
     DisposableEffect(state.baseUiState.lifecycle) {
         // Create an observer that triggers our remembered callbacks

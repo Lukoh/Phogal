@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Tag(
-    val source: Source,
-    val title: String,
-    val type: String
+    val source: Source?,
+    val title: String?,
+    val type: String?
 ) : BaseModel(), Parcelable

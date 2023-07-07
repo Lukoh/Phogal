@@ -292,7 +292,7 @@ fun BodyContent(
                 state = rememberUserContainerState(
                     userState = rememberSaveable { mutableStateOf(picture.user.toString()) },
                     profileSizeState = rememberSaveable { mutableDoubleStateOf(48.0) },
-                    colors = rememberSaveable { listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite, ColorSystemGray5, Blue75, DarkGreen60) },
+                    colorsState = remember { mutableStateOf(listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite, ColorSystemGray5, Blue75, DarkGreen60)) },
                     visibleViewButtonState = rememberSaveable { mutableStateOf(visibleViewPhotosButton) },
                     fromItemState = rememberSaveable { mutableStateOf(false) }
                 ),
