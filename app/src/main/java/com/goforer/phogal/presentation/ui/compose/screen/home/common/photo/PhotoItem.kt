@@ -58,6 +58,7 @@ import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
+import com.goforer.phogal.data.model.remote.response.gallery.common.toUserString
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.PhotoItemState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.rememberPhotoItemState
@@ -81,7 +82,7 @@ fun PhotoItem(
     onShowSnackBar: (text: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
-    val photo = state.photo.value as Photo
+    val photo = state.photoState.value as Photo
 
     photo.alreadySearched = true
     AnimatedVisibility(
@@ -97,7 +98,7 @@ fun PhotoItem(
             colors = CardDefaults.cardColors(
                 contentColor = MaterialTheme.colorScheme.primary,
                 containerColor =
-                if (state.isClicked.value)
+                if (state.clickedState.value)
                     MaterialTheme.colorScheme.primaryContainer
                 else
                     MaterialTheme.colorScheme.surfaceVariant,
@@ -164,8 +165,8 @@ fun PhotoItem(
                     )
                     .clip(RoundedCornerShape(4.dp))
                     .clickable {
-                        state.isClicked.value = true
-                        onItemClicked.invoke(photo, state.index.value)
+                        state.clickedState.value = true
+                        onItemClicked.invoke(photo, state.indexState.value)
                     }
                     .scale(.8f + (.2f * transition))
                     .graphicsLayer { rotationX = (1f - transition) * 5f }
@@ -180,7 +181,7 @@ fun PhotoItem(
                         colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(transition) })
                     )
 
-                    if (state.bookmarked.value) {
+                    if (state.bookmarkedState.value) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_bookmark_on),
                             contentDescription = "Bookmark",
@@ -194,12 +195,12 @@ fun PhotoItem(
 
                 UserContainer(
                     modifier = Modifier,
-                    user = photo.user,
                     state = rememberUserContainerState(
-                        profileSize = rememberSaveable { mutableDoubleStateOf(36.0) },
+                        userState = rememberSaveable { mutableStateOf(photo.user.toUserString()) },
+                        profileSizeState = rememberSaveable { mutableDoubleStateOf(36.0) },
                         colors = rememberSaveable { listOf(Color.White, Color.White, Blue70, Blue75, Blue50, ColorSnowWhite) },
-                        visibleViewPhotosButton = state.visibleViewPhotosButton,
-                        isFromItem = rememberSaveable { mutableStateOf(true) }
+                        visibleViewButtonState = state.visibleViewButtonState,
+                        fromItemState = rememberSaveable { mutableStateOf(true) }
                     ),
                     onViewPhotos = onViewPhotos,
                     onShowSnackBar = onShowSnackBar,

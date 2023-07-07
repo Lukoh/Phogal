@@ -16,9 +16,9 @@ import kotlinx.coroutines.flow.StateFlow
 class PopularPhotosContentState(
     val baseUiState: BaseUiState,
     val popularPhotosUiState: StateFlow<Any>,
-    val isRefreshing: StateFlow<Boolean>,
-    var enabledLoadPhotos: MutableState<Boolean>,
-    var visibleActions: MutableState<Boolean>
+    val refreshingState: StateFlow<Boolean>,
+    var enabledLoadState: MutableState<Boolean>,
+    var visibleActionsState: MutableState<Boolean>
 )
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -26,19 +26,19 @@ class PopularPhotosContentState(
 fun rememberPopularPhotosContentState(
     baseUiState: BaseUiState = rememberBaseUiState(),
     popularPhotosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
-    isRefreshing: StateFlow<Boolean> = remember { MutableStateFlow(false) },
-    enabledLoadPhotos: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },
-    visibleActions: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
+    refreshingState: StateFlow<Boolean> = remember { MutableStateFlow(false) },
+    enabledLoadState: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },
+    visibleActionsState: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
 ): PopularPhotosContentState = remember(
     baseUiState,
     popularPhotosUiState,
-    isRefreshing
+    refreshingState
 ) {
     PopularPhotosContentState(
         baseUiState = baseUiState,
         popularPhotosUiState = popularPhotosUiState,
-        isRefreshing = isRefreshing,
-        enabledLoadPhotos = enabledLoadPhotos,
-        visibleActions = visibleActions
+        refreshingState = refreshingState,
+        enabledLoadState = enabledLoadState,
+        visibleActionsState = visibleActionsState
     )
 }

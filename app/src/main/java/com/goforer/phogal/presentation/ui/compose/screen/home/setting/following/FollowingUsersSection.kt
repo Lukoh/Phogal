@@ -61,10 +61,10 @@ fun FollowingUsersSection(
                         tween(durationMillis = 250)
                     ),
                     state = rememberFollowingUserItemState(
-                        index = rememberSaveable { mutableIntStateOf(index) },
-                        user = rememberSaveable { mutableStateOf(item) },
-                        visibleViewPhotosButton = rememberSaveable { mutableStateOf(true) },
-                        isUserFollowed = rememberSaveable { mutableStateOf(followViewModel.isUserFollowed(item)) }
+                        indexState = rememberSaveable { mutableIntStateOf(index) },
+                        userState = rememberSaveable { mutableStateOf(item) },
+                        visibleViewButtonState = rememberSaveable { mutableStateOf(true) },
+                        followedState = rememberSaveable { mutableStateOf(followViewModel.isUserFollowed(item)) }
                     ),
                     onViewPhotos = onViewPhotos,
                     onOpenWebView = onOpenWebView,

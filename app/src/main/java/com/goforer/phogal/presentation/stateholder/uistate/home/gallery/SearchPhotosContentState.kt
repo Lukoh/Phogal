@@ -16,15 +16,15 @@ import kotlinx.coroutines.flow.StateFlow
 @Stable
 class SearchPhotosContentState(
     val baseUiState: BaseUiState,
-    val searchWord: MutableState<String>,
-    val enabledSearch: MutableState<Boolean>,
-    val triggeredSearch: MutableState<Boolean>,
-    val showPermissionBottomSheet: MutableState<Boolean>,
+    val wordState: MutableState<String>,
+    val enabledState: MutableState<Boolean>,
+    val triggeredState: MutableState<Boolean>,
+    val permissionState: MutableState<Boolean>,
     val rationaleTextState: MutableState<String>,
     val photosUiState: StateFlow<Any>,
-    val isRefreshing: StateFlow<Boolean>,
-    var isScrolling: MutableState<Boolean>,
-    var visibleActions: MutableState<Boolean>
+    val refreshingState: StateFlow<Boolean>,
+    var scrollingState: MutableState<Boolean>,
+    var visibleActionsState: MutableState<Boolean>
 ) {
     val permissions = listOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -37,31 +37,31 @@ class SearchPhotosContentState(
 @Composable
 fun rememberSearchPhotosContentState(
     baseUiState: BaseUiState = rememberBaseUiState(),
-    searchWord: MutableState<String> = rememberSaveable { mutableStateOf("") },
-    enabledSearch: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    triggeredSearch: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    showPermissionBottomSheet: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    wordState: MutableState<String> = rememberSaveable { mutableStateOf("") },
+    enabledState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    triggeredState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    permissionState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     rationaleTextState: MutableState<String> = rememberSaveable { mutableStateOf("") },
     photosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
-    isRefreshing: StateFlow<Boolean> = remember { MutableStateFlow(false) },
-    isScrolling: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    visibleActions: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
+    refreshingState: StateFlow<Boolean> = remember { MutableStateFlow(false) },
+    scrollingState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    visibleActionsState: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
 ): SearchPhotosContentState = remember(
     baseUiState,
     photosUiState,
-    isRefreshing
+    refreshingState
 ) {
     SearchPhotosContentState(
         baseUiState = baseUiState,
-        searchWord = searchWord,
-        enabledSearch = enabledSearch,
-        triggeredSearch = triggeredSearch,
-        showPermissionBottomSheet = showPermissionBottomSheet,
+        wordState = wordState,
+        enabledState = enabledState,
+        triggeredState = triggeredState,
+        permissionState = permissionState,
         rationaleTextState = rationaleTextState,
         photosUiState = photosUiState,
-        isRefreshing = isRefreshing,
-        isScrolling = isScrolling,
-        visibleActions = visibleActions
+        refreshingState = refreshingState,
+        scrollingState = scrollingState,
+        visibleActionsState = visibleActionsState
     )
 }
 

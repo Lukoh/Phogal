@@ -37,8 +37,8 @@ object PopularPhotos : PhogalDestination {
             state = rememberPopularPhotosContentState(
                 baseUiState = rememberBaseUiState(),
                 popularPhotosUiState = popularPhotosViewModel.popularPhotosUiState,
-                enabledLoadPhotos = rememberSaveable { mutableStateOf(true) },
-                isRefreshing = popularPhotosViewModel.isRefreshing
+                enabledLoadState = rememberSaveable { mutableStateOf(true) },
+                refreshingState = popularPhotosViewModel.isRefreshing
             ),
             onItemClicked = { id ->
                 val pictureArgument = PictureArgument(

@@ -16,39 +16,39 @@ import kotlinx.coroutines.flow.StateFlow
 @Stable
 class UserPhotosContentState(
     val baseUiState: BaseUiState,
-    val name: State<String>,
-    val firstName: State<String>,
+    val nameState: State<String>,
+    val firstNameState: State<String>,
     val photosUiState: StateFlow<Any>,
-    val isRefreshing: StateFlow<Boolean>,
-    var enabledLoadPhotos: MutableState<Boolean>,
-    var visibleActions: MutableState<Boolean>
+    val refreshingState: StateFlow<Boolean>,
+    var enabledLoadState: MutableState<Boolean>,
+    var visibleActionsState: MutableState<Boolean>
 )
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun rememberUserPhotosContentState(
     baseUiState: BaseUiState = rememberBaseUiState(),
-    name: State<String> = rememberSaveable { mutableStateOf("") },
-    firstName: State<String> = rememberSaveable { mutableStateOf("") },
+    nameState: State<String> = rememberSaveable { mutableStateOf("") },
+    firstNameState: State<String> = rememberSaveable { mutableStateOf("") },
     photosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
-    isRefreshing: StateFlow<Boolean> = remember { MutableStateFlow(false) },
-    enabledLoadPhotos :  MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },
-    visibleActions: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
+    refreshingState: StateFlow<Boolean> = remember { MutableStateFlow(false) },
+    enabledLoadState :  MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },
+    visibleActionsState: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
 ): UserPhotosContentState = remember(
     baseUiState,
-    name,
-    firstName,
+    nameState,
+    firstNameState,
     photosUiState,
-    isRefreshing,
-    enabledLoadPhotos
+    refreshingState,
+    enabledLoadState
 ) {
     UserPhotosContentState(
         baseUiState = baseUiState,
-        name = name,
-        firstName = firstName,
+        nameState = nameState,
+        firstNameState = firstNameState,
         photosUiState = photosUiState,
-        isRefreshing = isRefreshing,
-        enabledLoadPhotos = enabledLoadPhotos,
-        visibleActions = visibleActions
+        refreshingState = refreshingState,
+        enabledLoadState = enabledLoadState,
+        visibleActionsState = visibleActionsState
     )
 }

@@ -54,9 +54,9 @@ fun SearchPhotosContent(
     photosContentState: SearchPhotosContentState = rememberSearchPhotosContentState(
         baseUiState = rememberBaseUiState(),
         photosUiState = galleryViewModel.photosUiState,
-        isRefreshing = galleryViewModel.isRefreshing
+        refreshingState = galleryViewModel.isRefreshing
     ),
-    searchState: SearchSectionState = rememberSearchSectionState(searchEnabled = photosContentState.enabledSearch),
+    searchState: SearchSectionState = rememberSearchSectionState(enabledState = photosContentState.enabledState),
     onItemClicked: (id: String) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
@@ -73,22 +73,22 @@ fun SearchPhotosContent(
             modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
             state = searchState,
             onSearched = { keyword ->
-                if (keyword.isNotEmpty() && keyword != photosContentState.searchWord.value) {
-                    photosContentState.searchWord.value = keyword
+                if (keyword.isNotEmpty() && keyword != photosContentState.wordState.value) {
+                    photosContentState.wordState.value = keyword
                     photosContentState.baseUiState.keyboardController?.hide()
                     searchWordViewModel.setWord(keyword)
-                    photosContentState.triggeredSearch.value = true
+                    photosContentState.triggeredState.value = true
                     galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
                 }
             }
         )
         GenericCubicAnimationShape(
-            visible = !photosContentState.isScrolling.value,
+            visible = !photosContentState.scrollingState.value,
             duration = 250
         ) { animatedShape, visible ->
             if (visible) {
                 searchWordViewModel.getWords()?.let { words ->
-                    val items = if (photosContentState.triggeredSearch.value) {
+                    val items = if (photosContentState.triggeredState.value) {
                         listOf(words[0])
                     } else
                         words
@@ -105,12 +105,12 @@ fun SearchPhotosContent(
                         leadingIconTint = Blue70
                     ) { keyword ->
                         searchState.editableInputState.textState = keyword
-                        photosContentState.searchWord.value = keyword
+                        photosContentState.wordState.value = keyword
                         photosContentState.baseUiState.keyboardController?.hide()
                         galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
                     }
 
-                    photosContentState.triggeredSearch.value = false
+                    photosContentState.triggeredState.value = false
                 }
             }
         }
@@ -123,7 +123,7 @@ fun SearchPhotosContent(
                 state = rememberSearchPhotosSectionState(
                     scope = photosContentState.baseUiState.scope,
                     photosUiState = photosContentState.photosUiState,
-                    refreshingState = photosContentState.isRefreshing.collectAsStateWithLifecycle()
+                    refreshingState = photosContentState.refreshingState.collectAsStateWithLifecycle()
                 ),
                 onItemClicked = { photo, _ ->
                     onItemClicked(photo.id)
@@ -134,7 +134,7 @@ fun SearchPhotosContent(
                     onSuccess(it)
                 },
                 onScroll = {
-                    photosContentState.isScrolling.value = it
+                    photosContentState.scrollingState.value = it
                 },
                 onOpenWebView = onOpenWebView
             )
@@ -154,25 +154,25 @@ fun SearchPhotosContent(
         CheckPermission(
             multiplePermissionsState = multiplePermissionsState,
             onPermissionGranted = {
-                enabledSearch.value = true
-                showPermissionBottomSheet.value = false
+                enabledState.value = true
+                permissionState.value = false
             },
             onPermissionNotGranted = {
                 rationaleTextState.value = it
-                enabledSearch.value = false
-                showPermissionBottomSheet.value = true
+                enabledState.value = false
+                permissionState.value = true
             }
         )
-        if (showPermissionBottomSheet.value) {
+        if (permissionState.value) {
             PermissionBottomSheet(
                 state = rememberPermissionState(rationaleTextState = rationaleTextState),
                 onDismissedRequest = {
-                    enabledSearch.value = false
-                    showPermissionBottomSheet.value = false
+                    enabledState.value = false
+                    permissionState.value = false
                 },
                 onClicked = {
                     multiplePermissionsState.launchMultiplePermissionRequest()
-                    showPermissionBottomSheet.value = false
+                    permissionState.value = false
                 }
             )
         }

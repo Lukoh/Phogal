@@ -37,16 +37,16 @@ fun UserPhotosContent(
     userPhotosViewModel: UserPhotosViewModel = hiltViewModel(),
     state: UserPhotosContentState = rememberUserPhotosContentState(
         photosUiState = userPhotosViewModel.photosUiState,
-        isRefreshing = userPhotosViewModel.isRefreshing,
+        refreshingState = userPhotosViewModel.isRefreshing,
     ),
     onItemClicked: (id: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
-    if (state.enabledLoadPhotos.value) {
-        state.enabledLoadPhotos.value = false
-        userPhotosViewModel.trigger(1, Params(state.name.value, Repository.ITEM_COUNT))
+    if (state.enabledLoadState.value) {
+        state.enabledLoadState.value = false
+        userPhotosViewModel.trigger(1, Params(state.nameState.value, Repository.ITEM_COUNT))
     }
 
     if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
@@ -56,10 +56,10 @@ fun UserPhotosContent(
             contentPadding = contentPadding,
             state = rememberUserPhotosSectionState(
                 photosUiState = state.photosUiState,
-                refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
+                refreshingState = state.refreshingState.collectAsStateWithLifecycle()
             ),
             onItemClicked = { photo, _ ->
-                state.enabledLoadPhotos.value = false
+                state.enabledLoadState.value = false
                 onItemClicked(photo.id)
             },
             onViewPhotos = { _, _, _, _ -> },

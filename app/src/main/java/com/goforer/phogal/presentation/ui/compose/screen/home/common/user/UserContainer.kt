@@ -64,6 +64,7 @@ import com.goforer.base.designsystem.component.ImageCrossFade
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
+import com.goforer.phogal.data.model.remote.response.gallery.common.toUser
 import com.goforer.phogal.presentation.stateholder.business.home.common.follow.FollowViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.UserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserContainerState
@@ -84,13 +85,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun UserContainer(
     modifier: Modifier = Modifier,
-    user: User,
     state: UserContainerState = rememberUserContainerState(),
     followViewModel: FollowViewModel = hiltViewModel(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
+    val user = state.userState.value.toUser()
     val lastName = user.last_name ?: stringResource(id = R.string.picture_no_last_name)
     var showUserInfoBottomSheet by rememberSaveable { mutableStateOf(false) }
 
@@ -111,10 +112,10 @@ fun UserContainer(
                 },
         ) {
             ShowProfileImage(
-                profileImageSize = state.profileSize.value.dp,
+                profileImageSize = state.profileSizeState.value.dp,
                 user = user,
                 lastName = lastName,
-                visibleViewPhotosButton = state.visibleViewPhotosButton.value,
+                visibleViewPhotosButton = state.visibleViewButtonState.value,
                 onViewPhotos = onViewPhotos
             )
             Spacer(modifier = Modifier.width(14.dp))
@@ -163,7 +164,7 @@ fun UserContainer(
             }
         }
 
-        if (state.visibleViewPhotosButton.value) {
+        if (state.visibleViewButtonState.value) {
             IconButton(
                 modifier = Modifier.padding(start = 56.dp, top = 0.dp, bottom = 2.dp),
                 height = 32.dp,
@@ -181,7 +182,7 @@ fun UserContainer(
                 text = {
                     Text(
                         "${stringResource(id = R.string.picture_view_photos, user.name)}${" "}${user.total_photos}${" "}${stringResource(id = R.string.picture_photos, user.name)}",
-                        color = if (state.isFromItem.value)
+                        color = if (state.fromItemState.value)
                             ColorSnowWhite
                         else
                             DarkGreen60,

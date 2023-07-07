@@ -11,26 +11,26 @@ import androidx.compose.runtime.saveable.rememberSaveable
 
 @Stable
 class PhotoItemState(
-    val index:  MutableState<Int>,
-    val photo: State<Any>,
-    val visibleViewPhotosButton: MutableState<Boolean>,
-    val isClicked: MutableState<Boolean>,
-    val bookmarked: MutableState<Boolean>
+    val indexState:  MutableState<Int>,
+    val photoState: State<Any>,
+    val visibleViewButtonState: MutableState<Boolean>,
+    val clickedState: MutableState<Boolean>,
+    val bookmarkedState: MutableState<Boolean>
 )
 
 @Composable
 fun rememberPhotoItemState(
-    index: MutableState<Int> = rememberSaveable { mutableIntStateOf(0) },
-    photo: State<Any> = remember { mutableStateOf(Any()) },
-    visibleViewPhotosButton: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    isClicked: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    bookmarked: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
-): PhotoItemState = remember(index, photo, visibleViewPhotosButton, isClicked) {
+    indexState: MutableState<Int> = rememberSaveable { mutableIntStateOf(0) },
+    photoState: State<Any> = remember { mutableStateOf(Any()) },
+    visibleViewButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    clickedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    bookmarkedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
+): PhotoItemState = remember(indexState, photoState, visibleViewButtonState, clickedState) {
     PhotoItemState(
-        index = index,
-        visibleViewPhotosButton = visibleViewPhotosButton,
-        photo = photo,
-        isClicked = isClicked,
-        bookmarked = bookmarked
+        indexState = indexState,
+        photoState = photoState,
+        visibleViewButtonState = visibleViewButtonState,
+        clickedState = clickedState,
+        bookmarkedState = bookmarkedState
     )
 }

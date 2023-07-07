@@ -69,8 +69,8 @@ fun FollowingUsersItem(
     onOpenWebView: (firstName: String, url: String?) -> Unit,
     onFollow: (user: User) -> Unit
 ) {
-    val user = state.user.value as User
-    val verticalPadding = if (state.index.value == 0)
+    val user = state.userState.value as User
+    val verticalPadding = if (state.indexState.value == 0)
         2.dp
     else
         4.dp
@@ -87,7 +87,7 @@ fun FollowingUsersItem(
             modifier = modifier.padding(vertical = verticalPadding),
             colors = CardDefaults.cardColors(
                 contentColor = Blue70,
-                containerColor =  if (state.isClicked.value)
+                containerColor =  if (state.clickedState.value)
                     Blue75
                 else
                     Blue70,
@@ -129,7 +129,7 @@ fun FollowingUsersItem(
                     ShowFollowButton(
                         modifier = modifier,
                         followColor = Blue50,
-                        isUserFollowed = state.isUserFollowed.value
+                        isUserFollowed = state.followedState.value
                     ) {
                        onFollow(user)
                     }

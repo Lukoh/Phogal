@@ -108,7 +108,7 @@ fun PopularPhotosScreen(
                     },
                     onOpenWebView = onOpenWebView,
                     onSuccess = {
-                        state.visibleActions.value = it
+                        state.visibleActionsState.value = it
                     }
                 )
             }

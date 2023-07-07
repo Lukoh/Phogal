@@ -34,8 +34,8 @@ fun PopularPhotosContent(
     state: PopularPhotosContentState = rememberPopularPhotosContentState(
         baseUiState = rememberBaseUiState(),
         popularPhotosUiState = popularPhotosViewModel.popularPhotosUiState,
-        enabledLoadPhotos = rememberSaveable { mutableStateOf(true) },
-        isRefreshing = popularPhotosViewModel.isRefreshing
+        enabledLoadState = rememberSaveable { mutableStateOf(true) },
+        refreshingState = popularPhotosViewModel.isRefreshing
     ),
     onItemClicked: (id: String) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
@@ -43,8 +43,8 @@ fun PopularPhotosContent(
     onOpenWebView: (firstName: String, url: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
-    if (state.enabledLoadPhotos.value) {
-        state.enabledLoadPhotos.value = false
+    if (state.enabledLoadState.value) {
+        state.enabledLoadState.value = false
         popularPhotosViewModel.trigger(1, Params(POPULAR, FIRST_PAGE, ITEM_COUNT))
     }
 
@@ -54,10 +54,10 @@ fun PopularPhotosContent(
             state = rememberPopularPhotosSectionState(
                 scope = state.baseUiState.scope,
                 popularPhotosUiState = state.popularPhotosUiState,
-                refreshingState = state.isRefreshing.collectAsStateWithLifecycle()
+                refreshingState = state.refreshingState.collectAsStateWithLifecycle()
             ),
             onItemClicked = { photo, _ ->
-                state.enabledLoadPhotos.value= false
+                state.enabledLoadState.value= false
                 onItemClicked(photo.id)
             },
             onViewPhotos = onViewPhotos,

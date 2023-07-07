@@ -58,9 +58,9 @@ fun BookmarkedPhotosSection(
                         tween(durationMillis = 250)
                     ),
                     state = rememberPhotoItemState(
-                        index = rememberSaveable { mutableIntStateOf(index) },
-                        photo = rememberSaveable { mutableStateOf(item) },
-                        visibleViewPhotosButton = rememberSaveable { mutableStateOf(true) }
+                        indexState = rememberSaveable { mutableIntStateOf(index) },
+                        photoState = rememberSaveable { mutableStateOf(item) },
+                        visibleViewButtonState = rememberSaveable { mutableStateOf(true) }
                     ),
                     onItemClicked = onItemClicked,
                     onViewPhotos = onViewPhotos,

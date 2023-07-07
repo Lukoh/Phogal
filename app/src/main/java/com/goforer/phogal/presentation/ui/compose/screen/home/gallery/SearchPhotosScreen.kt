@@ -111,7 +111,7 @@ fun SearchPhotosScreen(
                     }
                 },
                 actions = {
-                    if (state.visibleActions.value) {
+                    if (state.visibleActionsState.value) {
                         IconButton(onClick = { /* doSomething() */ }) {
                             Icon(
                                 imageVector = Icons.Filled.Favorite,
@@ -142,7 +142,7 @@ fun SearchPhotosScreen(
                     },
                     onOpenWebView = onOpenWebView,
                     onSuccess = {
-                        state.visibleActions.value = it
+                        state.visibleActionsState.value = it
                     }
                 )
             }

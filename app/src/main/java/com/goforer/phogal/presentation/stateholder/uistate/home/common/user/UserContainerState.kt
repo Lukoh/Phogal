@@ -15,27 +15,30 @@ import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 @Stable
 class UserContainerState(
     val baseUiState: BaseUiState,
-    val profileSize: MutableState<Double>,
+    val userState: MutableState<String>,
+    val profileSizeState: MutableState<Double>,
     val colors: List<Color>,
-    val visibleViewPhotosButton: MutableState<Boolean>,
-    val isFromItem: MutableState<Boolean>,
+    val visibleViewButtonState: MutableState<Boolean>,
+    val fromItemState: MutableState<Boolean>,
 )
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun rememberUserContainerState(
     baseUiState: BaseUiState = rememberBaseUiState(),
-    profileSize: MutableState<Double> = rememberSaveable { mutableDoubleStateOf(0.0) },
+    userState: MutableState<String> = rememberSaveable { mutableStateOf("") },
+    profileSizeState: MutableState<Double> = rememberSaveable { mutableDoubleStateOf(0.0) },
     colors: List<Color> = rememberSaveable { listOf(Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent, Color.Transparent) },
-    visibleViewPhotosButton: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    isFromItem: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
+    visibleViewButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    fromItemState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): UserContainerState = remember(
-    profileSize, colors, visibleViewPhotosButton) {
+    profileSizeState, colors, visibleViewButtonState) {
     UserContainerState(
         baseUiState = baseUiState,
-        profileSize = profileSize,
+        userState = userState,
+        profileSizeState = profileSizeState,
         colors = colors,
-        visibleViewPhotosButton = visibleViewPhotosButton,
-        isFromItem = isFromItem
+        visibleViewButtonState = visibleViewButtonState,
+        fromItemState = fromItemState
     )
 }

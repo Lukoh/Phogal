@@ -85,6 +85,7 @@ import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Pic
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.datasource.network.response.Status
+import com.goforer.phogal.data.model.remote.response.gallery.common.toUserString
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.business.home.common.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserContainerState
@@ -117,9 +118,9 @@ fun PictureContent(
     onOpenWebView: (firstName: String, url: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
-    if (state.enabledLoadPhotos.value) {
-        state.enabledLoadPhotos.value = false
-        pictureViewModel.trigger(1, Params(state.id.value))
+    if (state.enabledLoadState.value) {
+        state.enabledLoadState.value = false
+        pictureViewModel.trigger(1, Params(state.idState.value))
     }
 
     HandlePictureResponse(
@@ -166,7 +167,7 @@ fun HandlePictureResponse(
                         BodyContent(
                             modifier = modifier,
                             picture = resource.data as Picture,
-                            visibleViewPhotosButton = state.visibleViewPhotosButton.value,
+                            visibleViewPhotosButton = state.visibleViewButtonState.value,
                             onViewPhotos = onViewPhotos,
                             onShowSnackBar = onShowSnackBar,
                             onShownPhoto = onShownPhoto,
@@ -211,7 +212,7 @@ fun HandlePictureResponse(
                             stringResource(id = R.string.error_dialog_title),
                         message = "${stringResource(id = R.string.error_get_picture)}${"\n\n"}${resource.message.toString()}",
                         onRetry = {
-                            pictureViewModel.trigger(1, Params(state.id.value))
+                            pictureViewModel.trigger(1, Params(state.idState.value))
                         }
                     )
                 }
@@ -289,12 +290,12 @@ fun BodyContent(
         } else {
             UserContainer(
                 modifier = Modifier,
-                user = picture.user,
                 state = rememberUserContainerState(
-                    profileSize = rememberSaveable { mutableDoubleStateOf(48.0) },
+                    userState = rememberSaveable { mutableStateOf(picture.user.toUserString()) },
+                    profileSizeState = rememberSaveable { mutableDoubleStateOf(48.0) },
                     colors = rememberSaveable { listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite, ColorSystemGray5, Blue75, DarkGreen60) },
-                    visibleViewPhotosButton = rememberSaveable { mutableStateOf(visibleViewPhotosButton) },
-                    isFromItem = rememberSaveable { mutableStateOf(false) }
+                    visibleViewButtonState = rememberSaveable { mutableStateOf(visibleViewPhotosButton) },
+                    fromItemState = rememberSaveable { mutableStateOf(false) }
                 ),
                 onViewPhotos = onViewPhotos,
                 onShowSnackBar = onShowSnackBar,

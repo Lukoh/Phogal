@@ -94,7 +94,7 @@ fun UserPhotosScreen(
             CustomCenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "${state.firstName.value}${" "}${stringResource(id = R.string.picture_photos)}",
+                        text = "${state.firstNameState.value}${" "}${stringResource(id = R.string.picture_photos)}",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontFamily = FontFamily.SansSerif,
@@ -106,7 +106,7 @@ fun UserPhotosScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            state.enabledLoadPhotos.value = false
+                            state.enabledLoadState.value = false
                             onBackPressed()
                         }
                     ) {
@@ -117,7 +117,7 @@ fun UserPhotosScreen(
                     }
                 },
                 actions = {
-                    if (state.visibleActions.value) {
+                    if (state.visibleActionsState.value) {
                         IconButton(onClick = { /* doSomething() */ }) {
                             Icon(
                                 imageVector = Icons.Filled.Favorite,
@@ -142,7 +142,7 @@ fun UserPhotosScreen(
                     },
                     onOpenWebView = onOpenWebView,
                     onSuccess = { isSuccessful ->
-                        state.visibleActions.value = isSuccessful
+                        state.visibleActionsState.value = isSuccessful
                     }
                 )
             }

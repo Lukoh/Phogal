@@ -14,12 +14,12 @@ import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 @Stable
 class PhotoContentState(
     val baseUiState: BaseUiState,
-    val id: MutableState<String>,
-    val visibleViewPhotosButton: MutableState<Boolean>,
-    var enabledLoadPhotos: MutableState<Boolean>,
-    var enabledBookmark: MutableState<Boolean>,
-    var enabledLike: MutableState<Boolean>,
-    var visibleActions: MutableState<Boolean>
+    val idState: MutableState<String>,
+    val visibleViewButtonState: MutableState<Boolean>,
+    var enabledLoadState: MutableState<Boolean>,
+    var enabledBookmarkState: MutableState<Boolean>,
+    var enabledLikeState: MutableState<Boolean>,
+    var visibleActionsState: MutableState<Boolean>
 ) {
     var picture: Picture? = null
 }
@@ -28,24 +28,24 @@ class PhotoContentState(
 @Composable
 fun rememberPhotoContentState(
     baseUiState: BaseUiState = rememberBaseUiState(),
-    id: MutableState<String> = rememberSaveable { mutableStateOf("") },
-    visibleViewPhotosButton: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    enabledLoadPhotos: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },
-    enabledBookmark: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    enabledLike: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    visibleActions: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
+    idState: MutableState<String> = rememberSaveable { mutableStateOf("") },
+    visibleViewButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    enabledLoadState: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },
+    enabledBookmarkState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    enabledLikeState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    visibleActionsState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): PhotoContentState = remember(
-    id,
-    visibleViewPhotosButton,
-    enabledLoadPhotos
+    idState,
+    visibleViewButtonState,
+    enabledLoadState
 ) {
     PhotoContentState(
         baseUiState = baseUiState,
-        id = id,
-        visibleViewPhotosButton = visibleViewPhotosButton,
-        enabledLoadPhotos = enabledLoadPhotos,
-        enabledBookmark = enabledBookmark,
-        enabledLike = enabledLike,
-        visibleActions = visibleActions
+        idState = idState,
+        visibleViewButtonState = visibleViewButtonState,
+        enabledLoadState = enabledLoadState,
+        enabledBookmarkState = enabledBookmarkState,
+        enabledLikeState = enabledLikeState,
+        visibleActionsState = visibleActionsState
     )
 }

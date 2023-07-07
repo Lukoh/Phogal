@@ -2,6 +2,7 @@ package com.goforer.phogal.data.model.remote.response.gallery.common
 
 import android.os.Parcelable
 import com.goforer.phogal.data.model.BaseModel
+import com.google.gson.Gson
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -26,3 +27,7 @@ data class User(
     val updated_at: String,
     val username: String
 ) : BaseModel(), Parcelable
+
+fun User.toUserString(): String = Gson().toJson(this)
+
+fun String.toUser(): User = Gson().fromJson(this, User::class.java)

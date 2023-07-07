@@ -11,26 +11,26 @@ import androidx.compose.runtime.saveable.rememberSaveable
 
 @Stable
 class FollowingUserItemState(
-    val index: MutableState<Int>,
-    val user: State<Any>,
-    val visibleViewPhotosButton: MutableState<Boolean>,
-    val isClicked: MutableState<Boolean>,
-    val isUserFollowed: MutableState<Boolean>
+    val indexState: MutableState<Int>,
+    val userState: State<Any>,
+    val visibleViewButtonState: MutableState<Boolean>,
+    val clickedState: MutableState<Boolean>,
+    val followedState: MutableState<Boolean>
 )
 
 @Composable
 fun rememberFollowingUserItemState(
-    index: MutableState<Int> = rememberSaveable { mutableIntStateOf(0) },
-    user: State<Any> = remember { mutableStateOf(Any()) },
-    visibleViewPhotosButton: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    isClicked: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    isUserFollowed: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
-): FollowingUserItemState = remember(index, user, visibleViewPhotosButton, isClicked) {
+    indexState: MutableState<Int> = rememberSaveable { mutableIntStateOf(0) },
+    userState: State<Any> = remember { mutableStateOf(Any()) },
+    visibleViewButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    clickedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    followedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
+): FollowingUserItemState = remember(indexState, userState, visibleViewButtonState, clickedState) {
     FollowingUserItemState(
-        index = index,
-        visibleViewPhotosButton = visibleViewPhotosButton,
-        user = user,
-        isClicked = isClicked,
-        isUserFollowed = isUserFollowed
+        indexState = indexState,
+        userState = userState,
+        visibleViewButtonState = visibleViewButtonState,
+        clickedState = clickedState,
+        followedState = followedState
     )
 }

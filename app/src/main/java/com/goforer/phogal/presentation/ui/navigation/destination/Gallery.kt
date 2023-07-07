@@ -55,7 +55,7 @@ object SearchPhotos : PhogalDestination {
             state = rememberSearchPhotosContentState(
                 baseUiState = rememberBaseUiState(),
                 photosUiState = galleryViewModel.photosUiState,
-                isRefreshing = galleryViewModel.isRefreshing
+                refreshingState = galleryViewModel.isRefreshing
             ),
             onItemClicked = { id ->
                 val pictureArgument = PictureArgument(
@@ -120,8 +120,8 @@ object Picture : PhogalDestination {
                 likeViewModel = likeViewModel,
                 unLikeViewModel = unLikeViewModel,
                 state = rememberPhotoContentState(
-                    id = rememberSaveable { mutableStateOf(pictureArgument.id) },
-                    visibleViewPhotosButton = rememberSaveable { mutableStateOf(pictureArgument.visibleViewPhotosButton) }
+                    idState = rememberSaveable { mutableStateOf(pictureArgument.id) },
+                    visibleViewButtonState = rememberSaveable { mutableStateOf(pictureArgument.visibleViewPhotosButton) }
                 ),
                 onViewPhotos = { name, firstName, lastName, username ->
                     val nameArgument = NameArgument(
@@ -179,10 +179,10 @@ object UserPhotos : PhogalDestination {
                 userPhotosViewModel = userPhotosViewModel,
                 state = rememberUserPhotosContentState(
                     baseUiState = rememberBaseUiState(),
-                    name = rememberSaveable { mutableStateOf(nameArgument.name) },
-                    firstName = rememberSaveable { mutableStateOf(nameArgument.firstName) },
+                    nameState = rememberSaveable { mutableStateOf(nameArgument.name) },
+                    firstNameState = rememberSaveable { mutableStateOf(nameArgument.firstName) },
                     photosUiState = userPhotosViewModel.photosUiState,
-                    isRefreshing = userPhotosViewModel.isRefreshing
+                    refreshingState = userPhotosViewModel.isRefreshing
                 ),
                 onItemClicked = { id ->
                     val pictureArgument = PictureArgument(

@@ -154,10 +154,10 @@ fun SearchPhotosSection(
                                         tween(durationMillis = 250)
                                     ),
                                     state = rememberPhotoItemState(
-                                        index = rememberSaveable { mutableIntStateOf(index) },
-                                        photo = rememberSaveable { mutableStateOf(photos[index]!!) },
-                                        visibleViewPhotosButton = rememberSaveable { mutableStateOf(true) },
-                                        bookmarked = rememberSaveable { mutableStateOf(bookmarkViewModel.isPhotoBookmarked(photos[index]!!.id)) }
+                                        indexState = rememberSaveable { mutableIntStateOf(index) },
+                                        photoState = rememberSaveable { mutableStateOf(photos[index]!!) },
+                                        visibleViewButtonState = rememberSaveable { mutableStateOf(true) },
+                                        bookmarkedState = rememberSaveable { mutableStateOf(bookmarkViewModel.isPhotoBookmarked(photos[index]!!.id)) }
                                     ),
                                     onItemClicked = onItemClicked,
                                     onViewPhotos = onViewPhotos,

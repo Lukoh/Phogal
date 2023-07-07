@@ -136,7 +136,7 @@ fun PictureScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            state.enabledLoadPhotos.value = false
+                            state.enabledLoadState.value = false
                             onBackPressed()
                         }
                     ) {
@@ -147,10 +147,10 @@ fun PictureScreen(
                     }
                 },
                 actions = {
-                    if (state.visibleActions.value) {
+                    if (state.visibleActionsState.value) {
                         IconButton(
                             colors = IconButtonDefaults.iconButtonColors(
-                                contentColor = if (state.enabledLike.value)
+                                contentColor = if (state.enabledLikeState.value)
                                     Red60
                                 else
                                     Color.Black,
@@ -158,9 +158,9 @@ fun PictureScreen(
                             onClick = {
                                 showDialogState.value = true
                                 if (!state.picture?.liked_by_user!!)
-                                    likeViewModel.trigger(1, Params(state.id.value))
+                                    likeViewModel.trigger(1, Params(state.idState.value))
                                 else
-                                    unLikeViewModel.trigger(1, Params(state.id.value))
+                                    unLikeViewModel.trigger(1, Params(state.idState.value))
                             }
                         ) {
                             state.picture?.liked_by_user?.let { liked ->
@@ -176,7 +176,7 @@ fun PictureScreen(
 
                         IconButton(
                             colors = IconButtonDefaults.iconButtonColors(
-                                contentColor = if (state.enabledBookmark.value)
+                                contentColor = if (state.enabledBookmarkState.value)
                                     Red60
                                 else
                                     Color.Black,
@@ -186,11 +186,11 @@ fun PictureScreen(
                                     bookmarkViewModel.setBookmarkPicture(it)
                                 }
 
-                                state.enabledBookmark.value = !state.enabledBookmark.value
+                                state.enabledBookmarkState.value = !state.enabledBookmarkState.value
                             }
                         ) {
                             Icon(
-                                imageVector = if (state.enabledBookmark.value)
+                                imageVector = if (state.enabledBookmarkState.value)
                                     ImageVector.vectorResource(id = R.drawable.ic_bookmark_on)
                                 else
                                     ImageVector.vectorResource(id = R.drawable.ic_bookmark_off),
@@ -215,13 +215,13 @@ fun PictureScreen(
                     },
                     onShownPhoto = {
                         state.picture = it
-                        state.visibleActions.value = true
-                        state.enabledBookmark.value =  bookmarkViewModel.isPhotoBookmarked(it)
+                        state.visibleActionsState.value = true
+                        state.enabledBookmarkState.value =  bookmarkViewModel.isPhotoBookmarked(it)
                     },
                     onOpenWebView = onOpenWebView,
                     onSuccess = { isSuccessful ->
                         if (!isSuccessful)
-                            state.visibleActions.value = false
+                            state.visibleActionsState.value = false
                     }
                 )
             }
@@ -243,13 +243,13 @@ fun LikeResponseHandle(
             Status.SUCCESS -> {
                 val likeResponse = resource.data as LikeResponse
 
-                state.enabledLike.value = likeResponse.photo.liked_by_user
-                Timber.d("Like Success : %s", state.enabledLike.value.toString())
+                state.enabledLikeState.value = likeResponse.photo.liked_by_user
+                Timber.d("Like Success : %s", state.enabledLikeState.value.toString())
             }
             Status.LOADING -> {}
             Status.ERROR-> {
-                state.enabledLike.value = false
-                Timber.d("Like Failed : %s", state.enabledLike.value.toString())
+                state.enabledLikeState.value = false
+                Timber.d("Like Failed : %s", state.enabledLikeState.value.toString())
                 if (showDialogState.value) {
                     AnimatedVisibility(
                         visible = true,
@@ -292,15 +292,15 @@ fun UnlikeResponseHandle(
             Status.SUCCESS -> {
                 val likeResponse = resource.data as LikeResponse
 
-                state.enabledLike.value = likeResponse.photo.liked_by_user
-                Timber.d("Like Success : %s", state.enabledLike.value.toString())
+                state.enabledLikeState.value = likeResponse.photo.liked_by_user
+                Timber.d("Like Success : %s", state.enabledLikeState.value.toString())
             }
             Status.LOADING -> {
 
             }
             Status.ERROR-> {
-                state.enabledLike.value = true
-                Timber.d("Unlike Failed : %s", state.enabledLike.value.toString())
+                state.enabledLikeState.value = true
+                Timber.d("Unlike Failed : %s", state.enabledLikeState.value.toString())
                 if (showDialogState.value) {
                     AnimatedVisibility(
                         visible = true,
