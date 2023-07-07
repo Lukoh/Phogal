@@ -52,7 +52,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
-import com.goforer.phogal.data.model.remote.response.gallery.common.toUserString
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.PhotoItemState
@@ -179,7 +178,7 @@ fun PictureItem(
                 UserContainer(
                     modifier = Modifier,
                     state = rememberUserContainerState(
-                        userState = rememberSaveable { mutableStateOf(picture.user.toUserString()) },
+                        userState = rememberSaveable { mutableStateOf(picture.user.toString()) },
                         profileSizeState = rememberSaveable { mutableDoubleStateOf(36.0) },
                         colors = rememberSaveable { listOf(Color.White, Color.White, Blue70, Blue75, Blue50, ColorSnowWhite) },
                         visibleViewButtonState = state.visibleViewButtonState,

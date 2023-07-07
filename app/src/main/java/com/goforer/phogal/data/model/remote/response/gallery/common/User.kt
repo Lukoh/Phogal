@@ -26,8 +26,6 @@ data class User(
     val twitter_username: String?,
     val updated_at: String,
     val username: String
-) : BaseModel(), Parcelable
-
-fun User.toUserString(): String = Gson().toJson(this)
-
-fun String.toUser(): User = Gson().fromJson(this, User::class.java)
+) : BaseModel(), Parcelable {
+    override fun toString(): String = Gson().toJson(this)
+}

@@ -85,7 +85,6 @@ import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Pic
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.datasource.network.response.Status
-import com.goforer.phogal.data.model.remote.response.gallery.common.toUserString
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.business.home.common.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserContainerState
@@ -291,7 +290,7 @@ fun BodyContent(
             UserContainer(
                 modifier = Modifier,
                 state = rememberUserContainerState(
-                    userState = rememberSaveable { mutableStateOf(picture.user.toUserString()) },
+                    userState = rememberSaveable { mutableStateOf(picture.user.toString()) },
                     profileSizeState = rememberSaveable { mutableDoubleStateOf(48.0) },
                     colors = rememberSaveable { listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite, ColorSystemGray5, Blue75, DarkGreen60) },
                     visibleViewButtonState = rememberSaveable { mutableStateOf(visibleViewPhotosButton) },
