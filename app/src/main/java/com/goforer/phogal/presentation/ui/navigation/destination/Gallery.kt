@@ -197,16 +197,6 @@ object UserPhotos : PhogalDestination {
                 onBackPressed = {
                     navController.navigateUp()
                 },
-                onOpenWebView = { firstName, url ->
-                    val webViewArgument = WebViewArgument(
-                        firstName = firstName,
-                        url = url
-                    )
-                    val gson = Gson()
-                    val json = Uri.encode(gson.toJson(webViewArgument))
-
-                    navController.navigateTo(route = "${WbeView.route}/$json")
-                }
             )
         }
     }

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
+import com.goforer.base.customtab.openCustomTab
 import com.goforer.phogal.R
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.repository.Repository
@@ -41,7 +42,6 @@ fun UserPhotosContent(
     ),
     onItemClicked: (id: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onOpenWebView: (firstName: String, url: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
     if (state.enabledLoadState.value) {
@@ -64,7 +64,9 @@ fun UserPhotosContent(
             },
             onViewPhotos = { _, _, _, _ -> },
             onShowSnackBar = onShowSnackBar,
-            onOpenWebView = onOpenWebView,
+            onOpenWebView = { _, url ->
+                state.baseUiState.context?.let { openCustomTab(it, url) }
+             },
             onSuccess = onSuccess
         )
     } else {

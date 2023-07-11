@@ -53,7 +53,6 @@ fun UserPhotosScreen(
     state: UserPhotosContentState = rememberUserPhotosContentState(),
     onItemClicked: (id: String) -> Unit,
     onBackPressed: () -> Unit,
-    onOpenWebView: (firstName: String, url: String) -> Unit,
     onStart: () -> Unit = {
         //To Do:: Implement the code what you want to do....
     },
@@ -147,7 +146,6 @@ fun UserPhotosScreen(
                             snackbarHostState.showSnackbar(it)
                         }
                     },
-                    onOpenWebView = onOpenWebView,
                     onSuccess = { isSuccessful ->
                         state.visibleActionsState.value = isSuccessful
                     }

@@ -67,8 +67,6 @@ fun loadContent(context: Context, url: String, color: Int = Color.TRANSPARENT) {
         val colorScheme = CustomTabsIntent.COLOR_SCHEME_LIGHT
         val customTabsIntent = CustomTabsIntent.Builder()
             .setColorSchemeParams(colorScheme, params)
-            .setStartAnimations(context, android.R.anim.slide_out_right, android.R.anim.slide_in_left)
-            .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
             .setUrlBarHidingEnabled(true)
             .build()
 
