@@ -1,6 +1,7 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.setting
 
 import android.app.Activity
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -28,7 +29,7 @@ import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 fun SettingScreen(
     modifier: Modifier = Modifier,
     baseUiState: BaseUiState,
-    onItemClicked: (index: Int) -> Unit
+    onItemClicked: (context: Context, index: Int) -> Unit
 ) {
     val backHandlingEnabled by remember { mutableStateOf(true) }
 
@@ -57,7 +58,9 @@ fun SettingScreen(
                 SettingContent(
                     modifier = modifier,
                     contentPadding = paddingValues,
-                    onItemClicked = onItemClicked
+                    onItemClicked = {
+                        onItemClicked(baseUiState.context, it)
+                    }
                 )
             }
         }

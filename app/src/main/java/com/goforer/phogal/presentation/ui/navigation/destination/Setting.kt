@@ -11,6 +11,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import com.goforer.base.customtab.openCustomTab
 import com.goforer.phogal.data.model.local.home.gallery.NameArgument
 import com.goforer.phogal.data.model.local.home.gallery.PictureArgument
 import com.goforer.phogal.data.model.local.home.gallery.WebViewArgument
@@ -37,11 +38,13 @@ object Setting : PhogalDestination {
     ) -> Unit = { navController, _, _ ->
         SettingScreen(
             baseUiState = rememberBaseUiState(),
-            onItemClicked = { index ->
+            onItemClicked = { context, index ->
                 when(index) {
-                    0 ->  navController.navigateTo(BookmarkedPhotos.route)
+                    0 -> navController.navigateTo(BookmarkedPhotos.route)
                     1 -> navController.navigateTo(FollowingUsers.route)
                     2 -> navController.navigateTo(NotificationSetting.route)
+                    4 -> openCustomTab(context, "https://lukoh.github.io/Phogal/")
+                    7 -> openCustomTab(context, "https://github.com/Lukoh/Phogal")
                     else -> {}
                 }
             }

@@ -35,7 +35,7 @@ fun BookmarkedPhotosSection(
 ) {
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(1.dp))
             .padding(
                 0.dp,
                 contentPadding.calculateTopPadding(),

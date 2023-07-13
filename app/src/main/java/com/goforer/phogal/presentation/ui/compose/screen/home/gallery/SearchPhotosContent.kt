@@ -118,7 +118,7 @@ fun SearchPhotosContent(
         if (photosContentState.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
             SearchPhotosSection(
                 modifier = Modifier
-                    .padding(top = 2.dp)
+                    .padding(top = 3.dp)
                     .weight(1f),
                 state = rememberSearchPhotosSectionState(
                     scope = photosContentState.baseUiState.scope,

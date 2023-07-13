@@ -82,7 +82,7 @@ fun SettingContent(
         middleItems.forEachIndexed { index, item ->
             SetItem(
                 modifier = Modifier,
-                index = index.plus(4),
+                index = index.plus(5),
                 text = item.text,
                 drawable = item.drawable,
                 onItemClicked = onItemClicked
@@ -103,15 +103,15 @@ fun SettingContent(
                 .align(Alignment.Start)
                 .padding(start = 16.dp)
                 .drawBehind {
-                val strokeWidth =  0.5.dp.value * density
-                val y = size.height.plus(16F)
-                drawLine(
-                    ColorSystemGray1,
-                    Offset(0f, y),
-                    Offset(size.width, y),
-                    strokeWidth
-                )
-            }
+                    val strokeWidth = 0.5.dp.value * density
+                    val y = size.height.plus(16F)
+                    drawLine(
+                        ColorSystemGray1,
+                        Offset(0f, y),
+                        Offset(size.width, y),
+                        strokeWidth
+                    )
+                }
         )
         Spacer(modifier = Modifier.height(28.dp))
         Text(
@@ -125,7 +125,7 @@ fun SettingContent(
                 .align(Alignment.Start)
                 .padding(start = 16.dp)
                 .drawBehind {
-                    val strokeWidth =  0.5.dp.value * density
+                    val strokeWidth = 0.5.dp.value * density
                     val y = size.height.plus(16F)
                     drawLine(
                         ColorSystemGray1,
@@ -147,7 +147,7 @@ fun SettingContent(
                 .align(Alignment.Start)
                 .padding(start = 16.dp)
                 .drawBehind {
-                    val strokeWidth =  0.5.dp.value * density
+                    val strokeWidth = 0.5.dp.value * density
                     val y = size.height.plus(16F)
                     drawLine(
                         ColorSystemGray1,

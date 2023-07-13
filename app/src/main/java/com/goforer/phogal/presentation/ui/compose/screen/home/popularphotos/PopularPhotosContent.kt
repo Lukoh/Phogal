@@ -50,7 +50,7 @@ fun PopularPhotosContent(
 
     if (state.popularPhotosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
         PopularPhotosSection(
-            modifier = modifier.padding(start = 2.dp, top = 4.dp, end = 2.dp),
+            modifier = modifier.padding(top = 3.dp),
             state = rememberPopularPhotosSectionState(
                 scope = state.baseUiState.scope,
                 popularPhotosUiState = state.popularPhotosUiState,

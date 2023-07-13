@@ -16,7 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 @OptIn(ExperimentalComposeUiApi::class)
 @Stable
 class BaseUiState(
-    val context: Context?,
+    val context: Context,
     val scope: CoroutineScope,
     val lifecycle: Lifecycle,
     val keyboardController: SoftwareKeyboardController?,
