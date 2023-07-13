@@ -47,7 +47,7 @@ fun BookmarkedPhotosSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(),
-            contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
+            contentPadding = PaddingValues(vertical = 8.dp),
         ) {
             itemsIndexed(
                 items = photos,

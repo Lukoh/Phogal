@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -92,6 +93,7 @@ fun PictureItem(
     ) {
         Card(
             modifier = modifier.padding(vertical = verticalPadding),
+            shape = RectangleShape,
             colors = CardDefaults.cardColors(
                 contentColor = MaterialTheme.colorScheme.primary,
                 containerColor =
@@ -160,7 +162,7 @@ fun PictureItem(
                                 Modifier.aspectRatio(intrinsicSize.width / intrinsicSize.height)
                             } ?: Modifier)
                     )
-                    .clip(RoundedCornerShape(4.dp))
+                    .clip(RoundedCornerShape(1.dp))
                     .clickable {
                         state.clickedState.value = true
                         onItemClicked.invoke(picture, state.indexState.value)
