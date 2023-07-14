@@ -54,7 +54,7 @@ fun SettingScreen(
                 }
             )
         }, content = { paddingValues ->
-            ScaffoldContent(topInterval = 16.dp) {
+            ScaffoldContent(topInterval = 2.dp) {
                 SettingContent(
                     modifier = modifier,
                     contentPadding = paddingValues,

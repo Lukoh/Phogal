@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.goforer.base.designsystem.animation.GenericCubicAnimationShape
 import com.goforer.base.designsystem.animation.animateIconScale
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.common.User
@@ -37,79 +36,73 @@ fun UserInfoBottomSheet(
     onDismissedRequest: (Boolean) -> Unit
 ) {
     TrackScreenViewEvent(screenName = "View_User_Profile_BottomSheet")
-    GenericCubicAnimationShape(
-        visible = showUserInfoBottomSheet,
-        duration = 400
-    ) { animatedShape, visible ->
-        if (visible) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    userInfoState.scope.launch {
-                        userInfoState.bottomSheetState.hide()
-                    }.invokeOnCompletion {
-                        if (!userInfoState.bottomSheetState.isVisible) {
-                            userInfoState.openBottomSheetState.value = false
-                        }
+    if (showUserInfoBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                userInfoState.scope.launch {
+                    userInfoState.bottomSheetState.hide()
+                }.invokeOnCompletion {
+                    if (!userInfoState.bottomSheetState.isVisible) {
+                        userInfoState.openBottomSheetState.value = false
                     }
+                }
 
-                    onDismissedRequest(false)
-                },
-                sheetState = userInfoState.bottomSheetState,
-                shape = animatedShape,
-                tonalElevation = 8.dp
+                onDismissedRequest(false)
+            },
+            sheetState = userInfoState.bottomSheetState,
+            tonalElevation = 8.dp
+        ) {
+            Column(
+                modifier = Modifier.wrapContentHeight(),
+                horizontalAlignment = Alignment.Start,
             ) {
-                Column(
-                    modifier = Modifier.wrapContentHeight(),
-                    horizontalAlignment = Alignment.Start,
-                ) {
-                    ProfileItem(
-                        image = user.profile_image.medium,
-                        name = user.name,
-                        nameColor = DarkGreenGray10,
-                        position = 9,
-                        onClicked = {}
+                ProfileItem(
+                    image = user.profile_image.medium,
+                    name = user.name,
+                    nameColor = DarkGreenGray10,
+                    position = 9,
+                    onClicked = {}
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                getProfileInfoItems(user).forEachIndexed { _, item ->
+                    UserInfoItem(
+                        text = item.text,
+                        textColor = DarkGreenGray10,
+                        painter = item.painter,
+                        position = item.position
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    getProfileInfoItems(user).forEachIndexed { _, item ->
-                        UserInfoItem(
-                            text = item.text,
-                            textColor = DarkGreenGray10,
-                            painter = item.painter,
-                            position = item.position
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-
-                    Row(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val animationIconScale = animateIconScale(inputScale = 0.6F, position = 1, delay = 150L)
-
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_portfolio),
-                            contentDescription = "Following",
-                            modifier = Modifier
-                                .size(22.dp)
-                                .padding(horizontal = 4.dp)
-                                .graphicsLayer {
-                                    scaleX = animationIconScale
-                                    scaleY = animationIconScale
-                                }
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        ShowPortfolioButton(
-                            scope = userInfoState.scope,
-                            bottomSheetState = userInfoState.bottomSheetState,
-                            openBottomSheetState = userInfoState.openBottomSheetState,
-                            firstName = user.first_name,
-                            onDismissedRequest = onDismissedRequest
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(36.dp))
                 }
+
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val animationIconScale = animateIconScale(inputScale = 0.6F, position = 1, delay = 150L)
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_portfolio),
+                        contentDescription = "Following",
+                        modifier = Modifier
+                            .size(22.dp)
+                            .padding(horizontal = 4.dp)
+                            .graphicsLayer {
+                                scaleX = animationIconScale
+                                scaleY = animationIconScale
+                            }
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    ShowPortfolioButton(
+                        scope = userInfoState.scope,
+                        bottomSheetState = userInfoState.bottomSheetState,
+                        openBottomSheetState = userInfoState.openBottomSheetState,
+                        firstName = user.first_name,
+                        onDismissedRequest = onDismissedRequest
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(36.dp))
             }
         }
     }
