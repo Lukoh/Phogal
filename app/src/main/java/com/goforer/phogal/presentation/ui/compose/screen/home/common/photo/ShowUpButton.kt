@@ -1,7 +1,6 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.common.photo
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material3.Text
@@ -18,8 +17,7 @@ fun ShowUpButton(modifier: Modifier, visible: Boolean, onClick: () -> Unit) {
     ) {
         FloatingActionButton(
             modifier = modifier
-                .navigationBarsPadding()
-                .padding(end = 8.dp),
+                .padding(bottom = 8.dp, end = 8.dp),
             backgroundColor = Blue70,
             onClick = onClick
         ) {
