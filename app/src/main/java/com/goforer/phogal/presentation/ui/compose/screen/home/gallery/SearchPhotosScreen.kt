@@ -101,7 +101,7 @@ fun SearchPhotosScreen(
             CustomCenterAlignedTopAppBar(
                 title = {
                     Text(
-                        stringResource(id = R.string.app_name),
+                        stringResource(id = R.string.bottom_navigation_gallery),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontFamily = FontFamily.SansSerif,
@@ -176,7 +176,7 @@ fun SearchPhotosScreenPreview() {
                 CustomCenterAlignedTopAppBar(
                     title = {
                         Text(
-                            stringResource(id = R.string.app_name),
+                            stringResource(id = R.string.bottom_navigation_gallery),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             fontFamily = FontFamily.SansSerif,
