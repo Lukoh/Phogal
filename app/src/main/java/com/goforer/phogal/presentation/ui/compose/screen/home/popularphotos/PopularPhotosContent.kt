@@ -14,7 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.PagingData
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.repository.Repository.Companion.FIRST_PAGE
 import com.goforer.phogal.data.repository.Repository.Companion.ITEM_COUNT
@@ -48,24 +47,22 @@ fun PopularPhotosContent(
         popularPhotosViewModel.trigger(1, Params(POPULAR, FIRST_PAGE, ITEM_COUNT))
     }
 
-    if (state.popularPhotosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
-        PopularPhotosSection(
-            modifier = modifier.padding(top = 0.5.dp),
-            state = rememberPopularPhotosSectionState(
-                scope = state.baseUiState.scope,
-                popularPhotosUiState = state.popularPhotosUiState,
-                refreshingState = state.refreshingState.collectAsStateWithLifecycle()
-            ),
-            onItemClicked = { photo, _ ->
-                state.enabledLoadState.value= false
-                onItemClicked(photo.id)
-            },
-            onViewPhotos = onViewPhotos,
-            onShowSnackBar = onShowSnackBar,
-            onOpenWebView = onOpenWebView,
-            onSuccess = onSuccess
-        )
-    }
+    PopularPhotosSection(
+        modifier = modifier,
+        state = rememberPopularPhotosSectionState(
+            scope = state.baseUiState.scope,
+            popularPhotosUiState = state.popularPhotosUiState,
+            refreshingState = state.refreshingState.collectAsStateWithLifecycle()
+        ),
+        onItemClicked = { photo, _ ->
+            state.enabledLoadState.value= false
+            onItemClicked(photo.id)
+        },
+        onViewPhotos = onViewPhotos,
+        onShowSnackBar = onShowSnackBar,
+        onOpenWebView = onOpenWebView,
+        onSuccess = onSuccess
+    )
 }
 
 @Preview(name = "Light Mode")

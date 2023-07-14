@@ -146,15 +146,20 @@ fun PopularPhotosSection(
                                 ),
                                 contentType = photos.itemContentType()
                             ) { index ->
+                                val padding = if (index == 0)
+                                    2.dp
+                                else
+                                    0.5.dp
                                 // After recreation, LazyPagingItems first return 0 items, then the cached items.
                                 // This behavior/issue is resetting the LazyListState scroll position.
                                 // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
                                 // If this bug will got fixed... then have to be removed below code
                                 state.visibleUpButtonState.value = visibleUpButton(index)
+
                                 PhotoItem(
-                                    modifier = modifier.animateItemPlacement(
-                                        tween(durationMillis = 250)
-                                    ),
+                                    modifier = modifier
+                                        .padding(top = padding)
+                                        .animateItemPlacement(tween(durationMillis = 250)),
                                     state = rememberPhotoItemState(
                                         indexState = rememberSaveable { mutableIntStateOf(index) },
                                         photoState = rememberSaveable { mutableStateOf(photos[index]!!) },
