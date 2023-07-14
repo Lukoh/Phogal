@@ -26,7 +26,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -72,12 +71,9 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.reme
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.follow.ShowFollowButton
 import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.Blue50
-import com.goforer.phogal.presentation.ui.theme.Blue80
-import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.DarkGreen60
 import com.goforer.phogal.presentation.ui.theme.DarkGreenGray99
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
-import com.goforer.phogal.presentation.ui.theme.Teal60
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -106,7 +102,7 @@ fun UserContainer(
                 .background(Color.Transparent)
                 .wrapContentHeight(Alignment.CenterVertically)
                 .fillMaxWidth()
-                .heightIn(88.dp, 114.dp)
+                .heightIn(76.dp, 114.dp)
                 .clickable {
                     showUserInfoBottomSheet = true
                 },
@@ -165,33 +161,26 @@ fun UserContainer(
         }
 
         if (state.visibleViewButtonState.value) {
-            IconButton(
-                modifier = Modifier.padding(start = 56.dp, top = 0.dp, bottom = 2.dp),
-                height = 32.dp,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = state.colorsState.value[3],
-                    contentColor = state.colorsState.value[4]
-                ),
-                onClick = { onViewPhotos(user.username, user.first_name,  lastName, user.username) },
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Photo,
-                        contentDescription = null,
-                    )
-                },
-                text = {
-                    Text(
-                        "${stringResource(id = R.string.picture_view_photos, user.name)}${" "}${user.total_photos}${" "}${stringResource(id = R.string.picture_photos, user.name)}",
-                        color = if (state.fromItemState.value)
-                            ColorSnowWhite
-                        else
-                            DarkGreen60,
-                        fontFamily = FontFamily.SansSerif,
-                        fontSize = 12.sp,
-                        fontStyle = FontStyle.Italic
-                    )
-                }
+            Text(
+                "${stringResource(id = R.string.picture_view_photos)}${" "}${user.total_photos}${" "}${stringResource(id = R.string.picture_photos, user.name)}",
+                modifier = Modifier
+                    .padding(start = if (state.fromItemState.value)
+                        56.dp
+                    else
+                        66.dp)
+                    .clickable {
+                        onViewPhotos(user.username, user.first_name, lastName, user.username)
+                    },
+                color = if (state.fromItemState.value)
+                    Color.White
+                else
+                    DarkGreen60,
+                fontFamily = FontFamily.SansSerif,
+                fontSize = 13.sp,
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.titleMedium
             )
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 
@@ -340,7 +329,7 @@ fun UserContainerPreview() {
                     .background(Color.Transparent)
                     .wrapContentHeight(Alignment.CenterVertically)
                     .fillMaxWidth()
-                    .heightIn(88.dp, 114.dp)
+                    .heightIn(76.dp, 114.dp)
                     .clickable {},
             ) {
                 IconContainer(36.dp) {
@@ -423,7 +412,7 @@ fun UserContainerPreview() {
                         .heightIn(42.dp)
                         .indication(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication  = rememberRipple(bounded = false)
+                            indication = rememberRipple(bounded = false)
                         ),
                     shape = MaterialTheme.shapes.small,
                     colors = ButtonDefaults.buttonColors(
@@ -438,12 +427,12 @@ fun UserContainerPreview() {
                         Icon(
                             modifier = Modifier.size(width = 28.dp, height = 28.dp),
                             imageVector = Icons.Filled.Add,
-                            contentDescription = "Follow",
+                            contentDescription = "F",
                             tint = Blue50
                         )
                         Spacer(modifier = Modifier.width(width = 4.dp))
                         Text(
-                            text = "Follow",
+                            text = "F",
                             color = Blue50,
                             fontStyle = FontStyle.Normal,
                             style = MaterialTheme.typography.titleMedium
@@ -452,29 +441,18 @@ fun UserContainerPreview() {
                 }
             }
 
-            IconButton(
-                modifier = Modifier.padding(start = 56.dp, top = 0.dp, bottom = 2.dp),
-                height = 32.dp,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Blue80,
-                    contentColor = Teal60
-                ),
-                onClick = {},
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Photo,
-                        contentDescription = null,
-                    )
-                },
-                text = {
-                    Text(
-                        stringResource(id = R.string.picture_view_photos, "Lukoh"),
-                        fontFamily = FontFamily.SansSerif,
-                        fontSize = 12.sp,
-                        fontStyle = FontStyle.Italic
-                    )
-                }
+            Text(
+                "${stringResource(id = R.string.picture_view_photos)}${" "}${77}${" "}${stringResource(id = R.string.picture_photos, "Lukoh")}",
+                modifier = Modifier
+                    .padding(start = 56.dp)
+                    .clickable {},
+                color = Color.White,
+                fontFamily = FontFamily.SansSerif,
+                fontSize = 13.sp,
+                fontStyle = FontStyle.Italic,
+                style = MaterialTheme.typography.titleMedium
             )
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 }

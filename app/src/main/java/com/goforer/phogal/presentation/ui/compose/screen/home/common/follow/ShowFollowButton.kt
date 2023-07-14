@@ -90,18 +90,18 @@ fun ShowFollowButton(
                     Icons.Filled.Check
                 else
                     Icons.Filled.Add,
-                contentDescription = "Follow",
+                contentDescription = "F",
                 tint = if (isFollowed)
                     ColorText1
                 else
                     followColor
             )
-            Spacer(modifier = Modifier.width(width = 4.dp))
+            Spacer(modifier = Modifier.width(width = 3.dp))
             Text(
                 text = if (isFollowed)
-                    "Following"
+                    "F"
                 else
-                    "Follow",
+                    "F",
                 color = if (isFollowed)
                     ColorText1
                 else
@@ -168,18 +168,18 @@ fun ShowFollowButtonPreview(modifier: Modifier = Modifier) {
                         Icons.Filled.Check
                     else
                         Icons.Filled.Add,
-                    contentDescription = "Follow",
+                    contentDescription = "F",
                     tint = if (isFollowed)
                         ColorText1
                     else
                         Blue50
                 )
-                Spacer(modifier = Modifier.width(width = 4.dp))
+                Spacer(modifier = Modifier.width(width = 3.dp))
                 Text(
                     text = if (isFollowed)
-                        "Following"
+                        "F"
                     else
-                        "Follow",
+                        "F",
                     color = if (isFollowed)
                         ColorText1
                     else

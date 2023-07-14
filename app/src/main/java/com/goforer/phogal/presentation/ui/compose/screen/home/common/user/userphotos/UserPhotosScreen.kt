@@ -134,7 +134,7 @@ fun UserPhotosScreen(
                 }
             )
         }, content = { paddingValues ->
-            ScaffoldContent(topInterval = 8.dp) {
+            ScaffoldContent(topInterval = 2.dp) {
                 UserPhotosContent(
                     modifier = modifier,
                     contentPadding = paddingValues,

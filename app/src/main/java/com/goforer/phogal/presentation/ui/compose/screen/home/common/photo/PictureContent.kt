@@ -314,7 +314,7 @@ fun BodyContent(
 
             Spacer(modifier = Modifier.height(12.dp))
             BehaviorItem(picture.likes, picture.downloads, picture.views)
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = picture.description ?: picture.alt_description
                 ?: stringResource(id = R.string.picture_no_description),
@@ -326,14 +326,14 @@ fun BodyContent(
                 fontStyle = FontStyle.Normal,
                 style = MaterialTheme.typography.titleMedium
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             picture.location?.let {
                 LocationItem(it.name)
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(2.dp))
             }
 
             DateItem(picture.created_at)
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(2.dp))
             picture.exif?.let { exif ->
                 GenericCubicAnimationShape(
                     visible = visiebleCameraInfo,
@@ -341,7 +341,7 @@ fun BodyContent(
                 ) { animatedShape, _ ->
                     ExifItem(
                         modifier = modifier
-                            .padding(horizontal = 4.dp, vertical = 8.dp)
+                            .padding(horizontal = 4.dp, vertical = 4.dp)
                             .graphicsLayer {
                                 clip = true
                                 shape = animatedShape
@@ -426,35 +426,36 @@ fun BehaviorItem(likes: Long, downloads: Long, views: Long) {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "${likes}${" "}${stringResource(id = R.string.picture_likes)}",
-            modifier = Modifier.padding(8.dp, 4.dp),
+            modifier = Modifier.padding(vertical =  4.dp),
             color = Black,
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.SemiBold,
-            fontSize = 16.sp,
+            fontSize = 13.sp,
             fontStyle = FontStyle.Normal,
             style = MaterialTheme.typography.titleMedium
         )
-        Spacer(modifier = Modifier.width(2.dp))
+        Spacer(modifier = Modifier.width(6.dp))
         Text(
             text = "${downloads}${" "}${stringResource(id = R.string.picture_downloads)}",
-            modifier = Modifier.padding(8.dp, 4.dp),
+            modifier = Modifier.padding(vertical = 4.dp),
             color = Black,
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Medium,
-            fontSize = 16.sp,
+            fontSize = 13.sp,
             fontStyle = FontStyle.Normal,
             style = MaterialTheme.typography.titleMedium
         )
-        Spacer(modifier = Modifier.width(2.dp))
+        Spacer(modifier = Modifier.width(6.dp))
         Text(
             text = "${views}${" "}${stringResource(id = R.string.picture_views)}",
-            modifier = Modifier.padding(8.dp, 4.dp),
+            modifier = Modifier.padding(vertical = 4.dp),
             color = Black,
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Medium,
-            fontSize = 16.sp,
+            fontSize = 13.sp,
             fontStyle = FontStyle.Normal,
             style = MaterialTheme.typography.titleMedium
         )
@@ -622,35 +623,36 @@ fun PictureContentPreview(modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "${"220"}${" "}${stringResource(id = R.string.picture_likes)}",
-                        modifier = Modifier.padding(8.dp, 4.dp),
+                        modifier = Modifier.padding(vertical = 4.dp),
                         color = Black,
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
+                        fontSize = 13.sp,
                         fontStyle = FontStyle.Normal,
                         style = MaterialTheme.typography.titleMedium
                     )
-                    Spacer(modifier = Modifier.width(2.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "${"400"}${" "}${stringResource(id = R.string.picture_downloads)}",
-                        modifier = Modifier.padding(8.dp, 4.dp),
+                        modifier = Modifier.padding(vertical = 4.dp),
                         color = Black,
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp,
+                        fontSize = 13.sp,
                         fontStyle = FontStyle.Normal,
                         style = MaterialTheme.typography.titleMedium
                     )
-                    Spacer(modifier = Modifier.width(2.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "${"450"}${" "}${stringResource(id = R.string.picture_views)}",
-                        modifier = Modifier.padding(8.dp, 4.dp),
+                        modifier = Modifier.padding(vertical = 4.dp),
                         color = Black,
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp,
+                        fontSize = 13.sp,
                         fontStyle = FontStyle.Normal,
                         style = MaterialTheme.typography.titleMedium
                     )
@@ -667,7 +669,7 @@ fun PictureContentPreview(modifier: Modifier = Modifier) {
                     fontStyle = FontStyle.Normal,
                     style = MaterialTheme.typography.titleMedium
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
@@ -691,8 +693,7 @@ fun PictureContentPreview(modifier: Modifier = Modifier) {
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
+                Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
@@ -716,7 +717,7 @@ fun PictureContentPreview(modifier: Modifier = Modifier) {
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically

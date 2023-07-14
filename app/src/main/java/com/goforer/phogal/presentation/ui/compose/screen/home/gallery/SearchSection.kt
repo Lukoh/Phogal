@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -45,9 +43,9 @@ import com.goforer.phogal.presentation.stateholder.uistate.EditableInputState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.SearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.rememberSearchSectionState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberEditableInputState
+import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.ColorSnowWhite
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray9
-import com.goforer.phogal.presentation.ui.theme.Orange97
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
 @Composable
@@ -62,8 +60,8 @@ fun SearchSection(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .height(IntrinsicSize.Min)
-            .background(Orange97)
+            .height(50.dp)
+            .background(Color.Transparent)
             .semantics { isTraversalGroup = true }
             .zIndex(1f)
             .wrapContentHeight(Alignment.Top)
@@ -106,7 +104,7 @@ fun SearchSection(
             ),
             shape = MaterialTheme.shapes.small,
             placeholder = {
-                Text(stringResource(R.string.placeholder_search),  style = MaterialTheme.typography.titleMedium.copy(color = LocalContentColor.current))
+                Text(stringResource(R.string.placeholder_search),  style = MaterialTheme.typography.titleMedium.copy(color = Black))
             },
             textStyle = TextStyle.Default.copy(
                 fontSize = 16.sp,
@@ -130,7 +128,7 @@ fun SearchSection(
         )
         IconButton(
             modifier = modifier.padding(horizontal = 2.dp),
-            height = 48.dp,
+            height = 42.dp,
             onClick = {
                 if (state.wordChangedState.value)
                     onSearched(state.editableInputState.textState)
@@ -171,7 +169,7 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
-                .height(IntrinsicSize.Min)
+                .height(50.dp)
                 .background(Color.Transparent)
                 .wrapContentHeight(Alignment.Top)
                 .border(
@@ -211,7 +209,7 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
                 ),
                 shape = MaterialTheme.shapes.small,
                 placeholder = {
-                    Text(stringResource(R.string.placeholder_search),  style = MaterialTheme.typography.titleMedium.copy(color = LocalContentColor.current))
+                    Text(stringResource(R.string.placeholder_search),  style = MaterialTheme.typography.titleMedium.copy(color = Black))
                 },
                 textStyle = TextStyle.Default.copy(
                     fontSize = 16.sp,
@@ -235,7 +233,7 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
             )
             IconButton(
                 modifier = modifier.padding(horizontal = 2.dp),
-                height = 48.dp,
+                height = 42.dp,
                 onClick = {},
                 icon = {
                     Icon(
