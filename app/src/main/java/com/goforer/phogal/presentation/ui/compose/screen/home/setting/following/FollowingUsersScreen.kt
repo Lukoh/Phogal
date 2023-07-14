@@ -119,7 +119,7 @@ fun FollowingUsersScreen(
         }, content = { paddingValues ->
             val text = stringResource(id = R.string.user_info_has_no_portfolio)
 
-            ScaffoldContent(topInterval = 8.dp) {
+            ScaffoldContent(topInterval = 2.dp) {
                 FollowingUsersContent(
                     modifier = modifier,
                     contentPadding = paddingValues,

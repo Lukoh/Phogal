@@ -81,7 +81,7 @@ fun PictureItem(
     val verticalPadding = if (state.indexState.value == 0)
         2.dp
     else
-        4.dp
+        0.5.dp
 
     AnimatedVisibility(
         visible = true,

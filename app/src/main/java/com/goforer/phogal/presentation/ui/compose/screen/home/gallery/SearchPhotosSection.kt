@@ -106,7 +106,7 @@ fun SearchPhotosSection(
     Box(
         modifier = modifier
             .pullRefresh(refreshState)
-            .clip(RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(0.2.dp))
     ) {
         LazyColumn(
             modifier = modifier

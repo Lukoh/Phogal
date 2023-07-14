@@ -104,7 +104,7 @@ fun PopularPhotosSection(
 
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(0.2.dp))
             .pullRefresh(refreshState)
     ) {
         LazyColumn(

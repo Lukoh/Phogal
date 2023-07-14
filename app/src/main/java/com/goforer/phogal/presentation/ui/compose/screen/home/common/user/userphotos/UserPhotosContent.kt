@@ -52,7 +52,7 @@ fun UserPhotosContent(
     if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
         UserPhotosSection(
             modifier = Modifier
-                .padding(top = 2.dp),
+                .padding(top = 0.5.dp),
             contentPadding = contentPadding,
             state = rememberUserPhotosSectionState(
                 photosUiState = state.photosUiState,
@@ -65,7 +65,7 @@ fun UserPhotosContent(
             onViewPhotos = { _, _, _, _ -> },
             onShowSnackBar = onShowSnackBar,
             onOpenWebView = { _, url ->
-                state.baseUiState.context?.let { openCustomTab(it, url) }
+                openCustomTab(state.baseUiState.context, url)
              },
             onSuccess = onSuccess
         )
@@ -99,7 +99,7 @@ fun PhotosContentPreview(modifier: Modifier = Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SearchSection(
-                    modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
+                    modifier = Modifier.padding(2.dp, 0.dp, 2.dp, 0.dp),
                     onSearched = { }
                 )
                 BoxWithConstraints(modifier = Modifier.weight(1f)) {

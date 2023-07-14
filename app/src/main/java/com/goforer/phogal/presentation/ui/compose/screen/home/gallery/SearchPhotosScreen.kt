@@ -130,7 +130,7 @@ fun SearchPhotosScreen(
                 }
             )
         }, content = { paddingValues ->
-            ScaffoldContent(topInterval = 16.dp) {
+            ScaffoldContent(topInterval = 8.dp) {
                 SearchPhotosContent(
                     modifier = modifier
                         .padding(

@@ -70,7 +70,7 @@ fun SearchPhotosContent(
             }
     ) {
         SearchSection(
-            modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),
+            modifier = Modifier.padding(2.dp, 0.dp, 2.dp, 0.dp),
             state = searchState,
             onSearched = { keyword ->
                 if (keyword.isNotEmpty() && keyword != photosContentState.wordState.value) {
@@ -95,7 +95,7 @@ fun SearchPhotosContent(
 
                     Chips(
                         modifier = Modifier
-                            .padding(top = 4.dp)
+                            .padding(top = 2.dp)
                             .graphicsLayer {
                                 clip = true
                                 shape = animatedShape
@@ -118,7 +118,7 @@ fun SearchPhotosContent(
         if (photosContentState.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
             SearchPhotosSection(
                 modifier = Modifier
-                    .padding(top = 2.dp)
+                    .padding(top = 0.5.dp)
                     .weight(1f),
                 state = rememberSearchPhotosSectionState(
                     scope = photosContentState.baseUiState.scope,

@@ -125,7 +125,7 @@ fun BookmarkedPhotosScreen(
                 }
             )
         }, content = { paddingValues ->
-            ScaffoldContent(topInterval = 8.dp) {
+            ScaffoldContent(topInterval = 2.dp) {
                 BookmarkedPhotosContent(
                     modifier = modifier,
                     contentPadding = paddingValues,

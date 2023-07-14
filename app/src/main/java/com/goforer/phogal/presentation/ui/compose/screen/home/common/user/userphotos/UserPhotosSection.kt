@@ -106,7 +106,7 @@ fun UserPhotosSection(
 
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(0.2.dp))
             .padding(
                 0.dp,
                 contentPadding.calculateTopPadding(),
