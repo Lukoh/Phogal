@@ -5,7 +5,7 @@ import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Category(
+data class CategoryUiState(
     val pretty_slug: String,
     val slug: String
 ) : BaseModel(), Parcelable

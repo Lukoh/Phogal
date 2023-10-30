@@ -42,7 +42,7 @@ import com.goforer.base.designsystem.component.ImageCrossFade
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.home.common.ProfileInfoItem
-import com.goforer.phogal.data.model.remote.response.gallery.common.User
+import com.goforer.phogal.data.model.remote.response.gallery.common.UserUiState
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
 @Composable
@@ -122,7 +122,7 @@ fun ProfileItem(
 }
 
 @Composable
-fun getProfileInfoItems(user: User) = listOf(
+fun getProfileInfoItems(user: UserUiState) = listOf(
     ProfileInfoItem(
         text = user.bio ?: stringResource(id = R.string.user_info_no_sex_info),
         painter = painterResource(id = R.drawable.ic_bio),

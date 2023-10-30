@@ -24,7 +24,7 @@ fun FollowingUsersContent(
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String?) -> Unit
 ) {
-    val users = followViewModel.followingUsersState.collectAsStateWithLifecycle().value
+    val users = followViewModel.uiState.collectAsStateWithLifecycle().value
 
     followViewModel.trigger(1)
     if (users.isNotEmpty()) {

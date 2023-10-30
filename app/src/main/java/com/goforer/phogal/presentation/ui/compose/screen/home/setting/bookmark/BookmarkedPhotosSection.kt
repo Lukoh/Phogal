@@ -19,7 +19,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.rememberPhotoItemState
 
@@ -28,8 +28,8 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.rem
 fun BookmarkedPhotosSection(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    photos: MutableList<Picture>,
-    onItemClicked: (item: Picture, index: Int) -> Unit,
+    photos: MutableList<PictureUiState>,
+    onItemClicked: (item: PictureUiState, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {

@@ -5,9 +5,8 @@ import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Sponsorship(
-    val impression_urls: List<String>? = null,
-    val sponsor: Sponsor,
-    val tagline: String,
-    val tagline_url: String? = null
+data class ProfileImageUiState(
+    val large: String,
+    val medium: String,
+    val small: String
 ) : BaseModel(), Parcelable

@@ -5,8 +5,8 @@ import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class CoverPhoto(
-    val alt_description: String,
+data class PhotoUiState(
+    val alt_description: String? = null,
     val blur_hash: String,
     val color: String,
     val created_at: String,
@@ -15,14 +15,15 @@ data class CoverPhoto(
     val id: String,
     val liked_by_user: Boolean,
     val likes: Int,
-    val links: LinksX? = null,
-    val plus: Boolean,
-    val premium: Boolean,
+    val links: LinksUiState,
+    val meta_description: String? = null,
     val promoted_at: String,
     val slug: String,
-    val topic_submissions: TopicSubmissions? = null,
+    val sponsorship: SponsorshipUiState?,
+    val tags: List<TagUiState>?,
     val updated_at: String,
-    val urls: Urls,
-    val user: User,
-    val width: Int
+    val urls: UrlsUiState,
+    val user: UserUiState,
+    val width: Int,
+    var alreadySearched: Boolean = false
 ) : BaseModel(), Parcelable

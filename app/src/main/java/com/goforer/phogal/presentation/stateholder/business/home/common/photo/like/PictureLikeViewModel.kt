@@ -1,7 +1,8 @@
 package com.goforer.phogal.presentation.stateholder.business.home.common.photo.like
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponse
+import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponseUiState
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.repository.common.photo.like.PostPictureLikeRepository
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
@@ -16,10 +17,11 @@ import javax.inject.Inject
 @HiltViewModel
 class PictureLikeViewModel
 @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val postPictureLikeRepository: PostPictureLikeRepository
-) : BaseViewModel<LikeResponse>() {
-    private val _likeUiState = MutableStateFlow(Any())
-    val likeUiState: StateFlow<Any> = _likeUiState
+) : BaseViewModel<LikeResponseUiState>() {
+    private val _uiState = MutableStateFlow(Any())
+    val uiState: StateFlow<Any> = _uiState
 
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {
@@ -30,7 +32,7 @@ class PictureLikeViewModel
                 .collectLatest {
                     val response = handleResponse(it)
 
-                    _likeUiState.value = response
+                    _uiState.value = response
                 }
         }
     }

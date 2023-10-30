@@ -46,10 +46,10 @@ import androidx.compose.ui.unit.sp
 import com.goforer.base.designsystem.animation.animateIconScale
 import com.goforer.base.designsystem.component.IconButton
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.gallery.common.LinksX
-import com.goforer.phogal.data.model.remote.response.gallery.common.ProfileImage
-import com.goforer.phogal.data.model.remote.response.gallery.common.Social
-import com.goforer.phogal.data.model.remote.response.gallery.common.User
+import com.goforer.phogal.data.model.remote.response.gallery.common.LinksXUiState
+import com.goforer.phogal.data.model.remote.response.gallery.common.ProfileImageUiState
+import com.goforer.phogal.data.model.remote.response.gallery.common.SocialUiState
+import com.goforer.phogal.data.model.remote.response.gallery.common.UserUiState
 import com.goforer.phogal.presentation.stateholder.uistate.home.setting.following.FollowingUserItemState
 import com.goforer.phogal.presentation.stateholder.uistate.home.setting.following.rememberFollowingUserItemState
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.follow.ShowFollowButton
@@ -67,9 +67,9 @@ fun FollowingUsersItem(
     state: FollowingUserItemState = rememberFollowingUserItemState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String?) -> Unit,
-    onFollow: (user: User) -> Unit
+    onFollow: (user: UserUiState) -> Unit
 ) {
-    val user = state.userState.value as User
+    val user = state.userState.value as UserUiState
     val verticalPadding = if (state.indexState.value == 0)
         2.dp
     else
@@ -227,7 +227,7 @@ fun ShowPortfolioButton(
 fun FollowingUsersItemPreview(
     modifier: Modifier = Modifier
 ) {
-    val user = User(
+    val user = UserUiState(
         accepted_tos = true,
         bio = null,
         first_name = "Ankush",
@@ -235,7 +235,7 @@ fun FollowingUsersItemPreview(
         id = "Ebx2G7C0GBo",
         instagram_username = "An.ku.sh",
         last_name = "Minda",
-        links = LinksX(
+        links = LinksXUiState(
             followers = "https://api.unsplash.com/users/an_ku_sh/followers",
             following = "https://api.unsplash.com/users/an_ku_sh/following",
             html = "https://unsplash.com/fr/@an_ku_sh",
@@ -248,12 +248,12 @@ fun FollowingUsersItemPreview(
         location = "India",
         name = "Ankush Minda",
         portfolio_url = "http://ankushminda.com",
-        profile_image = ProfileImage(
+        profile_image = ProfileImageUiState(
             large = "https://images.unsplash.com/profile-1539269396658-18762f46fa72?ixlib=rb-4.0.3&crop=faces&fit=crop&w=128&h=128",
             medium = "https://images.unsplash.com/profile-1539269396658-18762f46fa72?ixlib=rb-4.0.3&crop=faces&fit=crop&w=64&h=64",
             small = "https://images.unsplash.com/profile-1539269396658-18762f46fa72?ixlib=rb-4.0.3&crop=faces&fit=crop&w=32&h=32"
         ),
-        social = Social(
+        social = SocialUiState(
             instagram_username = "An.ku.sh",
             paypal_email = null,
             portfolio_url = "http://ankushminda.com, twitter_username=AnkushMinda",

@@ -1,8 +1,9 @@
 package com.goforer.phogal.presentation.stateholder.business.home.common.bookmark
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.goforer.phogal.data.datasource.local.LocalDataSource
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,10 +19,11 @@ import javax.inject.Inject
 class BookmarkViewModel
 @Inject
 constructor(
+    savedStateHandle: SavedStateHandle,
     private val localDataSource: LocalDataSource
-) : BaseViewModel<Picture>() {
-    private val _bookmarkPhotosUiState = MutableStateFlow(mutableListOf<Picture>())
-    val bookmarkPhotosUiState: StateFlow<MutableList<Picture>> = _bookmarkPhotosUiState
+) : BaseViewModel<PictureUiState>() {
+    private val _uiState = MutableStateFlow(mutableListOf<PictureUiState>())
+    val uiState: StateFlow<MutableList<PictureUiState>> = _uiState
 
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {
@@ -29,16 +31,16 @@ constructor(
                 localDataSource.geBookmarkedPhotos()
             ).stateIn(viewModelScope)
              .collectLatest { users ->
-                 _bookmarkPhotosUiState.value = users ?: mutableListOf()
+                 _uiState.value = users ?: mutableListOf()
              }
         }
     }
 
-    fun setBookmarkPicture(picture: Picture) {
+    fun setBookmarkPicture(picture: PictureUiState) {
         localDataSource.setBookmarkPhoto(picture)
     }
 
-    fun isPhotoBookmarked(picture: Picture) = localDataSource.isPhotoBookmarked(picture)
+    fun isPhotoBookmarked(picture: PictureUiState) = localDataSource.isPhotoBookmarked(picture)
 
     fun isPhotoBookmarked(id: String) = localDataSource.isPhotoBookmarked(id)
 }

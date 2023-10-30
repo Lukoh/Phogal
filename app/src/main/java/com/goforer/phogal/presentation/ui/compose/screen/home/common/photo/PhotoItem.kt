@@ -59,7 +59,7 @@ import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.PhotoItemState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.rememberPhotoItemState
@@ -78,12 +78,12 @@ import com.google.accompanist.placeholder.material.shimmer
 fun PhotoItem(
     modifier: Modifier = Modifier,
     state: PhotoItemState = rememberPhotoItemState(),
-    onItemClicked: (item: Photo, index: Int) -> Unit,
+    onItemClicked: (item: PhotoUiState, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
-    val photo = state.photoState.value as Photo
+    val photo = state.photoState.value as PhotoUiState
 
     photo.alreadySearched = true
     AnimatedVisibility(
@@ -119,7 +119,8 @@ fun PhotoItem(
                 size = Size(photo.width.div(8), photo.height.div(8))
             )
             val transition by animateFloatAsState(
-                targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f
+                targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f,
+                label = ""
             )
 
             if (painter.state is AsyncImagePainter.State.Loading) {

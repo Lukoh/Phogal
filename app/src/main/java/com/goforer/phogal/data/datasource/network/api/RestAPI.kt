@@ -1,11 +1,11 @@
 package com.goforer.phogal.data.datasource.network.api
 
-import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponse
-import com.goforer.phogal.data.model.remote.response.gallery.common.User
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
-import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
-import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponse
+import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponseUiState
+import com.goforer.phogal.data.model.remote.response.gallery.common.UserUiState
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
+import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponseUiState
 import com.goforer.phogal.data.datasource.network.response.ApiResponse
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -20,18 +20,18 @@ interface RestAPI {
         @Query("query") keyword: String,
         @Query("page") page: Int?,
         @Query("per_page") per_page: Int?
-    ): Flow<ApiResponse<PhotosResponse>>
+    ): Flow<ApiResponse<PhotosResponseUiState>>
 
     @GET("photos/{id}")
     fun getPhoto(
         @Path("id") id: String,
         @Query("client_id") clientId: String
-    ): Flow<ApiResponse<Picture>>
+    ): Flow<ApiResponse<PictureUiState>>
 
     @GET("users/{username}")
     fun getUserPublicProfile(
         @Path("username") username: String
-    ): Flow<ApiResponse<User>>
+    ): Flow<ApiResponse<UserUiState>>
 
     @GET("users/{username}/photos")
     fun getUserPhotos(
@@ -39,19 +39,19 @@ interface RestAPI {
         @Query("client_id") clientId: String,
         @Query("page") page: Int?,
         @Query("per_page") per_page: Int?
-    ): Flow<ApiResponse<MutableList<Photo>>>
+    ): Flow<ApiResponse<MutableList<PhotoUiState>>>
 
     @POST("photos/{id}/like")
     fun postLike(
         @Path("id") id: String,
         @Query("client_id") clientId: String
-    ): Flow<ApiResponse<LikeResponse>>
+    ): Flow<ApiResponse<LikeResponseUiState>>
 
     @DELETE("photos/{id}/like")
     fun deleteLike(
         @Path("id") id: String,
         @Query("client_id") clientId: String
-    ): Flow<ApiResponse<LikeResponse>>
+    ): Flow<ApiResponse<LikeResponseUiState>>
 
     @GET("photos")
     fun getPopularPhotos(
@@ -59,5 +59,5 @@ interface RestAPI {
         @Query("order_by") orderBy: String,
         @Query("page") page: Int?,
         @Query("per_page") per_page: Int?
-    ): Flow<ApiResponse<MutableList<Photo>>>
+    ): Flow<ApiResponse<MutableList<PhotoUiState>>>
 }

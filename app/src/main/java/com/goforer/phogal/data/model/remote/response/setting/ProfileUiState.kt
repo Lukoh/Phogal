@@ -5,7 +5,7 @@ import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Profile(
+data class ProfileUiState(
     val id: Int,
     val name: String,
     val sex: String,

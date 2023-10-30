@@ -80,8 +80,8 @@ import com.goforer.base.designsystem.animation.GenericCubicAnimationShape
 import com.goforer.base.designsystem.component.IconButton
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Exif
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.ExifUiState
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.datasource.network.response.Status
@@ -113,7 +113,7 @@ fun PictureContent(
     pictureViewModel: PictureViewModel = hiltViewModel(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onShownPhoto: (picture: Picture) -> Unit,
+    onShownPhoto: (picture: PictureUiState) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
@@ -143,11 +143,11 @@ fun HandlePictureResponse(
     state: PhotoContentState = rememberPhotoContentState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onShownPhoto: (picture: Picture) -> Unit,
+    onShownPhoto: (picture: PictureUiState) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
-    val pictureUiState = pictureViewModel.pictureUiState.collectAsStateWithLifecycle()
+    val pictureUiState = pictureViewModel.uiState.collectAsStateWithLifecycle()
 
     if (pictureUiState.value is Resource) {
         val resource = pictureUiState.value as Resource
@@ -165,7 +165,7 @@ fun HandlePictureResponse(
                     ) {
                         BodyContent(
                             modifier = modifier,
-                            picture = resource.data as Picture,
+                            picture = resource.data as PictureUiState,
                             visibleViewPhotosButton = state.visibleViewButtonState.value,
                             onViewPhotos = onViewPhotos,
                             onShowSnackBar = onShowSnackBar,
@@ -223,11 +223,11 @@ fun HandlePictureResponse(
 @Composable
 fun BodyContent(
     modifier: Modifier = Modifier,
-    picture: Picture,
+    picture: PictureUiState,
     visibleViewPhotosButton: Boolean,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onShownPhoto: (picture: Picture) -> Unit,
+    onShownPhoto: (picture: PictureUiState) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     var visiebleCameraInfo by remember { mutableStateOf(false) }
@@ -391,7 +391,7 @@ fun ImageContent(
     painter: AsyncImagePainter
 ) {
     val transition by animateFloatAsState(
-        targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f
+        targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f, label = ""
     )
 
     Image(
@@ -519,7 +519,7 @@ fun DateItem(createdAt: String) {
 @Composable
 fun ExifItem(
     modifier: Modifier = Modifier,
-    exif: Exif
+    exif: ExifUiState
 ) {
     Box(modifier) {
         Column {

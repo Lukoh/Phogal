@@ -54,7 +54,7 @@ object SearchPhotos : PhogalDestination {
             galleryViewModel = galleryViewModel,
             state = rememberSearchPhotosContentState(
                 baseUiState = rememberBaseUiState(),
-                photosUiState = galleryViewModel.photosUiState,
+                photosUiState = galleryViewModel.uiState,
                 refreshingState = galleryViewModel.isRefreshing
             ),
             onItemClicked = { id ->
@@ -181,7 +181,7 @@ object UserPhotos : PhogalDestination {
                     baseUiState = rememberBaseUiState(),
                     nameState = rememberSaveable { mutableStateOf(nameArgument.name) },
                     firstNameState = rememberSaveable { mutableStateOf(nameArgument.firstName) },
-                    photosUiState = userPhotosViewModel.photosUiState,
+                    photosUiState = userPhotosViewModel.uiState,
                     refreshingState = userPhotosViewModel.isRefreshing
                 ),
                 onItemClicked = { id ->

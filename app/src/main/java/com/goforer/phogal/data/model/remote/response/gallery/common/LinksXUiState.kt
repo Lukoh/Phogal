@@ -5,9 +5,13 @@ import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Links(
-    val download: String,
-    val download_location: String?,
+data class LinksXUiState(
+    val followers: String?,
+    val following: String?,
     val html: String,
+    val likes: String,
+    val photos: String,
+    val portfolio: String?,
+    val related: String? = null,
     val self: String
 ) : BaseModel(), Parcelable

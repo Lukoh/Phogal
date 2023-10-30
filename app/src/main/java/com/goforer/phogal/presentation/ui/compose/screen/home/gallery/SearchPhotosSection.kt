@@ -48,7 +48,7 @@ import com.goforer.base.designsystem.component.state.rememberCurrentScrollOffset
 import com.goforer.base.designsystem.component.state.rememberLazyListState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
-import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.business.home.common.bookmark.BookmarkViewModel
@@ -69,14 +69,14 @@ fun SearchPhotosSection(
     modifier: Modifier = Modifier,
     state: SearchPhotosSectionState = rememberSearchPhotosSectionState(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
-    onItemClicked: (item: Photo, index: Int) -> Unit,
+    onItemClicked: (item: PhotoUiState, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onLoadSuccess: (isSuccessful: Boolean) -> Unit,
     onScroll: (isScrolling: Boolean) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
-    val photos = (state.photosUiState as StateFlow<PagingData<Photo>>).collectAsLazyPagingItems()
+    val photos = (state.photosUiState as StateFlow<PagingData<PhotoUiState>>).collectAsLazyPagingItems()
     // After recreation, LazyPagingItems first return 0 items, then the cached items.
     // This behavior/issue is resetting the LazyListState scroll position.
     // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.

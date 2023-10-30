@@ -7,7 +7,7 @@ import com.goforer.phogal.BuildConfig
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.datasource.network.response.Status
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
-import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.data.repository.BasePagingSource
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 class GetPopularPhotosPagingSource
 @Inject
-constructor() : BasePagingSource<Int, MutableList<Photo>, Photo>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Photo> {
+constructor() : BasePagingSource<Int, MutableList<PhotoUiState>, PhotoUiState>() {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PhotoUiState> {
         val page = params.key ?: 1
 
         return try {
@@ -26,9 +26,9 @@ constructor() : BasePagingSource<Int, MutableList<Photo>, Photo>() {
             when(resource.status) {
                 Status.SUCCESS -> {
                     LoadResult.Page(
-                        data = resource.data as MutableList<Photo>,
+                        data = resource.data as MutableList<PhotoUiState>,
                         prevKey = if (page == 1) null else page - 1,
-                        nextKey = if((resource.data as MutableList<Photo>).isEmpty()) null else page + 1
+                        nextKey = if((resource.data as MutableList<PhotoUiState>).isEmpty()) null else page + 1
                     )
                 }
                 Status.ERROR -> {
@@ -42,9 +42,9 @@ constructor() : BasePagingSource<Int, MutableList<Photo>, Photo>() {
                 }
                 Status.LOADING -> {
                     LoadResult.Page(
-                        data = resource.data as MutableList<Photo>,
+                        data = resource.data as MutableList<PhotoUiState>,
                         prevKey = if (page == 1) null else page - 1,
-                        nextKey = if((resource.data as MutableList<Photo>).isEmpty()) null else page + 1
+                        nextKey = if((resource.data as MutableList<PhotoUiState>).isEmpty()) null else page + 1
                     )
                 }
             }
@@ -58,7 +58,7 @@ constructor() : BasePagingSource<Int, MutableList<Photo>, Photo>() {
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Photo>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, PhotoUiState>): Int? {
         // Try to find the page key of the closest page to anchorPosition, from
         // either the prevKey or the nextKey, but you need to handle nullability
         // here:

@@ -20,7 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.goforer.base.designsystem.animation.animateIconScale
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.gallery.common.User
+import com.goforer.phogal.data.model.remote.response.gallery.common.UserUiState
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.UserInfoState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserInfoState
@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun UserInfoBottomSheet(
     userInfoState: UserInfoState = rememberUserInfoState(),
-    user: User,
+    user: UserUiState,
     showUserInfoBottomSheet: Boolean,
     onDismissedRequest: (Boolean) -> Unit
 ) {

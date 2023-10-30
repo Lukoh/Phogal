@@ -5,11 +5,9 @@ import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Urls(
-    val full: String,
-    val raw: String,
-    val regular: String,
-    val small: String,
-    val small_s3: String? = null,
-    val thumb: String
+data class SocialUiState(
+    val instagram_username: String,
+    val paypal_email: String? = null,
+    val portfolio_url: String,
+    val twitter_username: String
 ) : BaseModel(), Parcelable

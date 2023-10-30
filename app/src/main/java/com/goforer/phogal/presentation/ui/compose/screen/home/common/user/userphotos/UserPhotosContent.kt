@@ -37,7 +37,7 @@ fun UserPhotosContent(
     contentPadding: PaddingValues = PaddingValues(4.dp),
     userPhotosViewModel: UserPhotosViewModel = hiltViewModel(),
     state: UserPhotosContentState = rememberUserPhotosContentState(
-        photosUiState = userPhotosViewModel.photosUiState,
+        photosUiState = userPhotosViewModel.uiState,
         refreshingState = userPhotosViewModel.isRefreshing,
     ),
     onItemClicked: (id: String) -> Unit,

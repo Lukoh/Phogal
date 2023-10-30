@@ -5,9 +5,12 @@ import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Location(
-    val city: String,
-    val country: String,
-    val name: String?,
-    val position: Position
+data class ExifUiState(
+    val aperture: String?,
+    val exposure_time: String?,
+    val focal_length: String?,
+    val iso: Int?,
+    val make: String?,
+    val model: String?,
+    val name: String?
 ) : BaseModel(), Parcelable

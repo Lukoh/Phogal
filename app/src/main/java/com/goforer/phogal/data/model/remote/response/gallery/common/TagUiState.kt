@@ -5,8 +5,8 @@ import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class ProfileImage(
-    val large: String,
-    val medium: String,
-    val small: String
+data class TagUiState(
+    val source: SourceUiState?,
+    val title: String?,
+    val type: String?
 ) : BaseModel(), Parcelable

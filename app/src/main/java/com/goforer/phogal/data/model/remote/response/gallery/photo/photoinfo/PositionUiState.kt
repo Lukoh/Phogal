@@ -5,8 +5,7 @@ import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class RelatedCollections(
-    val results: List<Result>,
-    val total: Long,
-    val type: String
+data class PositionUiState(
+    val latitude: Double,
+    val longitude: Double
 ) : BaseModel(), Parcelable

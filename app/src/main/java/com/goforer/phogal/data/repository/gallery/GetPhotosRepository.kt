@@ -3,8 +3,8 @@ package com.goforer.phogal.data.repository.gallery
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
 import com.goforer.phogal.data.datasource.network.api.Params
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.data.repository.BasePagingSource
 import com.goforer.phogal.data.repository.gallery.paging.GetPhotosPagingSource
@@ -15,10 +15,10 @@ import javax.inject.Singleton
 @Singleton
 class GetPhotosRepository
 @Inject
-constructor() : Repository<PagingData<Photo>>() {
+constructor() : Repository<PagingData<PhotoUiState>>() {
     private lateinit var pagingSource: GetPhotosPagingSource
 
-    override fun trigger(replyCount: Int, params: Params): Flow<PagingData<Photo>> {
+    override fun trigger(replyCount: Int, params: Params): Flow<PagingData<PhotoUiState>> {
         Repository.replyCount = replyCount
         return Pager(
             config = PagingConfig(

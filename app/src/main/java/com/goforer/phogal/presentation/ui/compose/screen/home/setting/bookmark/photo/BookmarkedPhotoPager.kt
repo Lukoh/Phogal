@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.photo.ImageContent
 import kotlin.math.absoluteValue
@@ -32,7 +32,7 @@ import kotlin.math.absoluteValue
 fun BookmarkedPhotoScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    photos: List<Picture>
+    photos: List<PictureUiState>
 ) {
     Box(
         modifier = modifier.fillMaxSize()
@@ -57,7 +57,7 @@ fun BookmarkedPhotoScreen(
             flingBehavior = PagerDefaults.flingBehavior(state = pagerState),
             key = null,
             pageNestedScrollConnection = remember(pagerState) {
-                PagerDefaults.pageNestedScrollConnection(pagerState, Orientation.Horizontal)
+                PagerDefaults.pageNestedScrollConnection(Orientation.Horizontal)
             }
         ) { page ->
             Column(

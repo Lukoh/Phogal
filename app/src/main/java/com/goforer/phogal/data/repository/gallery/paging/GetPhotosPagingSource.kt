@@ -3,10 +3,10 @@ package com.goforer.phogal.data.repository.gallery.paging
 import androidx.paging.PagingState
 import com.goforer.phogal.BuildConfig
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
-import com.goforer.phogal.data.model.remote.response.gallery.common.Photo
-import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponse
+import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponseUiState
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.datasource.network.response.Status
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.data.repository.BasePagingSource
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 class GetPhotosPagingSource
 @Inject
-constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Photo> {
+constructor() : BasePagingSource<Int, PhotosResponseUiState, PhotoUiState>() {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PhotoUiState> {
         val page = params.key ?: 1
 
         return try {
@@ -25,9 +25,9 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
             when(resource.status) {
                 Status.SUCCESS -> {
                     LoadResult.Page(
-                        data = (resource.data as PhotosResponse).results,
+                        data = (resource.data as PhotosResponseUiState).results,
                         prevKey = if (page == 1) null else page - 1,
-                        nextKey = if ((resource.data as PhotosResponse).results.isEmpty()) null else page + 1
+                        nextKey = if ((resource.data as PhotosResponseUiState).results.isEmpty()) null else page + 1
                     )
                 }
                 Status.ERROR -> {
@@ -41,9 +41,9 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
                 }
                 Status.LOADING -> {
                     LoadResult.Page(
-                        data = (resource.data as PhotosResponse).results,
+                        data = (resource.data as PhotosResponseUiState).results,
                         prevKey = if (page == 1) null else page - 1,
-                        nextKey = if ((resource.data as PhotosResponse).results.isEmpty()) null else page + 1
+                        nextKey = if ((resource.data as PhotosResponseUiState).results.isEmpty()) null else page + 1
                     )
                 }
             }
@@ -57,7 +57,7 @@ constructor() : BasePagingSource<Int, PhotosResponse, Photo>() {
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Photo>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, PhotoUiState>): Int? {
         // Try to find the page key of the closest page to anchorPosition, from
         // either the prevKey or the nextKey, but you need to handle nullability
         // here:

@@ -1,7 +1,8 @@
 package com.goforer.phogal.presentation.stateholder.business.home.common.photo.info
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.repository.common.photo.info.GetPictureRepository
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
@@ -16,10 +17,11 @@ import javax.inject.Inject
 @HiltViewModel
 class PictureViewModel
 @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getPictureRepository: GetPictureRepository
-) : BaseViewModel<Picture>() {
-    private val _pictureUiState = MutableStateFlow(Any())
-    val pictureUiState: StateFlow<Any> = _pictureUiState
+) : BaseViewModel<PictureUiState>() {
+    private val _uiState = MutableStateFlow(Any())
+    val uiState: StateFlow<Any> = _uiState
 
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {
@@ -30,7 +32,7 @@ class PictureViewModel
              .collectLatest {
                  val response = handleResponse(it)
 
-                _pictureUiState.value = response
+                 _uiState.value = response
              }
         }
     }

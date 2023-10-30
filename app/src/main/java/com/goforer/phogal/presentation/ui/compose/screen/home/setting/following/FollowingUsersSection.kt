@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.goforer.phogal.data.model.remote.response.gallery.common.User
+import com.goforer.phogal.data.model.remote.response.gallery.common.UserUiState
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.business.home.common.follow.FollowViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.setting.following.rememberFollowingUserItemState
@@ -31,10 +31,10 @@ fun FollowingUsersSection(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     followViewModel: FollowViewModel = hiltViewModel(),
-    users: MutableList<User>,
+    users: MutableList<UserUiState>,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String?) -> Unit,
-    onFollow: (user: User) -> Unit
+    onFollow: (user: UserUiState) -> Unit
 ) {
     Box(
         modifier = modifier

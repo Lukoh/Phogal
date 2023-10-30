@@ -54,7 +54,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.PhotoItemState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.rememberPhotoItemState
@@ -72,12 +72,12 @@ import com.google.accompanist.placeholder.material.shimmer
 fun PictureItem(
     modifier: Modifier = Modifier,
     state: PhotoItemState = rememberPhotoItemState(),
-    onItemClicked: (item: Picture, index: Int) -> Unit,
+    onItemClicked: (item: PictureUiState, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
-    val picture = state.photoState.value as Picture
+    val picture = state.photoState.value as PictureUiState
     val verticalPadding = if (state.indexState.value == 0)
         2.dp
     else
@@ -116,7 +116,8 @@ fun PictureItem(
                 size = Size(picture.width.div(8), picture.height.div(8))
             )
             val transition by animateFloatAsState(
-                targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f
+                targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f,
+                label = ""
             )
 
             if (painter.state is AsyncImagePainter.State.Loading) {

@@ -1,11 +1,11 @@
-package com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo
+package com.goforer.phogal.data.model.remote.response.gallery.photos
 
 import android.os.Parcelable
 import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Position(
-    val latitude: Double,
-    val longitude: Double
+data class SubcategoryUiState(
+    val pretty_slug: String,
+    val slug: String
 ) : BaseModel(), Parcelable

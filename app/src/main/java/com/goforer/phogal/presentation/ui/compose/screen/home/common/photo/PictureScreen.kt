@@ -50,7 +50,7 @@ import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
 import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.Errors
-import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponse
+import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponseUiState
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.datasource.network.response.Status
@@ -241,13 +241,13 @@ fun LikeResponseHandle(
     state: PhotoContentState = rememberPhotoContentState(),
     showDialogState: MutableState<Boolean>
 ) {
-    val likeUiState = likeViewModel.likeUiState.collectAsStateWithLifecycle()
+    val likeUiState = likeViewModel.uiState.collectAsStateWithLifecycle()
 
     if (likeUiState.value is Resource) {
         val resource = likeUiState.value as Resource
         when(resource.status) {
             Status.SUCCESS -> {
-                val likeResponse = resource.data as LikeResponse
+                val likeResponse = resource.data as LikeResponseUiState
 
                 state.enabledLikeState.value = likeResponse.photo.liked_by_user
                 Timber.d("Like Success : %s", state.enabledLikeState.value.toString())
@@ -290,13 +290,13 @@ fun UnlikeResponseHandle(
     state: PhotoContentState = rememberPhotoContentState(),
     showDialogState: MutableState<Boolean>
 ) {
-    val unlikeUiState = unLikeViewModel.unlikeUiState.collectAsStateWithLifecycle()
+    val unlikeUiState = unLikeViewModel.uiState.collectAsStateWithLifecycle()
 
     if (unlikeUiState.value is Resource) {
         val resource = unlikeUiState.value as Resource
         when(resource.status) {
             Status.SUCCESS -> {
-                val likeResponse = resource.data as LikeResponse
+                val likeResponse = resource.data as LikeResponseUiState
 
                 state.enabledLikeState.value = likeResponse.photo.liked_by_user
                 Timber.d("Like Success : %s", state.enabledLikeState.value.toString())

@@ -1,8 +1,9 @@
 package com.goforer.phogal.presentation.stateholder.business.home.setting.notification
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.goforer.phogal.data.datasource.local.LocalDataSource
-import com.goforer.phogal.data.model.remote.response.gallery.common.User
+import com.goforer.phogal.data.model.remote.response.gallery.common.UserUiState
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,8 +13,9 @@ import javax.inject.Inject
 class NotificationSettingViewModel
 @Inject
 constructor(
+    savedStateHandle: SavedStateHandle,
     private val localDataSource: LocalDataSource
-) : BaseViewModel<User>() {
+) : BaseViewModel<UserUiState>() {
 
     companion object {
         const val FOLLOWING_NOTIFICATION_SETTING = 0

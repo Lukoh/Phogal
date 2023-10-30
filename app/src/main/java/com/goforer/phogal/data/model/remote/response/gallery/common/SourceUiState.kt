@@ -5,9 +5,9 @@ import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Source(
-    val ancestry: Ancestry?,
-    val cover_photo: CoverPhoto?,
+data class SourceUiState(
+    val ancestry: AncestryUiState?,
+    val cover_photo: CoverPhotoUiState?,
     val description: String?,
     val meta_description: String?,
     val meta_title: String?,

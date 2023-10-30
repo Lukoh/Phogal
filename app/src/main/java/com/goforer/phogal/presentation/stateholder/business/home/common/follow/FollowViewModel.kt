@@ -1,8 +1,9 @@
 package com.goforer.phogal.presentation.stateholder.business.home.common.follow
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.goforer.phogal.data.datasource.local.LocalDataSource
-import com.goforer.phogal.data.model.remote.response.gallery.common.User
+import com.goforer.phogal.data.model.remote.response.gallery.common.UserUiState
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,10 +19,11 @@ import javax.inject.Inject
 class FollowViewModel
 @Inject
 constructor(
+    savedStateHandle: SavedStateHandle,
     private val localDataSource: LocalDataSource
-) : BaseViewModel<User>() {
-    private val _followingUsersUiState = MutableStateFlow(mutableListOf<User>())
-    val followingUsersState: StateFlow<MutableList<User>> = _followingUsersUiState
+) : BaseViewModel<UserUiState>() {
+    private val _uiState = MutableStateFlow(mutableListOf<UserUiState>())
+    val uiState: StateFlow<MutableList<UserUiState>> = _uiState
 
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {
@@ -29,14 +31,14 @@ constructor(
                 localDataSource.getFollowingUsers()
             ).stateIn(viewModelScope)
              .collectLatest { users ->
-                 _followingUsersUiState.value = users ?: mutableListOf()
+                 _uiState.value = users ?: mutableListOf()
              }
         }
     }
 
-    fun setUserFollow(user: User) {
+    fun setUserFollow(user: UserUiState) {
         localDataSource.setFollowingUser(user)
     }
 
-    fun isUserFollowed(user: User) = localDataSource.isUserFollowed(user)
+    fun isUserFollowed(user: UserUiState) = localDataSource.isUserFollowed(user)
 }

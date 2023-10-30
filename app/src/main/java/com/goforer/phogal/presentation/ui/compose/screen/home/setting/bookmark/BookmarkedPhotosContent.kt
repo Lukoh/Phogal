@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.goforer.phogal.presentation.stateholder.business.home.common.bookmark.BookmarkViewModel
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.InitScreen
 
@@ -22,11 +22,11 @@ fun BookmarkedPhotosContent(
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
     contentPadding: PaddingValues = PaddingValues(4.dp),
     enabledLoadPhotosState: MutableState<Boolean>,
-    onItemClicked: (item: Picture, index: Int) -> Unit,
+    onItemClicked: (item: PictureUiState, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
-    val bookmarkedPictures = bookmarkViewModel.bookmarkPhotosUiState.collectAsStateWithLifecycle().value
+    val bookmarkedPictures = bookmarkViewModel.uiState.collectAsStateWithLifecycle().value
 
     bookmarkViewModel.trigger(1)
     if (bookmarkedPictures.isNotEmpty()) {

@@ -75,7 +75,9 @@ fun HomeScreen(
     state: MainScreenState
 ) {
     var bottomBarVisible by remember { mutableStateOf(false) }
-    val bottomBarOffset by animateDpAsState(targetValue = if (bottomBarVisible) 0.dp else 56.dp)
+    val bottomBarOffset by animateDpAsState(targetValue = if (bottomBarVisible) 0.dp else 56.dp,
+        label = ""
+    )
     var currentRoute by rememberSaveable { mutableStateOf("") }
 
     Scaffold(

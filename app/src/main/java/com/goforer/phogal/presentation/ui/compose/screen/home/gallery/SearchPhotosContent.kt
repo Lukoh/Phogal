@@ -53,7 +53,7 @@ fun SearchPhotosContent(
     searchWordViewModel: SearchWordViewModel = hiltViewModel(),
     photosContentState: SearchPhotosContentState = rememberSearchPhotosContentState(
         baseUiState = rememberBaseUiState(),
-        photosUiState = galleryViewModel.photosUiState,
+        photosUiState = galleryViewModel.uiState,
         refreshingState = galleryViewModel.isRefreshing
     ),
     searchState: SearchSectionState = rememberSearchSectionState(enabledState = photosContentState.enabledState),

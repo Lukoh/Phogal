@@ -40,7 +40,7 @@ import com.goforer.base.designsystem.component.IconContainer
 import com.goforer.base.designsystem.component.ImageCrossFade
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.setting.Profile
+import com.goforer.phogal.data.model.remote.response.setting.ProfileUiState
 import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray1
@@ -48,8 +48,8 @@ import com.goforer.phogal.presentation.ui.theme.ColorSystemGray1
 @Composable
 fun SetProfileItem(
     modifier: Modifier = Modifier,
-    profile: Profile,
-    onItemClicked: (profile: Profile) -> Unit
+    profile: ProfileUiState,
+    onItemClicked: (profile: ProfileUiState) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -149,7 +149,7 @@ fun SetProfileItem(
 )
 @Composable
 fun SetProfileItemPreview(modifier: Modifier = Modifier) {
-    val profile = Profile(0,"Lukoh", "남성",
+    val profile = ProfileUiState(0,"Lukoh", "남성",
         favor = true,
         followed = true,
         email = "lukoh.nam@gmail.com",

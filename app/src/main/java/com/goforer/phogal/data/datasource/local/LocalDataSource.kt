@@ -7,8 +7,8 @@ import android.security.keystore.KeyProperties
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
-import com.goforer.phogal.data.model.remote.response.gallery.common.User
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.Picture
+import com.goforer.phogal.data.model.remote.response.gallery.common.UserUiState
+import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import timber.log.Timber
@@ -96,14 +96,14 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         editor.commit()
     }
 
-    internal fun geBookmarkedPhotos(): MutableList<Picture>? {
+    internal fun geBookmarkedPhotos(): MutableList<PictureUiState>? {
         val json = pref.getString(key_bookmark_photos, null)
-        val type = object : TypeToken<ArrayList<Picture>>() {}.type
+        val type = object : TypeToken<ArrayList<PictureUiState>>() {}.type
 
         return Gson().fromJson(json, type)
     }
 
-    internal fun isPhotoBookmarked(photo: Picture): Boolean {
+    internal fun isPhotoBookmarked(photo: PictureUiState): Boolean {
         val photos = geBookmarkedPhotos()
 
         return if (photos.isNullOrEmpty()) {
@@ -127,11 +127,11 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         }
     }
 
-    internal fun setBookmarkPhoto(bookmarkedPhoto: Picture): MutableList<Picture>? {
+    internal fun setBookmarkPhoto(bookmarkedPhoto: PictureUiState): MutableList<PictureUiState>? {
         val editor = pref.edit()
         var photos = geBookmarkedPhotos()
         val json: String
-        val type = object : TypeToken<ArrayList<Picture>>() {}.type
+        val type = object : TypeToken<ArrayList<PictureUiState>>() {}.type
 
         if (photos.isNullOrEmpty()) {
             photos = mutableListOf()
@@ -171,14 +171,14 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         editor.apply()
     }
 
-    internal fun getFollowingUsers(): MutableList<User>? {
+    internal fun getFollowingUsers(): MutableList<UserUiState>? {
         val json = pref.getString(key_following_user, null)
-        val type = object : TypeToken<ArrayList<User>>() {}.type
+        val type = object : TypeToken<ArrayList<UserUiState>>() {}.type
 
         return Gson().fromJson(json, type)
     }
 
-    internal fun isUserFollowed(user: User): Boolean {
+    internal fun isUserFollowed(user: UserUiState): Boolean {
         val users = getFollowingUsers()
 
         return if (users.isNullOrEmpty()) {
@@ -190,11 +190,11 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         }
     }
 
-    internal fun setFollowingUser(user: User): MutableList<User>? {
+    internal fun setFollowingUser(user: UserUiState): MutableList<UserUiState>? {
         val editor = pref.edit()
         var users = getFollowingUsers()
         val json: String
-        val type = object : TypeToken<ArrayList<User>>() {}.type
+        val type = object : TypeToken<ArrayList<UserUiState>>() {}.type
 
         if (users.isNullOrEmpty()) {
             users = mutableListOf()

@@ -5,7 +5,7 @@ import com.goforer.phogal.data.model.BaseModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Sponsor(
+data class SponsorUiState(
     val accepted_tos: Boolean,
     val bio: String,
     val first_name: String,
@@ -13,12 +13,12 @@ data class Sponsor(
     val id: String,
     val instagram_username: String,
     val last_name: String? = null,
-    val links: LinksX,
+    val links: LinksXUiState,
     val location: String,
     val name: String,
     val portfolio_url: String,
-    val profile_image: ProfileImage,
-    val social: Social,
+    val profile_image: ProfileImageUiState,
+    val social: SocialUiState,
     val total_collections: Int,
     val total_likes: Int,
     val total_photos: Int,
