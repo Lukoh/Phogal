@@ -29,7 +29,7 @@ fun BookmarkedPhotosSection(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     photos: MutableList<PictureUiState>,
-    onItemClicked: (item: PictureUiState, index: Int) -> Unit,
+    onItemClicked: (pictureUiState: PictureUiState, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {

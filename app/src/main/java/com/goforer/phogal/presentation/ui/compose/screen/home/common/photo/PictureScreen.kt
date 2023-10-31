@@ -163,13 +163,13 @@ fun PictureScreen(
                             ),
                             onClick = {
                                 showDialogState.value = true
-                                if (!state.picture?.liked_by_user!!)
+                                if (!state.pictureUiState?.liked_by_user!!)
                                     likeViewModel.trigger(1, Params(state.idState.value))
                                 else
                                     unLikeViewModel.trigger(1, Params(state.idState.value))
                             }
                         ) {
-                            state.picture?.liked_by_user?.let { liked ->
+                            state.pictureUiState?.liked_by_user?.let { liked ->
                                 Icon(
                                     imageVector = if (liked)
                                         ImageVector.vectorResource(id = R.drawable.ic_like_on)
@@ -188,7 +188,7 @@ fun PictureScreen(
                                     Color.Black,
                             ),
                             onClick = {
-                                state.picture?.let {
+                                state.pictureUiState?.let {
                                     bookmarkViewModel.setBookmarkPicture(it)
                                 }
 
@@ -220,7 +220,7 @@ fun PictureScreen(
                         }
                     },
                     onShownPhoto = {
-                        state.picture = it
+                        state.pictureUiState = it
                         state.visibleActionsState.value = true
                         state.enabledBookmarkState.value =  bookmarkViewModel.isPhotoBookmarked(it)
                     },
@@ -247,9 +247,9 @@ fun LikeResponseHandle(
         val resource = likeUiState.value as Resource
         when(resource.status) {
             Status.SUCCESS -> {
-                val likeResponse = resource.data as LikeResponseUiState
+                val likeResponseUiState = resource.data as LikeResponseUiState
 
-                state.enabledLikeState.value = likeResponse.photo.liked_by_user
+                state.enabledLikeState.value = likeResponseUiState.photo.liked_by_user
                 Timber.d("Like Success : %s", state.enabledLikeState.value.toString())
             }
             Status.LOADING -> {}
@@ -294,16 +294,15 @@ fun UnlikeResponseHandle(
 
     if (unlikeUiState.value is Resource) {
         val resource = unlikeUiState.value as Resource
+
         when(resource.status) {
             Status.SUCCESS -> {
-                val likeResponse = resource.data as LikeResponseUiState
+                val likeResponseUiState = resource.data as LikeResponseUiState
 
-                state.enabledLikeState.value = likeResponse.photo.liked_by_user
+                state.enabledLikeState.value = likeResponseUiState.photo.liked_by_user
                 Timber.d("Like Success : %s", state.enabledLikeState.value.toString())
             }
-            Status.LOADING -> {
-
-            }
+            Status.LOADING -> {}
             Status.ERROR-> {
                 state.enabledLikeState.value = true
                 Timber.d("Unlike Failed : %s", state.enabledLikeState.value.toString())

@@ -7,10 +7,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class PreviewPhotoUiState(
-    val blur_hash: String,
-    val created_at: String,
-    val id: String,
-    val slug: String,
-    val updated_at: String,
-    val urls: UrlsUiState
+    val blur_hash: String = "",
+    val created_at: String = "",
+    val id: String = "",
+    val slug: String = "",
+    val updated_at: String = "",
+    val urls: UrlsUiState = UrlsUiState()
 ) : BaseModel(), Parcelable

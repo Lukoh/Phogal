@@ -6,12 +6,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class LinksXUiState(
-    val followers: String?,
-    val following: String?,
-    val html: String,
-    val likes: String,
-    val photos: String,
-    val portfolio: String?,
+    val followers: String? = null,
+    val following: String? = null,
+    val html: String = "",
+    val likes: String = "",
+    val photos: String = "",
+    val portfolio: String? = null,
     val related: String? = null,
-    val self: String
+    val self: String = ""
 ) : BaseModel(), Parcelable

@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class PhotosResponseUiState(
-    val results: MutableList<PhotoUiState>,
-    val total: Int,
-    val total_pages: Int
+    val results: MutableList<PhotoUiState> = listOf<PhotoUiState>().toMutableList(),
+    val total: Int = 0,
+    val total_pages: Int = 0
 ) : BaseModel(), Parcelable

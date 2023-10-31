@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ProfileImageUiState(
-    val large: String,
-    val medium: String,
-    val small: String
+    val large: String = "",
+    val medium: String = "",
+    val small: String = ""
 ) : BaseModel(), Parcelable

@@ -21,7 +21,7 @@ class PhotoContentState(
     var enabledLikeState: MutableState<Boolean>,
     var visibleActionsState: MutableState<Boolean>
 ) {
-    var picture: PictureUiState? = null
+    var pictureUiState: PictureUiState? = null
 }
 
 @OptIn(ExperimentalComposeUiApi::class)

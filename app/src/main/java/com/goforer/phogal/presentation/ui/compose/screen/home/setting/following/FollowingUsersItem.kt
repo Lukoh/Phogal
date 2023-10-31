@@ -67,9 +67,9 @@ fun FollowingUsersItem(
     state: FollowingUserItemState = rememberFollowingUserItemState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String?) -> Unit,
-    onFollow: (user: UserUiState) -> Unit
+    onFollow: (userUiState: UserUiState) -> Unit
 ) {
-    val user = state.userState.value as UserUiState
+    val userUiState = state.userState.value as UserUiState
     val verticalPadding = if (state.indexState.value == 0)
         2.dp
     else
@@ -112,16 +112,16 @@ fun FollowingUsersItem(
                         .fillMaxWidth()
                 ) {
                     ProfileItem(
-                        image = user.profile_image.medium,
-                        name = user.name,
+                        image = userUiState.profile_image.medium,
+                        name = userUiState.name,
                         nameColor = Color.White,
                         position = 9,
                         onClicked = {
                             onViewPhotos(
-                                user.username,
-                                user.first_name,
-                                user.last_name ?: "",
-                                user.username
+                                userUiState.username,
+                                userUiState.first_name,
+                                userUiState.last_name ?: "",
+                                userUiState.username
                             )
                         }
                     )
@@ -131,11 +131,11 @@ fun FollowingUsersItem(
                         followColor = Blue50,
                         isUserFollowed = state.followedState.value
                     ) {
-                       onFollow(user)
+                       onFollow(userUiState)
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                getProfileInfoItems(user).forEachIndexed { _, item ->
+                getProfileInfoItems(userUiState).forEachIndexed { _, item ->
                     UserInfoItem(
                         text = item.text,
                         textColor = Color.White,
@@ -165,9 +165,9 @@ fun FollowingUsersItem(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     ShowPortfolioButton(
-                        firstName = user.first_name,
+                        firstName = userUiState.first_name,
                         onOpenWebView = {
-                            onOpenWebView(user.first_name, user.portfolio_url)
+                            onOpenWebView(userUiState.first_name, userUiState.portfolio_url)
                         }
                     )
                 }
@@ -227,7 +227,7 @@ fun ShowPortfolioButton(
 fun FollowingUsersItemPreview(
     modifier: Modifier = Modifier
 ) {
-    val user = UserUiState(
+    val userUiState = UserUiState(
         accepted_tos = true,
         bio = null,
         first_name = "Ankush",
@@ -296,14 +296,14 @@ fun FollowingUsersItemPreview(
             ) {
                 Spacer(modifier = Modifier.height(8.dp))
                 ProfileItem(
-                    image = user.profile_image.medium,
-                    name = user.name,
+                    image = userUiState.profile_image.medium,
+                    name = userUiState.name,
                     nameColor = Color.White,
                     position = 9,
                     onClicked = {}
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                getProfileInfoItems(user).forEachIndexed { _, item ->
+                getProfileInfoItems(userUiState).forEachIndexed { _, item ->
                     UserInfoItem(
                         text = item.text,
                         textColor = Color.White,
@@ -333,7 +333,7 @@ fun FollowingUsersItemPreview(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     ShowPortfolioButton(
-                        firstName = user.first_name,
+                        firstName = userUiState.first_name,
                         onOpenWebView = {}
                     )
                 }

@@ -6,8 +6,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class LinksUiState(
-    val download: String,
-    val download_location: String?,
-    val html: String,
-    val self: String
+    val download: String = "",
+    val download_location: String? = null,
+    val html: String = "",
+    val self: String = ""
 ) : BaseModel(), Parcelable

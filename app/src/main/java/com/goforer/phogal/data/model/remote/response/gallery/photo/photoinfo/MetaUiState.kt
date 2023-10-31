@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class MetaUiState(
-    val index: Boolean
+    val index: Boolean = false
 ) : BaseModel(), Parcelable

@@ -8,6 +8,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class LikeResponseUiState(
-    val photo: PhotoUiState,
-    val user: UserUiState
+    val photo: PhotoUiState = PhotoUiState(),
+    val user: UserUiState = UserUiState()
 ) : BaseModel(), Parcelable

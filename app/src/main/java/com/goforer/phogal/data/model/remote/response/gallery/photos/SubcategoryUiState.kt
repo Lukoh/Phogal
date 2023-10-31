@@ -6,6 +6,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SubcategoryUiState(
-    val pretty_slug: String,
-    val slug: String
+    val pretty_slug: String = "",
+    val slug: String = ""
 ) : BaseModel(), Parcelable

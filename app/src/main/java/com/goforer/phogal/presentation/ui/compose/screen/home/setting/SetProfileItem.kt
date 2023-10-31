@@ -48,8 +48,8 @@ import com.goforer.phogal.presentation.ui.theme.ColorSystemGray1
 @Composable
 fun SetProfileItem(
     modifier: Modifier = Modifier,
-    profile: ProfileUiState,
-    onItemClicked: (profile: ProfileUiState) -> Unit
+    profileUiState: ProfileUiState,
+    onItemClicked: (profileUiState: ProfileUiState) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -60,13 +60,13 @@ fun SetProfileItem(
             .fillMaxWidth()
             .height(68.dp)
             .clickable {
-                onItemClicked(profile)
+                onItemClicked(profileUiState)
             }
     ) {
         IconContainer(64.dp) {
             Box {
                 val painter = loadImagePainter(
-                    data = profile.profileImage,
+                    data = profileUiState.profileImage,
                     size = Size.ORIGINAL
                 )
 
@@ -109,7 +109,7 @@ fun SetProfileItem(
             .widthIn(180.dp)
         ) {
             Text(
-                profile.name,
+                profileUiState.name,
                 modifier = Modifier.padding(0.dp, 4.dp, 0.dp, 0.dp),
                 color = Black,
                 fontFamily = FontFamily.SansSerif,
@@ -120,7 +120,7 @@ fun SetProfileItem(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                profile.email,
+                profileUiState.email,
                 modifier = Modifier.padding(0.dp, 4.dp, 0.dp, 0.dp),
                 color = ColorSystemGray1,
                 fontFamily = FontFamily.SansSerif,

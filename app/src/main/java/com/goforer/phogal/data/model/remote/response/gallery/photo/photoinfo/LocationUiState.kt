@@ -6,8 +6,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class LocationUiState(
-    val city: String,
-    val country: String,
-    val name: String?,
-    val position: PositionUiState
+    val city: String = "",
+    val country: String = "",
+    val name: String? = null,
+    val position: PositionUiState = PositionUiState()
 ) : BaseModel(), Parcelable

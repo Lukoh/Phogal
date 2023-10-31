@@ -6,17 +6,17 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ProfileUiState(
-    val id: Int,
-    val name: String,
-    val sex: String,
-    var favor: Boolean,
+    val id: Int = 0,
+    val name: String = "",
+    val sex: String = "",
+    var favor: Boolean = false,
     var followed : Boolean = false,
-    val email: String,
-    val profileImage: String,
-    val personality: String,
-    val cellphone: String,
-    val address: String,
-    val birthday: String,
-    val reputation: String,
-    var deleted: Boolean
+    val email: String = "",
+    val profileImage: String = "",
+    val personality: String = "",
+    val cellphone: String = "",
+    val address: String = "",
+    val birthday: String = "",
+    val reputation: String = "",
+    var deleted: Boolean = false
 ) : BaseModel(), Parcelable

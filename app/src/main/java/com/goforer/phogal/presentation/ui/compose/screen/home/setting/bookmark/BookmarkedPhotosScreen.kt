@@ -49,7 +49,7 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 fun BookmarkedPhotosScreen(
     modifier: Modifier = Modifier,
     state: BaseUiState = rememberBaseUiState(),
-    onItemClicked: (item: PictureUiState, index: Int) -> Unit,
+    onItemClicked: (pictureUiState: PictureUiState, index: Int) -> Unit,
     onBackPressed: () -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,

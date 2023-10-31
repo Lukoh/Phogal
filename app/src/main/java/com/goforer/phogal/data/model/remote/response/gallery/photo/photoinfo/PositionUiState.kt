@@ -6,6 +6,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class PositionUiState(
-    val latitude: Double,
-    val longitude: Double
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0
 ) : BaseModel(), Parcelable

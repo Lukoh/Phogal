@@ -165,7 +165,7 @@ fun HandlePictureResponse(
                     ) {
                         BodyContent(
                             modifier = modifier,
-                            picture = resource.data as PictureUiState,
+                            pictureUiState = resource.data as PictureUiState,
                             visibleViewPhotosButton = state.visibleViewButtonState.value,
                             onViewPhotos = onViewPhotos,
                             onShowSnackBar = onShowSnackBar,
@@ -223,14 +223,14 @@ fun HandlePictureResponse(
 @Composable
 fun BodyContent(
     modifier: Modifier = Modifier,
-    picture: PictureUiState,
+    pictureUiState: PictureUiState,
     visibleViewPhotosButton: Boolean,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onShownPhoto: (picture: PictureUiState) -> Unit,
+    onShownPhoto: (pictureUiState: PictureUiState) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
-    var visiebleCameraInfo by remember { mutableStateOf(false) }
+    var visible by remember { mutableStateOf(false) }
 
     Card(
         modifier = modifier.padding(0.dp, 2.dp),
@@ -247,10 +247,10 @@ fun BodyContent(
         ),
         shape = RectangleShape
     ) {
-        val imageUrl = picture.urls.raw
+        val imageUrl = pictureUiState.urls.raw
         val painter = loadImagePainter(
             data = imageUrl,
-            size = Size(picture.width.div(8), picture.height.div(8))
+            size = Size(pictureUiState.width.div(8), pictureUiState.height.div(8))
         )
 
         if (painter.state is AsyncImagePainter.State.Loading) {
@@ -290,7 +290,7 @@ fun BodyContent(
             UserContainer(
                 modifier = Modifier,
                 state = rememberUserContainerState(
-                    userState = rememberSaveable { mutableStateOf(picture.user.toString()) },
+                    userState = rememberSaveable { mutableStateOf(pictureUiState.user.toString()) },
                     profileSizeState = rememberSaveable { mutableDoubleStateOf(48.0) },
                     colorsState = remember { mutableStateOf(listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite, ColorSystemGray5, Blue75, DarkGreen60)) },
                     visibleViewButtonState = rememberSaveable { mutableStateOf(visibleViewPhotosButton) },
@@ -313,10 +313,10 @@ fun BodyContent(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            BehaviorItem(picture.likes, picture.downloads, picture.views)
+            BehaviorItem(pictureUiState.likes, pictureUiState.downloads, pictureUiState.views)
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = picture.description ?: picture.alt_description
+                text = pictureUiState.description ?: pictureUiState.alt_description
                 ?: stringResource(id = R.string.picture_no_description),
                 modifier = Modifier.padding(8.dp, 4.dp),
                 color = ColorText4,
@@ -327,16 +327,16 @@ fun BodyContent(
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.height(10.dp))
-            picture.location?.let {
+            pictureUiState.location?.let {
                 LocationItem(it.name)
                 Spacer(modifier = Modifier.height(2.dp))
             }
 
-            DateItem(picture.created_at)
+            DateItem(pictureUiState.created_at)
             Spacer(modifier = Modifier.height(2.dp))
-            picture.exif?.let { exif ->
+            pictureUiState.exif?.let { exifUiState ->
                 GenericCubicAnimationShape(
-                    visible = visiebleCameraInfo,
+                    visible = visible,
                     duration = 550
                 ) { animatedShape, _ ->
                     ExifItem(
@@ -346,7 +346,7 @@ fun BodyContent(
                                 clip = true
                                 shape = animatedShape
                             },
-                        exif = exif
+                        exifUiState = exifUiState
                     )
                 }
             }
@@ -358,7 +358,7 @@ fun BodyContent(
                     contentColor = Color.White
                 ),
                 onClick = {
-                    visiebleCameraInfo = !visiebleCameraInfo
+                    visible = !visible
                 },
                 icon = {
                     Icon(
@@ -368,7 +368,7 @@ fun BodyContent(
                 },
                 text = {
                     Text(
-                        text = if (visiebleCameraInfo)
+                        text = if (visible)
                             stringResource(id = R.string.picture_close_camera_info)
                         else
                             stringResource(id = R.string.picture_view_camera_info),
@@ -380,7 +380,7 @@ fun BodyContent(
             )
 
             Spacer(modifier = Modifier.height(70.dp))
-            onShownPhoto(picture)
+            onShownPhoto(pictureUiState)
         }
     }
 }
@@ -519,7 +519,7 @@ fun DateItem(createdAt: String) {
 @Composable
 fun ExifItem(
     modifier: Modifier = Modifier,
-    exif: ExifUiState
+    exifUiState: ExifUiState
 ) {
     Box(modifier) {
         Column {
@@ -536,7 +536,7 @@ fun ExifItem(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = exif.name ?: stringResource(id = R.string.picture_no_camera_name),
+                    text = exifUiState.name ?: stringResource(id = R.string.picture_no_camera_name),
                     color = ColorBlackLight,
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Normal,
@@ -546,10 +546,10 @@ fun ExifItem(
                 )
             }
 
-            exif.name?.let {
+            exifUiState.name?.let {
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "${"Lens\n"}${"f/"}${exif.aperture}${"  "}${exif.focal_length}${"mm  "}${exif.exposure_time}${"s  iso "}${exif.iso}",
+                    text = "${"Lens\n"}${"f/"}${exifUiState.aperture}${"  "}${exifUiState.focal_length}${"mm  "}${exifUiState.exposure_time}${"s  iso "}${exifUiState.iso}",
                     modifier = Modifier.padding(horizontal = 28.dp),
                     color = ColorBlackLight,
                     fontFamily = FontFamily.SansSerif,
@@ -603,7 +603,8 @@ fun PictureContentPreview(modifier: Modifier = Modifier) {
                     size = Size(420, 640)
                 )
                 val transition by animateFloatAsState(
-                    targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f
+                    targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f,
+                    label = ""
                 )
 
                 val imageModifier = Modifier

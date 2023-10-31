@@ -58,9 +58,9 @@ fun UserPhotosContent(
                 photosUiState = state.photosUiState,
                 refreshingState = state.refreshingState.collectAsStateWithLifecycle()
             ),
-            onItemClicked = { photo, _ ->
+            onItemClicked = { photoUiState, _ ->
                 state.enabledLoadState.value = false
-                onItemClicked(photo.id)
+                onItemClicked(photoUiState.id)
             },
             onViewPhotos = { _, _, _, _ -> },
             onShowSnackBar = onShowSnackBar,

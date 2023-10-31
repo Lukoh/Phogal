@@ -6,11 +6,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SourceUiState(
-    val ancestry: AncestryUiState?,
-    val cover_photo: CoverPhotoUiState?,
-    val description: String?,
-    val meta_description: String?,
-    val meta_title: String?,
-    val subtitle: String?,
-    val title: String?
+    val ancestry: AncestryUiState? = null,
+    val cover_photo: CoverPhotoUiState? = null,
+    val description: String? = null,
+    val meta_description: String? = null,
+    val meta_title: String? = null,
+    val subtitle: String? = null,
+    val title: String? = null
 ) : BaseModel(), Parcelable

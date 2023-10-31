@@ -125,8 +125,8 @@ fun SearchPhotosContent(
                     photosUiState = photosContentState.photosUiState,
                     refreshingState = photosContentState.refreshingState.collectAsStateWithLifecycle()
                 ),
-                onItemClicked = { photo, _ ->
-                    onItemClicked(photo.id)
+                onItemClicked = { photoUiState, _ ->
+                    onItemClicked(photoUiState.id)
                 },
                 onViewPhotos = onViewPhotos,
                 onShowSnackBar = onShowSnackBar,

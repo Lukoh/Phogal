@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class SponsorshipUiState(
     val impression_urls: List<String>? = null,
-    val sponsor: SponsorUiState,
-    val tagline: String,
+    val sponsor: SponsorUiState = SponsorUiState(),
+    val tagline: String = "",
     val tagline_url: String? = null
 ) : BaseModel(), Parcelable

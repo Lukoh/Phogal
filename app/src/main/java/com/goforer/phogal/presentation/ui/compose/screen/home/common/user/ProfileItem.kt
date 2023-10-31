@@ -122,39 +122,39 @@ fun ProfileItem(
 }
 
 @Composable
-fun getProfileInfoItems(user: UserUiState) = listOf(
+fun getProfileInfoItems(userUiState: UserUiState) = listOf(
     ProfileInfoItem(
-        text = user.bio ?: stringResource(id = R.string.user_info_no_sex_info),
+        text = userUiState.bio ?: stringResource(id = R.string.user_info_no_sex_info),
         painter = painterResource(id = R.drawable.ic_bio),
         position = 8
     ),
     ProfileInfoItem(
-        text = user.location ?: stringResource(id = R.string.user_info_no_location_info),
+        text = userUiState.location ?: stringResource(id = R.string.user_info_no_location_info),
         painter = painterResource(id = R.drawable.ic_location),
         position = 7
     ),
     ProfileInfoItem(
-        text = "${stringResource(id = R.string.user_info_instagram_name)}${" "}${user.instagram_username ?: stringResource(id = R.string.user_info_no_instagram_name)}",
+        text = "${stringResource(id = R.string.user_info_instagram_name)}${" "}${userUiState.instagram_username ?: stringResource(id = R.string.user_info_no_instagram_name)}",
         painter = painterResource(id = R.drawable.ic_instagram),
         position = 6
     ),
     ProfileInfoItem(
-        text = "${stringResource(id = R.string.user_info_twitter_name)}${" "}${user.twitter_username ?: stringResource(id = R.string.user_info_no_twitter_name)}",
+        text = "${stringResource(id = R.string.user_info_twitter_name)}${" "}${userUiState.twitter_username ?: stringResource(id = R.string.user_info_no_twitter_name)}",
         painter = painterResource(id = R.drawable.ic_twitter),
         position = 5
     ),
     ProfileInfoItem(
-        text = user.links.followers ?: "",
+        text = userUiState.links.followers ?: "",
         painter = painterResource(id = R.drawable.ic_follower),
         position = 4
     ),
     ProfileInfoItem(
-        text = user.links.following ?: "",
+        text = userUiState.links.following ?: "",
         painter = painterResource(id = R.drawable.ic_following),
         position = 3
     ),
     ProfileInfoItem(
-        text = "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
+        text = "${stringResource(id = R.string.user_updated_at)}${" "}${userUiState.updated_at}",
         painter = painterResource(id = R.drawable.ic_date),
         position = 2
     )

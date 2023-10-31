@@ -6,6 +6,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TagsPreviewUiState(
-    val title: String,
-    val type: String
+    val title: String = "",
+    val type: String = ""
 ) : BaseModel(), Parcelable

@@ -78,14 +78,14 @@ import com.google.accompanist.placeholder.material.shimmer
 fun PhotoItem(
     modifier: Modifier = Modifier,
     state: PhotoItemState = rememberPhotoItemState(),
-    onItemClicked: (item: PhotoUiState, index: Int) -> Unit,
+    onItemClicked: (photoUiState: PhotoUiState, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
-    val photo = state.photoState.value as PhotoUiState
+    val photoUiState = state.photoState.value as PhotoUiState
 
-    photo.alreadySearched = true
+    photoUiState.alreadySearched = true
     AnimatedVisibility(
         visible = true,
         modifier = modifier,
@@ -113,10 +113,10 @@ fun PhotoItem(
                 focusedElevation = 4.dp
             )
         ) {
-            val imageUrl = photo.urls.raw
+            val imageUrl = photoUiState.urls.raw
             val painter = loadImagePainter(
                 data = imageUrl,
-                size = Size(photo.width.div(8), photo.height.div(8))
+                size = Size(photoUiState.width.div(8), photoUiState.height.div(8))
             )
             val transition by animateFloatAsState(
                 targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f,
@@ -169,7 +169,7 @@ fun PhotoItem(
                     .clip(RoundedCornerShape(1.dp))
                     .clickable {
                         state.clickedState.value = true
-                        onItemClicked.invoke(photo, state.indexState.value)
+                        onItemClicked.invoke(photoUiState, state.indexState.value)
                     }
                     .scale(.8f + (.2f * transition))
                     .graphicsLayer { rotationX = (1f - transition) * 5f }
@@ -199,7 +199,7 @@ fun PhotoItem(
                 UserContainer(
                     modifier = Modifier,
                     state = rememberUserContainerState(
-                        userState = rememberSaveable { mutableStateOf(photo.user.toString()) },
+                        userState = rememberSaveable { mutableStateOf(photoUiState.user.toString()) },
                         profileSizeState = rememberSaveable { mutableDoubleStateOf(36.0) },
                         colorsState = remember { mutableStateOf(listOf(Color.White, Color.White, Blue70, Blue75, Blue50, ColorSnowWhite)) },
                         visibleViewButtonState = state.visibleViewButtonState,

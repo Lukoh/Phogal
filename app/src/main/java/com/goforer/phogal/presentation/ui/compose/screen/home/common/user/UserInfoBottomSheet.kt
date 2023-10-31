@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun UserInfoBottomSheet(
     userInfoState: UserInfoState = rememberUserInfoState(),
-    user: UserUiState,
+    userUiState: UserUiState,
     showUserInfoBottomSheet: Boolean,
     onDismissedRequest: (Boolean) -> Unit
 ) {
@@ -57,14 +57,14 @@ fun UserInfoBottomSheet(
                 horizontalAlignment = Alignment.Start,
             ) {
                 ProfileItem(
-                    image = user.profile_image.medium,
-                    name = user.name,
+                    image = userUiState.profile_image.medium,
+                    name = userUiState.name,
                     nameColor = DarkGreenGray10,
                     position = 9,
                     onClicked = {}
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                getProfileInfoItems(user).forEachIndexed { _, item ->
+                getProfileInfoItems(userUiState).forEachIndexed { _, item ->
                     UserInfoItem(
                         text = item.text,
                         textColor = DarkGreenGray10,
@@ -97,7 +97,7 @@ fun UserInfoBottomSheet(
                         scope = userInfoState.scope,
                         bottomSheetState = userInfoState.bottomSheetState,
                         openBottomSheetState = userInfoState.openBottomSheetState,
-                        firstName = user.first_name,
+                        firstName = userUiState.first_name,
                         onDismissedRequest = onDismissedRequest
                     )
                 }

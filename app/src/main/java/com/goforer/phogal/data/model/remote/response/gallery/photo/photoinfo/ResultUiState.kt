@@ -10,20 +10,20 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ResultUiState(
-    val cover_photo: CoverPhotoUiState,
-    val curated: Boolean,
-    val description: String,
-    val featured: Boolean,
-    val id: String,
-    val last_collected_at: String,
-    val links: LinksXUiState,
-    val preview_photos: List<PreviewPhotoUiState>,
-    val private: Boolean,
-    val published_at: String,
-    val share_key: String,
-    val tags: List<TagUiState>,
-    val title: String,
-    val total_photos: Long,
-    val updated_at: String,
-    val user: UserUiState
+    val cover_photo: CoverPhotoUiState = CoverPhotoUiState(),
+    val curated: Boolean = false,
+    val description: String = "",
+    val featured: Boolean = false,
+    val id: String = "",
+    val last_collected_at: String = "",
+    val links: LinksXUiState = LinksXUiState(),
+    val preview_photos: List<PreviewPhotoUiState> = listOf(),
+    val private: Boolean = false,
+    val published_at: String = "",
+    val share_key: String = "",
+    val tags: List<TagUiState> = listOf(),
+    val title: String = "",
+    val total_photos: Long = 0L,
+    val updated_at: String = "",
+    val user: UserUiState = UserUiState()
 ) : BaseModel(), Parcelable

@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TagUiState(
-    val source: SourceUiState?,
-    val title: String?,
-    val type: String?
+    val source: SourceUiState? = null,
+    val title: String? = null,
+    val type: String? = null
 ) : BaseModel(), Parcelable

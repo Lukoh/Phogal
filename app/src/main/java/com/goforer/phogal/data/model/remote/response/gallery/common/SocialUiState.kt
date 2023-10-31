@@ -6,8 +6,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SocialUiState(
-    val instagram_username: String,
+    val instagram_username: String = "",
     val paypal_email: String? = null,
-    val portfolio_url: String,
-    val twitter_username: String
+    val portfolio_url: String = "",
+    val twitter_username: String = ""
 ) : BaseModel(), Parcelable

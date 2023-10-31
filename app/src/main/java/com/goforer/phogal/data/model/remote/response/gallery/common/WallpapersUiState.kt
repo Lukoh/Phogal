@@ -6,6 +6,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class WallpapersUiState(
-    val approved_on: String?,
-    val status: String?
+    val approved_on: String? = null,
+    val status: String? = null
 ) : BaseModel(), Parcelable

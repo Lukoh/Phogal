@@ -6,11 +6,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ExifUiState(
-    val aperture: String?,
-    val exposure_time: String?,
-    val focal_length: String?,
-    val iso: Int?,
-    val make: String?,
-    val model: String?,
-    val name: String?
+    val aperture: String? = null,
+    val exposure_time: String? = null,
+    val focal_length: String? = null,
+    val iso: Int? = null,
+    val make: String? = null,
+    val model: String? = null,
+    val name: String? = null
 ) : BaseModel(), Parcelable

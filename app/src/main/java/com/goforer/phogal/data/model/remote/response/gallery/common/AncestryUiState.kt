@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class AncestryUiState(
-    val category: CategoryUiState?,
+    val category: CategoryUiState? = null,
     val subcategory: SubcategoryUiState? = null,
-    val type: TypeUiState?
+    val type: TypeUiState? = null
 ) : BaseModel(), Parcelable

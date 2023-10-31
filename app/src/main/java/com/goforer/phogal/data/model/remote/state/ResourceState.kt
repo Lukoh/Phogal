@@ -9,5 +9,5 @@ import kotlinx.parcelize.RawValue
 @Parcelize
 data class ResourceState<T>(
     val resourceStateFlow: @RawValue T? = null,
-    var status: Status
+    var status: Status = Status.SUCCESS
 ) : BaseModel(), Parcelable

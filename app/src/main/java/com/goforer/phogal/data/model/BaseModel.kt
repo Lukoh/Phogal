@@ -3,7 +3,7 @@ package com.goforer.phogal.data.model
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
-open class BaseModel {
+abstract class BaseModel {
     companion object {
         private fun gsonBuilder(): GsonBuilder {
             val builder = GsonBuilder()

@@ -6,10 +6,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class UrlsUiState(
-    val full: String,
-    val raw: String,
-    val regular: String,
-    val small: String,
+    val full: String = "",
+    val raw: String = "",
+    val regular: String = "",
+    val small: String = "",
     val small_s3: String? = null,
-    val thumb: String
+    val thumb: String = ""
 ) : BaseModel(), Parcelable

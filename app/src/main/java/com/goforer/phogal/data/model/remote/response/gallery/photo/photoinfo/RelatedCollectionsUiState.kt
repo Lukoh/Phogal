@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class RelatedCollectionsUiState(
-    val results: List<ResultUiState>,
-    val total: Long,
-    val type: String
+    val results: List<ResultUiState> = listOf(),
+    val total: Long = 0L,
+    val type: String = ""
 ) : BaseModel(), Parcelable

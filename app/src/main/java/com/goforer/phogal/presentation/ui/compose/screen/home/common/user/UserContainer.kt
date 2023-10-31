@@ -61,7 +61,7 @@ import com.goforer.base.designsystem.component.IconButton
 import com.goforer.base.designsystem.component.IconContainer
 import com.goforer.base.designsystem.component.ImageCrossFade
 import com.goforer.base.designsystem.component.loadImagePainter
-import com.goforer.base.extension.toUser
+import com.goforer.base.extension.toUserUiState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.common.UserUiState
 import com.goforer.phogal.presentation.stateholder.business.home.common.follow.FollowViewModel
@@ -87,8 +87,8 @@ fun UserContainer(
     onShowSnackBar: (text: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
-    val user = state.userState.value.toUser()
-    val lastName = user.last_name ?: stringResource(id = R.string.picture_no_last_name)
+    val userUiState = state.userState.value.toUserUiState()
+    val lastName = userUiState.last_name ?: stringResource(id = R.string.picture_no_last_name)
     var showUserInfoBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     Column(
@@ -109,7 +109,7 @@ fun UserContainer(
         ) {
             ShowProfileImage(
                 profileImageSize = state.profileSizeState.value.dp,
-                user = user,
+                userUiState = userUiState,
                 lastName = lastName,
                 visibleViewPhotosButton = state.visibleViewButtonState.value,
                 onViewPhotos = onViewPhotos
@@ -120,7 +120,7 @@ fun UserContainer(
                 .widthIn(186.dp)
             ) {
                 Text(
-                    text = user.name,
+                    text = userUiState.name,
                     color = state.colorsState.value[0],
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Bold,
@@ -130,8 +130,8 @@ fun UserContainer(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    "${user.total_likes}${" "}" +
-                            "${stringResource(id = R.string.picture_likes)}${" "}${user.total_collections}${" "}" +
+                    "${userUiState.total_likes}${" "}" +
+                            "${stringResource(id = R.string.picture_likes)}${" "}${userUiState.total_collections}${" "}" +
                             "${stringResource(id = R.string.picture_collections)}${" "}",
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 12.sp,
@@ -141,7 +141,7 @@ fun UserContainer(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    "${stringResource(id = R.string.user_updated_at)}${" "}${user.updated_at}",
+                    "${stringResource(id = R.string.user_updated_at)}${" "}${userUiState.updated_at}",
                     fontFamily = FontFamily.SansSerif,
                     fontSize = 12.sp,
                     fontStyle = FontStyle.Normal,
@@ -154,22 +154,22 @@ fun UserContainer(
             ShowFollowButton(
                 modifier = modifier,
                 followColor = state.colorsState.value[4],
-                followViewModel.isUserFollowed(user)
+                followViewModel.isUserFollowed(userUiState)
             ) {
-                followViewModel.setUserFollow(user)
+                followViewModel.setUserFollow(userUiState)
             }
         }
 
         if (state.visibleViewButtonState.value) {
             Text(
-                "${stringResource(id = R.string.picture_view_photos)}${" "}${user.total_photos}${" "}${stringResource(id = R.string.picture_photos, user.name)}",
+                "${stringResource(id = R.string.picture_view_photos)}${" "}${userUiState.total_photos}${" "}${stringResource(id = R.string.picture_photos, userUiState.name)}",
                 modifier = Modifier
                     .padding(start = if (state.fromItemState.value)
                         56.dp
                     else
                         66.dp)
                     .clickable {
-                        onViewPhotos(user.username, user.first_name, lastName, user.username)
+                        onViewPhotos(userUiState.username, userUiState.first_name, lastName, userUiState.username)
                     },
                 color = if (state.fromItemState.value)
                     Color.White
@@ -189,17 +189,17 @@ fun UserContainer(
 
         UserInfoBottomSheet(
             userInfoState = rememberUserInfoState(),
-            user = user,
+            userUiState = userUiState,
             showUserInfoBottomSheet = showUserInfoBottomSheet,
             onDismissedRequest = {
                 showUserInfoBottomSheet = false
                 if (it) {
-                    if (user.portfolio_url.isNullOrEmpty()) {
+                    if (userUiState.portfolio_url.isNullOrEmpty()) {
                         state.baseUiState.scope.launch {
-                            onShowSnackBar("${user.first_name}${" "}${text}")
+                            onShowSnackBar("${userUiState.first_name}${" "}${text}")
                         }
                     } else {
-                        onOpenWebView(user.first_name, user.portfolio_url)
+                        onOpenWebView(userUiState.first_name, userUiState.portfolio_url)
                     }
                 }
             }
@@ -210,7 +210,7 @@ fun UserContainer(
 @Composable
 fun ShowProfileImage(
     profileImageSize: Dp,
-    user: UserUiState,
+    userUiState: UserUiState,
     lastName: String,
     visibleViewPhotosButton: Boolean,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
@@ -218,7 +218,7 @@ fun ShowProfileImage(
     IconContainer(profileImageSize) {
         Box {
             val painter = loadImagePainter(
-                data = user.profile_image.small,
+                data = userUiState.profile_image.small,
                 size = Size.ORIGINAL
             )
 
@@ -234,10 +234,10 @@ fun ShowProfileImage(
                     .clickable {
                         if (visibleViewPhotosButton)
                             onViewPhotos(
-                                user.username,
-                                user.first_name,
+                                userUiState.username,
+                                userUiState.first_name,
                                 lastName,
-                                user.username
+                                userUiState.username
                             )
                     },
                 Alignment.CenterStart,
