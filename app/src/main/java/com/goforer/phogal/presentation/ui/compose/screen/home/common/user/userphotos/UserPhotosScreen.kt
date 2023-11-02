@@ -22,6 +22,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -32,25 +35,29 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
 import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.phogal.R
+import com.goforer.phogal.data.model.local.home.gallery.NameArgument
 import com.goforer.phogal.presentation.stateholder.business.home.common.user.UserPhotosViewModel
-import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.photos.UserPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.photos.rememberUserPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun UserPhotosScreen(
     modifier: Modifier = Modifier,
-    userPhotosViewModel: UserPhotosViewModel,
-    state: UserPhotosContentState = rememberUserPhotosContentState(),
+    userPhotosViewModel: UserPhotosViewModel = hiltViewModel(),
+    nameArgument: NameArgument,
+    state: BaseUiState = rememberBaseUiState(),
     onItemClicked: (id: String) -> Unit,
     onBackPressed: () -> Unit,
     onStart: () -> Unit = {
@@ -64,12 +71,14 @@ fun UserPhotosScreen(
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
     val backHandlingEnabled by remember { mutableStateOf(true) }
+    var enabledLoadState by rememberSaveable { mutableStateOf(true) }
+    var visibleActionsState by rememberSaveable { mutableStateOf(true) }
 
     BackHandler(backHandlingEnabled) {
         onBackPressed()
     }
 
-    DisposableEffect(state.baseUiState.lifecycle) {
+    DisposableEffect(state.lifecycle) {
         // Create an observer that triggers our remembered callbacks
         // for doing anything
         val observer = LifecycleEventObserver { _, event ->
@@ -81,11 +90,11 @@ fun UserPhotosScreen(
         }
 
         // Add the observer to the lifecycle
-        state.baseUiState.lifecycle.addObserver(observer)
+        state.lifecycle.addObserver(observer)
 
         // When the effect leaves the Composition, remove the observer
         onDispose {
-            state.baseUiState.lifecycle.removeObserver(observer)
+            state.lifecycle.removeObserver(observer)
         }
     }
 
@@ -100,7 +109,7 @@ fun UserPhotosScreen(
             CustomCenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "${state.firstNameState.value}${" "}${stringResource(id = R.string.picture_photos)}",
+                        text = "${nameArgument.firstName}${" "}${stringResource(id = R.string.picture_photos)}",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontFamily = FontFamily.SansSerif,
@@ -112,7 +121,7 @@ fun UserPhotosScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            state.enabledLoadState.value = false
+                            enabledLoadState = false
                             onBackPressed()
                         }
                     ) {
@@ -123,7 +132,7 @@ fun UserPhotosScreen(
                     }
                 },
                 actions = {
-                    if (state.visibleActionsState.value) {
+                    if (visibleActionsState) {
                         IconButton(onClick = { /* doSomething() */ }) {
                             Icon(
                                 imageVector = Icons.Filled.Favorite,
@@ -137,17 +146,21 @@ fun UserPhotosScreen(
             ScaffoldContent(topInterval = 2.dp) {
                 UserPhotosContent(
                     modifier = modifier,
-                    contentPadding = paddingValues,
                     userPhotosViewModel = userPhotosViewModel,
-                    state = state,
+                    state = rememberUserPhotosContentState(
+                        photosUiState = userPhotosViewModel.uiState,
+                        refreshingState = userPhotosViewModel.isRefreshing,
+                        nameState = rememberSaveable { mutableStateOf(nameArgument.name) }
+                    ),
+                    contentPadding = paddingValues,
                     onItemClicked = onItemClicked,
                     onShowSnackBar = {
-                        state.baseUiState.scope.launch {
+                        state.scope.launch {
                             snackbarHostState.showSnackbar(it)
                         }
                     },
                     onSuccess = { isSuccessful ->
-                        state.visibleActionsState.value = isSuccessful
+                        visibleActionsState = isSuccessful
                     }
                 )
             }

@@ -24,7 +24,7 @@ class SearchPhotosContentState(
     val photosUiState: StateFlow<Any>,
     val refreshingState: StateFlow<Boolean>,
     var scrollingState: MutableState<Boolean>,
-    var visibleActionsState: MutableState<Boolean>
+    var removedWordState: MutableState<Boolean>
 ) {
     val permissions = listOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -45,7 +45,7 @@ fun rememberSearchPhotosContentState(
     photosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
     refreshingState: StateFlow<Boolean> = remember { MutableStateFlow(false) },
     scrollingState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    visibleActionsState: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
+    removedWordState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): SearchPhotosContentState = remember(
     baseUiState,
     photosUiState,
@@ -61,7 +61,7 @@ fun rememberSearchPhotosContentState(
         photosUiState = photosUiState,
         refreshingState = refreshingState,
         scrollingState = scrollingState,
-        visibleActionsState = visibleActionsState
+        removedWordState = removedWordState
     )
 }
 

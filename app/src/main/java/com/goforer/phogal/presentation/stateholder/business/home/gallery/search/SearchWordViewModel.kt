@@ -14,18 +14,18 @@ constructor() : BaseViewModel<PictureUiState>() {
     @Inject
     lateinit var localStorage: LocalDataSource
 
-    fun setWord(keyword: String) {
+    fun setWord(word: String) {
         localStorage.getSearchWords().isNull({
-            localStorage.setSearchWords(listOf(keyword.trim()))
+            localStorage.setSearchWords(listOf(word.trim()))
         }, {
             val keywords = it.toMutableList()
 
-            if (keywords.binarySearch(keyword.trim()) < 0) {
+            if (keywords.binarySearch(word.trim()) < 0) {
                 if (it.size >= 7) {
                     keywords.removeFirst()
-                    keywords.add(keyword)
+                    keywords.add(word)
                 } else {
-                    keywords.add(keyword)
+                    keywords.add(word)
                 }
 
                 localStorage.setSearchWords(keywords.toList())
@@ -41,5 +41,15 @@ constructor() : BaseViewModel<PictureUiState>() {
         } else {
             keywordList.toMutableList()
         }
+    }
+
+    fun removeWord(word: String) {
+        localStorage.getSearchWords().isNull({
+        }, {
+            val keywords = it.toMutableList()
+
+            if (keywords.remove(word))
+                localStorage.setSearchWords(keywords.toList())
+        })
     }
 }

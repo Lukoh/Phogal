@@ -92,11 +92,12 @@ fun BookmarkedPhotosScreen(
 
     Scaffold(
         contentColor = ColorBgSecondary,
-        snackbarHost = { SnackbarHost(
-            snackbarHostState, snackbar = { snackbarData: SnackbarData ->
-                CardSnackBar(modifier = Modifier, snackbarData)
-            }
-        )
+        snackbarHost = {
+            SnackbarHost(
+                snackbarHostState, snackbar = { snackbarData: SnackbarData ->
+                    CardSnackBar(modifier = Modifier, snackbarData)
+                }
+            )
         }, topBar = {
             CustomCenterAlignedTopAppBar(
                 title = {

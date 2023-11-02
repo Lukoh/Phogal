@@ -4,18 +4,12 @@ import android.net.Uri
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Photo
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import com.goforer.phogal.data.model.local.home.gallery.NameArgument
 import com.goforer.phogal.data.model.local.home.gallery.PictureArgument
 import com.goforer.phogal.data.model.local.home.gallery.WebViewArgument
-import com.goforer.phogal.presentation.stateholder.business.home.popularphotos.PopularPhotosViewModel
-import com.goforer.phogal.presentation.stateholder.uistate.home.popularphotos.rememberPopularPhotosContentState
-import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.compose.screen.home.popularphotos.PopularPhotosScreen
 import com.goforer.phogal.presentation.ui.navigation.destination.PhogalDestination.Companion.popularPhotosStartRoute
 import com.goforer.phogal.presentation.ui.navigation.ext.navigateTo
@@ -29,17 +23,9 @@ object PopularPhotos : PhogalDestination {
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
         route: String
-    ) -> Unit = { navController, backStackEntry, _ ->
-        val popularPhotosViewModel = hiltViewModel<PopularPhotosViewModel>(backStackEntry)
+    ) -> Unit = { navController, _, _ ->
 
         PopularPhotosScreen(
-            popularPhotosViewModel = popularPhotosViewModel,
-            state = rememberPopularPhotosContentState(
-                baseUiState = rememberBaseUiState(),
-                popularPhotosUiState = popularPhotosViewModel.popularPhotosUiState,
-                enabledLoadState = rememberSaveable { mutableStateOf(true) },
-                refreshingState = popularPhotosViewModel.isRefreshing
-            ),
             onItemClicked = { id ->
                 val pictureArgument = PictureArgument(
                     id = id,

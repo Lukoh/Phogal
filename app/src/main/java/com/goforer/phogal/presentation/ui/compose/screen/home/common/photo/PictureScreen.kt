@@ -55,7 +55,6 @@ import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.datasource.network.response.Status
 import com.goforer.phogal.presentation.stateholder.business.home.common.bookmark.BookmarkViewModel
-import com.goforer.phogal.presentation.stateholder.business.home.common.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.common.photo.like.PictureLikeViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.common.photo.like.PictureUnlikeViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.PhotoContentState
@@ -69,9 +68,8 @@ import timber.log.Timber
 @Composable
 fun PictureScreen(
     modifier: Modifier = Modifier,
-    pictureViewModel: PictureViewModel,
-    likeViewModel: PictureLikeViewModel,
-    unLikeViewModel: PictureUnlikeViewModel,
+    likeViewModel: PictureLikeViewModel = hiltViewModel(),
+    unLikeViewModel: PictureUnlikeViewModel =  hiltViewModel(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
     state: PhotoContentState = rememberPhotoContentState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
@@ -211,7 +209,6 @@ fun PictureScreen(
                 PictureContent(
                     modifier = modifier,
                     contentPadding = paddingValues,
-                    pictureViewModel = pictureViewModel,
                     state = state,
                     onViewPhotos = onViewPhotos,
                     onShowSnackBar = {

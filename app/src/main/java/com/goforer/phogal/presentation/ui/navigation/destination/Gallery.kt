@@ -11,7 +11,6 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -19,15 +18,7 @@ import androidx.navigation.navArgument
 import com.goforer.phogal.data.model.local.home.gallery.NameArgument
 import com.goforer.phogal.data.model.local.home.gallery.PictureArgument
 import com.goforer.phogal.data.model.local.home.gallery.WebViewArgument
-import com.goforer.phogal.presentation.stateholder.business.home.common.photo.info.PictureViewModel
-import com.goforer.phogal.presentation.stateholder.business.home.common.photo.like.PictureLikeViewModel
-import com.goforer.phogal.presentation.stateholder.business.home.common.photo.like.PictureUnlikeViewModel
-import com.goforer.phogal.presentation.stateholder.business.home.gallery.GalleryViewModel
-import com.goforer.phogal.presentation.stateholder.business.home.common.user.UserPhotosViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.rememberPhotoContentState
-import com.goforer.phogal.presentation.stateholder.uistate.home.gallery.rememberSearchPhotosContentState
-import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.photos.rememberUserPhotosContentState
-import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.webview.WebViewScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.common.photo.PictureScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.SearchPhotosScreen
@@ -47,16 +38,8 @@ object SearchPhotos : PhogalDestination {
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
         route: String
-    ) -> Unit = { navController, backStackEntry, _ ->
-        val galleryViewModel = hiltViewModel<GalleryViewModel>(backStackEntry)
-
+    ) -> Unit = { navController, _, _ ->
         SearchPhotosScreen(
-            galleryViewModel = galleryViewModel,
-            state = rememberSearchPhotosContentState(
-                baseUiState = rememberBaseUiState(),
-                photosUiState = galleryViewModel.uiState,
-                refreshingState = galleryViewModel.isRefreshing
-            ),
             onItemClicked = { id ->
                 val pictureArgument = PictureArgument(
                     id = id,
@@ -109,19 +92,12 @@ object Picture : PhogalDestination {
         route: String
     ) -> Unit = { navController, backStackEntry, _ ->
         val argument = backStackEntry.arguments?.getString(argumentTypeArg)
-        val pictureArgument = Gson().fromJson(argument, PictureArgument::class.java)
-        val pictureViewModel = hiltViewModel<PictureViewModel>(backStackEntry)
-        val likeViewModel =  hiltViewModel<PictureLikeViewModel>(backStackEntry)
-        val unLikeViewModel =  hiltViewModel<PictureUnlikeViewModel>(backStackEntry)
 
-        pictureArgument?.let {
+        Gson().fromJson(argument, PictureArgument::class.java)?.let {
             PictureScreen(
-                pictureViewModel = pictureViewModel,
-                likeViewModel = likeViewModel,
-                unLikeViewModel = unLikeViewModel,
                 state = rememberPhotoContentState(
-                    idState = rememberSaveable { mutableStateOf(pictureArgument.id) },
-                    visibleViewButtonState = rememberSaveable { mutableStateOf(pictureArgument.visibleViewPhotosButton) }
+                    idState = rememberSaveable { mutableStateOf(it.id) },
+                    visibleViewButtonState = rememberSaveable { mutableStateOf(it.visibleViewPhotosButton) }
                 ),
                 onViewPhotos = { name, firstName, lastName, username ->
                     val nameArgument = NameArgument(
@@ -171,19 +147,10 @@ object UserPhotos : PhogalDestination {
         route: String
     ) -> Unit = { navController, backStackEntry, _ ->
         val argument = backStackEntry.arguments?.getString(argumentTypeArg)
-        val nameArgument = Gson().fromJson(argument, NameArgument::class.java)
-        val userPhotosViewModel = hiltViewModel<UserPhotosViewModel>(backStackEntry)
 
-        nameArgument?.let {
+        Gson().fromJson(argument, NameArgument::class.java)?.let {
             UserPhotosScreen(
-                userPhotosViewModel = userPhotosViewModel,
-                state = rememberUserPhotosContentState(
-                    baseUiState = rememberBaseUiState(),
-                    nameState = rememberSaveable { mutableStateOf(nameArgument.name) },
-                    firstNameState = rememberSaveable { mutableStateOf(nameArgument.firstName) },
-                    photosUiState = userPhotosViewModel.uiState,
-                    refreshingState = userPhotosViewModel.isRefreshing
-                ),
+                nameArgument = it,
                 onItemClicked = { id ->
                     val pictureArgument = PictureArgument(
                         id = id,
@@ -219,12 +186,11 @@ object WbeView : PhogalDestination {
         route: String
     ) -> Unit = { navController, backStackEntry, _ ->
         val argument = backStackEntry.arguments?.getString(argumentTypeArg)
-        val webViewArgument = Gson().fromJson(argument,WebViewArgument::class.java)
 
-        webViewArgument?.let {
+        Gson().fromJson(argument,WebViewArgument::class.java)?.let {
             WebViewScreen(
-                firstName = webViewArgument.firstName,
-                url = webViewArgument.url,
+                firstName = it.firstName,
+                url = it.url,
                 onBackPressed = {
                     navController.navigateUp()
                 }

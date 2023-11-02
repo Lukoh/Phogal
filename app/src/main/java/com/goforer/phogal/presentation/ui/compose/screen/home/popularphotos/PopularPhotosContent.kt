@@ -39,8 +39,7 @@ fun PopularPhotosContent(
     onItemClicked: (id: String) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onOpenWebView: (firstName: String, url: String) -> Unit,
-    onSuccess: (isSuccessful: Boolean) -> Unit
+    onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     if (state.enabledLoadState.value) {
         state.enabledLoadState.value = false
@@ -61,7 +60,9 @@ fun PopularPhotosContent(
         onViewPhotos = onViewPhotos,
         onShowSnackBar = onShowSnackBar,
         onOpenWebView = onOpenWebView,
-        onSuccess = onSuccess
+        onSuccess = {
+            state.visibleActionsState.value = it
+        }
     )
 }
 

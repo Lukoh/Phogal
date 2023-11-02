@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -27,18 +28,16 @@ import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
 import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.phogal.R
-import com.goforer.phogal.presentation.stateholder.business.home.popularphotos.PopularPhotosViewModel
-import com.goforer.phogal.presentation.stateholder.uistate.home.popularphotos.PopularPhotosContentState
-import com.goforer.phogal.presentation.stateholder.uistate.home.popularphotos.rememberPopularPhotosContentState
+import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
+import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun PopularPhotosScreen(
     modifier: Modifier = Modifier,
-    popularPhotosViewModel: PopularPhotosViewModel,
-    state: PopularPhotosContentState = rememberPopularPhotosContentState(),
+    state: BaseUiState = rememberBaseUiState(),
     onItemClicked: (id: String) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
@@ -55,10 +54,10 @@ fun PopularPhotosScreen(
     val backHandlingEnabled by remember { mutableStateOf(true) }
 
     BackHandler(backHandlingEnabled) {
-        (state.baseUiState.context as Activity).finish()
+        (state.context as Activity).finish()
     }
 
-    DisposableEffect(state.baseUiState.lifecycle) {
+    DisposableEffect(state.lifecycle) {
         // Create an observer that triggers our remembered callbacks
         // for doing anything
         val observer = LifecycleEventObserver { _, event ->
@@ -70,11 +69,11 @@ fun PopularPhotosScreen(
         }
 
         // Add the observer to the lifecycle
-        state.baseUiState.lifecycle.addObserver(observer)
+        state.lifecycle.addObserver(observer)
 
         // When the effect leaves the Composition, remove the observer
         onDispose {
-            state.baseUiState.lifecycle.removeObserver(observer)
+            state.lifecycle.removeObserver(observer)
         }
     }
 
@@ -105,19 +104,14 @@ fun PopularPhotosScreen(
             ScaffoldContent(topInterval = paddingValues.calculateTopPadding()) {
                 PopularPhotosContent(
                     modifier = modifier,
-                    popularPhotosViewModel = popularPhotosViewModel,
-                    state = state,
                     onItemClicked = onItemClicked,
                     onViewPhotos = onViewPhotos,
                     onShowSnackBar = {
-                        state.baseUiState.scope.launch {
+                        state.scope.launch {
                             snackbarHostState.showSnackbar(it)
                         }
                     },
                     onOpenWebView = onOpenWebView,
-                    onSuccess = {
-                        state.visibleActionsState.value = it
-                    }
                 )
             }
         }

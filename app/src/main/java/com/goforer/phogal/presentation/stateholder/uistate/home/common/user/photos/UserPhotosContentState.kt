@@ -17,11 +17,9 @@ import kotlinx.coroutines.flow.StateFlow
 class UserPhotosContentState(
     val baseUiState: BaseUiState,
     val nameState: State<String>,
-    val firstNameState: State<String>,
     val photosUiState: StateFlow<Any>,
     val refreshingState: StateFlow<Boolean>,
-    var enabledLoadState: MutableState<Boolean>,
-    var visibleActionsState: MutableState<Boolean>
+    var enabledLoadState: MutableState<Boolean>
 )
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -29,15 +27,12 @@ class UserPhotosContentState(
 fun rememberUserPhotosContentState(
     baseUiState: BaseUiState = rememberBaseUiState(),
     nameState: State<String> = rememberSaveable { mutableStateOf("") },
-    firstNameState: State<String> = rememberSaveable { mutableStateOf("") },
     photosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
     refreshingState: StateFlow<Boolean> = remember { MutableStateFlow(false) },
-    enabledLoadState :  MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },
-    visibleActionsState: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
+    enabledLoadState :  MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
 ): UserPhotosContentState = remember(
     baseUiState,
     nameState,
-    firstNameState,
     photosUiState,
     refreshingState,
     enabledLoadState
@@ -45,10 +40,8 @@ fun rememberUserPhotosContentState(
     UserPhotosContentState(
         baseUiState = baseUiState,
         nameState = nameState,
-        firstNameState = firstNameState,
         photosUiState = photosUiState,
         refreshingState = refreshingState,
-        enabledLoadState = enabledLoadState,
-        visibleActionsState = visibleActionsState
+        enabledLoadState = enabledLoadState
     )
 }

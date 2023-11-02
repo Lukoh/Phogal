@@ -39,6 +39,7 @@ import com.goforer.phogal.presentation.ui.compose.screen.home.common.InitScreen
 import com.goforer.phogal.presentation.ui.theme.Black
 import com.goforer.phogal.presentation.ui.theme.Blue70
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
+import com.goforer.phogal.presentation.ui.theme.DarkGreen10
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -86,12 +87,15 @@ fun SearchPhotosContent(
             visible = !photosContentState.scrollingState.value,
             duration = 250
         ) { animatedShape, visible ->
-            if (visible) {
+            if (visible || photosContentState.removedWordState.value) {
                 searchWordViewModel.getWords()?.let { words ->
                     val items = if (photosContentState.triggeredState.value) {
                         listOf(words[0])
                     } else
                         words
+
+                    if (photosContentState.removedWordState.value)
+                        photosContentState.removedWordState.value = false
 
                     Chips(
                         modifier = Modifier
@@ -102,13 +106,19 @@ fun SearchPhotosContent(
                             },
                         items = items,
                         textColor = Black,
-                        leadingIconTint = Blue70
-                    ) { keyword ->
-                        searchState.editableInputState.textState = keyword
-                        photosContentState.wordState.value = keyword
-                        photosContentState.baseUiState.keyboardController?.hide()
-                        galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
-                    }
+                        leadingIconTint = Blue70,
+                        trailingIconTint = DarkGreen10,
+                        onClicked = { keyword ->
+                            searchState.editableInputState.textState = keyword
+                            photosContentState.wordState.value = keyword
+                            photosContentState.baseUiState.keyboardController?.hide()
+                            galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
+                        },
+                        onDeleted = {
+                            searchWordViewModel.removeWord(it)
+                            photosContentState.removedWordState.value = true
+                        }
+                    )
 
                     photosContentState.triggeredState.value = false
                 }

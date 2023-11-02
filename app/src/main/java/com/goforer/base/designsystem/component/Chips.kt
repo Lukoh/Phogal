@@ -1,6 +1,7 @@
 package com.goforer.base.designsystem.component
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ImageSearch
+import androidx.compose.material.icons.twotone.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.InputChip
@@ -36,9 +38,10 @@ fun Chips(
     items: List<String>,
     textColor: Color,
     leadingIconTint: Color,
-    onClicked: (String) -> Unit
+    trailingIconTint: Color,
+    onClicked: (String) -> Unit,
+    onDeleted: (String) -> Unit
 ) {
-
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
@@ -67,6 +70,18 @@ fun Chips(
                             contentDescription = "Keyword",
                             modifier = Modifier.size(24.dp),
                             tint = leadingIconTint
+                        )
+                    },
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.TwoTone.Close ,
+                            contentDescription = "Remove",
+                            modifier = Modifier
+                                .size(20.dp)
+                                .clickable {
+                                    onDeleted(it)
+                                },
+                            tint = trailingIconTint
                         )
                     }
                 )

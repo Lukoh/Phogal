@@ -36,10 +36,7 @@ fun UserPhotosContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     userPhotosViewModel: UserPhotosViewModel = hiltViewModel(),
-    state: UserPhotosContentState = rememberUserPhotosContentState(
-        photosUiState = userPhotosViewModel.uiState,
-        refreshingState = userPhotosViewModel.isRefreshing,
-    ),
+    state: UserPhotosContentState = rememberUserPhotosContentState(),
     onItemClicked: (id: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
