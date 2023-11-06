@@ -56,7 +56,7 @@ fun FollowingUsersScreen(
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
-    val enabledLoadPhotosState = remember { mutableStateOf(true) }
+    val enabledLoadPhotos by remember { mutableStateOf(true) }
     val backHandlingEnabled by remember { mutableStateOf(true) }
 
     BackHandler(backHandlingEnabled) {
@@ -123,7 +123,7 @@ fun FollowingUsersScreen(
                 FollowingUsersContent(
                     modifier = modifier,
                     contentPadding = paddingValues,
-                    enabledLoadPhotosState = enabledLoadPhotosState,
+                    enabledLoadPhotos = enabledLoadPhotos,
                     onViewPhotos = onViewPhotos,
                     onOpenWebView = { firstName, url ->
                         url.isNull({

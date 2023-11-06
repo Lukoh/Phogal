@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +20,7 @@ fun FollowingUsersContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     followViewModel: FollowViewModel = hiltViewModel(),
-    enabledLoadPhotosState: MutableState<Boolean>,
+    enabledLoadPhotos: Boolean,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String?) -> Unit
 ) {
@@ -43,7 +42,7 @@ fun FollowingUsersContent(
             }
         )
     } else {
-        if (enabledLoadPhotosState.value) {
+        if (enabledLoadPhotos) {
             BoxWithConstraints(
                 modifier = modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center

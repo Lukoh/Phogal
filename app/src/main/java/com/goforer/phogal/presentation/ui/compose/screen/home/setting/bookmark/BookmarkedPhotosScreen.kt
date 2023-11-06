@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -63,7 +64,7 @@ fun BookmarkedPhotosScreen(
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
-    val enabledLoadPhotosState = remember { mutableStateOf(true) }
+    var enabledLoadPhotos by remember { mutableStateOf(true) }
     val backHandlingEnabled by remember { mutableStateOf(true) }
 
     BackHandler(backHandlingEnabled) {
@@ -114,7 +115,7 @@ fun BookmarkedPhotosScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            enabledLoadPhotosState.value = false
+                            enabledLoadPhotos = false
                             onBackPressed()
                         }
                     ) {
@@ -130,7 +131,7 @@ fun BookmarkedPhotosScreen(
                 BookmarkedPhotosContent(
                     modifier = modifier,
                     contentPadding = paddingValues,
-                    enabledLoadPhotosState = enabledLoadPhotosState,
+                    enabledLoadPhotos = enabledLoadPhotos,
                     onItemClicked = onItemClicked,
                     onViewPhotos = onViewPhotos,
                     onOpenWebView = onOpenWebView

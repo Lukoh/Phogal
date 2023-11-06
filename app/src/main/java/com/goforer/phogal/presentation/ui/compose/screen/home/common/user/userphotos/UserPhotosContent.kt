@@ -46,6 +46,7 @@ fun UserPhotosContent(
                 refreshingState = state.refreshingState.collectAsStateWithLifecycle()
             ),
             onItemClicked = { id, _ ->
+                state.enabledLoadState.value = false
                 onItemClicked(id)
             },
             onViewPhotos = { _, _, _, _ -> },
@@ -53,7 +54,12 @@ fun UserPhotosContent(
             onOpenWebView = { _, url ->
                 openCustomTab(state.baseUiState.context, url)
              },
-            onSuccess = onSuccess
+            onSuccess = {
+                if (it)
+                    state.enabledLoadState.value = false
+
+                onSuccess(it)
+            }
         )
     } else {
         InitScreen(

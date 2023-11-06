@@ -66,7 +66,7 @@ fun SearchPhotosScreen(
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
     val backHandlingEnabled by remember { mutableStateOf(true) }
-    var visibleActionsState by rememberSaveable { mutableStateOf(true) }
+    var visibleActions by rememberSaveable { mutableStateOf(true) }
 
     BackHandler(backHandlingEnabled) {
         (state.context as Activity).finish()
@@ -121,7 +121,7 @@ fun SearchPhotosScreen(
                     }
                 },
                 actions = {
-                    if (visibleActionsState) {
+                    if (visibleActions) {
                         IconButton(onClick = { /* doSomething() */ }) {
                             Icon(
                                 imageVector = Icons.Filled.Favorite,
@@ -150,7 +150,7 @@ fun SearchPhotosScreen(
                     },
                     onOpenWebView = onOpenWebView,
                     onSuccess = {
-                        visibleActionsState = it
+                        visibleActions = it
                     }
                 )
             }

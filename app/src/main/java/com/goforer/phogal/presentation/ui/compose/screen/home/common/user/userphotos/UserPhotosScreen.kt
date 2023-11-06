@@ -73,8 +73,13 @@ fun UserPhotosScreen(
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
     val backHandlingEnabled by remember { mutableStateOf(true) }
-    var enabledLoadState by rememberSaveable { mutableStateOf(true) }
-    var visibleActionsState by rememberSaveable { mutableStateOf(true) }
+    var enabledLoad by rememberSaveable { mutableStateOf(true) }
+    var visibleActions by rememberSaveable { mutableStateOf(true) }
+
+    if (enabledLoad) {
+        enabledLoad = false
+        userPhotosViewModel.trigger(1, Params(nameArgument.name, Repository.ITEM_COUNT))
+    }
 
     BackHandler(backHandlingEnabled) {
         onBackPressed()
@@ -123,7 +128,7 @@ fun UserPhotosScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            enabledLoadState = false
+                            enabledLoad = false
                             onBackPressed()
                         }
                     ) {
@@ -134,7 +139,7 @@ fun UserPhotosScreen(
                     }
                 },
                 actions = {
-                    if (visibleActionsState) {
+                    if (visibleActions) {
                         IconButton(onClick = { /* doSomething() */ }) {
                             Icon(
                                 imageVector = Icons.Filled.Favorite,
@@ -146,7 +151,6 @@ fun UserPhotosScreen(
             )
         }, content = { paddingValues ->
             ScaffoldContent(topInterval = 2.dp) {
-                userPhotosViewModel.trigger(1, Params(nameArgument.name, Repository.ITEM_COUNT))
                 UserPhotosContent(
                     modifier = modifier,
                     state = rememberUserPhotosContentState(
@@ -154,14 +158,20 @@ fun UserPhotosScreen(
                         refreshingState = userPhotosViewModel.isRefreshing
                     ),
                     contentPadding = paddingValues,
-                    onItemClicked = onItemClicked,
+                    onItemClicked = {
+                        enabledLoad = false
+                        onItemClicked(it)
+                    },
                     onShowSnackBar = {
                         state.scope.launch {
                             snackbarHostState.showSnackbar(it)
                         }
                     },
                     onSuccess = { isSuccessful ->
-                        visibleActionsState = isSuccessful
+                        if (isSuccessful)
+                            enabledLoad = false
+
+                        visibleActions = isSuccessful
                     }
                 )
             }
