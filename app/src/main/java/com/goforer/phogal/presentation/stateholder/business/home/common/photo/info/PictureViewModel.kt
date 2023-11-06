@@ -2,8 +2,8 @@ package com.goforer.phogal.presentation.stateholder.business.home.common.photo.i
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.goforer.phogal.data.datasource.network.api.Params
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.data.repository.common.photo.info.GetPictureRepository
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,7 @@ class PictureViewModel
 @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getPictureRepository: GetPictureRepository
-) : BaseViewModel<PictureUiState>() {
+) : BaseViewModel<PhotoUiState>() {
     private val _uiState = MutableStateFlow(Any())
     val uiState: StateFlow<Any> = _uiState
 

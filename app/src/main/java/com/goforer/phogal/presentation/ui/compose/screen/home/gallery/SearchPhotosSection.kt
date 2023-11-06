@@ -67,9 +67,9 @@ import timber.log.Timber
 @Composable
 fun SearchPhotosSection(
     modifier: Modifier = Modifier,
-    state: SearchPhotosSectionState = rememberSearchPhotosSectionState(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
-    onItemClicked: (photoUiState: PhotoUiState, index: Int) -> Unit,
+    state: SearchPhotosSectionState = rememberSearchPhotosSectionState(),
+    onItemClicked: (id: String, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onLoadSuccess: (isSuccessful: Boolean) -> Unit,

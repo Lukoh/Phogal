@@ -81,10 +81,10 @@ import com.goforer.base.designsystem.component.IconButton
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.ExifUiState
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.datasource.network.response.Status
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.business.home.common.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserContainerState
@@ -113,7 +113,7 @@ fun PictureContent(
     pictureViewModel: PictureViewModel = hiltViewModel(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onShownPhoto: (picture: PictureUiState) -> Unit,
+    onShownPhoto: (photoUiState: PhotoUiState) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
@@ -143,14 +143,15 @@ fun HandlePictureResponse(
     state: PhotoContentState = rememberPhotoContentState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onShownPhoto: (picture: PictureUiState) -> Unit,
+    onShownPhoto: (photoUiState: PhotoUiState) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
-    val pictureUiState = pictureViewModel.uiState.collectAsStateWithLifecycle()
+    val value by pictureViewModel.uiState.collectAsStateWithLifecycle()
 
-    if (pictureUiState.value is Resource) {
-        val resource = pictureUiState.value as Resource
+    if (value is Resource) {
+        val resource = value as Resource
+
         when(resource.status) {
             Status.SUCCESS -> {
                 onSuccess(true)
@@ -165,7 +166,7 @@ fun HandlePictureResponse(
                     ) {
                         BodyContent(
                             modifier = modifier,
-                            pictureUiState = resource.data as PictureUiState,
+                            photoUiState = resource.data as PhotoUiState,
                             visibleViewPhotosButton = state.visibleViewButtonState.value,
                             onViewPhotos = onViewPhotos,
                             onShowSnackBar = onShowSnackBar,
@@ -223,11 +224,11 @@ fun HandlePictureResponse(
 @Composable
 fun BodyContent(
     modifier: Modifier = Modifier,
-    pictureUiState: PictureUiState,
+    photoUiState: PhotoUiState,
     visibleViewPhotosButton: Boolean,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
-    onShownPhoto: (pictureUiState: PictureUiState) -> Unit,
+    onShownPhoto: (photoUiState: PhotoUiState) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
     var visible by remember { mutableStateOf(false) }
@@ -247,10 +248,10 @@ fun BodyContent(
         ),
         shape = RectangleShape
     ) {
-        val imageUrl = pictureUiState.urls.raw
+        val imageUrl = photoUiState.urls.raw
         val painter = loadImagePainter(
             data = imageUrl,
-            size = Size(pictureUiState.width.div(8), pictureUiState.height.div(8))
+            size = Size(photoUiState.width.div(8), photoUiState.height.div(8))
         )
 
         if (painter.state is AsyncImagePainter.State.Loading) {
@@ -290,7 +291,7 @@ fun BodyContent(
             UserContainer(
                 modifier = Modifier,
                 state = rememberUserContainerState(
-                    userState = rememberSaveable { mutableStateOf(pictureUiState.user.toString()) },
+                    userState = rememberSaveable { mutableStateOf(photoUiState.user.toString()) },
                     profileSizeState = rememberSaveable { mutableDoubleStateOf(48.0) },
                     colorsState = remember { mutableStateOf(listOf(ColorSystemGray1, ColorSystemGray1, ColorSnowWhite, ColorSystemGray5, Blue75, DarkGreen60)) },
                     visibleViewButtonState = rememberSaveable { mutableStateOf(visibleViewPhotosButton) },
@@ -313,10 +314,10 @@ fun BodyContent(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            BehaviorItem(pictureUiState.likes, pictureUiState.downloads, pictureUiState.views)
+            BehaviorItem(photoUiState.likes.toLong(), photoUiState.downloads, photoUiState.views)
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = pictureUiState.description ?: pictureUiState.alt_description
+                text = photoUiState.description ?: photoUiState.alt_description
                 ?: stringResource(id = R.string.picture_no_description),
                 modifier = Modifier.padding(8.dp, 4.dp),
                 color = ColorText4,
@@ -327,14 +328,14 @@ fun BodyContent(
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.height(10.dp))
-            pictureUiState.location?.let {
+            photoUiState.location?.let {
                 LocationItem(it.name)
                 Spacer(modifier = Modifier.height(2.dp))
             }
 
-            DateItem(pictureUiState.created_at)
+            DateItem(photoUiState.created_at)
             Spacer(modifier = Modifier.height(2.dp))
-            pictureUiState.exif?.let { exifUiState ->
+            photoUiState.exif?.let { exifUiState ->
                 GenericCubicAnimationShape(
                     visible = visible,
                     duration = 550
@@ -380,7 +381,7 @@ fun BodyContent(
             )
 
             Spacer(modifier = Modifier.height(70.dp))
-            onShownPhoto(pictureUiState)
+            onShownPhoto(photoUiState)
         }
     }
 }

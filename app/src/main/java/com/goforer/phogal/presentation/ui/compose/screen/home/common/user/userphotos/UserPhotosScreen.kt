@@ -42,7 +42,9 @@ import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
 import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.phogal.R
+import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.model.local.home.gallery.NameArgument
+import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.presentation.stateholder.business.home.common.user.UserPhotosViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.photos.rememberUserPhotosContentState
@@ -144,13 +146,12 @@ fun UserPhotosScreen(
             )
         }, content = { paddingValues ->
             ScaffoldContent(topInterval = 2.dp) {
+                userPhotosViewModel.trigger(1, Params(nameArgument.name, Repository.ITEM_COUNT))
                 UserPhotosContent(
                     modifier = modifier,
-                    userPhotosViewModel = userPhotosViewModel,
                     state = rememberUserPhotosContentState(
                         photosUiState = userPhotosViewModel.uiState,
-                        refreshingState = userPhotosViewModel.isRefreshing,
-                        nameState = rememberSaveable { mutableStateOf(nameArgument.name) }
+                        refreshingState = userPhotosViewModel.isRefreshing
                     ),
                     contentPadding = paddingValues,
                     onItemClicked = onItemClicked,

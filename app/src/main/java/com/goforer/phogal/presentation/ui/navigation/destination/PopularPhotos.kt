@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Photo
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import com.goforer.phogal.data.model.local.home.gallery.NameArgument
@@ -18,7 +17,6 @@ import com.google.gson.Gson
 object PopularPhotos : PhogalDestination {
     override val icon = Icons.Sharp.Photo
     override val route = popularPhotosStartRoute
-    @OptIn(ExperimentalComposeUiApi::class)
     override val screen: @Composable (
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,

@@ -161,13 +161,13 @@ fun PictureScreen(
                             ),
                             onClick = {
                                 showDialogState.value = true
-                                if (!state.pictureUiState?.liked_by_user!!)
+                                if (!state.photoUiState?.liked_by_user!!)
                                     likeViewModel.trigger(1, Params(state.idState.value))
                                 else
                                     unLikeViewModel.trigger(1, Params(state.idState.value))
                             }
                         ) {
-                            state.pictureUiState?.liked_by_user?.let { liked ->
+                            state.photoUiState?.liked_by_user?.let { liked ->
                                 Icon(
                                     imageVector = if (liked)
                                         ImageVector.vectorResource(id = R.drawable.ic_like_on)
@@ -186,7 +186,7 @@ fun PictureScreen(
                                     Color.Black,
                             ),
                             onClick = {
-                                state.pictureUiState?.let {
+                                state.photoUiState?.let {
                                     bookmarkViewModel.setBookmarkPicture(it)
                                 }
 
@@ -217,7 +217,7 @@ fun PictureScreen(
                         }
                     },
                     onShownPhoto = {
-                        state.pictureUiState = it
+                        state.photoUiState = it
                         state.visibleActionsState.value = true
                         state.enabledBookmarkState.value =  bookmarkViewModel.isPhotoBookmarked(it)
                     },
@@ -238,10 +238,11 @@ fun LikeResponseHandle(
     state: PhotoContentState = rememberPhotoContentState(),
     showDialogState: MutableState<Boolean>
 ) {
-    val likeUiState = likeViewModel.uiState.collectAsStateWithLifecycle()
+    val value by likeViewModel.uiState.collectAsStateWithLifecycle()
 
-    if (likeUiState.value is Resource) {
-        val resource = likeUiState.value as Resource
+    if (value is Resource) {
+        val resource = value as Resource
+
         when(resource.status) {
             Status.SUCCESS -> {
                 val likeResponseUiState = resource.data as LikeResponseUiState
@@ -287,10 +288,10 @@ fun UnlikeResponseHandle(
     state: PhotoContentState = rememberPhotoContentState(),
     showDialogState: MutableState<Boolean>
 ) {
-    val unlikeUiState = unLikeViewModel.uiState.collectAsStateWithLifecycle()
+    val value by unLikeViewModel.uiState.collectAsStateWithLifecycle()
 
-    if (unlikeUiState.value is Resource) {
-        val resource = unlikeUiState.value as Resource
+    if (value is Resource) {
+        val resource = value as Resource
 
         when(resource.status) {
             Status.SUCCESS -> {

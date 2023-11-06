@@ -63,9 +63,9 @@ object BookmarkedPhotos : PhogalDestination {
         route: String
     ) -> Unit = { navController, _, _ ->
         BookmarkedPhotosScreen(
-            onItemClicked = { pictureUiState, _ ->
+            onItemClicked = { photoUiState, _ ->
                 val pictureArgument = PictureArgument(
-                    id = pictureUiState.id,
+                    id = photoUiState.id,
                     visibleViewPhotosButton = false
                 )
                 val gson = Gson()

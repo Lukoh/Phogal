@@ -30,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -69,7 +70,9 @@ fun FollowingUsersItem(
     onOpenWebView: (firstName: String, url: String?) -> Unit,
     onFollow: (userUiState: UserUiState) -> Unit
 ) {
-    val userUiState = state.userState.value as UserUiState
+
+
+    val userUiState by state.userUiState
     val verticalPadding = if (state.indexState.value == 0)
         2.dp
     else

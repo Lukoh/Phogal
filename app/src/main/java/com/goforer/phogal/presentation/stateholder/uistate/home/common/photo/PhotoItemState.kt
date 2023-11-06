@@ -8,11 +8,12 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 
 @Stable
 class PhotoItemState(
     val indexState:  MutableState<Int>,
-    val photoState: State<Any>,
+    val photoState: State<PhotoUiState>,
     val visibleViewButtonState: MutableState<Boolean>,
     val clickedState: MutableState<Boolean>,
     val bookmarkedState: MutableState<Boolean>
@@ -21,7 +22,7 @@ class PhotoItemState(
 @Composable
 fun rememberPhotoItemState(
     indexState: MutableState<Int> = rememberSaveable { mutableIntStateOf(0) },
-    photoState: State<Any> = remember { mutableStateOf(Any()) },
+    photoState: State<PhotoUiState> = remember { mutableStateOf(PhotoUiState()) },
     visibleViewButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     clickedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     bookmarkedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }

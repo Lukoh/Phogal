@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 
@@ -21,7 +21,7 @@ class PhotoContentState(
     var enabledLikeState: MutableState<Boolean>,
     var visibleActionsState: MutableState<Boolean>
 ) {
-    var pictureUiState: PictureUiState? = null
+    var photoUiState: PhotoUiState? = null
 }
 
 @OptIn(ExperimentalComposeUiApi::class)

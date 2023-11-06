@@ -3,8 +3,8 @@ package com.goforer.phogal.presentation.stateholder.business.home.common.bookmar
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.goforer.phogal.data.datasource.local.LocalDataSource
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.goforer.phogal.data.datasource.network.api.Params
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,9 +21,9 @@ class BookmarkViewModel
 constructor(
     savedStateHandle: SavedStateHandle,
     private val localDataSource: LocalDataSource
-) : BaseViewModel<PictureUiState>() {
-    private val _uiState = MutableStateFlow(mutableListOf<PictureUiState>())
-    val uiState: StateFlow<MutableList<PictureUiState>> = _uiState
+) : BaseViewModel<PhotoUiState>() {
+    private val _uiState = MutableStateFlow(mutableListOf<PhotoUiState>())
+    val uiState: StateFlow<MutableList<PhotoUiState>> = _uiState
 
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {
@@ -36,11 +36,11 @@ constructor(
         }
     }
 
-    fun setBookmarkPicture(picture: PictureUiState) {
-        localDataSource.setBookmarkPhoto(picture)
+    fun setBookmarkPicture(photoUiState: PhotoUiState) {
+        localDataSource.setBookmarkPhoto(photoUiState)
     }
 
-    fun isPhotoBookmarked(picture: PictureUiState) = localDataSource.isPhotoBookmarked(picture)
+    fun isPhotoBookmarked(photoUiState: PhotoUiState) = localDataSource.isPhotoBookmarked(photoUiState)
 
     fun isPhotoBookmarked(id: String) = localDataSource.isPhotoBookmarked(id)
 }

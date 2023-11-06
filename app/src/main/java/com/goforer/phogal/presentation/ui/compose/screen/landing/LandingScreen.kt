@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -34,7 +35,7 @@ fun LandingScreen(modifier: Modifier = Modifier, onTimeout: () -> Unit) {
         }
 
         val isPlaying by remember { mutableStateOf(true) }
-        val speed by remember { mutableStateOf(3.2f) }
+        val speed by remember { mutableFloatStateOf(3.2f) }
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.splash))
         val lottieAnimatable = rememberLottieAnimatable()
         val progress by animateLottieCompositionAsState(

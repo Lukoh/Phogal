@@ -62,7 +62,7 @@ fun FollowingUsersSection(
                     ),
                     state = rememberFollowingUserItemState(
                         indexState = rememberSaveable { mutableIntStateOf(index) },
-                        userState = rememberSaveable { mutableStateOf(item) },
+                        userUiState = rememberSaveable { mutableStateOf(item) },
                         visibleViewButtonState = rememberSaveable { mutableStateOf(true) },
                         followedState = rememberSaveable { mutableStateOf(followViewModel.isUserFollowed(item)) }
                     ),

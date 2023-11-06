@@ -38,7 +38,7 @@ import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
 import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
@@ -49,7 +49,7 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 fun BookmarkedPhotosScreen(
     modifier: Modifier = Modifier,
     state: BaseUiState = rememberBaseUiState(),
-    onItemClicked: (pictureUiState: PictureUiState, index: Int) -> Unit,
+    onItemClicked: (photoUiState: PhotoUiState, index: Int) -> Unit,
     onBackPressed: () -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,

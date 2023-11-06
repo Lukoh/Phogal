@@ -39,8 +39,8 @@ fun Chips(
     textColor: Color,
     leadingIconTint: Color,
     trailingIconTint: Color,
-    onClicked: (String) -> Unit,
-    onDeleted: (String) -> Unit
+    onClicked: (word: String) -> Unit,
+    onDeleted: (word: String) -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth()

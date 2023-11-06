@@ -15,14 +15,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import com.goforer.base.customtab.openCustomTab
 import com.goforer.phogal.R
-import com.goforer.phogal.data.datasource.network.api.Params
-import com.goforer.phogal.data.repository.Repository
-import com.goforer.phogal.presentation.stateholder.business.home.common.user.UserPhotosViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.photos.UserPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.photos.rememberUserPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.photos.rememberUserPhotosSectionState
@@ -35,17 +31,11 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 fun UserPhotosContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(4.dp),
-    userPhotosViewModel: UserPhotosViewModel = hiltViewModel(),
     state: UserPhotosContentState = rememberUserPhotosContentState(),
     onItemClicked: (id: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
-    if (state.enabledLoadState.value) {
-        state.enabledLoadState.value = false
-        userPhotosViewModel.trigger(1, Params(state.nameState.value, Repository.ITEM_COUNT))
-    }
-
     if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
         UserPhotosSection(
             modifier = Modifier
@@ -55,9 +45,8 @@ fun UserPhotosContent(
                 photosUiState = state.photosUiState,
                 refreshingState = state.refreshingState.collectAsStateWithLifecycle()
             ),
-            onItemClicked = { photoUiState, _ ->
-                state.enabledLoadState.value = false
-                onItemClicked(photoUiState.id)
+            onItemClicked = { id, _ ->
+                onItemClicked(id)
             },
             onViewPhotos = { _, _, _, _ -> },
             onShowSnackBar = onShowSnackBar,

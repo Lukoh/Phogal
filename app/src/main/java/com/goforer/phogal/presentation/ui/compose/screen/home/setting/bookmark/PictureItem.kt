@@ -54,7 +54,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.PhotoItemState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.rememberPhotoItemState
@@ -72,12 +72,12 @@ import com.google.accompanist.placeholder.material.shimmer
 fun PictureItem(
     modifier: Modifier = Modifier,
     state: PhotoItemState = rememberPhotoItemState(),
-    onItemClicked: (pictureUiState: PictureUiState, index: Int) -> Unit,
+    onItemClicked: (photoUiState: PhotoUiState, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
-    val pictureUiState = state.photoState.value as PictureUiState
+    val photoUiState by state.photoState
     val verticalPadding = if (state.indexState.value == 0)
         2.dp
     else
@@ -110,10 +110,10 @@ fun PictureItem(
                 focusedElevation = 4.dp
             )
         ) {
-            val imageUrl = pictureUiState.urls.raw
+            val imageUrl = photoUiState.urls.raw
             val painter = loadImagePainter(
                 data = imageUrl,
-                size = Size(pictureUiState.width.div(8), pictureUiState.height.div(8))
+                size = Size(photoUiState.width.div(8), photoUiState.height.div(8))
             )
             val transition by animateFloatAsState(
                 targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f,
@@ -166,7 +166,7 @@ fun PictureItem(
                     .clip(RoundedCornerShape(1.dp))
                     .clickable {
                         state.clickedState.value = true
-                        onItemClicked.invoke(pictureUiState, state.indexState.value)
+                        onItemClicked.invoke(photoUiState, state.indexState.value)
                     }
                     .scale(.8f + (.2f * transition))
                     .graphicsLayer { rotationX = (1f - transition) * 5f }
@@ -182,7 +182,7 @@ fun PictureItem(
                 UserContainer(
                     modifier = Modifier,
                     state = rememberUserContainerState(
-                        userState = rememberSaveable { mutableStateOf(pictureUiState.user.toString()) },
+                        userState = rememberSaveable { mutableStateOf(photoUiState.user.toString()) },
                         profileSizeState = rememberSaveable { mutableDoubleStateOf(36.0) },
                         colorsState = remember { mutableStateOf(listOf(Color.White, Color.White, Blue70, Blue75, Blue50, ColorSnowWhite)) },
                         visibleViewButtonState = state.visibleViewButtonState,

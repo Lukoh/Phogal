@@ -59,7 +59,6 @@ import coil.compose.AsyncImagePainter
 import coil.size.Size
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
-import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.PhotoItemState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.rememberPhotoItemState
@@ -78,12 +77,12 @@ import com.google.accompanist.placeholder.material.shimmer
 fun PhotoItem(
     modifier: Modifier = Modifier,
     state: PhotoItemState = rememberPhotoItemState(),
-    onItemClicked: (photoUiState: PhotoUiState, index: Int) -> Unit,
+    onItemClicked: (id: String, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit
 ) {
-    val photoUiState = state.photoState.value as PhotoUiState
+    val photoUiState by state.photoState
 
     photoUiState.alreadySearched = true
     AnimatedVisibility(
@@ -169,7 +168,7 @@ fun PhotoItem(
                     .clip(RoundedCornerShape(1.dp))
                     .clickable {
                         state.clickedState.value = true
-                        onItemClicked.invoke(photoUiState, state.indexState.value)
+                        onItemClicked.invoke(photoUiState.id, state.indexState.value)
                     }
                     .scale(.8f + (.2f * transition))
                     .graphicsLayer { rotationX = (1f - transition) * 5f }

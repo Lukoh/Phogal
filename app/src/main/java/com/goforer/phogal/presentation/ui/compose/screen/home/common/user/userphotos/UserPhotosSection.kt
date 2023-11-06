@@ -72,7 +72,7 @@ fun UserPhotosSection(
     contentPadding: PaddingValues,
     state: UserPhotosSectionState = rememberUserPhotosSectionState(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
-    onItemClicked: (photoUiState: PhotoUiState, index: Int) -> Unit,
+    onItemClicked: (id: String, index: Int) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,

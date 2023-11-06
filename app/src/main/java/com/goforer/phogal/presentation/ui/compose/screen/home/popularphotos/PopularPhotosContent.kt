@@ -53,9 +53,9 @@ fun PopularPhotosContent(
             popularPhotosUiState = state.popularPhotosUiState,
             refreshingState = state.refreshingState.collectAsStateWithLifecycle()
         ),
-        onItemClicked = { photo, _ ->
+        onItemClicked = { id, _ ->
             state.enabledLoadState.value= false
-            onItemClicked(photo.id)
+            onItemClicked(id)
         },
         onViewPhotos = onViewPhotos,
         onShowSnackBar = onShowSnackBar,

@@ -2,7 +2,7 @@ package com.goforer.phogal.presentation.stateholder.business.home.gallery.search
 
 import com.goforer.base.extension.isNull
 import com.goforer.phogal.data.datasource.local.LocalDataSource
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -10,7 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchWordViewModel
 @Inject
-constructor() : BaseViewModel<PictureUiState>() {
+constructor() : BaseViewModel<PhotoUiState>() {
     @Inject
     lateinit var localStorage: LocalDataSource
 

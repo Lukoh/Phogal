@@ -7,8 +7,8 @@ import android.security.keystore.KeyProperties
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.data.model.remote.response.gallery.common.UserUiState
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import timber.log.Timber
@@ -96,20 +96,20 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         editor.commit()
     }
 
-    internal fun geBookmarkedPhotos(): MutableList<PictureUiState>? {
+    internal fun geBookmarkedPhotos(): MutableList<PhotoUiState>? {
         val json = pref.getString(key_bookmark_photos, null)
-        val type = object : TypeToken<ArrayList<PictureUiState>>() {}.type
+        val type = object : TypeToken<ArrayList<PhotoUiState>>() {}.type
 
         return Gson().fromJson(json, type)
     }
 
-    internal fun isPhotoBookmarked(photo: PictureUiState): Boolean {
+    internal fun isPhotoBookmarked(photoUiState: PhotoUiState): Boolean {
         val photos = geBookmarkedPhotos()
 
         return if (photos.isNullOrEmpty()) {
             false
         } else {
-            val foundPhoto = photos.find { it.id == photo.id || it.urls.raw == photo.urls.raw }
+            val foundPhoto = photos.find { it.id == photoUiState.id || it.urls.raw == photoUiState.urls.raw }
 
             foundPhoto != null
         }
@@ -127,24 +127,24 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         }
     }
 
-    internal fun setBookmarkPhoto(bookmarkedPhoto: PictureUiState): MutableList<PictureUiState>? {
+    internal fun setBookmarkPhoto(photoUiState: PhotoUiState): MutableList<PhotoUiState>? {
         val editor = pref.edit()
         var photos = geBookmarkedPhotos()
         val json: String
-        val type = object : TypeToken<ArrayList<PictureUiState>>() {}.type
+        val type = object : TypeToken<ArrayList<PhotoUiState>>() {}.type
 
         if (photos.isNullOrEmpty()) {
             photos = mutableListOf()
-            photos.add(bookmarkedPhoto)
+            photos.add(photoUiState)
             json = Gson().toJson(photos)
             editor.apply()
             editor.putString(key_bookmark_photos, json)
             editor.apply()
         } else {
-            val photo = photos.find { it.id == bookmarkedPhoto.id || it.urls.raw == bookmarkedPhoto.urls.raw }
+            val photo = photos.find { it.id == photoUiState.id || it.urls.raw == photoUiState.urls.raw }
 
             if (photo == null)
-                photos.add(bookmarkedPhoto)
+                photos.add(photoUiState)
             else
                 photos.remove(photo)
 

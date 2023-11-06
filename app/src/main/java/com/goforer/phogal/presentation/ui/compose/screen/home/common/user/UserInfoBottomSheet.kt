@@ -33,7 +33,7 @@ fun UserInfoBottomSheet(
     userInfoState: UserInfoState = rememberUserInfoState(),
     userUiState: UserUiState,
     showUserInfoBottomSheet: Boolean,
-    onDismissedRequest: (Boolean) -> Unit
+    onDismissedRequest: (dismissed: Boolean) -> Unit
 ) {
     TrackScreenViewEvent(screenName = "View_User_Profile_BottomSheet")
     if (showUserInfoBottomSheet) {

@@ -8,11 +8,12 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import com.goforer.phogal.data.model.remote.response.gallery.common.UserUiState
 
 @Stable
 class FollowingUserItemState(
     val indexState: MutableState<Int>,
-    val userState: State<Any>,
+    val userUiState: State<UserUiState>,
     val visibleViewButtonState: MutableState<Boolean>,
     val clickedState: MutableState<Boolean>,
     val followedState: MutableState<Boolean>
@@ -21,14 +22,14 @@ class FollowingUserItemState(
 @Composable
 fun rememberFollowingUserItemState(
     indexState: MutableState<Int> = rememberSaveable { mutableIntStateOf(0) },
-    userState: State<Any> = remember { mutableStateOf(Any()) },
+    userUiState: State<UserUiState> = remember { mutableStateOf(UserUiState()) },
     visibleViewButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     clickedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     followedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
-): FollowingUserItemState = remember(indexState, userState, visibleViewButtonState, clickedState) {
+): FollowingUserItemState = remember(indexState, userUiState, visibleViewButtonState, clickedState) {
     FollowingUserItemState(
         indexState = indexState,
-        userState = userState,
+        userUiState = userUiState,
         visibleViewButtonState = visibleViewButtonState,
         clickedState = clickedState,
         followedState = followedState

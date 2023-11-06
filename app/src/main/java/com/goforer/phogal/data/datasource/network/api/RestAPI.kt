@@ -2,7 +2,6 @@ package com.goforer.phogal.data.datasource.network.api
 
 import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponseUiState
 import com.goforer.phogal.data.model.remote.response.gallery.common.UserUiState
-import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.PictureUiState
 import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponseUiState
 import com.goforer.phogal.data.datasource.network.response.ApiResponse
 import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
@@ -26,7 +25,7 @@ interface RestAPI {
     fun getPhoto(
         @Path("id") id: String,
         @Query("client_id") clientId: String
-    ): Flow<ApiResponse<PictureUiState>>
+    ): Flow<ApiResponse<PhotoUiState>>
 
     @GET("users/{username}")
     fun getUserPublicProfile(

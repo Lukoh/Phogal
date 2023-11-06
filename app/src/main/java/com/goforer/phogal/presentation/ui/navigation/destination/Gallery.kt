@@ -33,7 +33,6 @@ import com.google.gson.Gson
 object SearchPhotos : PhogalDestination {
     override val icon = Icons.Sharp.ViewList
     override val route = searchPhotosStartRoute
-    @OptIn(ExperimentalComposeUiApi::class)
     override val screen: @Composable (
         navController: NavHostController,
         backStackEntry: NavBackStackEntry,
