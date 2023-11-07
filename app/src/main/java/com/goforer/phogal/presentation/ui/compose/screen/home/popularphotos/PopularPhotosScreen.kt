@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,13 +23,18 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
 import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.phogal.R
+import com.goforer.phogal.data.datasource.network.api.Params
+import com.goforer.phogal.data.repository.Repository
+import com.goforer.phogal.presentation.stateholder.business.home.popularphotos.PopularPhotosViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
+import com.goforer.phogal.presentation.stateholder.uistate.home.popularphotos.rememberPopularPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import kotlinx.coroutines.launch
@@ -37,6 +43,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun PopularPhotosScreen(
     modifier: Modifier = Modifier,
+    popularPhotosViewModel: PopularPhotosViewModel = hiltViewModel(),
     state: BaseUiState = rememberBaseUiState(),
     onItemClicked: (id: String) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
@@ -104,6 +111,16 @@ fun PopularPhotosScreen(
             ScaffoldContent(topInterval = paddingValues.calculateTopPadding()) {
                 PopularPhotosContent(
                     modifier = modifier,
+                    state = rememberPopularPhotosContentState(
+                        baseUiState = rememberBaseUiState(),
+                        uiState = popularPhotosViewModel.uiState,
+                        enabledLoadState = rememberSaveable { mutableStateOf(true) },
+                        refreshingState = popularPhotosViewModel.isRefreshing
+                    ),
+                    onTriggered = {
+                        if (it)
+                            popularPhotosViewModel.trigger(1, Params(Repository.POPULAR, Repository.FIRST_PAGE, Repository.ITEM_COUNT))
+                    },
                     onItemClicked = onItemClicked,
                     onViewPhotos = onViewPhotos,
                     onShowSnackBar = {

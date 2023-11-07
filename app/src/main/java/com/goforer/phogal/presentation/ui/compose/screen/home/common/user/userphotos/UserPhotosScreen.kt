@@ -73,13 +73,7 @@ fun UserPhotosScreen(
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
     val backHandlingEnabled by remember { mutableStateOf(true) }
-    var enabledLoad by rememberSaveable { mutableStateOf(true) }
     var visibleActions by rememberSaveable { mutableStateOf(true) }
-
-    if (enabledLoad) {
-        enabledLoad = false
-        userPhotosViewModel.trigger(1, Params(nameArgument.name, Repository.ITEM_COUNT))
-    }
 
     BackHandler(backHandlingEnabled) {
         onBackPressed()
@@ -128,7 +122,6 @@ fun UserPhotosScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            enabledLoad = false
                             onBackPressed()
                         }
                     ) {
@@ -154,12 +147,15 @@ fun UserPhotosScreen(
                 UserPhotosContent(
                     modifier = modifier,
                     state = rememberUserPhotosContentState(
-                        photosUiState = userPhotosViewModel.uiState,
+                        uiState = userPhotosViewModel.uiState,
                         refreshingState = userPhotosViewModel.isRefreshing
                     ),
                     contentPadding = paddingValues,
+                    onTriggered = {
+                        if (it)
+                            userPhotosViewModel.trigger(1, Params(nameArgument.name, Repository.ITEM_COUNT))
+                    },
                     onItemClicked = {
-                        enabledLoad = false
                         onItemClicked(it)
                     },
                     onShowSnackBar = {
@@ -168,9 +164,6 @@ fun UserPhotosScreen(
                         }
                     },
                     onSuccess = { isSuccessful ->
-                        if (isSuccessful)
-                            enabledLoad = false
-
                         visibleActions = isSuccessful
                     }
                 )

@@ -9,6 +9,7 @@ import com.goforer.phogal.data.repository.popularphotos.GetPopularPhotosReposito
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -20,7 +21,8 @@ class PopularPhotosViewModel
     savedStateHandle: SavedStateHandle,
     private val getPopularPhotosRepository: GetPopularPhotosRepository
 ) : BaseViewModel<PhotoUiState>() {
-    val popularPhotosUiState = MutableStateFlow(Any())
+    private val _uiState = MutableStateFlow(Any())
+    val uiState: StateFlow<Any> = _uiState
     val isRefreshing = MutableStateFlow(false)
 
     override fun trigger(replyCount: Int, params: Params) {
@@ -31,7 +33,7 @@ class PopularPhotosViewModel
             ).cachedIn(viewModelScope)
                 .stateIn(viewModelScope)
                 .collectLatest {
-                    popularPhotosUiState.value = it
+                    _uiState.value = it
                 }
         }
     }

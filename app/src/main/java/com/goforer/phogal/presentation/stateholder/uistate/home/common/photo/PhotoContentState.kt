@@ -10,10 +10,13 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Stable
 class PhotoContentState(
     val baseUiState: BaseUiState,
+    val uiState: StateFlow<Any>,
     val idState: MutableState<String>,
     val visibleViewButtonState: MutableState<Boolean>,
     var enabledLoadState: MutableState<Boolean>,
@@ -28,6 +31,7 @@ class PhotoContentState(
 @Composable
 fun rememberPhotoContentState(
     baseUiState: BaseUiState = rememberBaseUiState(),
+    uiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
     idState: MutableState<String> = rememberSaveable { mutableStateOf("") },
     visibleViewButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     enabledLoadState: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },
@@ -36,11 +40,13 @@ fun rememberPhotoContentState(
     visibleActionsState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): PhotoContentState = remember(
     idState,
+    uiState,
     visibleViewButtonState,
     enabledLoadState
 ) {
     PhotoContentState(
         baseUiState = baseUiState,
+        uiState = uiState,
         idState = idState,
         visibleViewButtonState = visibleViewButtonState,
         enabledLoadState = enabledLoadState,

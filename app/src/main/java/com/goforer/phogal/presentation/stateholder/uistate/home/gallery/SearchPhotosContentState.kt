@@ -21,7 +21,7 @@ class SearchPhotosContentState(
     val triggeredState: MutableState<Boolean>,
     val permissionState: MutableState<Boolean>,
     val rationaleTextState: MutableState<String>,
-    val photosUiState: StateFlow<Any>,
+    val uiState: StateFlow<Any>,
     val refreshingState: StateFlow<Boolean>,
     var scrollingState: MutableState<Boolean>,
     var removedWordState: MutableState<Boolean>
@@ -42,13 +42,13 @@ fun rememberSearchPhotosContentState(
     triggeredState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     permissionState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     rationaleTextState: MutableState<String> = rememberSaveable { mutableStateOf("") },
-    photosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
+    uiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
     refreshingState: StateFlow<Boolean> = remember { MutableStateFlow(false) },
     scrollingState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     removedWordState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): SearchPhotosContentState = remember(
     baseUiState,
-    photosUiState,
+    uiState,
     refreshingState
 ) {
     SearchPhotosContentState(
@@ -58,7 +58,7 @@ fun rememberSearchPhotosContentState(
         triggeredState = triggeredState,
         permissionState = permissionState,
         rationaleTextState = rationaleTextState,
-        photosUiState = photosUiState,
+        uiState = uiState,
         refreshingState = refreshingState,
         scrollingState = scrollingState,
         removedWordState = removedWordState

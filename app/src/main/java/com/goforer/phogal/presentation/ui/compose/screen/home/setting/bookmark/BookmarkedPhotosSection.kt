@@ -51,7 +51,7 @@ fun BookmarkedPhotosSection(
         ) {
             itemsIndexed(
                 items = photos,
-                key = { _, item -> item.id }
+                key = { _, item ->  }
             ) {index, item ->
                 PictureItem(
                     modifier = modifier.animateItemPlacement(

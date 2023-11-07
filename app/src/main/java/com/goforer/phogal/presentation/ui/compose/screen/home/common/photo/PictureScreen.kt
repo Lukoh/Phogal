@@ -55,6 +55,7 @@ import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.datasource.network.response.Status
 import com.goforer.phogal.presentation.stateholder.business.home.common.bookmark.BookmarkViewModel
+import com.goforer.phogal.presentation.stateholder.business.home.common.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.common.photo.like.PictureLikeViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.common.photo.like.PictureUnlikeViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.PhotoContentState
@@ -68,6 +69,7 @@ import timber.log.Timber
 @Composable
 fun PictureScreen(
     modifier: Modifier = Modifier,
+    pictureViewModel: PictureViewModel = hiltViewModel(),
     likeViewModel: PictureLikeViewModel = hiltViewModel(),
     unLikeViewModel: PictureUnlikeViewModel =  hiltViewModel(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
@@ -209,7 +211,13 @@ fun PictureScreen(
                 PictureContent(
                     modifier = modifier,
                     contentPadding = paddingValues,
-                    state = state,
+                    state = rememberPhotoContentState(
+                        uiState = pictureViewModel.uiState
+                    ),
+                    onTriggered = {
+                        if (it)
+                            pictureViewModel.trigger(1, Params(state.idState.value))
+                    },
                     onViewPhotos = onViewPhotos,
                     onShowSnackBar = {
                         state.baseUiState.scope.launch {
@@ -217,7 +225,7 @@ fun PictureScreen(
                         }
                     },
                     onShownPhoto = {
-                        state.photoUiState = it
+                        //state.photoUiState = it
                         state.visibleActionsState.value = true
                         state.enabledBookmarkState.value =  bookmarkViewModel.isPhotoBookmarked(it)
                     },

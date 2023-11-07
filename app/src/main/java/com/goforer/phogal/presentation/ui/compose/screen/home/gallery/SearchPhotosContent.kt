@@ -54,7 +54,7 @@ fun SearchPhotosContent(
     searchWordViewModel: SearchWordViewModel = hiltViewModel(),
     photosContentState: SearchPhotosContentState = rememberSearchPhotosContentState(
         baseUiState = rememberBaseUiState(),
-        photosUiState = galleryViewModel.uiState,
+        uiState = galleryViewModel.uiState,
         refreshingState = galleryViewModel.isRefreshing
     ),
     searchState: SearchSectionState = rememberSearchSectionState(enabledState = photosContentState.enabledState),
@@ -125,14 +125,14 @@ fun SearchPhotosContent(
             }
         }
 
-        if (photosContentState.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
+        if (photosContentState.uiState.collectAsStateWithLifecycle().value is PagingData<*>) {
             SearchPhotosSection(
                 modifier = Modifier
                     .padding(top = 0.5.dp)
                     .weight(1f),
                 state = rememberSearchPhotosSectionState(
                     scope = photosContentState.baseUiState.scope,
-                    photosUiState = photosContentState.photosUiState,
+                    uiState = photosContentState.uiState,
                     refreshingState = photosContentState.refreshingState.collectAsStateWithLifecycle()
                 ),
                 onItemClicked = { id, _ ->

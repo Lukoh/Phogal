@@ -78,7 +78,7 @@ fun UserPhotosSection(
     onOpenWebView: (firstName: String, url: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
-    val photos = (state.photosUiState as StateFlow<PagingData<PhotoUiState>>).collectAsLazyPagingItems()
+    val photos = (state.uiState as StateFlow<PagingData<PhotoUiState>>).collectAsLazyPagingItems()
     // After recreation, LazyPagingItems first return 0 items, then the cached items.
     // This behavior/issue is resetting the LazyListState scroll position.
     // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
@@ -150,9 +150,7 @@ fun UserPhotosSection(
                         } else {
                             onSuccess(true)
                             items(count = photos.itemCount,
-                                key = photos.itemKey(
-                                    key = { photo -> photo.id }
-                                ),
+                                key = photos.itemKey(),
                                 contentType = photos.itemContentType()
                             ) { index ->
                                 // After recreation, LazyPagingItems first return 0 items, then the cached items.

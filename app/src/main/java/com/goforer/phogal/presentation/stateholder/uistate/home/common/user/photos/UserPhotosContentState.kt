@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Stable
 class UserPhotosContentState(
     val baseUiState: BaseUiState,
-    val photosUiState: StateFlow<Any>,
+    val uiState: StateFlow<Any>,
     val refreshingState: StateFlow<Boolean>,
     var enabledLoadState: MutableState<Boolean>
 )
@@ -24,18 +24,18 @@ class UserPhotosContentState(
 @Composable
 fun rememberUserPhotosContentState(
     baseUiState: BaseUiState = rememberBaseUiState(),
-    photosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
+    uiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
     refreshingState: StateFlow<Boolean> = remember { MutableStateFlow(false) },
     enabledLoadState :  MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
 ): UserPhotosContentState = remember(
     baseUiState,
-    photosUiState,
+    uiState,
     refreshingState,
     enabledLoadState
 ) {
     UserPhotosContentState(
         baseUiState = baseUiState,
-        photosUiState = photosUiState,
+        uiState = uiState,
         refreshingState = refreshingState,
         enabledLoadState = enabledLoadState
     )

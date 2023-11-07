@@ -21,7 +21,7 @@ fun animateIconScale(
         targetValue = scale,
         animationSpec = FloatSpringSpec(
             dampingRatio = 0.3f
-        )
+        ), label = ""
     )
 
     LaunchedEffect(Unit) {

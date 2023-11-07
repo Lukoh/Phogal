@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,17 +34,21 @@ fun UserPhotosContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     state: UserPhotosContentState = rememberUserPhotosContentState(),
+    onTriggered: (triggered: Boolean ) -> Unit,
     onItemClicked: (id: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
-    if (state.photosUiState.collectAsStateWithLifecycle().value is PagingData<*>) {
+    val triggered by rememberUpdatedState(onTriggered)
+
+    triggered(state.enabledLoadState.value)
+    if (state.uiState.collectAsStateWithLifecycle().value is PagingData<*>) {
         UserPhotosSection(
             modifier = Modifier
                 .padding(top = 0.5.dp),
             contentPadding = contentPadding,
             state = rememberUserPhotosSectionState(
-                photosUiState = state.photosUiState,
+                uiState = state.uiState,
                 refreshingState = state.refreshingState.collectAsStateWithLifecycle()
             ),
             onItemClicked = { id, _ ->

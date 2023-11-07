@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Stable
 class PopularPhotosContentState(
     val baseUiState: BaseUiState,
-    val popularPhotosUiState: StateFlow<Any>,
+    val uiState: StateFlow<Any>,
     val refreshingState: StateFlow<Boolean>,
     var enabledLoadState: MutableState<Boolean>,
     var visibleActionsState: MutableState<Boolean>
@@ -25,18 +25,18 @@ class PopularPhotosContentState(
 @Composable
 fun rememberPopularPhotosContentState(
     baseUiState: BaseUiState = rememberBaseUiState(),
-    popularPhotosUiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
+    uiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
     refreshingState: StateFlow<Boolean> = remember { MutableStateFlow(false) },
     enabledLoadState: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },
     visibleActionsState: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) }
 ): PopularPhotosContentState = remember(
     baseUiState,
-    popularPhotosUiState,
+    uiState,
     refreshingState
 ) {
     PopularPhotosContentState(
         baseUiState = baseUiState,
-        popularPhotosUiState = popularPhotosUiState,
+        uiState = uiState,
         refreshingState = refreshingState,
         enabledLoadState = enabledLoadState,
         visibleActionsState = visibleActionsState

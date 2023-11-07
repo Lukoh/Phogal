@@ -48,6 +48,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -72,7 +73,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImagePainter
 import coil.size.Size
@@ -81,12 +81,10 @@ import com.goforer.base.designsystem.component.IconButton
 import com.goforer.base.designsystem.component.loadImagePainter
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.photo.photoinfo.ExifUiState
-import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.datasource.network.response.Status
 import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
-import com.goforer.phogal.presentation.stateholder.business.home.common.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.rememberUserContainerState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.PhotoContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.rememberPhotoContentState
@@ -110,28 +108,28 @@ fun PictureContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     state: PhotoContentState = rememberPhotoContentState(),
-    pictureViewModel: PictureViewModel = hiltViewModel(),
+    onTriggered: (enabled: Boolean) -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onShownPhoto: (photoUiState: PhotoUiState) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
-    if (state.enabledLoadState.value) {
-        state.enabledLoadState.value = false
-        pictureViewModel.trigger(1, Params(state.idState.value))
-    }
+    val triggered by rememberUpdatedState(onTriggered)
 
+    triggered(state.enabledLoadState.value)
     HandlePictureResponse(
         modifier = modifier,
         contentPadding = contentPadding,
         state = state,
-        pictureViewModel = pictureViewModel,
         onViewPhotos = onViewPhotos,
         onShowSnackBar = onShowSnackBar,
         onShownPhoto = onShownPhoto,
         onOpenWebView = onOpenWebView,
-        onSuccess = onSuccess
+        onSuccess = onSuccess,
+        onRetry = {
+            triggered(true)
+        }
     )
 }
 
@@ -139,15 +137,15 @@ fun PictureContent(
 fun HandlePictureResponse(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    pictureViewModel: PictureViewModel = hiltViewModel(),
     state: PhotoContentState = rememberPhotoContentState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onShownPhoto: (photoUiState: PhotoUiState) -> Unit,
     onOpenWebView: (firstName: String, url: String) -> Unit,
-    onSuccess: (isSuccessful: Boolean) -> Unit
+    onSuccess: (isSuccessful: Boolean) -> Unit,
+    onRetry: () -> Unit
 ) {
-    val value by pictureViewModel.uiState.collectAsStateWithLifecycle()
+    val value by state.uiState.collectAsStateWithLifecycle()
 
     if (value is Resource) {
         val resource = value as Resource
@@ -211,9 +209,7 @@ fun HandlePictureResponse(
                         else
                             stringResource(id = R.string.error_dialog_title),
                         message = "${stringResource(id = R.string.error_get_picture)}${"\n\n"}${resource.message.toString()}",
-                        onRetry = {
-                            pictureViewModel.trigger(1, Params(state.idState.value))
-                        }
+                        onRetry = onRetry
                     )
                 }
             }

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Stable
 class UserPhotosSectionState(
-    val photosUiState: StateFlow<Any>,
+    val uiState: StateFlow<Any>,
     val refreshingState: State<Boolean>,
     var clickedState: MutableState<Boolean>,
     var visibleUpButtonState: MutableState<Boolean>
@@ -20,7 +20,7 @@ class UserPhotosSectionState(
 
 @Composable
 fun rememberUserPhotosSectionState(
-    photosUiState: StateFlow<Any> = rememberSaveable { MutableStateFlow(Any()) },
+    uiState: StateFlow<Any> = rememberSaveable { MutableStateFlow(Any()) },
     refreshingState: State<Boolean> = rememberSaveable { mutableStateOf(false) },
     clickedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     visibleUpButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
@@ -28,7 +28,7 @@ fun rememberUserPhotosSectionState(
     clickedState,
 ) {
     UserPhotosSectionState(
-        photosUiState = photosUiState,
+        uiState = uiState,
         refreshingState = refreshingState,
         clickedState = clickedState,
         visibleUpButtonState = visibleUpButtonState
