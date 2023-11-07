@@ -118,6 +118,7 @@ fun PictureContent(
     val triggered by rememberUpdatedState(onTriggered)
 
     triggered(state.enabledLoadState.value)
+    state.enabledLoadState.value = false
     HandlePictureResponse(
         modifier = modifier,
         contentPadding = contentPadding,
@@ -128,7 +129,9 @@ fun PictureContent(
         onOpenWebView = onOpenWebView,
         onSuccess = onSuccess,
         onRetry = {
-            triggered(true)
+            state.enabledLoadState.value = true
+            triggered(state.enabledLoadState.value)
+            state.enabledLoadState.value = false
         }
     )
 }

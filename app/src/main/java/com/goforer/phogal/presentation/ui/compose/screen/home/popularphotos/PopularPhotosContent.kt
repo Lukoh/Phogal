@@ -32,6 +32,7 @@ fun PopularPhotosContent(
     val triggered by rememberUpdatedState(onTriggered)
 
     triggered(state.enabledLoadState.value)
+    state.enabledLoadState.value = false
     PopularPhotosSection(
         modifier = modifier,
         state = rememberPopularPhotosSectionState(

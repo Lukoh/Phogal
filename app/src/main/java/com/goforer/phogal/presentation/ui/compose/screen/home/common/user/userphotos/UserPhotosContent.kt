@@ -42,6 +42,7 @@ fun UserPhotosContent(
     val triggered by rememberUpdatedState(onTriggered)
 
     triggered(state.enabledLoadState.value)
+    state.enabledLoadState.value = false
     if (state.uiState.collectAsStateWithLifecycle().value is PagingData<*>) {
         UserPhotosSection(
             modifier = Modifier
