@@ -30,14 +30,13 @@ class PictureViewModel
             getPictureRepository.trigger(
                 replyCount = replyCount,
                 params = params
-            )
-                .onStart {
-                    Status.LOADING
-                }.stateIn(
-                    scope = viewModelScope
-                ).collectLatest {
-                    _uiState.value = handleResponse(it)
-                }
+            ).onStart {
+                Status.LOADING
+            }.stateIn(
+                scope = viewModelScope
+            ).collectLatest {
+                _uiState.value = handleResponse(it)
+            }
         }
     }
 }

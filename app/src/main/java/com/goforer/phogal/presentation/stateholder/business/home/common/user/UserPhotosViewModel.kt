@@ -35,17 +35,16 @@ class UserPhotosViewModel
             getUserPhotosRepository.trigger(
                 replyCount = replyCount,
                 params = params
-            )
-                .cachedIn(viewModelScope)
-                .onStart {
-                    Status.LOADING
-                }.stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5_000),
-                    initialValue = ApiEmptyResponse<PagingData<PhotoUiState>>(),
-                ).collectLatest {
-                    _uiState.value = it
-                }
+            ).cachedIn(viewModelScope)
+             .onStart {
+                 Status.LOADING
+             }.stateIn(
+                 scope = viewModelScope,
+                 started = SharingStarted.WhileSubscribed(5_000),
+                 initialValue = ApiEmptyResponse<PagingData<PhotoUiState>>(),
+             ).collectLatest {
+                _uiState.value = it
+             }
         }
     }
 

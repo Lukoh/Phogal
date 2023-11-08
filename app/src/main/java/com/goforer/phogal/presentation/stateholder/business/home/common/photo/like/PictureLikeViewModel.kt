@@ -28,12 +28,11 @@ class PictureLikeViewModel
             postPictureLikeRepository.trigger(
                 replyCount = replyCount,
                 params = params
-            )
-                .stateIn(
-                    scope = viewModelScope
-                ).collectLatest {
-                    _uiState.value = handleResponse(it)
-                }
+            ).stateIn(
+                scope = viewModelScope
+            ).collectLatest {
+                _uiState.value = handleResponse(it)
+            }
         }
     }
 }

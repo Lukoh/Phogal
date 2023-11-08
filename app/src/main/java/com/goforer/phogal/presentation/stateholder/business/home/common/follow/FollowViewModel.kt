@@ -32,16 +32,15 @@ constructor(
         viewModelScope.launch {
             flowOf(
                 localDataSource.getFollowingUsers()
-            )
-                .onStart {
-                    Status.LOADING
-                }.stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5_000),
-                    initialValue = mutableListOf(),
-                ).collectLatest { users ->
-                    _uiState.value = users as MutableList<UserUiState>
-                }
+            ).onStart {
+                Status.LOADING
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = mutableListOf()
+            ).collectLatest { users ->
+                _uiState.value = users as MutableList<UserUiState>
+            }
         }
     }
 
