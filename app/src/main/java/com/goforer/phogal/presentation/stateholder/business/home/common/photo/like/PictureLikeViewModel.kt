@@ -28,11 +28,11 @@ class PictureLikeViewModel
             postPictureLikeRepository.trigger(
                 replyCount = replyCount,
                 params = params
-            ).stateIn(viewModelScope)
-                .collectLatest {
-                    val response = handleResponse(it)
-
-                    _uiState.value = response
+            )
+                .stateIn(
+                    scope = viewModelScope
+                ).collectLatest {
+                    _uiState.value = handleResponse(it)
                 }
         }
     }

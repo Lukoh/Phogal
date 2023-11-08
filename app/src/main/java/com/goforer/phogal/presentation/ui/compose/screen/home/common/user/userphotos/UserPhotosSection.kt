@@ -149,7 +149,8 @@ fun UserPhotosSection(
                             }
                         } else {
                             onSuccess(true)
-                            items(count = photos.itemCount,
+                            items(
+                                count = photos.itemCount,
                                 key = photos.itemKey(
                                     key = { photo -> photo.id }
                                 ),

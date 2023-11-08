@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
@@ -33,7 +34,9 @@ import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
 import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.base.extension.isNull
 import com.goforer.phogal.R
+import com.goforer.phogal.presentation.stateholder.business.home.common.follow.FollowViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
+import com.goforer.phogal.presentation.stateholder.uistate.home.setting.following.rememberFollowingUsersState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import kotlinx.coroutines.launch
@@ -42,6 +45,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun FollowingUsersScreen(
     modifier: Modifier = Modifier,
+    followViewModel: FollowViewModel = hiltViewModel(),
     state: BaseUiState = rememberBaseUiState(),
     onBackPressed: () -> Unit,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
@@ -56,7 +60,6 @@ fun FollowingUsersScreen(
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
-    val enabledLoadPhotos by remember { mutableStateOf(true) }
     val backHandlingEnabled by remember { mutableStateOf(true) }
 
     BackHandler(backHandlingEnabled) {
@@ -122,9 +125,21 @@ fun FollowingUsersScreen(
             ScaffoldContent(topInterval = 2.dp) {
                 FollowingUsersContent(
                     modifier = modifier,
+                    state = rememberFollowingUsersState(
+                        uiState = followViewModel.uiState
+                    ),
                     contentPadding = paddingValues,
-                    enabledLoadPhotos = enabledLoadPhotos,
+                    onTriggered = {
+                        if (it)
+                            followViewModel.trigger()
+                    },
                     onViewPhotos = onViewPhotos,
+                    onFollowed = {
+                        with(followViewModel) {
+                            setUserFollow(it)
+                            trigger()
+                        }
+                    },
                     onOpenWebView = { firstName, url ->
                         url.isNull({
                             state.scope.launch {

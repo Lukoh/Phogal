@@ -34,7 +34,7 @@ fun UserPhotosContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     state: UserPhotosContentState = rememberUserPhotosContentState(),
-    onTriggered: (triggered: Boolean ) -> Unit,
+    onTriggered: (triggered: Boolean, ) -> Unit,
     onItemClicked: (id: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit

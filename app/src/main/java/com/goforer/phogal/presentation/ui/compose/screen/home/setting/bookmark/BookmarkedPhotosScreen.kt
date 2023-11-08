@@ -21,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
@@ -40,7 +40,9 @@ import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
 import com.goforer.base.designsystem.component.ScaffoldContent
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
+import com.goforer.phogal.presentation.stateholder.business.home.common.bookmark.BookmarkViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
+import com.goforer.phogal.presentation.stateholder.uistate.home.setting.bookmark.rememberBookmarkedPhotosState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
@@ -49,6 +51,7 @@ import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 @Composable
 fun BookmarkedPhotosScreen(
     modifier: Modifier = Modifier,
+    bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
     state: BaseUiState = rememberBaseUiState(),
     onItemClicked: (photoUiState: PhotoUiState, index: Int) -> Unit,
     onBackPressed: () -> Unit,
@@ -64,7 +67,6 @@ fun BookmarkedPhotosScreen(
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
-    var enabledLoadPhotos by remember { mutableStateOf(true) }
     val backHandlingEnabled by remember { mutableStateOf(true) }
 
     BackHandler(backHandlingEnabled) {
@@ -115,7 +117,6 @@ fun BookmarkedPhotosScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            enabledLoadPhotos = false
                             onBackPressed()
                         }
                     ) {
@@ -130,8 +131,14 @@ fun BookmarkedPhotosScreen(
             ScaffoldContent(topInterval = 2.dp) {
                 BookmarkedPhotosContent(
                     modifier = modifier,
+                    state = rememberBookmarkedPhotosState(
+                        uiState = bookmarkViewModel.uiState
+                    ),
                     contentPadding = paddingValues,
-                    enabledLoadPhotos = enabledLoadPhotos,
+                    onTriggered = {
+                        if (it)
+                            bookmarkViewModel.trigger()
+                    },
                     onItemClicked = onItemClicked,
                     onViewPhotos = onViewPhotos,
                     onOpenWebView = onOpenWebView

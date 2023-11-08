@@ -68,10 +68,8 @@ fun FollowingUsersItem(
     state: FollowingUserItemState = rememberFollowingUserItemState(),
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String?) -> Unit,
-    onFollow: (userUiState: UserUiState) -> Unit
+    onFollowed: (userUiState: UserUiState) -> Unit
 ) {
-
-
     val userUiState by state.userUiState
     val verticalPadding = if (state.indexState.value == 0)
         2.dp
@@ -134,7 +132,7 @@ fun FollowingUsersItem(
                         followColor = Blue50,
                         isUserFollowed = state.followedState.value
                     ) {
-                       onFollow(userUiState)
+                        onFollowed(userUiState)
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))

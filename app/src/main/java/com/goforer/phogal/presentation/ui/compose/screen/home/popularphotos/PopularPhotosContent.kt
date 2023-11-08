@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,7 +17,6 @@ import com.goforer.phogal.presentation.stateholder.uistate.home.popularphotos.re
 import com.goforer.phogal.presentation.stateholder.uistate.home.popularphotos.rememberPopularPhotosSectionState
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PopularPhotosContent(
     modifier: Modifier = Modifier,

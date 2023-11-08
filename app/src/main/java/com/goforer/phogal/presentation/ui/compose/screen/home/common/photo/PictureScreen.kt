@@ -225,9 +225,9 @@ fun PictureScreen(
                         }
                     },
                     onShownPhoto = {
-                        //state.photoUiState = it
+                        state.photoUiState = it
                         state.visibleActionsState.value = true
-                        state.enabledBookmarkState.value =  bookmarkViewModel.isPhotoBookmarked(it)
+                        state.enabledBookmarkState.value =  bookmarkViewModel.isPhotoBookmarked(it.id, it.urls.raw)
                     },
                     onOpenWebView = onOpenWebView,
                     onSuccess = { isSuccessful ->

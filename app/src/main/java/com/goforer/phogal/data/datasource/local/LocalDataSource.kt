@@ -103,13 +103,13 @@ constructor(val context: Context, cookieJar: PersistentCookieJar? = null) {
         return Gson().fromJson(json, type)
     }
 
-    internal fun isPhotoBookmarked(photoUiState: PhotoUiState): Boolean {
+    internal fun isPhotoBookmarked(id: String, url: String): Boolean {
         val photos = geBookmarkedPhotos()
 
         return if (photos.isNullOrEmpty()) {
             false
         } else {
-            val foundPhoto = photos.find { it.id == photoUiState.id || it.urls.raw == photoUiState.urls.raw }
+            val foundPhoto = photos.find { it.id == id || it.urls.raw == url }
 
             foundPhoto != null
         }

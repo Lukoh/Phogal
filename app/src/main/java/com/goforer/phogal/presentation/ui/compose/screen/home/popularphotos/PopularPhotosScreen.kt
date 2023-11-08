@@ -119,7 +119,14 @@ fun PopularPhotosScreen(
                     ),
                     onTriggered = {
                         if (it)
-                            popularPhotosViewModel.trigger(1, Params(Repository.POPULAR, Repository.FIRST_PAGE, Repository.ITEM_COUNT))
+                            popularPhotosViewModel.trigger(
+                                replyCount = 1,
+                                params = Params(
+                                    Repository.POPULAR,
+                                    Repository.FIRST_PAGE,
+                                    Repository.ITEM_COUNT
+                                )
+                            )
                     },
                     onItemClicked = onItemClicked,
                     onViewPhotos = onViewPhotos,

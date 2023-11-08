@@ -142,7 +142,9 @@ fun PopularPhotosSection(
                             onSuccess(true)
                             items(
                                 count = photos.itemCount,
-                                key = photos.itemKey(),
+                                key = photos.itemKey(
+                                    key = { photo -> photo.id }
+                                ),
                                 contentType = photos.itemContentType()
                             ) { index ->
                                 val padding = if (index == 0)

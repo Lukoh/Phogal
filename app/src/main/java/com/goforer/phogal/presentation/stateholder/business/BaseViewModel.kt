@@ -20,7 +20,7 @@ abstract class BaseViewModel<T> : ViewModel() {
     protected var errorMessage = PagingErrorMessage.PAGING_NORMAL
     protected var errorCode = 200
 
-    open fun trigger(replyCount: Int, params: Params = Params()) {
+    open fun trigger(replyCount: Int = 1, params: Params = Params()) {
         Timber.d("Triggered Params")
     }
 

@@ -34,7 +34,7 @@ fun FollowingUsersSection(
     users: MutableList<UserUiState>,
     onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
     onOpenWebView: (firstName: String, url: String?) -> Unit,
-    onFollow: (userUiState: UserUiState) -> Unit
+    onFollowed: (userUiState: UserUiState) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -68,7 +68,7 @@ fun FollowingUsersSection(
                     ),
                     onViewPhotos = onViewPhotos,
                     onOpenWebView = onOpenWebView,
-                    onFollow = onFollow
+                    onFollowed = onFollowed
                 )
 
                 if (index == users.size - 1)
