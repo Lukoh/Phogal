@@ -137,7 +137,7 @@ fun SettingContent(
         )
         Spacer(modifier = Modifier.height(28.dp))
         Text(
-            text = stringResource(id = R.string.app_name) + " 0.3.0",
+            text = stringResource(id = R.string.app_name) + " 0.7.0",
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Medium,
             fontSize = 13.sp,

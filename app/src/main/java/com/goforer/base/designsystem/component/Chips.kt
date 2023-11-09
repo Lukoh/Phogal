@@ -42,52 +42,49 @@ fun Chips(
     onClicked: (word: String) -> Unit,
     onDeleted: (word: String) -> Unit
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth()
+    LazyRow(
+        modifier = modifier
+            .padding(start = 8.dp, end = 8.dp, bottom = 4.dp)
+            .fillMaxWidth()
     ) {
-        LazyRow(
-            modifier = modifier
-                .padding(start = 8.dp, end = 8.dp, bottom = 4.dp)
-        ) {
-            items(items) {
-                InputChip(
-                    selected = true,
-                    onClick = {
-                        onClicked(it)
-                    },
-                    enabled = true,
-                    label = {
-                        Text(
-                            text = it,
-                            color = textColor,
-                            fontStyle = FontStyle.Normal,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                     },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.ImageSearch,
-                            contentDescription = "Keyword",
-                            modifier = Modifier.size(24.dp),
-                            tint = leadingIconTint
-                        )
-                    },
-                    trailingIcon = {
-                        Icon(
-                            imageVector = Icons.TwoTone.Close ,
-                            contentDescription = "Remove",
-                            modifier = Modifier
-                                .size(20.dp)
-                                .clickable {
-                                    onDeleted(it)
-                                },
-                            tint = trailingIconTint
-                        )
-                    }
-                )
-                if (items.size > 1)
-                    Spacer(modifier = Modifier.width(8.dp))
-            }
+        items(items) {
+            InputChip(
+                selected = true,
+                onClick = {
+                    onClicked(it)
+                },
+                enabled = true,
+                label = {
+                    Text(
+                        text = it,
+                        color = textColor,
+                        fontStyle = FontStyle.Normal,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.ImageSearch,
+                        contentDescription = "Word",
+                        modifier = Modifier.size(24.dp),
+                        tint = leadingIconTint
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.TwoTone.Close ,
+                        contentDescription = "Remove",
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickable {
+                                onDeleted(it)
+                            },
+                        tint = trailingIconTint
+                    )
+                }
+            )
+            if (items.size > 1)
+                Spacer(modifier = Modifier.width(8.dp))
         }
     }
 }
