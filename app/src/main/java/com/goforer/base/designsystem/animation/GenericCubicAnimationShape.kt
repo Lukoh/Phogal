@@ -19,7 +19,7 @@ fun GenericCubicAnimationShape(
 ) {
     val animationProgress by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(durationMillis = duration, easing = FastOutSlowInEasing)
+        animationSpec = tween(durationMillis = duration, easing = FastOutSlowInEasing), label = ""
     )
     val transition = updateTransition(targetState = animationProgress, label = "")
     val animatedShape by transition.animateValue(

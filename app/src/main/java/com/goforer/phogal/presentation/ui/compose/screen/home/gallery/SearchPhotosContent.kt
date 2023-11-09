@@ -4,6 +4,8 @@ import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -83,6 +85,7 @@ fun SearchPhotosContent(
                 }
             }
         )
+        Spacer(modifier = Modifier.height(4.dp))
         GenericCubicAnimationShape(
             visible = !photosContentState.scrollingState.value,
             duration = 250
