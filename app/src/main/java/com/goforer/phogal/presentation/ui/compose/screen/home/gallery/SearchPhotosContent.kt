@@ -85,7 +85,15 @@ fun SearchPhotosContent(
                 }
             }
         )
-        Spacer(modifier = Modifier.height(4.dp))
+
+        Spacer(
+            modifier = Modifier.height(
+                if (photosContentState.scrollingState.value)
+                    8.dp
+                else
+                    4.dp
+            )
+        )
         GenericCubicAnimationShape(
             visible = !photosContentState.scrollingState.value,
             duration = 250
