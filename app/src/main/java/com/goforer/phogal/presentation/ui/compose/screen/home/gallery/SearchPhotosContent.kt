@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.PagingData
 import com.goforer.base.designsystem.animation.GenericCubicAnimationShape
 import com.goforer.base.designsystem.component.Chips
 import com.goforer.phogal.R
@@ -78,6 +77,7 @@ fun SearchPhotosContent(
                     photosContentState.wordState.value = keyword
                     photosContentState.baseUiState.keyboardController?.hide()
                     searchWordViewModel.setWord(keyword)
+                    photosContentState.searchedState.value = true
                     photosContentState.triggeredState.value = true
                     galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
                 }
@@ -89,7 +89,7 @@ fun SearchPhotosContent(
         ) { animatedShape, visible ->
             if (visible || photosContentState.removedWordState.value) {
                 searchWordViewModel.getWords()?.let { words ->
-                    val items = if (photosContentState.triggeredState.value) {
+                    val items = if (photosContentState.searchedState.value) {
                         listOf(words[0])
                     } else
                         words
@@ -111,6 +111,7 @@ fun SearchPhotosContent(
                         onClicked = { keyword ->
                             searchState.editableInputState.textState = keyword
                             photosContentState.wordState.value = keyword
+                            photosContentState.triggeredState.value = true
                             photosContentState.baseUiState.keyboardController?.hide()
                             galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
                         },
@@ -120,12 +121,12 @@ fun SearchPhotosContent(
                         }
                     )
 
-                    photosContentState.triggeredState.value = false
+                    photosContentState.searchedState.value = false
                 }
             }
         }
 
-        if (photosContentState.uiState.collectAsStateWithLifecycle().value is PagingData<*>) {
+        if (photosContentState.triggeredState.value) {
             SearchPhotosSection(
                 modifier = Modifier
                     .padding(top = 0.5.dp)
@@ -142,6 +143,8 @@ fun SearchPhotosContent(
                 onShowSnackBar = onShowSnackBar,
                 onLoadSuccess = {
                     onSuccess(it)
+                    if (!it)
+                        photosContentState.triggeredState.value = false
                 },
                 onScroll = {
                     photosContentState.scrollingState.value = it

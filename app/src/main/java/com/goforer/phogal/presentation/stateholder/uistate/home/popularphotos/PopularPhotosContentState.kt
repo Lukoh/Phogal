@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.goforer.phogal.presentation.stateholder.uistate.home.popularphotos
 
 import androidx.compose.runtime.Composable
@@ -7,6 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.paging.PagingData
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Stable
 class PopularPhotosContentState(
     val baseUiState: BaseUiState,
-    val uiState: StateFlow<Any>,
+    val uiState: StateFlow<PagingData<PhotoUiState>>,
     val refreshingState: StateFlow<Boolean>,
     var enabledLoadState: MutableState<Boolean>,
     var visibleActionsState: MutableState<Boolean>
@@ -36,7 +40,7 @@ fun rememberPopularPhotosContentState(
 ) {
     PopularPhotosContentState(
         baseUiState = baseUiState,
-        uiState = uiState,
+        uiState = uiState as StateFlow<PagingData<PhotoUiState>>,
         refreshingState = refreshingState,
         enabledLoadState = enabledLoadState,
         visibleActionsState = visibleActionsState

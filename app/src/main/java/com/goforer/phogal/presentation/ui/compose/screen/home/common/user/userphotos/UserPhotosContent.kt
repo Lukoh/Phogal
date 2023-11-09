@@ -18,13 +18,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.PagingData
 import com.goforer.base.customtab.openCustomTab
 import com.goforer.phogal.R
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.photos.UserPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.photos.rememberUserPhotosContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.user.photos.rememberUserPhotosSectionState
-import com.goforer.phogal.presentation.ui.compose.screen.home.common.InitScreen
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.SearchSection
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
@@ -34,7 +32,7 @@ fun UserPhotosContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(4.dp),
     state: UserPhotosContentState = rememberUserPhotosContentState(),
-    onTriggered: (triggered: Boolean, ) -> Unit,
+    onTriggered: (triggered: Boolean) -> Unit,
     onItemClicked: (id: String) -> Unit,
     onShowSnackBar: (text: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
@@ -43,37 +41,30 @@ fun UserPhotosContent(
 
     triggered(state.enabledLoadState.value)
     state.enabledLoadState.value = false
-    if (state.uiState.collectAsStateWithLifecycle().value is PagingData<*>) {
-        UserPhotosSection(
-            modifier = Modifier
-                .padding(top = 0.5.dp),
-            contentPadding = contentPadding,
-            state = rememberUserPhotosSectionState(
-                uiState = state.uiState,
-                refreshingState = state.refreshingState.collectAsStateWithLifecycle()
-            ),
-            onItemClicked = { id, _ ->
+    UserPhotosSection(
+        modifier = modifier
+            .padding(top = 0.5.dp),
+        contentPadding = contentPadding,
+        state = rememberUserPhotosSectionState(
+            uiState = state.uiState,
+            refreshingState = state.refreshingState.collectAsStateWithLifecycle()
+        ),
+        onItemClicked = { id, _ ->
+            state.enabledLoadState.value = false
+            onItemClicked(id)
+        },
+        onViewPhotos = { _, _, _, _ -> },
+        onShowSnackBar = onShowSnackBar,
+        onOpenWebView = { _, url ->
+            openCustomTab(state.baseUiState.context, url)
+        },
+        onSuccess = {
+            if (it)
                 state.enabledLoadState.value = false
-                onItemClicked(id)
-            },
-            onViewPhotos = { _, _, _, _ -> },
-            onShowSnackBar = onShowSnackBar,
-            onOpenWebView = { _, url ->
-                openCustomTab(state.baseUiState.context, url)
-             },
-            onSuccess = {
-                if (it)
-                    state.enabledLoadState.value = false
 
-                onSuccess(it)
-            }
-        )
-    } else {
-        InitScreen(
-            modifier = modifier,
-            text = stringResource(id = R.string.search_photos)
-        )
-    }
+            onSuccess(it)
+        }
+    )
 }
 
 @Preview(name = "Light Mode")

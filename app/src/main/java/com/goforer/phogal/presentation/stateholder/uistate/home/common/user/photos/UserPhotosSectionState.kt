@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.goforer.phogal.presentation.stateholder.uistate.home.common.user.photos
 
 import androidx.compose.runtime.Composable
@@ -7,12 +9,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.paging.PagingData
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Stable
 class UserPhotosSectionState(
-    val uiState: StateFlow<Any>,
+    val uiState: StateFlow<PagingData<PhotoUiState>>,
     val refreshingState: State<Boolean>,
     var clickedState: MutableState<Boolean>,
     var visibleUpButtonState: MutableState<Boolean>
@@ -28,7 +32,7 @@ fun rememberUserPhotosSectionState(
     clickedState,
 ) {
     UserPhotosSectionState(
-        uiState = uiState,
+        uiState = uiState as StateFlow<PagingData<PhotoUiState>>,
         refreshingState = refreshingState,
         clickedState = clickedState,
         visibleUpButtonState = visibleUpButtonState

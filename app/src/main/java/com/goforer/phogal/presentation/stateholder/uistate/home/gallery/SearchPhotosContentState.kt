@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.goforer.phogal.presentation.stateholder.uistate.home.gallery
 
 import android.Manifest
@@ -8,6 +10,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.paging.PagingData
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,10 +22,11 @@ class SearchPhotosContentState(
     val baseUiState: BaseUiState,
     val wordState: MutableState<String>,
     val enabledState: MutableState<Boolean>,
+    val searchedState: MutableState<Boolean>,
     val triggeredState: MutableState<Boolean>,
     val permissionState: MutableState<Boolean>,
     val rationaleTextState: MutableState<String>,
-    val uiState: StateFlow<Any>,
+    val uiState: StateFlow<PagingData<PhotoUiState>>,
     val refreshingState: StateFlow<Boolean>,
     var scrollingState: MutableState<Boolean>,
     var removedWordState: MutableState<Boolean>
@@ -39,6 +44,7 @@ fun rememberSearchPhotosContentState(
     baseUiState: BaseUiState = rememberBaseUiState(),
     wordState: MutableState<String> = rememberSaveable { mutableStateOf("") },
     enabledState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    searchedState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     triggeredState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     permissionState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     rationaleTextState: MutableState<String> = rememberSaveable { mutableStateOf("") },
@@ -55,10 +61,11 @@ fun rememberSearchPhotosContentState(
         baseUiState = baseUiState,
         wordState = wordState,
         enabledState = enabledState,
+        searchedState = searchedState,
         triggeredState = triggeredState,
         permissionState = permissionState,
         rationaleTextState = rationaleTextState,
-        uiState = uiState,
+        uiState = uiState as StateFlow<PagingData<PhotoUiState>>,
         refreshingState = refreshingState,
         scrollingState = scrollingState,
         removedWordState = removedWordState

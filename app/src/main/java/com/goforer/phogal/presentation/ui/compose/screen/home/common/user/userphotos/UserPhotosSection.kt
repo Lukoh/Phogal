@@ -1,5 +1,3 @@
-@file:Suppress("UNCHECKED_CAST")
-
 package com.goforer.phogal.presentation.ui.compose.screen.home.common.user.userphotos
 
 import androidx.compose.animation.AnimatedVisibility
@@ -42,14 +40,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.goforer.base.designsystem.component.state.rememberLazyListState
 import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
-import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.data.repository.Repository
 import com.goforer.phogal.presentation.analytics.TrackScreenViewEvent
 import com.goforer.phogal.presentation.stateholder.business.home.common.bookmark.BookmarkViewModel
@@ -62,7 +58,6 @@ import com.goforer.phogal.presentation.ui.compose.screen.home.common.photo.ShowU
 import com.goforer.phogal.presentation.ui.compose.screen.home.gallery.LoadingPhotos
 import com.goforer.phogal.presentation.ui.theme.ColorSystemGray7
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
@@ -78,7 +73,7 @@ fun UserPhotosSection(
     onOpenWebView: (firstName: String, url: String) -> Unit,
     onSuccess: (isSuccessful: Boolean) -> Unit
 ) {
-    val photos = (state.uiState as StateFlow<PagingData<PhotoUiState>>).collectAsLazyPagingItems()
+    val photos = state.uiState.collectAsLazyPagingItems()
     // After recreation, LazyPagingItems first return 0 items, then the cached items.
     // This behavior/issue is resetting the LazyListState scroll position.
     // Below is a workaround. More info: https://issuetracker.google.com/issues/177245496.
