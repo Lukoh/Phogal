@@ -156,67 +156,106 @@ fun HandlePictureResponse(
         when(resource.status) {
             Status.SUCCESS -> {
                 onSuccess(true)
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(top = contentPadding.calculateTopPadding())
-                            .verticalScroll(rememberScrollState()),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        BodyContent(
-                            modifier = modifier,
-                            photoUiState = resource.data as PhotoUiState,
-                            visibleViewPhotosButton = state.visibleViewButtonState.value,
-                            onViewPhotos = onViewPhotos,
-                            onShowSnackBar = onShowSnackBar,
-                            onShownPhoto = onShownPhoto,
-                            onOpenWebView = onOpenWebView
-                        )
-                        Spacer(modifier = Modifier.height(30.dp))
-                    }
-                }
-
-                TrackScreenViewEvent(screenName = "PhotoContent")
+                HandleSuccess(
+                    modifier = modifier,
+                    contentPadding =contentPadding,
+                    photoUiState = resource.data as PhotoUiState,
+                    visibleViewPhotosButton = state.visibleViewButtonState.value,
+                    onViewPhotos = onViewPhotos,
+                    onShowSnackBar = onShowSnackBar,
+                    onShownPhoto = onShownPhoto,
+                    onOpenWebView = onOpenWebView
+                )
             }
             Status.LOADING -> {
-                AnimatedVisibility(
-                    visible = true,
-                    modifier = Modifier,
-                    enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
-                            fadeIn() + expandIn(expandFrom = Alignment.TopStart),
-                    exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
-                            fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
-                ) {
-                    LoadingPicture(
-                        modifier = Modifier.padding(4.dp, 4.dp),
-                        enableLoadIndicator = true
-                    )
-                }
+                HandleLoading()
             }
             Status.ERROR-> {
                 onSuccess(false)
-                AnimatedVisibility(
-                    visible = true,
-                    modifier = Modifier,
-                    enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
-                            fadeIn() + expandIn(expandFrom = Alignment.TopStart),
-                    exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
-                            fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
-                ) {
-                    ErrorContent(
-                        modifier = Modifier,
-                        title = if (resource.errorCode !in 200..299)
-                            stringResource(id = R.string.error_dialog_network_title)
-                        else
-                            stringResource(id = R.string.error_dialog_title),
-                        message = "${stringResource(id = R.string.error_get_picture)}${"\n\n"}${resource.message.toString()}",
-                        onRetry = onRetry
-                    )
-                }
+                HandleError(
+                    resource = resource,
+                    onRetry = onRetry
+                )
             }
         }
+    }
+}
+
+@Composable
+fun HandleSuccess(
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues,
+    photoUiState: PhotoUiState,
+    visibleViewPhotosButton: Boolean,
+    onViewPhotos: (name: String, firstName: String, lastName: String, username: String) -> Unit,
+    onShowSnackBar: (text: String) -> Unit,
+    onShownPhoto: (photoUiState: PhotoUiState) -> Unit,
+    onOpenWebView: (firstName: String, url: String) -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(top = contentPadding.calculateTopPadding())
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            BodyContent(
+                modifier = modifier,
+                photoUiState = photoUiState,
+                visibleViewPhotosButton = visibleViewPhotosButton,
+                onViewPhotos = onViewPhotos,
+                onShowSnackBar = onShowSnackBar,
+                onShownPhoto = onShownPhoto,
+                onOpenWebView = onOpenWebView
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+        }
+    }
+
+    TrackScreenViewEvent(screenName = "PhotoContent")
+}
+
+@Composable
+fun HandleLoading() {
+    AnimatedVisibility(
+        visible = true,
+        modifier = Modifier,
+        enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+        exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+    ) {
+        LoadingPicture(
+            modifier = Modifier.padding(4.dp, 4.dp),
+            enableLoadIndicator = true
+        )
+    }
+}
+
+@Composable
+fun HandleError(
+    resource: Resource,
+    onRetry: () -> Unit
+) {
+    AnimatedVisibility(
+        visible = true,
+        modifier = Modifier,
+        enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+        exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+    ) {
+        ErrorContent(
+            modifier = Modifier,
+            title = if (resource.errorCode !in 200..299)
+                stringResource(id = R.string.error_dialog_network_title)
+            else
+                stringResource(id = R.string.error_dialog_title),
+            message = "${stringResource(id = R.string.error_get_picture)}${"\n\n"}${resource.message.toString()}",
+            onRetry = onRetry
+        )
     }
 }
 

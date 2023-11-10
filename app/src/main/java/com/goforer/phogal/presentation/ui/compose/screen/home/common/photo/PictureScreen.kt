@@ -54,6 +54,7 @@ import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResp
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.datasource.network.response.Status
+import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.business.home.common.bookmark.BookmarkViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.common.photo.info.PictureViewModel
 import com.goforer.phogal.presentation.stateholder.business.home.common.photo.like.PictureLikeViewModel
@@ -93,25 +94,11 @@ fun PictureScreen(
        onBackPressed()
     }
 
-    DisposableEffect(state.baseUiState.lifecycle) {
-        // Create an observer that triggers our remembered callbacks
-        // for doing anything
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
-                currentOnStart()
-            } else if (event == Lifecycle.Event.ON_STOP) {
-                currentOnStop()
-            }
-        }
-
-        // Add the observer to the lifecycle
-        state.baseUiState.lifecycle.addObserver(observer)
-
-        // When the effect leaves the Composition, remove the observer
-        onDispose {
-            state.baseUiState.lifecycle.removeObserver(observer)
-        }
-    }
+    HandleObserver(
+        lifecycle = state.baseUiState.lifecycle,
+        onStart = currentOnStart,
+        onStop = currentOnStop
+    )
 
     val showDialogState = rememberSaveable { mutableStateOf(false) }
 
@@ -154,55 +141,25 @@ fun PictureScreen(
                 },
                 actions = {
                     if (state.visibleActionsState.value) {
-                        IconButton(
-                            colors = IconButtonDefaults.iconButtonColors(
-                                contentColor = if (state.enabledLikeState.value)
-                                    Red60
-                                else
-                                    Color.Black,
-                            ),
-                            onClick = {
-                                showDialogState.value = true
-                                if (!state.photoUiState?.liked_by_user!!)
+                        HandleLike(
+                            enabledLike = state.enabledLikeState.value,
+                            showDialogState = showDialogState,
+                            likedByUser = state.photoUiState?.liked_by_user!!,
+                            onTriggered = {
+                                if (it)
                                     likeViewModel.trigger(1, Params(state.idState.value))
                                 else
                                     unLikeViewModel.trigger(1, Params(state.idState.value))
                             }
-                        ) {
-                            state.photoUiState?.liked_by_user?.let { liked ->
-                                Icon(
-                                    imageVector = if (liked)
-                                        ImageVector.vectorResource(id = R.drawable.ic_like_on)
-                                    else
-                                        ImageVector.vectorResource(id = R.drawable.ic_like_off),
-                                    contentDescription = "Like"
-                                )
+                        )
+                        HandleBookmark(
+                            enabledBookmark = state.enabledBookmarkState.value,
+                            photoUiState = state.photoUiState,
+                            enabledBookmarkState = state.enabledBookmarkState,
+                            onBookmarked = {
+                                bookmarkViewModel.setBookmarkPicture(it)
                             }
-                        }
-
-                        IconButton(
-                            colors = IconButtonDefaults.iconButtonColors(
-                                contentColor = if (state.enabledBookmarkState.value)
-                                    Red60
-                                else
-                                    Color.Black,
-                            ),
-                            onClick = {
-                                state.photoUiState?.let {
-                                    bookmarkViewModel.setBookmarkPicture(it)
-                                }
-
-                                state.enabledBookmarkState.value = !state.enabledBookmarkState.value
-                            }
-                        ) {
-                            Icon(
-                                imageVector = if (state.enabledBookmarkState.value)
-                                    ImageVector.vectorResource(id = R.drawable.ic_bookmark_on)
-                                else
-                                    ImageVector.vectorResource(id = R.drawable.ic_bookmark_off),
-                                contentDescription = "Bookmark"
-                            )
-                        }
+                        )
                     }
                 }
             )
@@ -238,6 +195,97 @@ fun PictureScreen(
             }
         }
     )
+}
+
+@Composable
+fun HandleObserver(
+    lifecycle: Lifecycle,
+    onStart: () -> Unit,
+    onStop: () -> Unit
+) {
+    DisposableEffect(lifecycle) {
+        // Create an observer that triggers our remembered callbacks
+        // for doing anything
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                onStart()
+            } else if (event == Lifecycle.Event.ON_STOP) {
+                onStop()
+            }
+        }
+
+        // Add the observer to the lifecycle
+        lifecycle.addObserver(observer)
+
+        // When the effect leaves the Composition, remove the observer
+        onDispose {
+            lifecycle.removeObserver(observer)
+        }
+    }
+}
+
+@Composable
+fun HandleLike(
+    enabledLike: Boolean,
+    showDialogState: MutableState<Boolean>,
+    likedByUser: Boolean,
+    onTriggered: (likedByUser: Boolean) -> Unit
+) {
+    IconButton(
+        colors = IconButtonDefaults.iconButtonColors(
+            contentColor = if (enabledLike)
+                Red60
+            else
+                Color.Black,
+        ),
+        onClick = {
+            showDialogState.value = true
+            if (!likedByUser)
+                onTriggered(true)
+            else
+                onTriggered(false)
+        }
+    ) {
+        Icon(
+            imageVector = if (likedByUser)
+                ImageVector.vectorResource(id = R.drawable.ic_like_on)
+            else
+                ImageVector.vectorResource(id = R.drawable.ic_like_off),
+            contentDescription = "Like"
+        )
+    }
+}
+
+@Composable
+fun HandleBookmark(
+    enabledBookmark: Boolean,
+    photoUiState: PhotoUiState?,
+    enabledBookmarkState: MutableState<Boolean>,
+    onBookmarked: (photoUiState: PhotoUiState) -> Unit
+) {
+    IconButton(
+        colors = IconButtonDefaults.iconButtonColors(
+            contentColor = if (enabledBookmark)
+                Red60
+            else
+                Color.Black,
+        ),
+        onClick = {
+            photoUiState?.let {
+                onBookmarked(it)
+            }
+
+            enabledBookmarkState.value = !enabledBookmarkState.value
+        }
+    ) {
+        Icon(
+            imageVector = if (enabledBookmark)
+                ImageVector.vectorResource(id = R.drawable.ic_bookmark_on)
+            else
+                ImageVector.vectorResource(id = R.drawable.ic_bookmark_off),
+            contentDescription = "Bookmark"
+        )
+    }
 }
 
 @Composable
