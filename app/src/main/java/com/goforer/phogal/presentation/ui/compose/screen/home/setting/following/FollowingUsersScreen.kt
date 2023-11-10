@@ -12,7 +12,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,8 +26,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
 import com.goforer.base.designsystem.component.ScaffoldContent
@@ -38,6 +35,7 @@ import com.goforer.phogal.presentation.stateholder.business.home.common.follow.F
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.home.setting.following.rememberFollowingUsersState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
+import com.goforer.phogal.presentation.ui.compose.screen.HandleObserver
 import com.goforer.phogal.presentation.ui.theme.ColorBgSecondary
 import kotlinx.coroutines.launch
 
@@ -66,25 +64,11 @@ fun FollowingUsersScreen(
         onBackPressed()
     }
 
-    DisposableEffect(state.lifecycle) {
-        // Create an observer that triggers our remembered callbacks
-        // for doing anything
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
-                currentOnStart()
-            } else if (event == Lifecycle.Event.ON_STOP) {
-                currentOnStop()
-            }
-        }
-
-        // Add the observer to the lifecycle
-        state.lifecycle.addObserver(observer)
-
-        // When the effect leaves the Composition, remove the observer
-        onDispose {
-            state.lifecycle.removeObserver(observer)
-        }
-    }
+    HandleObserver(
+        lifecycle = state.lifecycle,
+        onStart = currentOnStart,
+        onStop = currentOnStop
+    )
 
     Scaffold(
         contentColor = ColorBgSecondary,

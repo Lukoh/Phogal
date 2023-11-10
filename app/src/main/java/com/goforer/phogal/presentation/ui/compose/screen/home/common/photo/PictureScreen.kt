@@ -21,7 +21,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,8 +41,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goforer.base.designsystem.component.CardSnackBar
 import com.goforer.base.designsystem.component.CustomCenterAlignedTopAppBar
@@ -61,6 +58,7 @@ import com.goforer.phogal.presentation.stateholder.business.home.common.photo.li
 import com.goforer.phogal.presentation.stateholder.business.home.common.photo.like.PictureUnlikeViewModel
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.PhotoContentState
 import com.goforer.phogal.presentation.stateholder.uistate.home.common.photo.rememberPhotoContentState
+import com.goforer.phogal.presentation.ui.compose.screen.HandleObserver
 import com.goforer.phogal.presentation.ui.theme.Red60
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -99,7 +97,6 @@ fun PictureScreen(
         onStart = currentOnStart,
         onStop = currentOnStop
     )
-
     val showDialogState = rememberSaveable { mutableStateOf(false) }
 
     LikeResponseHandle(likeViewModel = likeViewModel, showDialogState = showDialogState)
@@ -195,33 +192,6 @@ fun PictureScreen(
             }
         }
     )
-}
-
-@Composable
-fun HandleObserver(
-    lifecycle: Lifecycle,
-    onStart: () -> Unit,
-    onStop: () -> Unit
-) {
-    DisposableEffect(lifecycle) {
-        // Create an observer that triggers our remembered callbacks
-        // for doing anything
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
-                onStart()
-            } else if (event == Lifecycle.Event.ON_STOP) {
-                onStop()
-            }
-        }
-
-        // Add the observer to the lifecycle
-        lifecycle.addObserver(observer)
-
-        // When the effect leaves the Composition, remove the observer
-        onDispose {
-            lifecycle.removeObserver(observer)
-        }
-    }
 }
 
 @Composable
