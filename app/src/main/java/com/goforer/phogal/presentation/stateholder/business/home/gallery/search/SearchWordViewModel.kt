@@ -10,13 +10,12 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchWordViewModel
 @Inject
-constructor() : BaseViewModel<PhotoUiState>() {
-    @Inject
-    lateinit var localStorage: LocalDataSource
-
+constructor(
+    private val localDataSource: LocalDataSource
+) : BaseViewModel<PhotoUiState>() {
     fun setWord(word: String) {
-        localStorage.getSearchWords().isNull({
-            localStorage.setSearchWords(listOf(word.trim()))
+        localDataSource.getSearchWords().isNull({
+            localDataSource.setSearchWords(listOf(word.trim()))
         }, {
             val keywords = it.toMutableList()
 
@@ -28,13 +27,13 @@ constructor() : BaseViewModel<PhotoUiState>() {
                     keywords.add(word)
                 }
 
-                localStorage.setSearchWords(keywords.toList())
+                localDataSource.setSearchWords(keywords.toList())
             }
         })
     }
 
     fun getWords(): MutableList<String>? {
-        val keywordList = localStorage.getSearchWords()?.asReversed()
+        val keywordList = localDataSource.getSearchWords()?.asReversed()
 
         return if (keywordList.isNullOrEmpty()) {
             null
@@ -44,12 +43,12 @@ constructor() : BaseViewModel<PhotoUiState>() {
     }
 
     fun removeWord(word: String) {
-        localStorage.getSearchWords().isNull({
+        localDataSource.getSearchWords().isNull({
         }, {
             val keywords = it.toMutableList()
 
             if (keywords.remove(word))
-                localStorage.setSearchWords(keywords.toList())
+                localDataSource.setSearchWords(keywords.toList())
         })
     }
 }

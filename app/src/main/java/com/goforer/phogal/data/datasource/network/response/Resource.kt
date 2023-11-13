@@ -1,8 +1,6 @@
 package com.goforer.phogal.data.datasource.network.response
 
-class Resource {
-    internal lateinit var status: Status
-
+class Resource constructor(var status: Status = Status.LOADING) {
     internal var message: String? = null
 
     internal var data: Any? = null

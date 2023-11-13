@@ -49,7 +49,6 @@ import com.goforer.phogal.R
 import com.goforer.phogal.data.model.local.error.Errors
 import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponseUiState
 import com.goforer.phogal.data.datasource.network.api.Params
-import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.datasource.network.response.Status
 import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.business.home.common.bookmark.BookmarkViewModel
@@ -264,43 +263,39 @@ fun LikeResponseHandle(
     state: PhotoContentState = rememberPhotoContentState(),
     showDialogState: MutableState<Boolean>
 ) {
-    val value by likeViewModel.uiState.collectAsStateWithLifecycle()
+    val resource by likeViewModel.uiState.collectAsStateWithLifecycle()
 
-    if (value is Resource) {
-        val resource = value as Resource
+    when(resource.status) {
+        Status.SUCCESS -> {
+            val likeResponseUiState = resource.data as LikeResponseUiState
 
-        when(resource.status) {
-            Status.SUCCESS -> {
-                val likeResponseUiState = resource.data as LikeResponseUiState
-
-                state.enabledLikeState.value = likeResponseUiState.photo.liked_by_user
-                Timber.d("Like Success : %s", state.enabledLikeState.value.toString())
-            }
-            Status.LOADING -> {}
-            Status.ERROR-> {
-                state.enabledLikeState.value = false
-                Timber.d("Like Failed : %s", state.enabledLikeState.value.toString())
-                if (showDialogState.value) {
-                    AnimatedVisibility(
-                        visible = true,
-                        modifier = Modifier,
-                        enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
-                                fadeIn() + expandIn(expandFrom = Alignment.TopStart),
-                        exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
-                                fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+            state.enabledLikeState.value = likeResponseUiState.photo.liked_by_user
+            Timber.d("Like Success : %s", state.enabledLikeState.value.toString())
+        }
+        Status.LOADING -> {}
+        Status.ERROR-> {
+            state.enabledLikeState.value = false
+            Timber.d("Like Failed : %s", state.enabledLikeState.value.toString())
+            if (showDialogState.value) {
+                AnimatedVisibility(
+                    visible = true,
+                    modifier = Modifier,
+                    enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                            fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+                    exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                            fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+                ) {
+                    ErrorDialog(
+                        title = if (resource.errorCode !in 200..299)
+                            stringResource(id = R.string.error_dialog_network_title)
+                        else
+                            stringResource(id = R.string.error_dialog_title),
+                        text = (if (resource.message?.contains("errors")!!)
+                            Gson().fromJson(resource.message.toString(), Errors::class.java).errors[0]
+                        else
+                            resource.message.toString())
                     ) {
-                        ErrorDialog(
-                            title = if (resource.errorCode !in 200..299)
-                                stringResource(id = R.string.error_dialog_network_title)
-                            else
-                                stringResource(id = R.string.error_dialog_title),
-                            text = (if (resource.message?.contains("errors")!!)
-                                Gson().fromJson(resource.message.toString(), Errors::class.java).errors[0]
-                            else
-                                resource.message.toString())
-                        ) {
-                            showDialogState.value = false
-                        }
+                        showDialogState.value = false
                     }
                 }
             }
@@ -314,43 +309,39 @@ fun UnlikeResponseHandle(
     state: PhotoContentState = rememberPhotoContentState(),
     showDialogState: MutableState<Boolean>
 ) {
-    val value by unLikeViewModel.uiState.collectAsStateWithLifecycle()
+    val resource by unLikeViewModel.uiState.collectAsStateWithLifecycle()
 
-    if (value is Resource) {
-        val resource = value as Resource
+    when(resource.status) {
+        Status.SUCCESS -> {
+            val likeResponseUiState = resource.data as LikeResponseUiState
 
-        when(resource.status) {
-            Status.SUCCESS -> {
-                val likeResponseUiState = resource.data as LikeResponseUiState
-
-                state.enabledLikeState.value = likeResponseUiState.photo.liked_by_user
-                Timber.d("Like Success : %s", state.enabledLikeState.value.toString())
-            }
-            Status.LOADING -> {}
-            Status.ERROR-> {
-                state.enabledLikeState.value = true
-                Timber.d("Unlike Failed : %s", state.enabledLikeState.value.toString())
-                if (showDialogState.value) {
-                    AnimatedVisibility(
-                        visible = true,
-                        modifier = Modifier,
-                        enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
-                                fadeIn() + expandIn(expandFrom = Alignment.TopStart),
-                        exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
-                                fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+            state.enabledLikeState.value = likeResponseUiState.photo.liked_by_user
+            Timber.d("Like Success : %s", state.enabledLikeState.value.toString())
+        }
+        Status.LOADING -> {}
+        Status.ERROR-> {
+            state.enabledLikeState.value = true
+            Timber.d("Unlike Failed : %s", state.enabledLikeState.value.toString())
+            if (showDialogState.value) {
+                AnimatedVisibility(
+                    visible = true,
+                    modifier = Modifier,
+                    enter = scaleIn(transformOrigin = TransformOrigin(0f, 0f)) +
+                            fadeIn() + expandIn(expandFrom = Alignment.TopStart),
+                    exit = scaleOut(transformOrigin = TransformOrigin(0f, 0f)) +
+                            fadeOut() + shrinkOut(shrinkTowards = Alignment.TopStart)
+                ) {
+                    ErrorDialog(
+                        title = if (resource.errorCode !in 200..299)
+                            stringResource(id = R.string.error_dialog_network_title)
+                        else
+                            stringResource(id = R.string.error_dialog_title),
+                        text = (if (resource.message?.contains("errors")!!)
+                            Gson().fromJson(resource.message.toString(), Errors::class.java).errors[0]
+                        else
+                            resource.message.toString())
                     ) {
-                        ErrorDialog(
-                            title = if (resource.errorCode !in 200..299)
-                                stringResource(id = R.string.error_dialog_network_title)
-                            else
-                                stringResource(id = R.string.error_dialog_title),
-                            text = (if (resource.message?.contains("errors")!!)
-                                Gson().fromJson(resource.message.toString(), Errors::class.java).errors[0]
-                            else
-                                resource.message.toString())
-                        ) {
-                            showDialogState.value = false
-                        }
+                        showDialogState.value = false
                     }
                 }
             }

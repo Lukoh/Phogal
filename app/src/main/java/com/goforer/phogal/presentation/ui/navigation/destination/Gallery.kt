@@ -1,4 +1,4 @@
-package com.goforer.phogal.presentation.ui.navigation.destination
+ package com.goforer.phogal.presentation.ui.navigation.destination
 
 import android.net.Uri
 import androidx.compose.material.icons.Icons

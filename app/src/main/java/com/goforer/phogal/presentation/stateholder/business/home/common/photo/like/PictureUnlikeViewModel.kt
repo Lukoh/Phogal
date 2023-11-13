@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.goforer.phogal.data.model.remote.response.gallery.photo.like.LikeResponseUiState
 import com.goforer.phogal.data.datasource.network.api.Params
+import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.datasource.network.response.Status
 import com.goforer.phogal.data.repository.common.photo.like.DeletePictureLikeRepository
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
@@ -22,8 +23,8 @@ class PictureUnlikeViewModel
     savedStateHandle: SavedStateHandle,
     private val deletePictureLikeRepository: DeletePictureLikeRepository
 ) : BaseViewModel<LikeResponseUiState>() {
-    private val _uiState = MutableStateFlow(Any())
-    val uiState: StateFlow<Any> = _uiState
+    private val _uiState = MutableStateFlow(Resource())
+    val uiState: StateFlow<Resource> = _uiState
 
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {

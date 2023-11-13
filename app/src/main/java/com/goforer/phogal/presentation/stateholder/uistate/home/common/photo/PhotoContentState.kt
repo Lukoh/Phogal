@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.uistate.BaseUiState
 import com.goforer.phogal.presentation.stateholder.uistate.rememberBaseUiState
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Stable
 class PhotoContentState(
     val baseUiState: BaseUiState,
-    val uiState: StateFlow<Any>,
+    val uiState: StateFlow<Resource>,
     val idState: MutableState<String>,
     val visibleViewButtonState: MutableState<Boolean>,
     var enabledLoadState: MutableState<Boolean>,
@@ -31,7 +32,7 @@ class PhotoContentState(
 @Composable
 fun rememberPhotoContentState(
     baseUiState: BaseUiState = rememberBaseUiState(),
-    uiState: StateFlow<Any> = remember { MutableStateFlow(Any()) },
+    uiState: StateFlow<Resource> = remember { MutableStateFlow(Resource()) },
     idState: MutableState<String> = rememberSaveable { mutableStateOf("") },
     visibleViewButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     enabledLoadState: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },

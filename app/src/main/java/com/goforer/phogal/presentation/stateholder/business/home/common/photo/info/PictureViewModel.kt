@@ -3,6 +3,7 @@ package com.goforer.phogal.presentation.stateholder.business.home.common.photo.i
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.goforer.phogal.data.datasource.network.api.Params
+import com.goforer.phogal.data.datasource.network.response.Resource
 import com.goforer.phogal.data.datasource.network.response.Status
 import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.data.repository.common.photo.info.GetPictureRepository
@@ -22,8 +23,8 @@ class PictureViewModel
     savedStateHandle: SavedStateHandle,
     private val getPictureRepository: GetPictureRepository
 ) : BaseViewModel<PhotoUiState>() {
-    private val _uiState = MutableStateFlow(Any())
-    val uiState: StateFlow<Any> = _uiState
+    private val _uiState = MutableStateFlow(Resource())
+    val uiState: StateFlow<Resource> = _uiState
 
     override fun trigger(replyCount: Int, params: Params) {
         viewModelScope.launch {

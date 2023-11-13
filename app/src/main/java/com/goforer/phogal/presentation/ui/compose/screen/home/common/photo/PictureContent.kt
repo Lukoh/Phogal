@@ -148,35 +148,31 @@ fun HandlePictureResponse(
     onSuccess: (isSuccessful: Boolean) -> Unit,
     onRetry: () -> Unit
 ) {
-    val value by state.uiState.collectAsStateWithLifecycle()
+    val resource by state.uiState.collectAsStateWithLifecycle()
 
-    if (value is Resource) {
-        val resource = value as Resource
-
-        when(resource.status) {
-            Status.SUCCESS -> {
-                onSuccess(true)
-                HandleSuccess(
-                    modifier = modifier,
-                    contentPadding =contentPadding,
-                    photoUiState = resource.data as PhotoUiState,
-                    visibleViewPhotosButton = state.visibleViewButtonState.value,
-                    onViewPhotos = onViewPhotos,
-                    onShowSnackBar = onShowSnackBar,
-                    onShownPhoto = onShownPhoto,
-                    onOpenWebView = onOpenWebView
-                )
-            }
-            Status.LOADING -> {
-                HandleLoading()
-            }
-            Status.ERROR-> {
-                onSuccess(false)
-                HandleError(
-                    resource = resource,
-                    onRetry = onRetry
-                )
-            }
+    when(resource.status) {
+        Status.SUCCESS -> {
+            onSuccess(true)
+            HandleSuccess(
+                modifier = modifier,
+                contentPadding =contentPadding,
+                photoUiState = resource.data as PhotoUiState,
+                visibleViewPhotosButton = state.visibleViewButtonState.value,
+                onViewPhotos = onViewPhotos,
+                onShowSnackBar = onShowSnackBar,
+                onShownPhoto = onShownPhoto,
+                onOpenWebView = onOpenWebView
+            )
+        }
+        Status.LOADING -> {
+            HandleLoading()
+        }
+        Status.ERROR-> {
+            onSuccess(false)
+            HandleError(
+                resource = resource,
+                onRetry = onRetry
+            )
         }
     }
 }
