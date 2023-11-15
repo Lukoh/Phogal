@@ -23,7 +23,7 @@ class PictureViewModel
     savedStateHandle: SavedStateHandle,
     private val getPictureRepository: GetPictureRepository
 ) : BaseViewModel<PhotoUiState>() {
-    private val _uiState = MutableStateFlow(Resource())
+    private val _uiState = MutableStateFlow(resource)
     val uiState: StateFlow<Resource> = _uiState
 
     override fun trigger(replyCount: Int, params: Params) {

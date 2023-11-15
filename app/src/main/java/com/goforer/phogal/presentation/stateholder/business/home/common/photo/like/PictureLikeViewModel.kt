@@ -21,7 +21,7 @@ class PictureLikeViewModel
     savedStateHandle: SavedStateHandle,
     private val postPictureLikeRepository: PostPictureLikeRepository
 ) : BaseViewModel<LikeResponseUiState>() {
-    private val _uiState = MutableStateFlow(Resource())
+    private val _uiState = MutableStateFlow(resource)
     val uiState: StateFlow<Resource> = _uiState
 
     override fun trigger(replyCount: Int, params: Params) {

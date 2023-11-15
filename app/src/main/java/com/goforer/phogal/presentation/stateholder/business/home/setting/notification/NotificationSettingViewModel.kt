@@ -16,7 +16,6 @@ constructor(
     savedStateHandle: SavedStateHandle,
     private val localDataSource: LocalDataSource
 ) : BaseViewModel<UserUiState>() {
-
     companion object {
         const val FOLLOWING_NOTIFICATION_SETTING = 0
         const val LATEST_NOTIFICATION_SETTING = 1

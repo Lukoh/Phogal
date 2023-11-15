@@ -23,7 +23,7 @@ class PictureUnlikeViewModel
     savedStateHandle: SavedStateHandle,
     private val deletePictureLikeRepository: DeletePictureLikeRepository
 ) : BaseViewModel<LikeResponseUiState>() {
-    private val _uiState = MutableStateFlow(Resource())
+    private val _uiState = MutableStateFlow(resource)
     val uiState: StateFlow<Resource> = _uiState
 
     override fun trigger(replyCount: Int, params: Params) {
