@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goforer.base.designsystem.animation.GenericCubicAnimationShape
 import com.goforer.base.designsystem.component.Chips
+import com.goforer.base.extension.isNull
 import com.goforer.phogal.R
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.repository.Repository.Companion.ITEM_COUNT
@@ -107,10 +108,12 @@ fun SearchPhotosContent(
             val searchedWords = remember { mutableStateListOf<String>() }
 
             LaunchedEffect(visible, photosContentState.searchedState.value, photosContentState.removedWordState.value) {
-                searchWordViewModel.getWords()?.let {
+                searchWordViewModel.getWords().isNull({
+                    searchedWords.clear()
+                }, {
                     searchedWords.clear()
                     searchedWords.addAll(it)
-                }
+                })
             }
 
             if (searchedWords.isNotEmpty()) {
