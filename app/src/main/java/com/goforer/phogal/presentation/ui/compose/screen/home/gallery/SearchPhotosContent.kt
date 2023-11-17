@@ -1,5 +1,6 @@
 package com.goforer.phogal.presentation.ui.compose.screen.home.gallery
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -11,6 +12,9 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -44,7 +48,9 @@ import com.goforer.phogal.presentation.ui.theme.DarkGreen10
 import com.goforer.phogal.presentation.ui.theme.PhogalTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.launch
 
+@SuppressLint("MutableCollectionMutableState")
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class,
     ExperimentalMaterial3Api::class
 )
@@ -98,42 +104,52 @@ fun SearchPhotosContent(
             visible = !photosContentState.scrollingState.value,
             duration = 250
         ) { animatedShape, visible ->
-            if (visible || photosContentState.removedWordState.value) {
-                searchWordViewModel.getWords()?.let { words ->
-                    val items = if (photosContentState.searchedState.value) {
-                        listOf(words[0])
-                    } else
-                        words
+            val searchedWords = remember { mutableStateListOf<String>() }
 
-                    if (photosContentState.removedWordState.value)
-                        photosContentState.removedWordState.value = false
-
-                    Chips(
-                        modifier = Modifier
-                            .padding(top = 2.dp)
-                            .graphicsLayer {
-                                clip = true
-                                shape = animatedShape
-                            },
-                        items = items,
-                        textColor = Black,
-                        leadingIconTint = Blue70,
-                        trailingIconTint = DarkGreen10,
-                        onClicked = { keyword ->
-                            searchState.editableInputState.textState = keyword
-                            photosContentState.wordState.value = keyword
-                            photosContentState.triggeredState.value = true
-                            photosContentState.baseUiState.keyboardController?.hide()
-                            galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
-                        },
-                        onDeleted = {
-                            searchWordViewModel.removeWord(it)
-                            photosContentState.removedWordState.value = true
-                        }
-                    )
-
-                    photosContentState.searchedState.value = false
+            LaunchedEffect(visible, photosContentState.searchedState.value, photosContentState.removedWordState.value) {
+                searchWordViewModel.getWords()?.let {
+                    searchedWords.clear()
+                    searchedWords.addAll(it)
                 }
+            }
+
+            if (searchedWords.isNotEmpty()) {
+                val items = if (photosContentState.searchedState.value) {
+                    listOf(searchedWords[0])
+                } else
+                    searchedWords
+
+                if (photosContentState.removedWordState.value)
+                    photosContentState.removedWordState.value = false
+
+                Chips(
+                    modifier = Modifier
+                        .padding(top = 2.dp)
+                        .graphicsLayer {
+                            clip = true
+                            shape = animatedShape
+                        },
+                    items = items,
+                    textColor = Black,
+                    leadingIconTint = Blue70,
+                    trailingIconTint = DarkGreen10,
+                    onClicked = { keyword ->
+                        searchState.editableInputState.textState = keyword
+                        photosContentState.wordState.value = keyword
+                        photosContentState.triggeredState.value = true
+                        photosContentState.baseUiState.keyboardController?.hide()
+                        galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
+                    },
+                    onDeleted = {
+                        photosContentState.baseUiState.scope.launch {
+                            searchWordViewModel.removeWord(it)
+                        }
+
+                        photosContentState.removedWordState.value = true
+                    }
+                )
+
+                photosContentState.searchedState.value = false
             }
         }
 
