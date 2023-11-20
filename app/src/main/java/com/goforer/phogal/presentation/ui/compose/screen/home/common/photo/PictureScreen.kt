@@ -165,7 +165,7 @@ fun PictureScreen(
                     modifier = modifier,
                     contentPadding = paddingValues,
                     state = rememberPhotoContentState(
-                        uiState = pictureViewModel.uiState
+                        resourceState = pictureViewModel.uiState
                     ),
                     onTriggered = {
                         if (it)

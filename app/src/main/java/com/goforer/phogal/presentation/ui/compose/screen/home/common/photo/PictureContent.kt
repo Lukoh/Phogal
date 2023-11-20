@@ -148,7 +148,7 @@ fun HandlePictureResponse(
     onSuccess: (isSuccessful: Boolean) -> Unit,
     onRetry: () -> Unit
 ) {
-    val resource by state.uiState.collectAsStateWithLifecycle()
+    val resource by state.resourceState.collectAsStateWithLifecycle()
 
     when(resource.status) {
         Status.SUCCESS -> {

@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Stable
 class PhotoContentState(
     val baseUiState: BaseUiState,
-    val uiState: StateFlow<Resource>,
+    val resourceState: StateFlow<Resource>,
     val idState: MutableState<String>,
     val visibleViewButtonState: MutableState<Boolean>,
     var enabledLoadState: MutableState<Boolean>,
@@ -32,7 +32,7 @@ class PhotoContentState(
 @Composable
 fun rememberPhotoContentState(
     baseUiState: BaseUiState = rememberBaseUiState(),
-    uiState: StateFlow<Resource> = remember { MutableStateFlow(Resource()) },
+    resourceState: StateFlow<Resource> = remember { MutableStateFlow(Resource()) },
     idState: MutableState<String> = rememberSaveable { mutableStateOf("") },
     visibleViewButtonState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     enabledLoadState: MutableState<Boolean> = rememberSaveable { mutableStateOf(true) },
@@ -41,13 +41,13 @@ fun rememberPhotoContentState(
     visibleActionsState: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) }
 ): PhotoContentState = remember(
     idState,
-    uiState,
+    resourceState,
     visibleViewButtonState,
     enabledLoadState
 ) {
     PhotoContentState(
         baseUiState = baseUiState,
-        uiState = uiState,
+        resourceState = resourceState,
         idState = idState,
         visibleViewButtonState = visibleViewButtonState,
         enabledLoadState = enabledLoadState,
