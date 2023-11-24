@@ -12,5 +12,5 @@ import javax.inject.Singleton
 class DeletePictureLikeRepository
 @Inject
 constructor() : Repository<ApiResponse<LikeResponseUiState>>() {
-    override fun trigger(replyCount: Int, params: Params) = restAPI.deleteLike(params.args[0] as String, BuildConfig.clientId)
+    override suspend fun trigger(replyCount: Int, params: Params) = restAPI.deleteLike(params.args[0] as String, BuildConfig.clientId)
 }

@@ -12,5 +12,5 @@ import javax.inject.Singleton
 class GetPictureRepository
 @Inject
 constructor() : Repository<ApiResponse<PhotoUiState>>() {
-    override fun trigger(replyCount: Int, params: Params) = restAPI.getPhoto(params.args[0] as String, BuildConfig.clientId)
+    override suspend fun trigger(replyCount: Int, params: Params) = restAPI.getPhoto(params.args[0] as String, BuildConfig.clientId)
 }

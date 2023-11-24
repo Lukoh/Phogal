@@ -18,7 +18,7 @@ class GetUserPhotosRepository
 constructor() : Repository<PagingData<PhotoUiState>>() {
     private lateinit var pagingSource: GetUserPhotosPagingSource
 
-    override fun trigger(replyCount: Int, params: Params): Flow<PagingData<PhotoUiState>> {
+    override suspend fun trigger(replyCount: Int, params: Params): Flow<PagingData<PhotoUiState>> {
         Repository.replyCount = replyCount
         return Pager(
             config = PagingConfig(

@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goforer.base.designsystem.animation.GenericCubicAnimationShape
 import com.goforer.base.designsystem.component.Chips
 import com.goforer.base.extension.isNull
+import com.goforer.base.extension.isNullOnFlow
 import com.goforer.phogal.R
 import com.goforer.phogal.data.datasource.network.api.Params
 import com.goforer.phogal.data.repository.Repository.Companion.ITEM_COUNT
@@ -85,7 +86,10 @@ fun SearchPhotosContent(
                 if (keyword.isNotEmpty() && keyword != photosContentState.wordState.value) {
                     photosContentState.wordState.value = keyword
                     photosContentState.baseUiState.keyboardController?.hide()
-                    searchWordViewModel.setWord(keyword)
+                    photosContentState.baseUiState.scope.launch {
+                        searchWordViewModel.setWord(keyword)
+                    }
+
                     photosContentState.searchedState.value = true
                     photosContentState.triggeredState.value = true
                     galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
@@ -108,7 +112,7 @@ fun SearchPhotosContent(
             val searchedWords = remember { mutableStateListOf<String>() }
 
             LaunchedEffect(visible, photosContentState.searchedState.value, photosContentState.removedWordState.value) {
-                searchWordViewModel.getWords().isNull({
+                searchWordViewModel.getWords().isNullOnFlow({
                     searchedWords.clear()
                 }, {
                     searchedWords.clear()

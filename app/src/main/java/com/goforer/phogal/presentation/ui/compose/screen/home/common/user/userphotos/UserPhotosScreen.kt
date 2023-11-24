@@ -135,13 +135,11 @@ fun UserPhotosScreen(
                     ),
                     contentPadding = paddingValues,
                     onTriggered = {
-                        if (it) {
+                        if (it)
                             userPhotosViewModel.trigger(
                                 1,
                                 Params(nameArgument.name, Repository.ITEM_COUNT)
                             )
-
-                        }
                     },
                     onItemClicked = {
                         onItemClicked(it)

@@ -1,6 +1,6 @@
 package com.goforer.phogal.presentation.stateholder.business.home.gallery.search
 
-import com.goforer.base.extension.isNull
+import com.goforer.base.extension.isNullOnFlow
 import com.goforer.phogal.data.datasource.local.LocalDataSource
 import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.presentation.stateholder.business.BaseViewModel
@@ -13,8 +13,8 @@ class SearchWordViewModel
 constructor(
     private val localDataSource: LocalDataSource
 ) : BaseViewModel<PhotoUiState>() {
-    fun setWord(word: String) {
-        localDataSource.getSearchWords().isNull({
+    suspend fun setWord(word: String) {
+        localDataSource.getSearchWords().isNullOnFlow({
             localDataSource.setSearchWords(listOf(word.trim()))
         }, {
             val keywords = it.toMutableList()
@@ -42,8 +42,8 @@ constructor(
         }
     }
 
-    fun removeWord(word: String) {
-        localDataSource.getSearchWords().isNull({
+    suspend fun removeWord(word: String) {
+        localDataSource.getSearchWords().isNullOnFlow({
         }, {
             val keywords = it.toMutableList()
 
