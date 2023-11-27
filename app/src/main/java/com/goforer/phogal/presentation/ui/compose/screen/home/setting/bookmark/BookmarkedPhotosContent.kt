@@ -41,17 +41,15 @@ fun BookmarkedPhotosContent(
             onViewPhotos = onViewPhotos,
             onOpenWebView = onOpenWebView
         )
-    } else {
-        if (state.enabledLoadState.value) {
-            BoxWithConstraints(
-                modifier = modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                InitScreen(
-                    modifier = Modifier,
-                    text = stringResource(id = R.string.setting_no_bookmarked_photos)
-                )
-            }
-        }
+    }
+
+    BoxWithConstraints(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        InitScreen(
+            modifier = Modifier,
+            text = stringResource(id = R.string.setting_no_bookmarked_photos)
+        )
     }
 }

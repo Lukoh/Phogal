@@ -104,10 +104,19 @@ fun SearchSection(
             ),
             shape = MaterialTheme.shapes.small,
             placeholder = {
-                Text(stringResource(R.string.placeholder_search),  style = MaterialTheme.typography.titleMedium.copy(color = Black))
+                Text(
+                    stringResource(R.string.placeholder_search),
+                    style = TextStyle.Default.copy(
+                        color = Black,
+                        fontSize = 15.sp,
+                        fontFamily = FontFamily.SansSerif,
+                        fontStyle = FontStyle.Normal,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
             },
             textStyle = TextStyle.Default.copy(
-                fontSize = 16.sp,
+                fontSize = 15.sp,
                 fontFamily = FontFamily.SansSerif,
                 fontStyle = FontStyle.Normal,
                 fontWeight = FontWeight.Medium
@@ -209,10 +218,19 @@ fun SearchSectionPreview(modifier: Modifier = Modifier) {
                 ),
                 shape = MaterialTheme.shapes.small,
                 placeholder = {
-                    Text(stringResource(R.string.placeholder_search),  style = MaterialTheme.typography.titleMedium.copy(color = Black))
+                    Text(
+                        stringResource(R.string.placeholder_search),
+                        style = TextStyle.Default.copy(
+                            color = Black,
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily.SansSerif,
+                            fontStyle = FontStyle.Normal,
+                            fontWeight = FontWeight.Medium
+                        )
+                    )
                 },
                 textStyle = TextStyle.Default.copy(
-                    fontSize = 16.sp,
+                    fontSize = 15.sp,
                     fontFamily = FontFamily.SansSerif,
                     fontStyle = FontStyle.Normal,
                     fontWeight = FontWeight.Medium

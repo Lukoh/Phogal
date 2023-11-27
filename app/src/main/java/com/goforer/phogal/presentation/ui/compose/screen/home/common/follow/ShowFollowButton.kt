@@ -48,7 +48,7 @@ fun ShowFollowButton(
     val color = remember { Animatable(Color.Transparent) }
 
     LaunchedEffect(isFollowed) {
-        color.animateTo(if (isFollowed) Color.Transparent else Color.Transparent)
+        color.animateTo(Color.Transparent)
     }
     Button(
         onClick = {

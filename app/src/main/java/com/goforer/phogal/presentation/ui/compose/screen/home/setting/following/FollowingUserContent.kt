@@ -41,17 +41,15 @@ fun FollowingUsersContent(
             onOpenWebView = onOpenWebView,
             onFollowed = onFollowed
         )
-    } else {
-        if (state.enabledLoadState.value) {
-            BoxWithConstraints(
-                modifier = modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                InitScreen(
-                    modifier = Modifier,
-                    text = stringResource(id = R.string.setting_no_following)
-                )
-            }
-        }
+    }
+
+    BoxWithConstraints(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        InitScreen(
+            modifier = Modifier,
+            text = stringResource(id = R.string.setting_no_following)
+        )
     }
 }

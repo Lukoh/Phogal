@@ -39,7 +39,9 @@ constructor(
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = mutableListOf()
             ).collectLatest { users ->
-                _uiState.value = users as MutableList<UserUiState>
+                users?.let {
+                    _uiState.value = it
+                }
             }
         }
     }

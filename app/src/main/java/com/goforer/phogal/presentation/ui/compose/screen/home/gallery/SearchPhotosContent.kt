@@ -28,7 +28,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goforer.base.designsystem.animation.GenericCubicAnimationShape
 import com.goforer.base.designsystem.component.Chips
-import com.goforer.base.extension.isNull
 import com.goforer.base.extension.isNullOnFlow
 import com.goforer.phogal.R
 import com.goforer.phogal.data.datasource.network.api.Params
@@ -53,9 +52,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.launch
 
 @SuppressLint("MutableCollectionMutableState")
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalPermissionsApi::class,
-    ExperimentalMaterial3Api::class
-)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchPhotosContent(
     modifier: Modifier = Modifier,
@@ -82,21 +79,15 @@ fun SearchPhotosContent(
         SearchSection(
             modifier = Modifier.padding(2.dp, 0.dp, 2.dp, 0.dp),
             state = searchState,
-            onSearched = { keyword ->
-                if (keyword.isNotEmpty() && keyword != photosContentState.wordState.value) {
-                    photosContentState.wordState.value = keyword
-                    photosContentState.baseUiState.keyboardController?.hide()
-                    photosContentState.baseUiState.scope.launch {
-                        searchWordViewModel.setWord(keyword)
-                    }
-
-                    photosContentState.searchedState.value = true
-                    photosContentState.triggeredState.value = true
-                    galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
-                }
+            onSearched = { word ->
+                handleOnSearched(
+                    word = word,
+                    photosContentState = photosContentState,
+                    galleryViewModel = galleryViewModel,
+                    searchWordViewModel = searchWordViewModel
+                )
             }
         )
-
         Spacer(
             modifier = Modifier.height(
                 if (photosContentState.scrollingState.value)
@@ -105,61 +96,12 @@ fun SearchPhotosContent(
                     4.dp
             )
         )
-        GenericCubicAnimationShape(
-            visible = !photosContentState.scrollingState.value,
-            duration = 250
-        ) { animatedShape, visible ->
-            val searchedWords = remember { mutableStateListOf<String>() }
-
-            LaunchedEffect(visible, photosContentState.searchedState.value, photosContentState.removedWordState.value) {
-                searchWordViewModel.getWords().isNullOnFlow({
-                    searchedWords.clear()
-                }, {
-                    searchedWords.clear()
-                    searchedWords.addAll(it)
-                })
-            }
-
-            if (searchedWords.isNotEmpty()) {
-                val items = if (photosContentState.searchedState.value) {
-                    listOf(searchedWords[0])
-                } else
-                    searchedWords
-
-                if (photosContentState.removedWordState.value)
-                    photosContentState.removedWordState.value = false
-
-                Chips(
-                    modifier = Modifier
-                        .padding(top = 2.dp)
-                        .graphicsLayer {
-                            clip = true
-                            shape = animatedShape
-                        },
-                    items = items,
-                    textColor = Black,
-                    leadingIconTint = Blue70,
-                    trailingIconTint = DarkGreen10,
-                    onClicked = { keyword ->
-                        searchState.editableInputState.textState = keyword
-                        photosContentState.wordState.value = keyword
-                        photosContentState.triggeredState.value = true
-                        photosContentState.baseUiState.keyboardController?.hide()
-                        galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
-                    },
-                    onDeleted = {
-                        photosContentState.baseUiState.scope.launch {
-                            searchWordViewModel.removeWord(it)
-                        }
-
-                        photosContentState.removedWordState.value = true
-                    }
-                )
-
-                photosContentState.searchedState.value = false
-            }
-        }
-
+        SearchChips(
+            galleryViewModel = galleryViewModel,
+            searchWordViewModel = searchWordViewModel,
+            photosContentState = photosContentState,
+            searchState = searchState
+        )
         if (photosContentState.triggeredState.value) {
             SearchPhotosSection(
                 modifier = Modifier
@@ -195,6 +137,112 @@ fun SearchPhotosContent(
         }
     }
 
+    Permissions(photosContentState = photosContentState)
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+fun handleOnSearched(
+    word: String,
+    photosContentState: SearchPhotosContentState,
+    galleryViewModel: GalleryViewModel,
+    searchWordViewModel: SearchWordViewModel,
+) {
+    if (word.isNotEmpty() && word != photosContentState.wordState.value) {
+        photosContentState.wordState.value = word
+        photosContentState.baseUiState.keyboardController?.hide()
+        photosContentState.baseUiState.scope.launch {
+            searchWordViewModel.setWord(word)
+        }
+
+        photosContentState.searchedState.value = true
+        photosContentState.triggeredState.value = true
+        photosContentState.baseUiState.scope.launch {
+            galleryViewModel.trigger(1, Params(word, ITEM_COUNT))
+        }
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun SearchChips(
+    galleryViewModel: GalleryViewModel = hiltViewModel(),
+    searchWordViewModel: SearchWordViewModel = hiltViewModel(),
+    photosContentState: SearchPhotosContentState = rememberSearchPhotosContentState(
+        baseUiState = rememberBaseUiState(),
+        uiState = galleryViewModel.uiState,
+        refreshingState = galleryViewModel.isRefreshing
+    ),
+    searchState: SearchSectionState = rememberSearchSectionState(
+        enabledState = photosContentState.enabledState
+    )
+) {
+    GenericCubicAnimationShape(
+        visible = !photosContentState.scrollingState.value,
+        duration = 250
+    ) { animatedShape, visible ->
+        val searchedWords = remember { mutableStateListOf<String>() }
+
+        LaunchedEffect(
+            visible,
+            photosContentState.searchedState.value,
+            photosContentState.removedWordState.value
+        ) {
+            searchWordViewModel.getWords().isNullOnFlow({
+                searchedWords.clear()
+            }, {
+                searchedWords.clear()
+                searchedWords.addAll(it)
+            })
+        }
+
+        if (searchedWords.isNotEmpty()) {
+            val items = if (photosContentState.searchedState.value) {
+                listOf(searchedWords[0])
+            } else
+                searchedWords
+
+            if (photosContentState.removedWordState.value)
+                photosContentState.removedWordState.value = false
+
+            Chips(
+                modifier = Modifier
+                    .padding(top = 2.dp)
+                    .graphicsLayer {
+                        clip = true
+                        shape = animatedShape
+                    },
+                items = items,
+                textColor = Black,
+                leadingIconTint = Blue70,
+                trailingIconTint = DarkGreen10,
+                onClicked = { keyword ->
+                    searchState.editableInputState.textState = keyword
+                    photosContentState.wordState.value = keyword
+                    photosContentState.triggeredState.value = true
+                    photosContentState.baseUiState.keyboardController?.hide()
+                    galleryViewModel.trigger(1, Params(keyword, ITEM_COUNT))
+                },
+                onDeleted = {
+                    photosContentState.baseUiState.scope.launch {
+                        searchWordViewModel.removeWord(it)
+                    }
+
+                    photosContentState.removedWordState.value = true
+                }
+            )
+
+            photosContentState.searchedState.value = false
+        }
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3Api::class
+)
+@Composable
+fun Permissions(
+    photosContentState: SearchPhotosContentState
+) {
     val multiplePermissionsState = rememberMultiplePermissionsState(photosContentState.permissions)
 
     with(photosContentState) {
@@ -210,6 +258,7 @@ fun SearchPhotosContent(
                 permissionState.value = true
             }
         )
+
         if (permissionState.value) {
             PermissionBottomSheet(
                 state = rememberPermissionState(rationaleTextState = rationaleTextState),
