@@ -20,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -66,7 +65,7 @@ fun BookmarkedPhotosScreen(
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
-    var backHandlingEnabled by remember { mutableStateOf(true) }
+    val backHandlingEnabled by remember { mutableStateOf(true) }
 
     BackHandler(backHandlingEnabled) {
         onBackPressed()
@@ -102,7 +101,6 @@ fun BookmarkedPhotosScreen(
                     IconButton(
                         onClick = {
                             onBackPressed()
-                            backHandlingEnabled = false
                         }
                     ) {
                         Icon(
@@ -113,23 +111,21 @@ fun BookmarkedPhotosScreen(
                 }
             )
         }, content = { paddingValues ->
-            if (backHandlingEnabled) {
-                ScaffoldContent(topInterval = 2.dp) {
-                    BookmarkedPhotosContent(
-                        modifier = modifier,
-                        state = rememberBookmarkedPhotosState(
-                            uiState = bookmarkViewModel.uiState
-                        ),
-                        contentPadding = paddingValues,
-                        onTriggered = {
-                            if (it)
-                                bookmarkViewModel.trigger()
-                        },
-                        onItemClicked = onItemClicked,
-                        onViewPhotos = onViewPhotos,
-                        onOpenWebView = onOpenWebView
-                    )
-                }
+            ScaffoldContent(topInterval = 2.dp) {
+                BookmarkedPhotosContent(
+                    modifier = modifier,
+                    state = rememberBookmarkedPhotosState(
+                        uiState = bookmarkViewModel.uiState
+                    ),
+                    contentPadding = paddingValues,
+                    onTriggered = {
+                        if (it)
+                            bookmarkViewModel.trigger()
+                    },
+                    onItemClicked = onItemClicked,
+                    onViewPhotos = onViewPhotos,
+                    onOpenWebView = onOpenWebView
+                )
             }
         }
     )

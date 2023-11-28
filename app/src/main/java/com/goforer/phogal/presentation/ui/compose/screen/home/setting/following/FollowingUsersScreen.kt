@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -59,7 +58,7 @@ fun FollowingUsersScreen(
     val currentOnStart by rememberUpdatedState(onStart)
     val currentOnStop by rememberUpdatedState(onStop)
     val snackbarHostState = remember { SnackbarHostState() }
-    var backHandlingEnabled by remember { mutableStateOf(true) }
+    val backHandlingEnabled by remember { mutableStateOf(true) }
 
     BackHandler(backHandlingEnabled) {
         onBackPressed()
@@ -95,7 +94,6 @@ fun FollowingUsersScreen(
                     IconButton(
                         onClick = {
                             onBackPressed()
-                            backHandlingEnabled = false
                         }
                     ) {
                         Icon(
@@ -106,38 +104,36 @@ fun FollowingUsersScreen(
                 }
             )
         }, content = { paddingValues ->
-            if (backHandlingEnabled) {
-                val text = stringResource(id = R.string.user_info_has_no_portfolio)
+            val text = stringResource(id = R.string.user_info_has_no_portfolio)
 
-                ScaffoldContent(topInterval = 2.dp) {
-                    FollowingUsersContent(
-                        modifier = modifier,
-                        state = rememberFollowingUsersState(
-                            uiState = followViewModel.uiState
-                        ),
-                        contentPadding = paddingValues,
-                        onTriggered = {
-                            if (it)
-                                followViewModel.trigger()
-                        },
-                        onViewPhotos = onViewPhotos,
-                        onFollowed = {
-                            with(followViewModel) {
-                                setUserFollow(it)
-                                trigger()
-                            }
-                        },
-                        onOpenWebView = { firstName, url ->
-                            url.isNull({
-                                state.scope.launch {
-                                    snackbarHostState.showSnackbar("${firstName}${" "}${text}")
-                                }
-                            }, {
-                                onOpenWebView(firstName, it)
-                            })
+            ScaffoldContent(topInterval = 2.dp) {
+                FollowingUsersContent(
+                    modifier = modifier,
+                    state = rememberFollowingUsersState(
+                        uiState = followViewModel.uiState
+                    ),
+                    contentPadding = paddingValues,
+                    onTriggered = {
+                        if (it)
+                            followViewModel.trigger()
+                    },
+                    onViewPhotos = onViewPhotos,
+                    onFollowed = {
+                        with(followViewModel) {
+                            setUserFollow(it)
+                            trigger()
                         }
-                    )
-                }
+                    },
+                    onOpenWebView = { firstName, url ->
+                        url.isNull({
+                            state.scope.launch {
+                                snackbarHostState.showSnackbar("${firstName}${" "}${text}")
+                            }
+                        }, {
+                            onOpenWebView(firstName, it)
+                        })
+                    }
+                )
             }
         }
     )
