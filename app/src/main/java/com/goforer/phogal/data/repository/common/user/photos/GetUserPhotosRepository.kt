@@ -18,11 +18,14 @@ class GetUserPhotosRepository
 constructor() : Repository<PagingData<PhotoUiState>>() {
     private lateinit var pagingSource: GetUserPhotosPagingSource
 
-    override suspend fun trigger(replyCount: Int, params: Params): Flow<PagingData<PhotoUiState>> {
+    override  fun trigger(replyCount: Int, params: Params): Flow<PagingData<PhotoUiState>> {
         Repository.replyCount = replyCount
         return Pager(
             config = PagingConfig(
-                pageSize = params.args[1] as Int,
+                pageSize = if (params.args.size > 1 && params.args[1] != null && params.args[1] is Int)
+                    params.args[1] as Int
+                else
+                    0,
                 prefetchDistance = ITEM_COUNT - 5,
                 initialLoadSize = ITEM_COUNT
             ),

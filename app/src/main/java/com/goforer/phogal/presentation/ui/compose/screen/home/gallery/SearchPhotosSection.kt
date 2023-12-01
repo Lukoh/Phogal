@@ -258,11 +258,9 @@ fun SearchPhotosSection(
         }
     }
 
-    LaunchedEffect(lazyListState, true, state.clickedState.value) {
-        if (state.clickedState.value) {
+    LaunchedEffect(lazyListState, state.clickedState.value) {
+        if (state.clickedState.value)
             lazyListState.animateScrollToItem (0)
-            state.visibleUpButtonState.value = false
-        }
 
         state.clickedState.value = false
     }

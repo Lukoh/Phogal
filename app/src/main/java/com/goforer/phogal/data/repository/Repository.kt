@@ -33,7 +33,7 @@ abstract class Repository<T> {
         internal var replyCount = 0
     }
 
-    abstract suspend fun trigger(replyCount: Int, params: Params): Flow<T>
+    abstract fun trigger(replyCount: Int, params: Params): Flow<T>
 
     open fun invalidatePagingSource() {
         Timber.d("invalidatePagingSource")

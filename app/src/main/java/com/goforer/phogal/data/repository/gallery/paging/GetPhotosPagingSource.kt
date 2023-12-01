@@ -5,7 +5,7 @@ import com.goforer.phogal.BuildConfig
 import com.goforer.phogal.data.model.local.error.ErrorThrowable
 import com.goforer.phogal.data.model.remote.response.gallery.photos.PhotosResponseUiState
 import com.goforer.phogal.data.datasource.network.api.Params
-import com.goforer.phogal.data.datasource.network.response.Status
+import com.goforer.phogal.data.datasource.network.response.Status.*
 import com.goforer.phogal.data.model.remote.response.gallery.common.PhotoUiState
 import com.goforer.phogal.data.repository.BasePagingSource
 import com.google.gson.Gson
@@ -23,14 +23,14 @@ constructor() : BasePagingSource<Int, PhotosResponseUiState, PhotoUiState>() {
         return try {
             request(page)
             when(resource.status) {
-                Status.SUCCESS -> {
+                SUCCESS -> {
                     LoadResult.Page(
                         data = (resource.data as PhotosResponseUiState).results,
                         prevKey = if (page == 1) null else page - 1,
                         nextKey = if ((resource.data as PhotosResponseUiState).results.isEmpty()) null else page + 1
                     )
                 }
-                Status.ERROR -> {
+                ERROR -> {
                     val error = ErrorThrowable(
                         code = resource.errorCode,
                         message = resource.message.toString()
@@ -39,13 +39,7 @@ constructor() : BasePagingSource<Int, PhotosResponseUiState, PhotoUiState>() {
                     val json = gson.toJson(error)
                     LoadResult.Error(Throwable(json.toString()))
                 }
-                Status.LOADING -> {
-                    LoadResult.Page(
-                        data = (resource.data as PhotosResponseUiState).results,
-                        prevKey = if (page == 1) null else page - 1,
-                        nextKey = if ((resource.data as PhotosResponseUiState).results.isEmpty()) null else page + 1
-                    )
-                }
+                LOADING -> TODO()
             }
         } catch (exception: IOException) {
             return LoadResult.Error(exception)
